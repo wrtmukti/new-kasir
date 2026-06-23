@@ -19,11 +19,12 @@ return new class extends Migration
             $table->string('company_email')->nullable();
             $table->string('company_phone')->nullable();
             $table->text('company_address')->nullable();
-            $table->string('category_image')->nullable();
-            $table->tinyInteger('company_status')->default(0);
+            $table->string('company_image')->nullable();
+            $table->tinyInteger('company_status')->default(1);//0 for inactive, 1 for active
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->tinyInteger('delete_status')->default(0);//0 for not deleted, 1 for deleted
             $table->timestamps();
         });
     }
