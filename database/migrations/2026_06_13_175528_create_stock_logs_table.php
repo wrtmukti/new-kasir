@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stocks', function (Blueprint $table) {
-            $table->id('stock_id');
+        Schema::create('stock_logs', function (Blueprint $table) {
+            $table->id('stock_log_id');
+            $table->foreignId('stock_id')->constrained('stocks', 'stock_id');
             $table->string('company_id')->nullable();
 
             $table->string('stock_code')->nullable();
@@ -21,18 +22,20 @@ return new class extends Migration
             $table->text('stock_description')->nullable();
 
             $table->string('stock_type')->nullable();
-
-            $table->string('stock_unit', 20)->nullable(); // gr, kg, pcs, etc
-            $table->tinyInteger('stock_counted')->default(1); //0 for not counted, 1 for counted
+            $table->string('stock_unit', 20)->nullable();
+            $table->tinyInteger('stock_counted')->default(1);
             $table->integer('stock_amount')->default(0);
-            $table->decimal('stock_price', 15, 2)->nullable(); // price per unit
-            $table->tinyInteger('stock_status')->default(1); //0 for inactive, 1 for active
+            $table->decimal('stock_price', 15, 2)->nullable();
+            $table->tinyInteger('stock_status')->default(1);
             $table->string('stock_image')->nullable();
 
-            $table->string('stock_remark')->nullable();
+            $table->string('stock_log_remark')->nullable();
+            $table->date('effective_date')->nullable();
+            $table->string('action_type')->nullable(); // create / update / delete
+            $table->string('changed_by', 50)->nullable();
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();
-            $table->tinyInteger('delete_status')->default(0); //0 for not deleted, 1 for deleted
+            $table->tinyInteger('delete_status')->default(0);
             $table->timestamps();
         });
     }
@@ -42,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stocks');
+        Schema::dropIfExists('stock_logs');
     }
 };

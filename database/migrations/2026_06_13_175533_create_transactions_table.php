@@ -20,11 +20,11 @@ return new class extends Migration
             $table->decimal('transaction_tax', 10, 2)->nullable();
             $table->decimal('transaction_subtotal', 10, 2)->nullable();
             $table->decimal('transaction_service_charge', 10, 2)->nullable();
-            $table->integer('discount_id')->nullable();
-            $table->decimal('transaction_grand_total', 10, 2)->nullable(); //subtotal + tax + service_charge - discount
-            $table->string('transaction_status')->nullable(); // pending, in progress, completed, cancelled
-            $table->text('transaction_remark')->nullable();
+            $table->integer('voucher_id')->nullable();
+            $table->decimal('transaction_grand_total', 10, 2)->nullable(); //subtotal + tax + service_charge - voucher
+            $table->string('transaction_status')->nullable(); // pending || success || failed || refunded
             $table->text('cancel_reason')->nullable();
+            $table->text('transaction_remark')->nullable();
 
             $table->integer('payment_id')->nullable();
             $table->string('transaction_table_id')->nullable();

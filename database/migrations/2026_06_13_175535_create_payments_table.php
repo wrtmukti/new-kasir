@@ -17,15 +17,14 @@ return new class extends Migration
 
             $table->integer('transaction_id')->nullable();
             $table->string('payment_metode')->nullable();
-            $table->string('payment_date')->nullable(); // pending, in progress, completed, cancelled
-            $table->decimal('payment_tax', 10, 2)->nullable();
-            $table->decimal('payment_subtotal', 10, 2)->nullable();
-            $table->decimal('payment_service_charge', 10, 2)->nullable();
-            $table->integer('discount_id')->nullable();
-            $table->decimal('payment_grand_total', 10, 2)->nullable(); //subtotal + tax + service_charge - discount
+            $table->decimal('payment_amount', 10, 2)->nullable();
+            $table->string('payment_reference')->nullable(); // pending, in progress, completed, cancelled
             $table->string('payment_status')->nullable(); // pending, in progress, completed, cancelled
-            $table->text('cancel_reason')->nullable();
+            $table->decimal('payment_grand_total', 10, 2)->nullable(); //subtotal + tax + service_charge - discount
+
+
             $table->text('payment_remark')->nullable();
+            $table->string('payment_date')->nullable(); // pending, in progress, completed, cancelled
 
             $table->integer('payment_id')->nullable();
             $table->string('payment_table_id')->nullable();
