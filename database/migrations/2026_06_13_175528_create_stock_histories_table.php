@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock_logs', function (Blueprint $table) {
-            $table->id('stock_log_id');
+        Schema::create('stock_histories', function (Blueprint $table) {
+            $table->id('stock_history_id');
             $table->foreignId('stock_id')->constrained('stocks', 'stock_id');
             $table->string('company_id')->nullable();
 
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->tinyInteger('stock_status')->default(1);
             $table->string('stock_image')->nullable();
 
-            $table->string('stock_log_remark')->nullable();
+            $table->string('stock_history_remark')->nullable();
             $table->date('effective_date')->nullable();
             $table->string('action_type')->nullable(); // create / update / delete
             $table->string('changed_by', 50)->nullable();
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_logs');
+        Schema::dropIfExists('stock_historys');
     }
 };

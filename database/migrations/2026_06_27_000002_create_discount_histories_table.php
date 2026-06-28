@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('discount_histories', function (Blueprint $table) {
-            $table->id('history_id');
+            $table->id('discount_history_id');
             $table->string('discount_id')->nullable(); // no FK
             $table->string('company_id')->nullable();
 

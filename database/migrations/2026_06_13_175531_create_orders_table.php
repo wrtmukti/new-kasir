@@ -17,8 +17,7 @@ return new class extends Migration
 
             $table->string('order_type')->nullable(); // dine in, take away, delivery (opsional)
             $table->string('order_status')->nullable(); // pending, in progress, completed, cancelled
-            $table->decimal('order_price', 10, 2)->nullable();
-            $table->decimal('order_grand_total', 10, 2)->nullable();
+            $table->decimal('order_grand_total', 10, 2)->nullable(); // total order
             $table->text('order_remark')->nullable();
 
             $table->integer('order_transaction_id')->nullable();

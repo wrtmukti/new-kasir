@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_product', function (Blueprint $table) {
-            // $table->id('ingredients_id');
+        Schema::create('cutomers', function (Blueprint $table) {
+            $table->id('customer_id'); // kusus customer
             $table->string('company_id')->nullable();
 
-            $table->string('product_id')->nullable();
-            $table->string('order_id')->nullable();
-            $table->string('note')->nullable();
-            $table->integer('quantity')->nullable();
+            $table->integer('transaction_id')->nullable();
+            $table->string('customer_name')->nullable();
+            $table->string('customer_email')->nullable(); // untuk info promo
+            $table->string('customer_phone')->nullable(); // untuk info promo
+            $table->text('customer_address')->nullable(); //opsinal (misal untuk pengiriman)
+            $table->string('customer_notes')->nullable();
+            $table->string('customer_name')->nullable();
 
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients');
+        Schema::dropIfExists('cutomers');
     }
 };
