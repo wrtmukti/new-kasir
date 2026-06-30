@@ -11,23 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_logs', function (Blueprint $table) {
-            $table->id('product_log_id');
-            $table->foreignId('product_id')->constrained('products', 'product_id');
+        Schema::create('product_histories', function (Blueprint $table) {
+            $table->id('product_history_id');
+            $table->interger('product_id')->nullable();
             $table->string('company_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
 
-            $table->string('product_code')->nullable();
-            $table->string('product_name')->nullable();
-            $table->string('product_slug')->nullable();
-            $table->text('product_description')->nullable();
-            $table->decimal('product_price', 15, 2)->nullable();
-            $table->decimal('product_discount', 15, 2)->nullable();
-            $table->decimal('product_grand_total', 15, 2)->nullable();
+            $table->string('history_code')->nullable();
+            $table->string('history_name')->nullable();
+            $table->string('history_slug')->nullable();
+            $table->text('history_description')->nullable();
+            $table->decimal('history_price', 15, 2)->nullable();
+            $table->decimal('history_discount', 15, 2)->nullable();
+            $table->decimal('history_grand_total', 15, 2)->nullable();
 
 
-            $table->tinyInteger('product_status')->default(1); //0 for inactive, 1 for active
-            $table->string('product_image')->nullable();
+            $table->tinyInteger('history_status')->default(1); //0 for inactive, 1 for active
+            $table->string('history_image')->nullable();
 
             $table->string('category_remark')->nullable();
             $table->date('effective_date')->nullable(); // tgl data ini mulai berlaku
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_logs');
+        Schema::dropIfExists('product_hostorys');
     }
 };

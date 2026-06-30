@@ -1,0 +1,246 @@
+<mxfile host="app.diagrams.net" agent="ClaudeCode">
+  <diagram name="Database ERD" id="main-erd">
+    <mxGraphModel dx="5060" dy="3676" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="2500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="style-tables" connectable="0" parent="1" style="html=1;whiteSpace=wrap;align=left;verticalAlign=top;overflow=hidden;fillColor=#ffffff;strokeColor=#333333;fontFamily=Helvetica;fontSize=10;rounded=1;shadow=0;arcSize=6;" vertex="1">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="style-pk" connectable="0" parent="1" style="html=1;whiteSpace=wrap;align=left;verticalAlign=top;overflow=hidden;fillColor=#ffffff;strokeColor=#333333;fontFamily=Helvetica;fontSize=10;fontColor=#B71C1C;rounded=1;shadow=0;arcSize=6;" vertex="1">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="style-fk" connectable="0" parent="1" style="html=1;whiteSpace=wrap;align=left;verticalAlign=top;overflow=hidden;fillColor=#ffffff;strokeColor=#333333;fontFamily=Helvetica;fontSize=10;fontColor=#1565C0;rounded=1;shadow=0;arcSize=6;" vertex="1">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="style-snap" connectable="0" parent="1" style="html=1;whiteSpace=wrap;align=left;verticalAlign=top;overflow=hidden;fillColor=#ffffff;strokeColor=#333333;fontFamily=Helvetica;fontSize=10;fontColor=#666666;rounded=1;shadow=0;arcSize=6;" vertex="1">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="style-header" connectable="0" parent="1" style="html=1;whiteSpace=wrap;align=center;verticalAlign=middle;overflow=hidden;fontFamily=Helvetica;fontSize=11;fontColor=#ffffff;rounded=1;shadow=0;arcSize=6;" vertex="1">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="style-arrow" connectable="0" edge="1" parent="1" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=10;strokeColor=#666666;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" />
+        </mxCell>
+        <mxCell id="title-bg" connectable="0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1A237E;strokeColor=none;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="" vertex="1">
+          <mxGeometry height="70" width="2500" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="title-text" connectable="0" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontColor=#ffffff;rounded=1;whiteSpace=wrap;" value="&lt;b&gt;🗄️ DATABASE SCHEMA — new-kasir POS&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#B0BEC5;&#39;&gt;Laravel &amp;nbsp;|&amp;nbsp; 32 tables &amp;nbsp;|&amp;nbsp; June 2026&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="2500" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-box" connectable="0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#BDBDBD;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;📌 LEGEND&lt;/b&gt;&lt;hr&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;font color=&#39;#B71C1C&#39;&gt;🔴 red text&lt;/font&gt;&lt;/td&gt;&lt;td&gt;= Primary Key (PK)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;font color=&#39;#1565C0&#39;&gt;🔵 blue text&lt;/font&gt;&lt;/td&gt;&lt;td&gt;= Foreign Key → target table&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;font color=&#39;#666666&#39;&gt;⚪ gray text&lt;/font&gt;&lt;/td&gt;&lt;td&gt;= Snapshot / history field&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;➡️ arrow&lt;/td&gt;&lt;td&gt;= Relationship (FK)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Bold&lt;/b&gt;&lt;/td&gt;&lt;td&gt;= Key business field&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="160" width="200" x="1970" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="h-01" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#1A237E;strokeColor=#1A237E;fontColor=#ffffff;fontSize=11;" value="📦 MASTER DATA" vertex="1">
+          <mxGeometry height="446" width="300" x="30" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-companies" connectable="0" parent="h-01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;companies&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;company_id (PK, ULID)&lt;/font&gt;&lt;br&gt;company_name ✅&lt;br&gt;company_code (UNIQUE) ✅&lt;br&gt;company_slug&lt;br&gt;company_email&lt;br&gt;company_phone&lt;br&gt;company_address&lt;br&gt;company_image&lt;br&gt;company_status&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="150" width="300" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t-categories" connectable="0" parent="h-01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;categories&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;category_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;category_name&lt;br&gt;category_slug&lt;br&gt;category_description&lt;br&gt;&lt;b&gt;category_type (food/beverage)&lt;/b&gt;&lt;br&gt;category_status&lt;br&gt;category_image&lt;br&gt;category_remark&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="160" width="300" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="t-users" connectable="0" parent="h-01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;users&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;id (PK)&lt;/font&gt;&lt;br&gt;name&lt;br&gt;email (UNIQUE)&lt;br&gt;email_verified_at&lt;br&gt;password&lt;br&gt;role&lt;br&gt;remember_token&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="110" width="300" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="h-02" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#1B5E20;strokeColor=#1B5E20;fontColor=#ffffff;fontSize=11;" value="🏷️ PRODUCTS" vertex="1">
+          <mxGeometry height="446" width="300" x="-440" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t-products" connectable="0" parent="h-02" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;products&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;product_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;category_id → categories&lt;/font&gt;&lt;br&gt;product_code&lt;br&gt;&lt;b&gt;product_name&lt;/b&gt;&lt;br&gt;product_slug&lt;br&gt;product_description&lt;br&gt;product_price ✅&lt;br&gt;product_discount&lt;br&gt;product_discount_type&lt;br&gt;product_discount_value&lt;br&gt;product_grand_total&lt;br&gt;product_status&lt;br&gt;product_image&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="220" width="300" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t-product_histories" connectable="0" parent="h-02" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;product_histories&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;product_history_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;product_id → products&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;category_id → categories&lt;/font&gt;&lt;br&gt;history_code / history_name / history_slug&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;history_price / history_discount / history_grand_total&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;history_status / history_image&lt;/font&gt;&lt;br&gt;&lt;b&gt;effective_date&lt;/b&gt;&lt;br&gt;&lt;b&gt;action_type (create/update/delete)&lt;/b&gt;&lt;br&gt;changed_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="200" width="300" y="246" as="geometry" />
+        </mxCell>
+        <mxCell id="h-03" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#4A148C;strokeColor=#4A148C;fontColor=#ffffff;fontSize=11;" value="📦 STOCK &amp; INVENTORY" vertex="1">
+          <mxGeometry height="26" width="320" x="380" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-stocks" connectable="0" parent="h-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;stocks&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;stock_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;stock_code&lt;br&gt;&lt;b&gt;stock_name&lt;/b&gt;&lt;br&gt;stock_slug&lt;br&gt;stock_description&lt;br&gt;stock_type&lt;br&gt;stock_unit (gr/kg/pcs) ✅&lt;br&gt;stock_counted (0/1)&lt;br&gt;stock_amount ✅&lt;br&gt;stock_price (per unit)&lt;br&gt;stock_status ✅&lt;br&gt;stock_image&lt;br&gt;stock_remark&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="210" width="300" x="10" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="t-ingredients" connectable="0" parent="h-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;ingredients (BOM pivot)&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;&amp;lt;no PK&amp;gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;product_id → products&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;stock_id → stocks&lt;/font&gt;&lt;br&gt;&lt;b&gt;quantity&lt;/b&gt;&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="140" width="300" x="10" y="256" as="geometry" />
+        </mxCell>
+        <mxCell id="t-stock_histories" connectable="0" parent="h-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;stock_histories&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;stock_history_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;stock_id → stocks&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;*snapshot kolom stock*&lt;/font&gt;&lt;br&gt;stock_history_remark&lt;br&gt;&lt;b&gt;effective_date&lt;/b&gt;&lt;br&gt;&lt;b&gt;action_type (create/update/delete)&lt;/b&gt;&lt;br&gt;changed_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="170" width="300" x="10" y="406" as="geometry" />
+        </mxCell>
+        <mxCell id="t-stock_logs" connectable="0" parent="h-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;stock_logs&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;log_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;stock_id → stocks&lt;/font&gt;&lt;br&gt;&lt;b&gt;reference_type (receiving/adjustment/sale)&lt;/b&gt;&lt;br&gt;reference_code&lt;br&gt;&lt;b&gt;type (in/out/adjustment)&lt;/b&gt; ✅&lt;br&gt;&lt;b&gt;qty&lt;/b&gt;&lt;br&gt;price&lt;br&gt;total&lt;br&gt;&lt;b&gt;stock_before / stock_after&lt;/b&gt;&lt;br&gt;notes&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="200" width="300" x="10" y="586" as="geometry" />
+        </mxCell>
+        <mxCell id="h-04" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#E65100;strokeColor=#E65100;fontColor=#ffffff;fontSize=11;" value="🪑 TABLES &amp; ORDERS" vertex="1">
+          <mxGeometry height="26" width="320" x="750" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-tables" connectable="0" parent="h-04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;tables&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;table_id (PK, ULID)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;b&gt;table_number&lt;/b&gt; ✅&lt;br&gt;table_status (inactive/active/reserved/occupied)&lt;br&gt;table_capacity&lt;br&gt;table_description&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="150" width="300" x="10" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="t-orders" connectable="0" parent="h-04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;orders&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;order_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;order_table_id → tables&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;order_customer_id → customers&lt;/font&gt;&lt;br&gt;order_transaction_id&lt;br&gt;&lt;b&gt;order_type (dine in/take away/delivery)&lt;/b&gt;&lt;br&gt;&lt;b&gt;order_status (pending/in progress/completed/cancelled)&lt;/b&gt;✅&lt;br&gt;order_grand_total&lt;br&gt;order_remark&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="190" width="300" x="10" y="196" as="geometry" />
+        </mxCell>
+        <mxCell id="t-order_product" connectable="0" parent="h-04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;order_product (pivot)&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;&amp;lt;no PK&amp;gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;product_id → products&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;order_id → orders&lt;/font&gt;&lt;br&gt;note&lt;br&gt;&lt;b&gt;quantity&lt;/b&gt; ✅&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="140" width="300" x="10" y="396" as="geometry" />
+        </mxCell>
+        <mxCell id="h-05" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#B71C1C;strokeColor=#B71C1C;fontColor=#ffffff;fontSize=11;" value="💰 TRANSACTIONS &amp; PAYMENTS" vertex="1">
+          <mxGeometry height="26" width="320" x="1120" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-transactions" connectable="0" parent="h-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF5350;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;transactions&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;transaction_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;voucher_id → vouchers&lt;/font&gt;&lt;br&gt;transaction_table_id&lt;br&gt;transaction_customer_id&lt;br&gt;&lt;b&gt;transaction_code&lt;/b&gt;✅&lt;br&gt;transaction_date&lt;br&gt;transaction_tax&lt;br&gt;transaction_subtotal&lt;br&gt;transaction_service_charge&lt;br&gt;&lt;b&gt;transaction_grand_total&lt;/b&gt;✅&lt;br&gt;&lt;b&gt;transaction_status (pending/success/failed/refunded)&lt;/b&gt;&lt;br&gt;cancel_reason | transaction_remark&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;discount_id / discount_name / discount_type&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;discount_value / discount_amount&lt;/font&gt;&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="250" width="300" x="10" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="t-transaction_items" connectable="0" parent="h-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF5350;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;transaction_items&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;item_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;transaction_id → transactions&lt;/font&gt;&lt;br&gt;product_id&lt;br&gt;&lt;b&gt;product_name (SNAPSHOT)&lt;/b&gt;&lt;br&gt;price (snap)&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;discount_type / discount_value / discount_amount&lt;/font&gt;&lt;br&gt;&lt;b&gt;qty&lt;/b&gt;✅&lt;br&gt;&lt;b&gt;subtotal&lt;/b&gt;&lt;br&gt;note&lt;br&gt;created_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="190" width="300" x="10" y="296" as="geometry" />
+        </mxCell>
+        <mxCell id="t-transaction_voucher" connectable="0" parent="h-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF5350;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;transaction_voucher (pivot)&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;transaction_id → transactions&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;voucher_id → vouchers&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;voucher_code / voucher_type / voucher_value (snap)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;voucher_max_discount (snap)&lt;/font&gt;&lt;br&gt;&lt;b&gt;voucher_amount&lt;/b&gt;&lt;br&gt;created_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="180" width="300" x="10" y="496" as="geometry" />
+        </mxCell>
+        <mxCell id="t-payments" connectable="0" parent="h-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF5350;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;payments&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;payment_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;transaction_id → transactions&lt;/font&gt;&lt;br&gt;&lt;b&gt;payment_metode&lt;/b&gt;✅&lt;br&gt;payment_amount✅&lt;br&gt;payment_reference&lt;br&gt;payment_status✅&lt;br&gt;payment_grand_total&lt;br&gt;payment_remark&lt;br&gt;payment_date&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="190" width="300" x="10" y="686" as="geometry" />
+        </mxCell>
+        <mxCell id="h-05b" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#E65100;strokeColor=#E65100;fontColor=#ffffff;fontSize=11;" value="🏷️ DISCOUNTS &amp; VOUCHERS" vertex="1">
+          <mxGeometry height="736" width="320" x="1570" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="t-discounts" connectable="0" parent="h-05b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;discounts&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;discount_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;discount_name&lt;br&gt;&lt;b&gt;discount_type (percentage/nominal)&lt;/b&gt;&lt;br&gt;discount_value✅&lt;br&gt;discount_max_amount&lt;br&gt;discount_description&lt;br&gt;discount_status&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="150" width="320" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t-discount_histories" connectable="0" parent="h-05b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;discount_histories&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;discount_history_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;discount_id → discounts&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;discount_name / discount_type / discount_value (snap)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;discount_max_amount (snap)&lt;/font&gt;&lt;br&gt;start_date / end_date&lt;br&gt;reason&lt;br&gt;changed_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="160" width="320" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="t-vouchers" connectable="0" parent="h-05b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;vouchers&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;voucher_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;voucher_code✅&lt;br&gt;voucher_name&lt;br&gt;voucher_description&lt;br&gt;&lt;b&gt;voucher_type (nominal/percentage/free_item)&lt;/b&gt;&lt;br&gt;voucher_value✅&lt;br&gt;voucher_max_discount&lt;br&gt;voucher_min_purchase&lt;br&gt;voucher_applicable_to&lt;br&gt;voucher_usage_limit&lt;br&gt;voucher_usage_per_customer&lt;br&gt;voucher_start_date / end_date&lt;br&gt;voucher_status&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="220" width="320" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="t-voucher_histories" connectable="0" parent="h-05b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;voucher_histories&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;history_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;voucher_id → vouchers&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;voucher_code / name / type / value (snap)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;voucher_max_discount / min_purchase (snap)&lt;/font&gt;&lt;br&gt;start_date / end_date&lt;br&gt;reason&lt;br&gt;changed_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="180" width="320" y="556" as="geometry" />
+        </mxCell>
+        <mxCell id="h-06" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#01579B;strokeColor=#01579B;fontColor=#ffffff;fontSize=11;" value="👥 CUSTOMERS" vertex="1">
+          <mxGeometry height="206" width="320" x="-460" y="-150" as="geometry" />
+        </mxCell>
+        <mxCell id="t-customers" connectable="0" parent="h-06" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#29B6F6;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;cutomers ⚠️&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;customer_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;transaction_id&lt;br&gt;&lt;b&gt;customer_name&lt;/b&gt;✅&lt;br&gt;customer_email&lt;br&gt;customer_phone&lt;br&gt;customer_address&lt;br&gt;customer_notes&lt;br&gt;customer_name (duplicate)&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps&lt;br&gt;&lt;font color=&#39;red&#39;&gt;⚠️ typo: &#39;cutomers&#39; should be &#39;customers&#39;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="180" width="320" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="h-07" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#6A1B9A;strokeColor=#6A1B9A;fontColor=#ffffff;fontSize=11;" value="🎯 BUNDLES (NEW)" vertex="1">
+          <mxGeometry height="26" width="320" x="1490" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-bundles" connectable="0" parent="h-07" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;bundles ✅ NEW&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;bundle_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;b&gt;bundle_code&lt;/b&gt;✅&lt;br&gt;&lt;b&gt;bundle_name&lt;/b&gt;✅&lt;br&gt;bundle_slug&lt;br&gt;bundle_description&lt;br&gt;&lt;b&gt;bundle_price&lt;/b&gt;✅&lt;br&gt;bundle_status&lt;br&gt;bundle_image&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="170" width="300" x="10" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="t-bundle_items" connectable="0" parent="h-07" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;bundle_items ✅ NEW&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;bundle_item_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;bundle_id → bundles&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;product_id → products&lt;/font&gt;&lt;br&gt;&lt;b&gt;quantity&lt;/b&gt;✅&lt;br&gt;price_snapshot&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="140" width="300" x="10" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="t-bundle_histories" connectable="0" parent="h-07" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#CE93D8;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;bundle_histories ✅ NEW&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;bundle_history_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;bundle_id → bundles&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;*snapshot kolom bundle*&lt;/font&gt;&lt;br&gt;bundle_history_remark&lt;br&gt;&lt;b&gt;effective_date&lt;/b&gt;&lt;br&gt;&lt;b&gt;action_type (create/update/delete)&lt;/b&gt;&lt;br&gt;changed_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="170" width="300" x="10" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="h-08" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;fillColor=#004D40;strokeColor=#004D40;fontColor=#ffffff;fontSize=11;" value="🚚 PURCHASING" vertex="1">
+          <mxGeometry height="836" width="320" x="1970" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="t-suppliers" connectable="0" parent="h-08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#26A69A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;suppliers&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;supplier_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;supplier_code (SUP-001)&lt;br&gt;&lt;b&gt;supplier_name&lt;/b&gt;✅&lt;br&gt;supplier_contact&lt;br&gt;supplier_phone&lt;br&gt;supplier_address&lt;br&gt;supplier_status&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="150" width="320" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t-purchase_orders" connectable="0" parent="h-08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#26A69A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;purchase_orders&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;po_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;supplier_id → suppliers&lt;/font&gt;&lt;br&gt;&lt;b&gt;po_code&lt;/b&gt;✅&lt;br&gt;&lt;b&gt;po_date&lt;/b&gt;&lt;br&gt;&lt;b&gt;po_status (draft/ordered/partial/completed/cancelled)&lt;/b&gt;✅&lt;br&gt;po_total_amount&lt;br&gt;po_notes&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="160" width="320" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="t-purchase_order_items" connectable="0" parent="h-08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#26A69A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;purchase_order_items&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;po_item_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;po_id → purchase_orders&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;stock_id → stocks&lt;/font&gt;&lt;br&gt;&lt;b&gt;qty&lt;/b&gt;✅&lt;br&gt;price (buying price)&lt;br&gt;subtotal✅&lt;br&gt;received_qty&lt;br&gt;notes&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="160" width="320" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="t-purchase_receivings" connectable="0" parent="h-08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#26A69A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;purchase_receivings&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;receiving_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;company_id → companies&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;po_id → purchase_orders&lt;/font&gt;&lt;br&gt;&lt;b&gt;receiving_code&lt;/b&gt;✅&lt;br&gt;receiving_date&lt;br&gt;&lt;font color=&#39;#666666&#39;&gt;po_code (snap)&lt;/font&gt;&lt;br&gt;receiving_status (pending/completed)&lt;br&gt;receiving_notes&lt;br&gt;received_by&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="170" width="320" y="496" as="geometry" />
+        </mxCell>
+        <mxCell id="t-purchase_receiving_items" connectable="0" parent="h-08" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#26A69A;fontFamily=Helvetica;fontSize=10;align=left;verticalAlign=top;overflow=hidden;" value="&lt;b&gt;purchase_receiving_items&lt;/b&gt;&lt;hr&gt;&lt;font color=&#39;#B71C1C&#39;&gt;receiving_item_id (PK)&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;receiving_id → purchase_receivings&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;po_item_id → purchase_order_items&lt;/font&gt;&lt;br&gt;&lt;font color=&#39;#1565C0&#39;&gt;stock_id → stocks&lt;/font&gt;&lt;br&gt;&lt;b&gt;received_qty&lt;/b&gt;✅&lt;br&gt;received_price&lt;br&gt;subtotal✅&lt;br&gt;notes&lt;br&gt;created_by | updated_by&lt;br&gt;delete_status&lt;br&gt;timestamps" vertex="1">
+          <mxGeometry height="170" width="320" y="666" as="geometry" />
+        </mxCell>
+        <mxCell id="h-09" connectable="0" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;dashed=1;dashPattern=5;fillColor=#424242;strokeColor=#424242;fontColor=#ffffff;fontSize=11;" value="⚙️ SYSTEM TABLES (Laravel)" vertex="1">
+          <mxGeometry height="236" width="320" x="710" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="t-cache" connectable="0" parent="h-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontFamily=Helvetica;fontSize=9;align=left;verticalAlign=top;overflow=hidden;dashed=1;dashPattern=5;" value="&lt;b&gt;cache&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#B71C1C&#39;&gt;key (PK)&lt;/font&gt; | value | expiration" vertex="1">
+          <mxGeometry height="40" width="320" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t-cache_locks" connectable="0" parent="h-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontFamily=Helvetica;fontSize=9;align=left;verticalAlign=top;overflow=hidden;dashed=1;dashPattern=5;" value="&lt;b&gt;cache_locks&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#B71C1C&#39;&gt;key (PK)&lt;/font&gt; | owner | expiration" vertex="1">
+          <mxGeometry height="40" width="320" y="66" as="geometry" />
+        </mxCell>
+        <mxCell id="t-sessions" connectable="0" parent="h-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontFamily=Helvetica;fontSize=9;align=left;verticalAlign=top;overflow=hidden;dashed=1;dashPattern=5;" value="&lt;b&gt;password_reset_tokens&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#B71C1C&#39;&gt;email (PK)&lt;/font&gt; | token | created_at" vertex="1">
+          <mxGeometry height="40" width="320" y="106" as="geometry" />
+        </mxCell>
+        <mxCell id="t-sessions2" connectable="0" parent="h-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontFamily=Helvetica;fontSize=9;align=left;verticalAlign=top;overflow=hidden;dashed=1;dashPattern=5;" value="&lt;b&gt;sessions&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#B71C1C&#39;&gt;id (PK)&lt;/font&gt;&lt;br&gt;user_id → users | ip_address | user_agent | payload | last_activity" vertex="1">
+          <mxGeometry height="50" width="320" y="146" as="geometry" />
+        </mxCell>
+        <mxCell id="t-jobs" connectable="0" parent="h-09" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontFamily=Helvetica;fontSize=9;align=left;verticalAlign=top;overflow=hidden;dashed=1;dashPattern=5;" value="&lt;b&gt;jobs / job_batches / failed_jobs&lt;/b&gt;&lt;br&gt;Laravel queue system — standard tables" vertex="1">
+          <mxGeometry height="40" width="320" y="196" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-cat-comp" edge="1" parent="1" source="t-categories" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#5C6BC0;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-prod-comp" edge="1" parent="1" source="t-products" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#66BB6A;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-prod-cat" edge="1" parent="1" source="t-product_histories" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#66BB6A;strokeWidth=1.2;exitX=0;exitY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-313.04526748971193" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-prod-hist" edge="1" parent="1" source="t-products" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#66BB6A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-product_histories">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-stk-comp" edge="1" parent="1" source="t-stocks" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#AB47BC;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-ing-prod" edge="1" parent="1" source="t-ingredients" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#AB47BC;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-products">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-ing-stk" edge="1" parent="1" source="t-ingredients" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#AB47BC;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-stocks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-ord-comp" edge="1" parent="1" source="t-orders" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#FF9800;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-ord-tbl" edge="1" parent="1" source="t-orders" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#FF9800;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-tables">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-op-ord" edge="1" parent="1" source="t-order_product" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#FF9800;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-op-prod" edge="1" parent="1" source="t-order_product" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#FF9800;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-products">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-trx-comp" edge="1" parent="1" source="t-transactions" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#EF5350;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-trx-item" edge="1" parent="1" source="t-transactions" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#EF5350;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-transaction_items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-trx-pay" edge="1" parent="1" source="t-payments" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#EF5350;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-transactions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-trx-vch" edge="1" parent="1" source="t-transaction_voucher" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#EF5350;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-transactions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-vch-trvch" edge="1" parent="1" source="t-transaction_voucher" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#EF5350;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-vouchers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-cust-comp" edge="1" parent="1" source="t-customers" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#29B6F6;strokeWidth=1.2;exitX=0;exitY=0.5;" target="t-companies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-bndl-item" edge="1" parent="1" source="t-bundles" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#CE93D8;strokeWidth=1.5;exitX=1;exitY=0.5;" target="t-bundle_items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-item-prod" edge="1" parent="1" source="t-bundle_items" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#CE93D8;strokeWidth=1.5;exitX=1;exitY=0.5;" target="t-products">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-bndl-hist" edge="1" parent="1" source="t-bundle_histories" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#CE93D8;strokeWidth=1.5;exitX=1;exitY=0.5;" target="t-bundles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-po-supp" edge="1" parent="1" source="t-purchase_orders" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#26A69A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-suppliers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-poi-po" edge="1" parent="1" source="t-purchase_order_items" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#26A69A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-purchase_orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-poi-stk" edge="1" parent="1" source="t-purchase_order_items" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#26A69A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-stocks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-pr-po" edge="1" parent="1" source="t-purchase_receivings" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#26A69A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-purchase_orders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-pri-pr" edge="1" parent="1" source="t-purchase_receiving_items" style="endArrow=block;endSize=8;html=1;rounded=1;fontFamily=Helvetica;fontSize=9;strokeColor=#26A69A;strokeWidth=1.2;exitX=1;exitY=0.5;" target="t-purchase_receivings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
