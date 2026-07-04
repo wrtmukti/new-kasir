@@ -21,9 +21,8 @@ return new class extends Migration
             $table->string('product_slug')->nullable();
             $table->text('product_description')->nullable();
             $table->decimal('product_price', 15, 2)->nullable();
-            $table->decimal('product_discount', 15, 2)->nullable();
-            $table->decimal('product_grand_total', 15, 2)->nullable();
-
+            $table->interger('product_discount_id')->nullable();
+            
             $table->tinyInteger('product_status')->default(1); //0 for inactive, 1 for active
             $table->string('product_image')->nullable();
 
