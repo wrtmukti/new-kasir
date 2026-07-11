@@ -1,0 +1,32 @@
+# Log Code — Riwayat Perubahan
+
+> Catat setiap perubahan penting di proyek ini. Format: `YYYY-MM-DD | [Tipe] | Deskripsi | File terkait`
+
+---
+
+## 2026-07-11
+
+| Tipe | Deskripsi | File |
+|------|-----------|------|
+| FIX | Typo `interger` → `integer` | `create_products_table.php`, `create_product_histories_table.php` |
+| FIX | Double primary key `id('category_id')` → `unsignedBigInteger` | `create_products_table.php` |
+| FIX | Typo table name `product_hostorys` → `product_histories` | `create_product_histories_table.php` |
+| FIX | Typo table name `stock_historys` → `stock_histories` | `create_stock_histories_table.php` |
+| FIX | Typo table name `cuqtomers` → `customers` | `create_customers_table.php` |
+| FIX | Duplikat kolom `customer_name` (hapus 1) | `create_customers_table.php` |
+| FIX | Duplikat kolom `payment_id` (hapus 1) | `create_payments_table.php` |
+| FIX | Missing primary key `ulid('table_id')` → `->primary()` | `create_tables_table.php` |
+| FIX | Wrong `after('product_discount')` → `after('product_discount_id')` | `add_discount_fields_to_products_table.php` |
+| RENAME | File migration typo `cutomers` → `customers` | `2026_06_13_175535_create_cutomers_table.php` |
+| CREATE | DB file SQLite + migrate 30 migration sukses | `database/database.sqlite` |
+| CREATE | Dokumentasi arsitektur proyek | `basic-knowledge/README.md` |
+| CREATE | Aturan AI | `basic-knowledge/rule_ai.md` |
+| CREATE | Log perubahan | `basic-knowledge/log_code.md` |
+| RULES | Aturan 1-4 dicatat | `rule_ai.md` |
+| CREATE | Company + Stock CRUD (MVC, routes, seeder) | CompanyController, StockController, 8 views, 2 seeders, routes |
+| CREATE | Model Product & Category | `app/Models/Product.php`, `Category.php` |
+| SEED | 3 company dummy + 7 stock dummy | `database/database.sqlite` |
+| FIX | Layout sendiri di `admin/layouts/` — gak pake `docs/` langsung | 8 views + layout baru |
+| RULES | Aturan 5 — auth & login menyusul, semua route open | `rule_ai.md` |
+| MOVE | Semua view admin pindah ke `admin/basic_layout/` + route prefix `/admin/basic_layout/` | Controllers, routes, 8 views |
+| RULES | Aturan 6 — folder structure `basic_layout/` | `rule_ai.md` |

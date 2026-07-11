@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cutomers', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id('customer_id'); // kusus customer
             $table->string('company_id')->nullable();
 
@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('customer_phone')->nullable(); // untuk info promo
             $table->text('customer_address')->nullable(); //opsinal (misal untuk pengiriman)
             $table->string('customer_notes')->nullable();
-            $table->string('customer_name')->nullable();
 
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cutomers');
+        Schema::dropIfExists('customers');
     }
 };

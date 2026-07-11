@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('product_histories', function (Blueprint $table) {
             $table->id('product_history_id');
-            $table->interger('product_id')->nullable();
+            $table->integer('product_id')->nullable();
             $table->string('company_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
 
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_hostorys');
+        Schema::dropIfExists('product_histories');
     }
 };

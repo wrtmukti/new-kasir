@@ -48,3 +48,15 @@ Route::get('/', function () {
 Route::get('/docs', function () {
     return redirect('/docs/index');
 })->name('docs.index');
+
+// ===================== ADMIN (CRUD) =====================
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\StockController;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('stock', StockController::class);
+});
+
+Route::prefix('sys_admin')->name('sys_admin.')->group(function () {
+    Route::resource('company', CompanyController::class);
+});

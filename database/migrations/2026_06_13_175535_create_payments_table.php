@@ -26,7 +26,6 @@ return new class extends Migration
             $table->text('payment_remark')->nullable();
             $table->string('payment_date')->nullable(); // pending, in progress, completed, cancelled
 
-            $table->integer('payment_id')->nullable();
             $table->string('payment_table_id')->nullable();
             $table->string('payment_customer_id')->nullable();
             // $table->integer('payment_voucher_id')->nullable();// nanti kalo mau pake voucher bisa ditambahin pake pivot table
