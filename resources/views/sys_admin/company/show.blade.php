@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('sys_admin.layouts.app')
 
 @section('title', 'Detail Perusahaan')
 
@@ -10,15 +10,15 @@
     <h1>Detail Perusahaan</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <a href="{{ route('admin.company.index') }}">Perusahaan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('sys_admin.company.index') }}">Perusahaan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>{{ $company->company_name }}</span>
     </div>
   </div>
   <div class="d-flex gap-2">
-    <a href="{{ route('admin.company.edit', $company) }}" class="btn btn-primary-grad">
+    <a href="{{ route('sys_admin.company.edit', $company) }}" class="btn btn-primary-grad">
       <i class="bi bi-pencil me-1"></i>Edit
     </a>
-    <a href="{{ route('admin.company.index') }}" class="btn btn-outline-soft">Kembali</a>
+    <a href="{{ route('sys_admin.company.index') }}" class="btn btn-outline-soft">Kembali</a>
   </div>
 </div>
 

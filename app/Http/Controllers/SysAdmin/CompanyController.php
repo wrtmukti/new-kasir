@@ -1,16 +1,38 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\SysAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
+use App\Models\SysAdmin\Company;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
     public function index()
     {
-        $companies = Company::where('delete_status', 0)->latest()->get();
+        $companies = Company::where('delete_status', 0)
+            ->latest()
+            ->paginate(10);
+        return view('sys_admin.company.index', compact('companies'));
+    }
+
+    public function data(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $companies = Company::where('delete_status', 0)
+            ->latest()
+            ->paginate($perPage);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('sys_admin.company._data', compact('companies'))->render(),
+                'pagination' => view('vendor.pagination.modern', ['paginator' => $companies])->render(),
+                'total' => $companies->total(),
+                'from' => $companies->firstItem(),
+                'to' => $companies->lastItem(),
+            ]);
+        }
+
         return view('sys_admin.company.index', compact('companies'));
     }
 
@@ -36,7 +58,7 @@ class CompanyController extends Controller
 
         Company::create($validated);
 
-        return redirect()->route('admin.company.index')
+        return redirect()->route('sys_admin.company.index')
             ->with('success', 'Perusahaan berhasil ditambahkan.');
     }
 
@@ -66,7 +88,7 @@ class CompanyController extends Controller
 
         $company->update($validated);
 
-        return redirect()->route('admin.company.index')
+        return redirect()->route('sys_admin.company.index')
             ->with('success', 'Perusahaan berhasil diperbarui.');
     }
 
@@ -74,7 +96,11 @@ class CompanyController extends Controller
     {
         $company->update(['delete_status' => 1]);
 
-        return redirect()->route('admin.company.index')
+        if (request()->ajax()) {
+            return response()->json(['success' => 'Perusahaan berhasil dihapus.']);
+        }
+
+        return redirect()->route('sys_admin.company.index')
             ->with('success', 'Perusahaan berhasil dihapus.');
     }
 }

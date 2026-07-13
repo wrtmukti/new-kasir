@@ -50,13 +50,15 @@ Route::get('/docs', function () {
 })->name('docs.index');
 
 // ===================== ADMIN (CRUD) =====================
-use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\SysAdmin\CompanyController;
 use App\Http\Controllers\Admin\StockController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
     Route::resource('stock', StockController::class);
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {
+    Route::get('company/data', [CompanyController::class, 'data'])->name('company.data');
     Route::resource('company', CompanyController::class);
 });

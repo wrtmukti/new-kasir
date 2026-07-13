@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SysAdmin\Company;
 
 class Stock extends Model
 {
+    protected $table = 'stocks';
+
     protected $primaryKey = 'stock_id';
 
     protected $fillable = [

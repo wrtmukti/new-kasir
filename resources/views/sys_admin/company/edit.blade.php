@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('sys_admin.layouts.app')
 
 @section('title', 'Edit Perusahaan')
 
@@ -10,7 +10,7 @@
     <h1>Edit Perusahaan</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <a href="{{ route('admin.company.index') }}">Perusahaan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('sys_admin.company.index') }}">Perusahaan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Edit</span>
     </div>
   </div>
@@ -19,7 +19,7 @@
 <div class="card">
   <div class="card-header-flex"><h6><i class="bi bi-building me-2"></i>Informasi Perusahaan</h6></div>
   <div class="card-body">
-    <form action="{{ route('admin.company.update', $company) }}" method="POST">
+    <form action="{{ route('sys_admin.company.update', $company) }}" method="POST">
       @csrf @method('PUT')
       <div class="row g-3">
         <div class="col-md-6">
@@ -56,7 +56,7 @@
         </div>
         <div class="col-12 d-flex gap-2">
           <button type="submit" class="btn btn-primary-grad">Simpan Perubahan</button>
-          <a href="{{ route('admin.company.index') }}" class="btn btn-outline-soft">Batal</a>
+          <a href="{{ route('sys_admin.company.index') }}" class="btn btn-outline-soft">Batal</a>
         </div>
       </div>
     </form>

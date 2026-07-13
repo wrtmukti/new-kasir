@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\SysAdmin;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use App\Models\Admin\Stock;
+use App\Models\Admin\Product;
+use App\Models\Admin\Category;
 
 class Company extends Model
 {
     use HasUlids;
+
+    protected $table = 'companies';
 
     protected $primaryKey = 'company_id';
 

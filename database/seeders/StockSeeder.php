@@ -2,14 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Stock;
+use App\Models\Admin\Stock;
+use App\Models\SysAdmin\Company;
 use Illuminate\Database\Seeder;
 
 class StockSeeder extends Seeder
 {
     public function run(): void
     {
-        $companyIds = \App\Models\Company::pluck('company_id')->toArray();
+        $companyIds = Company::pluck('company_id')->toArray();
         $cid = $companyIds[0] ?? null;
 
         $stocks = [

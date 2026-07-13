@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SysAdmin\Company;
 
 class Category extends Model
 {
+    protected $table = 'categories';
+
     protected $primaryKey = 'category_id';
 
     protected $fillable = [

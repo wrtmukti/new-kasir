@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SysAdmin\Company;
 
 class Product extends Model
 {
+    protected $table = 'products';
+
     protected $primaryKey = 'product_id';
 
     protected $fillable = [
