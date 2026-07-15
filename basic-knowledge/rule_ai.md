@@ -53,6 +53,37 @@
      - **Button loading:** tambah class `btn-loading` ke tombol submit — otomatis disabled + spinner saat diklik
    - **Min 400ms loading setelah submit** — pakai `setTimeout` biar user liat feedback.
    - Referensi: `resources/views/docs/forms.blade.php` (bagian "Input Skeleton & Button Loading Demo")
+   - **Backend validation:** Setiap form wajib pakai **Form Request** untuk validasi di controller. Pesan error ditampilkan **di bawah masing-masing field** dengan teks **merah** (`<span class="text-danger">`). Pesan error pakai **Bahasa Indonesia**.
+     - Contoh Blade:
+       ```blade
+       <div class="input-skeleton">
+         <label for="name" class="form-label-modern">Nama</label>
+         <input type="text" name="name" id="name"
+                class="form-control-modern @error('name') is-invalid @enderror"
+                value="{{ old('name') }}">
+         @error('name')
+             <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+         @enderror
+       </div>
+       ```
+     - Contoh Form Request (`app/Http/Requests/`):
+       ```php
+       public function rules(): array
+       {
+           return [
+               'name' => 'required|string|max:255',
+           ];
+       }
+
+       public function messages(): array
+       {
+           return [
+               'name.required' => 'Nama wajib diisi.',
+               'name.max' => 'Nama maksimal :max karakter.',
+           ];
+       }
+       ```
+     - AJAX: kirim error sebagai JSON, render manual di bawah field pakai JS.
 
    ### Table
    - Setiap table index wajib pake **pagination** — referensi class `pagination-modern` dari docs (UI Components > Pagination).
