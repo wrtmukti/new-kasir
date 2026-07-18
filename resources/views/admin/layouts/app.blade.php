@@ -28,6 +28,12 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'stock') active @endif">
           <a href="{{ route('admin.stock.index') }}" class="nav-link"><i class="bi bi-box-seam"></i><span class="nav-label-text">Stok Bahan</span></a>
         </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'supplier') active @endif">
+          <a href="{{ route('admin.supplier.index') }}" class="nav-link"><i class="bi bi-truck"></i><span class="nav-label-text">Supplier</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'purchase-order') active @endif">
+          <a href="{{ route('admin.purchase-order.index') }}" class="nav-link"><i class="bi bi-cart-plus"></i><span class="nav-label-text">Purchase Order</span></a>
+        </li>
       </ul>
 
       <div class="nav-section-title">Sample Menu</div>

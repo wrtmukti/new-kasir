@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\CompanyRequest;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\Request;
 
@@ -41,17 +42,9 @@ class CompanyController extends Controller
         return view('sys_admin.company.create');
     }
 
-    public function store(Request $request)
+    public function store(CompanyRequest $request)
     {
-        $validated = $request->validate([
-            'company_name' => 'required|string|max:255',
-            'company_code' => 'nullable|string|max:50',
-            'company_branch' => 'nullable|string|max:255',
-            'company_email' => 'nullable|email|max:255',
-            'company_phone' => 'nullable|string|max:50',
-            'company_address' => 'nullable|string',
-            'company_status' => 'nullable|integer|in:0,1',
-        ]);
+        $validated = $request->validated();
 
         $validated['company_slug'] = str()->slug($validated['company_name']);
         $validated['company_status'] = $validated['company_status'] ?? 1;
@@ -72,17 +65,9 @@ class CompanyController extends Controller
         return view('sys_admin.company.edit', compact('company'));
     }
 
-    public function update(Request $request, Company $company)
+    public function update(CompanyRequest $request, Company $company)
     {
-        $validated = $request->validate([
-            'company_name' => 'required|string|max:255',
-            'company_code' => 'nullable|string|max:50',
-            'company_branch' => 'nullable|string|max:255',
-            'company_email' => 'nullable|email|max:255',
-            'company_phone' => 'nullable|string|max:50',
-            'company_address' => 'nullable|string',
-            'company_status' => 'nullable|integer|in:0,1',
-        ]);
+        $validated = $request->validated();
 
         $validated['company_slug'] = str()->slug($validated['company_name']);
 

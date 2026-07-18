@@ -6,19 +6,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
 :root {
-  /* ---- Color tokens ---- */
-  --bg-base:       #07111F;
-  --bg-surface:    #0D1726;
-  --bg-elevated:   #132033;
-  --bg-elevated-2: #1A2A42;
+  /* ---- Color tokens — soft dark (mata-friendly) ---- */
+  --bg-base:       #12151C;
+  --bg-surface:    #1A1E27;
+  --bg-elevated:   #222834;
+  --bg-elevated-2: #2A3140;
 
-  --border-subtle: #24354F;
-  --border-strong: #375070;
+  --border-subtle: #2F3748;
+  --border-strong: #404A60;
 
   /* ---- Primary Brand Colors (Blue Theme) ---- */
-  --accent-1:         #2563EB; /* blue */
-  --accent-2:         #06B6D4; /* cyan */
-  --accent-cyan:      #22D3EE;
+  --accent-1:         #3B82F6; /* blue lebih soft */
+  --accent-2:         #22D3EE; /* cyan */
+  --accent-cyan:      #67E8F9;
 
   --accent-gradient: linear-gradient(
     135deg,
@@ -27,9 +27,9 @@
   );
 
   /* ---- Text ---- */
-  --text-primary:   #F1F5F9;
-  --text-secondary: #CBD5E1;
-  --text-muted:     #94A3B8;
+  --text-primary:   #E8EDF5;
+  --text-secondary: #C8D0DC;
+  --text-muted:     #8893A8;
 
   /* ---- Status Colors ---- */
   --success:          #34D399;

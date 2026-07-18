@@ -52,10 +52,21 @@ Route::get('/docs', function () {
 // ===================== ADMIN (CRUD) =====================
 use App\Http\Controllers\SysAdmin\CompanyController;
 use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\PurchaseOrderController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
     Route::resource('stock', StockController::class);
+
+    Route::get('supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
+    Route::resource('supplier', SupplierController::class);
+
+    // Purchase Order + Receiving
+    Route::get('purchase-order/data', [PurchaseOrderController::class, 'data'])->name('purchase-order.data');
+    Route::get('purchase-order/{purchase_order}/receiving/create', [PurchaseOrderController::class, 'receivingCreate'])->name('purchase-order.receiving.create');
+    Route::post('purchase-order/{purchase_order}/receiving', [PurchaseOrderController::class, 'receivingStore'])->name('purchase-order.receiving.store');
+    Route::resource('purchase-order', PurchaseOrderController::class);
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

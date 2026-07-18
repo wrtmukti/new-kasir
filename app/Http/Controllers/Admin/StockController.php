@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StockRequest;
 use App\Models\Admin\Stock;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\Request;
@@ -45,19 +46,9 @@ class StockController extends Controller
         return view('admin.stock.create', compact('companies'));
     }
 
-    public function store(Request $request)
+    public function store(StockRequest $request)
     {
-        $validated = $request->validate([
-            'company_id' => 'nullable|string|max:255',
-            'stock_code' => 'nullable|string|max:50',
-            'stock_name' => 'required|string|max:255',
-            'stock_description' => 'nullable|string',
-            'stock_type' => 'nullable|string|max:50',
-            'stock_unit' => 'nullable|string|max:20',
-            'stock_amount' => 'nullable|integer|min:0',
-            'stock_price' => 'nullable|numeric|min:0',
-            'stock_status' => 'nullable|integer|in:0,1',
-        ]);
+        $validated = $request->validated();
 
         $validated['stock_slug'] = str()->slug($validated['stock_name']);
         $validated['stock_status'] = $validated['stock_status'] ?? 1;
@@ -81,19 +72,9 @@ class StockController extends Controller
         return view('admin.stock.edit', compact('stock', 'companies'));
     }
 
-    public function update(Request $request, Stock $stock)
+    public function update(StockRequest $request, Stock $stock)
     {
-        $validated = $request->validate([
-            'company_id' => 'nullable|string|max:255',
-            'stock_code' => 'nullable|string|max:50',
-            'stock_name' => 'required|string|max:255',
-            'stock_description' => 'nullable|string',
-            'stock_type' => 'nullable|string|max:50',
-            'stock_unit' => 'nullable|string|max:20',
-            'stock_amount' => 'nullable|integer|min:0',
-            'stock_price' => 'nullable|numeric|min:0',
-            'stock_status' => 'nullable|integer|in:0,1',
-        ]);
+        $validated = $request->validated();
 
         $validated['stock_slug'] = str()->slug($validated['stock_name']);
 

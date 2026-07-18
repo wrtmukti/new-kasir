@@ -149,3 +149,8 @@
      ```
    - Untuk AJAX response, langsung panggil di callback JS setelah loading selesai.
    - Referensi: `resources/views/docs/ui-components.blade.php` (section 33. Toast Demo)
+
+9. **Git branch safety:**
+   - Setiap kali selesai baca basic-knowledge & siap ngoding, kasih tau user **lagi di branch apa sekarang**.
+   - Ingatkan user **jangan commit di branch main/master**. Kalau lagi di main/master, saranin buat branch dulu.
+   - Contoh: *"⚠️ Lagi di branch master. Jangan commit di sini. Mau bikin branch baru?"*
