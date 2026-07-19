@@ -40,7 +40,7 @@ class PurchaseOrderController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admin.purchase-order._data', compact('orders'))->render(),
-                'pagination' => view('vendor.pagination.modern', ['paginator' => $orders])->render(),
+                'pagination' => $orders->links('vendor.pagination.modern')->toHtml(),
                 'total' => $orders->total(),
                 'from' => $orders->firstItem(),
                 'to' => $orders->lastItem(),

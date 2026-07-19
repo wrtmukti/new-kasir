@@ -54,3 +54,28 @@
 |
 | 2026-07-19 | CREATE | StockLog model | `app/Models/Admin/StockLog.php` |
 | 2026-07-19 | UPDATE | Receiving store — inject stock_logs (type=in, stok_before/after) | `PurchaseOrderController@receivingStore` |
+|
+| 2026-07-19 | CREATE | Product CRUD — Model (relasi category), FormRequest, Controller, 5 views, routes, sidebar | `Product.php`, `ProductRequest.php`, `ProductController.php`, `views/admin/product/*`, `routes/web.php`, `layouts/app.blade.php` |
+| 2026-07-19 | SEED | Categories + dummy products | database |
+|
+| 2026-07-19 | CREATE | Category CRUD — FormRequest, Controller, 5 views, routes, sidebar | `CategoryRequest.php`, `CategoryController.php`, `views/admin/category/*`, `routes/web.php`, `layouts/app.blade.php` |
+|
+| 2026-07-19 | CREATE | Table CRUD — Model (ULID PK), FormRequest, Controller, 5 views, routes, sidebar | `Table.php`, `TableRequest.php`, `TableController.php`, `views/admin/table/*`, `routes/web.php`, `layouts/app.blade.php` |
+| 2026-07-19 | SEED | 5 meja dummy | database |
+|
+| 2026-07-19 | SEED | 36 produk dummy (4 kategori) | `ProductSeeder.php` |
+|
+| 2026-07-19 | UPDATE | Category CRUD — Aturan 7: semua field pake input-skeleton, btn-loading, min 400ms submit delay | `views/admin/category/create.blade.php`, `views/admin/category/edit.blade.php` |
+|
+| 2026-07-19 | UPDATE | Product CRUD — Aturan 7: semua field pake input-skeleton, btn-loading, min 400ms submit delay | `views/admin/product/create.blade.php`, `views/admin/product/edit.blade.php` |
+|
+| 2026-07-19 | MOVE | Menu Meja pindah dari Master Data ke Sample Menu di sidebar | `views/admin/layouts/app.blade.php` |
+| 2026-07-19 | UPDATE | Table CRUD — Aturan 7: semua field pake input-skeleton, btn-loading, min 400ms submit delay | `views/admin/table/create.blade.php`, `views/admin/table/edit.blade.php` |
+|
+| 2026-07-19 | CREATE | Category image upload — preview di create/edit, thumbnail di table/show, storage symlink, validasi file | `CategoryRequest.php`, `CategoryController.php`, `views/admin/category/*.blade.php` |
+|
+| 2026-07-19 | UPDATE | Product image upload — preview di create/edit, thumbnail di table/show, row clickable → edit | `ProductRequest.php`, `ProductController.php`, `views/admin/product/*.blade.php` |
+|
+| 2026-07-19 | UPDATE | Product & Table — ganti confirm() browser jadi Bootstrap modal konfirmasi hapus | `views/admin/product/index.blade.php`, `views/admin/table/index.blade.php` |
+|
+| 2026-07-19 | UPDATE | Product index — tabs kategori filter AJAX + toggle List/Card view | `ProductController@data`, `views/admin/product/index.blade.php`, `views/admin/product/_card.blade.php` |

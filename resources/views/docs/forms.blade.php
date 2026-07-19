@@ -148,7 +148,7 @@
             Bungkus input dengan <code>.input-skeleton</code> — saat form di-submit, input jadi shimmer.
             Tambah class <code>.btn-loading</code> ke tombol — saat diklik jadi loading.
           </p>
-          <form onsubmit="event.preventDefault(); alert('Simulasi submit berhasil');" style="max-width:500px;">
+          <form onsubmit="event.preventDefault(); var f=this; setTimeout(function(){ alert('Simulasi submit berhasil'); f.querySelectorAll('.input-skeleton').forEach(function(e){e.classList.remove('is-loading');}); }, 800);" style="max-width:500px;">
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label-modern">Nama Lengkap</label>

@@ -20,6 +20,8 @@ class Product extends Model
         'product_description',
         'product_price',
         'product_discount_id',
+        'product_discount_type',
+        'product_discount_value',
         'product_status',
         'product_image',
         'category_remark',
@@ -31,5 +33,10 @@ class Product extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
     }
 }

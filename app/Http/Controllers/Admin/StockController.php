@@ -30,7 +30,7 @@ class StockController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admin.stock._data', compact('stocks'))->render(),
-                'pagination' => view('vendor.pagination.modern', ['paginator' => $stocks])->render(),
+                'pagination' => $stocks->links('vendor.pagination.modern')->toHtml(),
                 'total' => $stocks->total(),
                 'from' => $stocks->firstItem(),
                 'to' => $stocks->lastItem(),

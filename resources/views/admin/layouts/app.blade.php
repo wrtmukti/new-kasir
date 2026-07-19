@@ -38,11 +38,14 @@
 
       <div class="nav-section-title">Sample Menu</div>
       <ul class="list-unstyled">
-        <li class="nav-item">
-          <a href="#" class="nav-link"><i class="bi bi-tags-fill"></i><span class="nav-label-text">Kategori</span></a>
+        <li class="nav-item @if(($activeMenu ?? '') === 'category') active @endif">
+          <a href="{{ route('admin.category.index') }}" class="nav-link"><i class="bi bi-tags-fill"></i><span class="nav-label-text">Kategori</span></a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link"><i class="bi bi-cup-hot-fill"></i><span class="nav-label-text">Produk</span></a>
+        <li class="nav-item @if(($activeMenu ?? '') === 'product') active @endif">
+          <a href="{{ route('admin.product.index') }}" class="nav-link"><i class="bi bi-cup-hot-fill"></i><span class="nav-label-text">Produk</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'table') active @endif">
+          <a href="{{ route('admin.table.index') }}" class="nav-link"><i class="bi bi-grid-3x3-gap-fill"></i><span class="nav-label-text">Meja</span></a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link"><i class="bi bi-people-fill"></i><span class="nav-label-text">Pelanggan</span></a>

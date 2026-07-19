@@ -27,7 +27,7 @@ class CompanyController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('sys_admin.company._data', compact('companies'))->render(),
-                'pagination' => view('vendor.pagination.modern', ['paginator' => $companies])->render(),
+                'pagination' => $companies->links('vendor.pagination.modern')->toHtml(),
                 'total' => $companies->total(),
                 'from' => $companies->firstItem(),
                 'to' => $companies->lastItem(),

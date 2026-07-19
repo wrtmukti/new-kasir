@@ -54,10 +54,22 @@ use App\Http\Controllers\SysAdmin\CompanyController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\PurchaseOrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TableController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
     Route::resource('stock', StockController::class);
+
+    Route::get('product/data', [ProductController::class, 'data'])->name('product.data');
+    Route::resource('product', ProductController::class);
+
+    Route::get('category/data', [CategoryController::class, 'data'])->name('category.data');
+    Route::resource('category', CategoryController::class);
+
+    Route::get('table/data', [TableController::class, 'data'])->name('table.data');
+    Route::resource('table', TableController::class);
 
     Route::get('supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
     Route::resource('supplier', SupplierController::class);

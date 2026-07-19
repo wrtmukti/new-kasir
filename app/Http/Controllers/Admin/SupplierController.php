@@ -30,7 +30,7 @@ class SupplierController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('admin.supplier._data', compact('suppliers'))->render(),
-                'pagination' => view('vendor.pagination.modern', ['paginator' => $suppliers])->render(),
+                'pagination' => $suppliers->links('vendor.pagination.modern')->toHtml(),
                 'total' => $suppliers->total(),
                 'from' => $suppliers->firstItem(),
                 'to' => $suppliers->lastItem(),
