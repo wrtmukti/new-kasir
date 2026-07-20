@@ -40,6 +40,21 @@ class StockController extends Controller
         return view('admin.stock.index', compact('stocks'));
     }
 
+    public function jsonList(Request $request)
+    {
+        $search = $request->input('search');
+        $stocks = Stock::where('delete_status', 0)
+            ->where('stock_status', 1)
+            ->when($search, function ($q) use ($search) {
+                $q->where('stock_name', 'like', "%{$search}%")
+                  ->orWhere('stock_code', 'like', "%{$search}%");
+            })
+            ->orderBy('stock_name')
+            ->get(['stock_id', 'stock_name', 'stock_code', 'stock_unit', 'stock_price']);
+
+        return response()->json($stocks);
+    }
+
     public function create()
     {
         $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();

@@ -11,6 +11,25 @@ class ProductRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        // Decode JSON string from hidden input into actual array for validation
+        if ($this->has('stock_ids') && is_string($this->input('stock_ids'))) {
+            $decoded = json_decode($this->input('stock_ids'), true);
+            $this->merge([
+                'stock_ids' => is_array($decoded) ? $decoded : [],
+            ]);
+        }
+
+        // Map quantities from associative (stock_id => qty) to indexed array if needed
+        if ($this->has('quantities') && is_string($this->input('quantities'))) {
+            $decoded = json_decode($this->input('quantities'), true);
+            $this->merge([
+                'quantities' => is_array($decoded) ? $decoded : [],
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -23,6 +42,10 @@ class ProductRequest extends FormRequest
             'product_status' => 'nullable|integer|in:0,1',
             'product_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
             'category_remark' => 'nullable|string|max:255',
+            'stock_ids' => 'nullable|array',
+            'stock_ids.*' => 'string|exists:stocks,stock_id',
+            'quantities' => 'nullable|array',
+            'quantities.*' => 'nullable|integer|min:0',
         ];
     }
 
@@ -39,6 +62,9 @@ class ProductRequest extends FormRequest
             'product_image.image' => 'File harus berupa gambar.',
             'product_image.mimes' => 'Format gambar harus jpeg, png, jpg, webp, atau svg.',
             'product_image.max' => 'Ukuran gambar maksimal 2MB.',
+            'stock_ids.*.exists' => 'Stok dengan ID tersebut tidak ditemukan.',
+            'quantities.*.integer' => 'Jumlah stok harus berupa angka.',
+            'quantities.*.min' => 'Jumlah stok minimal 0.',
         ];
     }
 }

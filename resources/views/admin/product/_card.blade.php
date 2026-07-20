@@ -21,6 +21,11 @@
     </div>
     <div class="product-card-category">{{ $product->category?->category_name ?? '-' }}</div>
     <div class="product-card-price">{{ $product->product_price ? 'Rp ' . number_format($product->product_price, 0) : '-' }}</div>
+    @if($product->relationLoaded('stocks') && $product->stocks->isNotEmpty())
+      <div class="product-card-stock">
+        <span class="stock-pill"><i class="bi bi-box-seam me-1" style="font-size:0.65rem;"></i>{{ $product->stocks->count() }} bahan</span>
+      </div>
+    @endif
   </div>
   <div class="product-card-actions">
     <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-ghost btn-icon-sq btn-sm" title="Edit">

@@ -60,6 +60,7 @@ use App\Http\Controllers\Admin\TableController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
+    Route::get('stock/json-list', [StockController::class, 'jsonList'])->name('stock.json-list');
     Route::resource('stock', StockController::class);
 
     Route::get('product/data', [ProductController::class, 'data'])->name('product.data');

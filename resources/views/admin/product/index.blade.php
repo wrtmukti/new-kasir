@@ -64,6 +64,7 @@
                 <th>Produk</th>
                 <th>Kategori</th>
                 <th>Harga</th>
+                <th>Stok</th>
                 <th>Status</th>
                 <th>Aksi</th>
               </tr>
@@ -100,12 +101,13 @@
                 <th>Produk</th>
                 <th>Kategori</th>
                 <th>Harga</th>
+                <th>Stok</th>
                 <th>Status</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody class="tab-table-body" data-category-id="{{ $cat->category_id }}">
-              <tr><td colspan="5" class="text-center text-muted-c py-4">Pilih tab untuk memuat data.</td></tr>
+              <tr><td colspan="6" class="text-center text-muted-c py-4">Pilih tab untuk memuat data.</td></tr>
             </tbody>
           </table>
         </div>
@@ -197,6 +199,9 @@
   color: var(--accent-1);
   margin-bottom: 0.35rem;
 }
+.product-card-stock {
+  margin-top: 0.25rem;
+}
 .product-card-actions {
   position: absolute;
   top: 0.4rem;
@@ -208,6 +213,18 @@
 }
 .product-card:hover .product-card-actions {
   opacity: 1;
+}
+
+.stock-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  background: rgba(37,99,235,0.12);
+  color: var(--accent-1);
+  border: 1px solid rgba(37,99,235,0.2);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 </style>
 @endpush

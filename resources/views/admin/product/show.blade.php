@@ -59,5 +59,127 @@
       </div>
     </div>
   </div>
+
+  {{-- BOM / Ingredients Card --}}
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header-flex">
+        <h6><i class="bi bi-box-seam me-2"></i>Komposisi Stok</h6>
+        <span class="selected-count" style="display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;background:var(--accent-gradient);color:#fff;border-radius:var(--radius-full);font-size:0.72rem;font-weight:600;">
+          {{ $product->stocks->count() }}
+        </span>
+      </div>
+      <div class="card-body">
+        @if($product->stocks->isNotEmpty())
+          <div class="ingredient-list">
+            @foreach($product->stocks as $stock)
+              <div class="ingredient-item">
+                <div class="ingredient-icon">
+                  <i class="bi bi-dot"></i>
+                </div>
+                <div class="ingredient-info">
+                  <div class="ingredient-name">{{ $stock->stock_name }}</div>
+                  <div class="ingredient-meta">
+                    <span class="stock-badge-sm">{{ $stock->stock_unit }}</span>
+                    @if($stock->stock_code)
+                      <span class="text-muted-c" style="font-size:0.7rem;">{{ $stock->stock_code }}</span>
+                    @endif
+                  </div>
+                </div>
+                <div class="ingredient-qty">
+                  <span class="qty-value">{{ $stock->pivot->quantity }}</span>
+                  <span class="qty-unit">{{ $stock->stock_unit }}</span>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <div class="text-center text-muted-c py-4">
+            <i class="bi bi-box-seam" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
+            <span style="font-size:0.85rem;">Tidak ada komposisi stok</span>
+          </div>
+        @endif
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.ingredient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.ingredient-item:last-child {
+  border-bottom: none;
+}
+.ingredient-icon {
+  color: var(--accent-1);
+  font-size: 1.1rem;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+.ingredient-info {
+  flex: 1;
+  min-width: 0;
+}
+.ingredient-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.ingredient-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.1rem;
+}
+.stock-badge-sm {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+.ingredient-qty {
+  text-align: right;
+  flex-shrink: 0;
+}
+.qty-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-1);
+}
+.qty-unit {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: -0.1rem;
+}
+.selected-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: var(--accent-gradient);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+</style>
+@endpush

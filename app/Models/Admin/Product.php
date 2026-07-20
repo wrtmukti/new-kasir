@@ -39,4 +39,12 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'category_id');
     }
+
+    public function stocks()
+    {
+        return $this->belongsToMany(Stock::class, 'ingredients', 'product_id', 'stock_id')
+            ->withPivot('quantity')
+            ->wherePivot('delete_status', 0)
+            ->withTimestamps();
+    }
 }

@@ -19,6 +19,15 @@
   <td>{{ $product->category?->category_name ?? '-' }}</td>
   <td class="text-mono">{{ $product->product_price ? 'Rp ' . number_format($product->product_price, 0) : '-' }}</td>
   <td>
+    @if($product->relationLoaded('stocks') && $product->stocks->isNotEmpty())
+      <span class="stock-pill" title="Jumlah bahan baku">
+        <i class="bi bi-box-seam me-1" style="font-size:0.65rem;"></i>{{ $product->stocks->count() }}
+      </span>
+    @else
+      <span class="text-muted-c" style="font-size:0.75rem;">-</span>
+    @endif
+  </td>
+  <td>
     @if($product->product_status)
       <span class="pill pill-success">Aktif</span>
     @else
@@ -38,6 +47,6 @@
 </tr>
 @empty
 <tr>
-  <td colspan="5" class="text-center text-muted-c py-4">Belum ada data produk.</td>
+  <td colspan="6" class="text-center text-muted-c py-4">Belum ada data produk.</td>
 </tr>
 @endforelse
