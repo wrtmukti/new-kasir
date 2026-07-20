@@ -19,18 +19,20 @@
 <div class="card">
   <div class="card-header-flex"><h6><i class="bi bi-cart-plus me-2"></i>Informasi PO</h6></div>
   <div class="card-body">
-    <form action="{{ route('admin.purchase-order.update', $order) }}" method="POST" id="poForm">
+    <form action="{{ route('admin.purchase-order.update', $order) }}" method="POST" id="poForm" class="form-submit-loading">
       @csrf @method('PUT')
       <div class="row g-3 mb-4">
         <div class="col-md-6">
           <label class="form-label-modern">Supplier <span class="text-danger">*</span></label>
-          <select name="supplier_id" class="form-select-modern @error('supplier_id') is-invalid @enderror">
-            <option value="">-- Pilih Supplier --</option>
-            @foreach($suppliers as $s)
-              <option value="{{ $s->supplier_id }}" {{ old('supplier_id', $order->supplier_id) == $s->supplier_id ? 'selected' : '' }}>{{ $s->supplier_name }}</option>
-            @endforeach
-          </select>
-          @error('supplier_id')<div class="text-danger mt-1" style="font-size:0.8rem;">{{ $message }}</div>@enderror
+          <div class="input-skeleton">
+            <select name="supplier_id" class="form-select-modern @error('supplier_id') is-invalid @enderror">
+              <option value="">-- Pilih Supplier --</option>
+              @foreach($suppliers as $s)
+                <option value="{{ $s->supplier_id }}" {{ old('supplier_id', $order->supplier_id) == $s->supplier_id ? 'selected' : '' }}>{{ $s->supplier_name }}</option>
+              @endforeach
+            </select>
+            @error('supplier_id')<span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>@enderror
+          </div>
         </div>
         <div class="col-md-3">
           <label class="form-label-modern">Kode PO</label>
@@ -87,12 +89,14 @@
       <div class="row mt-3">
         <div class="col-12">
           <label class="form-label-modern">Catatan</label>
-          <textarea name="po_notes" class="form-control-modern" rows="2" placeholder="Catatan PO">{{ old('po_notes', $order->po_notes) }}</textarea>
+          <div class="input-skeleton">
+            <textarea name="po_notes" class="form-control-modern" rows="2" placeholder="Catatan PO">{{ old('po_notes', $order->po_notes) }}</textarea>
+          </div>
         </div>
       </div>
 
       <div class="d-flex gap-2 mt-4">
-        <button type="submit" class="btn btn-primary-grad">Simpan Perubahan</button>
+        <button type="submit" class="btn btn-primary-grad btn-loading">Simpan Perubahan</button>
         <a href="{{ route('admin.purchase-order.show', $order) }}" class="btn btn-outline-soft">Kembali</a>
       </div>
     </form>
@@ -103,6 +107,25 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Form submit loading
+  const form = document.querySelector('.form-submit-loading');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      form.querySelectorAll('.input-skeleton').forEach(function(el) {
+        el.classList.add('is-loading');
+      });
+      const btn = form.querySelector('.btn-loading');
+      if (btn) {
+        btn.classList.add('is-loading');
+        btn.disabled = true;
+      }
+      requestAnimationFrame(function() {
+        setTimeout(function() { form.submit(); }, 400);
+      });
+    });
+  }
+
   let rowIndex = {{ count($order->items) }};
 
   function calcRow(row) {

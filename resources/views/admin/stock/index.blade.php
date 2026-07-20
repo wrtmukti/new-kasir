@@ -68,6 +68,26 @@
 @if(session('error'))
   <script>document.addEventListener('DOMContentLoaded', function() { NexoraToast('{{ session('error') }}', 'danger'); });</script>
 @endif
+{{-- Modal Konfirmasi Hapus --}}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="mb-0">Konfirmasi Hapus</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-exclamation-triangle-fill" style="font-size:2rem;color:var(--danger);"></i>
+        <p class="mt-2 mb-0">Yakin ingin menghapus stok ini?</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0 pt-0">
+        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -133,28 +153,44 @@ document.addEventListener('DOMContentLoaded', function() {
     // Delete click
     document.querySelectorAll('.btn-delete').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        if (!confirm('Hapus stok ini?')) return;
+        document.getElementById('confirmDeleteBtn').dataset.url = this.dataset.url;
+        var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        modal.show();
+      });
+    });
 
-        const url = this.dataset.url;
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: '_token={{ csrf_token() }}&_method=DELETE'
-        })
-        .then(res => res.json())
-        .then(data => {
-          NexoraToast(data.success || 'Berhasil dihapus.', 'success');
-          loadData(currentPage, perPage.value);
-        })
-        .catch(() => {
-          NexoraToast('Gagal menghapus data.', 'danger');
-        });
+    // Row click → show
+    document.querySelectorAll('.row-clickable').forEach(function(row) {
+      row.addEventListener('click', function(e) {
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.btn')) return;
+        window.location.href = this.dataset.url;
       });
     });
   }
+
+  // Confirm delete — bind sekali
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    const url = this.dataset.url;
+    if (!url) return;
+    var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+    if (modal) modal.hide();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: '_token={{ csrf_token() }}&_method=DELETE'
+    })
+    .then(res => res.json())
+    .then(data => {
+      NexoraToast(data.success || 'Berhasil dihapus.', 'success');
+      loadData(currentPage, perPage.value);
+    })
+    .catch(() => {
+      NexoraToast('Gagal menghapus data.', 'danger');
+    });
+  });
 
   // Per-page change
   perPage.addEventListener('change', function() {

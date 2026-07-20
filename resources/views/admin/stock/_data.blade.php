@@ -1,9 +1,7 @@
 @forelse($stocks as $stock)
-<tr>
+<tr class="row-clickable" data-url="{{ route('admin.stock.show', $stock) }}">
   <td class="text-mono">{{ $stock->stock_code ?? '-' }}</td>
-  <td class="cell-primary">
-    <a href="{{ route('admin.stock.show', $stock) }}" class="text-decoration-none">{{ $stock->stock_name }}</a>
-  </td>
+  <td class="cell-primary">{{ $stock->stock_name }}</td>
   <td>{{ $stock->stock_type ?? '-' }}</td>
   <td class="text-mono">{{ $stock->stock_unit ?? '-' }}</td>
   <td class="text-mono fw-semibold {{ $stock->stock_amount <= 0 ? 'text-danger' : '' }}">{{ number_format($stock->stock_amount) }}</td>

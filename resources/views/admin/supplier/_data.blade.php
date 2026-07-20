@@ -1,9 +1,7 @@
 @forelse($suppliers as $supplier)
-<tr>
+<tr class="row-clickable" data-url="{{ route('admin.supplier.show', $supplier) }}">
   <td class="text-mono">{{ $supplier->supplier_code ?? '-' }}</td>
-  <td class="cell-primary">
-    <a href="{{ route('admin.supplier.show', $supplier) }}" class="text-decoration-none">{{ $supplier->supplier_name }}</a>
-  </td>
+  <td class="cell-primary">{{ $supplier->supplier_name }}</td>
   <td>{{ $supplier->supplier_contact ?? '-' }}</td>
   <td class="text-mono">{{ $supplier->supplier_phone ?? '-' }}</td>
   <td>

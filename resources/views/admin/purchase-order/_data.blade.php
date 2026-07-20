@@ -1,8 +1,6 @@
 @forelse($orders as $order)
-<tr>
-  <td class="text-mono fw-semibold">
-    <a href="{{ route('admin.purchase-order.show', $order) }}" class="text-decoration-none">{{ $order->po_code }}</a>
-  </td>
+<tr class="row-clickable" data-url="{{ route('admin.purchase-order.show', $order) }}">
+  <td class="text-mono fw-semibold">{{ $order->po_code }}</td>
   <td>{{ $order->supplier?->supplier_name ?? '-' }}</td>
   <td style="font-size:0.85rem;">{{ $order->po_date ? $order->po_date->format('d M Y') : '-' }}</td>
   <td class="text-mono">Rp {{ number_format($order->po_total_amount, 0) }}</td>
