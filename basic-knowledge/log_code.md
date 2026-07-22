@@ -104,3 +104,14 @@
 | 2026-07-22 | FIX | Bundle create/edit — .product-tag warna ilang di dark mode, tambah `color:var(--text-primary)` | `views/admin/bundle/create.blade.php`, `edit.blade.php` |
 | 2026-07-22 | FIX | Receiving create — teks referensi PO & tombol Konfirmasi Terima ilang di dark mode, tambah `color` + `btn-success-grad` style | `views/admin/purchase-receiving/create.blade.php` |
 | 2026-07-22 | RULES | Aturan 10 — setiap perubahan wajib catat di `log_code.md` langsung | `rule_ai.md` |
+|
+| 2026-07-22 | CREATE | Order menu (Pesan) — controller, view index (copy product index), partials _data & _card, route, sidebar, cart modal | `OrderController.php`, `views/admin/order/*`, `routes/web.php`, `layouts/app.blade.php` |
+|
+| 2026-07-22 | UPDATE | Order flow — create view (form detail + notes per item), store (status in_progress), auto-decrement stock via BOM, update meja jadi terisi | `OrderController.php`, `views/admin/order/create.blade.php`, `routes/web.php` |
+|
+| 2026-07-22 | CREATE | Order list (table AJAX) + detail show — controller method, view list & show, sidebar menu Riwayat Pesanan | `OrderController.php`, `views/admin/order/list.blade.php`, `views/admin/order/_list_data.blade.php`, `views/admin/order/show.blade.php`, `routes/web.php`, `layouts/app.blade.php` |
+|
+| 2026-07-22 | CREATE | Tombol complete order + cetak struk — complete (in_progress→completed, free table), receipt view (thermal 80mm) | `OrderController.php`, `views/admin/order/receipt.blade.php`, `views/admin/order/show.blade.php`, `routes/web.php` |
+|
+| 2026-07-23 | UPDATE | Complete order — simpan ke transactions + transaction_items | `OrderController.php`, `app/Models/Admin/Transaction.php`, `app/Models/Admin/TransactionItem.php` |
+| 2026-07-23 | CREATE | Menu Transaksi — controller, views (index AJAX + show detail), route, sidebar di bawah Riwayat Pesanan | `TransactionController.php`, `views/admin/transaction/*`, `routes/web.php`, `layouts/app.blade.php` |

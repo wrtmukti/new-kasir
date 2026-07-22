@@ -58,6 +58,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TableController;
 use App\Http\Controllers\Admin\BundleController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\TransactionController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -88,6 +90,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Bundle
     Route::get('bundle/data', [BundleController::class, 'data'])->name('bundle.data');
     Route::resource('bundle', BundleController::class);
+
+    // Order — New order
+    Route::get('order/data', [OrderController::class, 'data'])->name('order.data');
+    Route::get('order', [OrderController::class, 'index'])->name('order.index');
+    Route::post('order/store-cart', [OrderController::class, 'storeCart'])->name('order.store-cart');
+    Route::get('order/create', [OrderController::class, 'create'])->name('order.create');
+    Route::post('order', [OrderController::class, 'store'])->name('order.store');
+    // Order — List & detail
+    Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
+    Route::get('order/list-data', [OrderController::class, 'listData'])->name('order.list-data');
+    Route::post('order/{order}/complete', [OrderController::class, 'complete'])->name('order.complete');
+    Route::get('order/{order}/receipt', [OrderController::class, 'receipt'])->name('order.receipt');
+    Route::get('order/{order}', [OrderController::class, 'show'])->name('order.show');
+
+    // Transaction
+    Route::get('transaction/data', [TransactionController::class, 'data'])->name('transaction.data');
+    Route::get('transaction', [TransactionController::class, 'index'])->name('transaction.index');
+    Route::get('transaction/{transaction}', [TransactionController::class, 'show'])->name('transaction.show');
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

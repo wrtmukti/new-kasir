@@ -36,6 +36,19 @@
         </li>
       </ul>
 
+      <div class="nav-section-title">Transaksi</div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'order') active @endif">
+          <a href="{{ route('admin.order.index') }}" class="nav-link"><i class="bi bi-bag-fill"></i><span class="nav-label-text">Pesan</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'order-list') active @endif">
+          <a href="{{ route('admin.order.list') }}" class="nav-link"><i class="bi bi-receipt"></i><span class="nav-label-text">Riwayat Pesanan</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'transaction') active @endif">
+          <a href="{{ route('admin.transaction.index') }}" class="nav-link"><i class="bi bi-credit-card"></i><span class="nav-label-text">Transaksi</span></a>
+        </li>
+      </ul>
+
       <div class="nav-section-title">Sample Menu</div>
       <ul class="list-unstyled">
         <li class="nav-item @if(($activeMenu ?? '') === 'category') active @endif">
