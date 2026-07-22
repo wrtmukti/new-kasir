@@ -34,15 +34,7 @@
             @error('supplier_id')<span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>@enderror
           </div>
         </div>
-        <div class="col-md-3">
-          <label class="form-label-modern">Status</label>
-          <div class="input-skeleton">
-            <select name="po_status" class="form-select-modern">
-              <option value="draft" {{ old('po_status', 'draft') == 'draft' ? 'selected' : '' }}>Draft</option>
-              <option value="ordered" {{ old('po_status') == 'ordered' ? 'selected' : '' }}>Langsung Pesan</option>
-            </select>
-          </div>
-        </div>
+        <input type="hidden" name="po_status" value="draft">
       </div>
 
       <div class="card-header-flex mb-3 px-0 border-0">

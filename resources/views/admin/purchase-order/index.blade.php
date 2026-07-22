@@ -59,12 +59,7 @@
   </div>
 </div>
 
-@if(session('success'))
-  <script>document.addEventListener('DOMContentLoaded', function() { NexoraToast('{{ session('success') }}', 'success'); });</script>
-@endif
-@if(session('error'))
-  <script>document.addEventListener('DOMContentLoaded', function() { NexoraToast('{{ session('error') }}', 'danger'); });</script>
-@endif
+{{-- Flash session → NexoraToast (diproses di JS bawah) --}}
 {{-- Modal Konfirmasi Hapus --}}
 <div class="modal fade" id="deleteModal" tabindex="-1">
   <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -90,6 +85,14 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Flash → NexoraToast
+  @if(session('success'))
+    NexoraToast('{{ session('success') }}', 'success');
+  @endif
+  @if(session('error'))
+    NexoraToast('{{ session('error') }}', 'danger');
+  @endif
+
   const tableBody = document.getElementById('tableBody');
   const paginationContainer = document.getElementById('paginationContainer');
   const totalCount = document.getElementById('totalCount');

@@ -44,6 +44,9 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'product') active @endif">
           <a href="{{ route('admin.product.index') }}" class="nav-link"><i class="bi bi-cup-hot-fill"></i><span class="nav-label-text">Produk</span></a>
         </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'bundle') active @endif">
+          <a href="{{ route('admin.bundle.index') }}" class="nav-link"><i class="bi bi-gift"></i><span class="nav-label-text">Paket Bundle</span></a>
+        </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'table') active @endif">
           <a href="{{ route('admin.table.index') }}" class="nav-link"><i class="bi bi-grid-3x3-gap-fill"></i><span class="nav-label-text">Meja</span></a>
         </li>

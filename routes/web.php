@@ -57,6 +57,7 @@ use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TableController;
+use App\Http\Controllers\Admin\BundleController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -77,9 +78,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Purchase Order + Receiving
     Route::get('purchase-order/data', [PurchaseOrderController::class, 'data'])->name('purchase-order.data');
+    Route::post('purchase-order/{purchase_order}/confirm', [PurchaseOrderController::class, 'confirm'])->name('purchase-order.confirm');
+    Route::post('purchase-order/{purchase_order}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-order.cancel');
+    Route::post('purchase-order/{purchase_order}/return', [PurchaseOrderController::class, 'return'])->name('purchase-order.return');
     Route::get('purchase-order/{purchase_order}/receiving/create', [PurchaseOrderController::class, 'receivingCreate'])->name('purchase-order.receiving.create');
     Route::post('purchase-order/{purchase_order}/receiving', [PurchaseOrderController::class, 'receivingStore'])->name('purchase-order.receiving.store');
     Route::resource('purchase-order', PurchaseOrderController::class);
+
+    // Bundle
+    Route::get('bundle/data', [BundleController::class, 'data'])->name('bundle.data');
+    Route::resource('bundle', BundleController::class);
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

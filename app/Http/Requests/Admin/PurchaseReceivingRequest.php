@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Admin\PurchaseOrderItem;
 
 class PurchaseReceivingRequest extends FormRequest
 {
@@ -19,6 +20,34 @@ class PurchaseReceivingRequest extends FormRequest
             'items.*.received_qty' => 'required|integer|min:0',
             'items.*.received_price' => 'required|numeric|min:0',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $items = $this->input('items', []);
+            foreach ($items as $i => $item) {
+                $qty = (int) ($item['received_qty'] ?? 0);
+                if ($qty <= 0) continue;
+
+                $poItemId = $item['po_item_id'] ?? null;
+                if (!$poItemId) continue;
+
+                $poItem = PurchaseOrderItem::find($poItemId);
+                if (!$poItem) {
+                    $validator->errors()->add("items.$i.received_qty", "Item tidak ditemukan.");
+                    continue;
+                }
+
+                $remaining = $poItem->qty - $poItem->received_qty;
+                if ($qty > $remaining) {
+                    $validator->errors()->add(
+                        "items.$i.received_qty",
+                        "Qty diterima ($qty) melebihi sisa pesanan ($remaining)."
+                    );
+                }
+            }
+        });
     }
 
     public function messages(): array

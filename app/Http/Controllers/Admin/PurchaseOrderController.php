@@ -88,7 +88,7 @@ class PurchaseOrderController extends Controller
                 'po_code' => $poCode,
                 'po_date' => now(),
                 'supplier_id' => $validated['supplier_id'],
-                'po_status' => $validated['po_status'] ?? 'draft',
+                'po_status' => 'draft',
                 'po_total_amount' => $totalAmount,
                 'po_notes' => $validated['po_notes'] ?? null,
             ]);
@@ -96,7 +96,7 @@ class PurchaseOrderController extends Controller
             $order->items()->saveMany($items);
             DB::commit();
 
-            return redirect()->route('admin.purchase-order.show', $order)
+            return redirect()->route('admin.purchase-order.show', [$order, 'confirm' => 1])
                 ->with('success', 'Purchase Order berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -109,7 +109,17 @@ class PurchaseOrderController extends Controller
     {
         $order = $purchase_order;
         $order->load(['supplier', 'items.stock', 'receivings.items']);
-        return view('admin.purchase-order.show', compact('order'));
+
+        // Hitung returned_qty per stock dari StockLog
+        $returnLogs = StockLog::where('reference_type', 'purchase_return')
+            ->where('reference_code', $order->po_code)
+            ->get()
+            ->groupBy('stock_id')
+            ->map(function ($logs) {
+                return $logs->sum('qty');
+            });
+
+        return view('admin.purchase-order.show', compact('order', 'returnLogs'));
     }
 
     public function edit(PurchaseOrder $purchase_order)
@@ -181,6 +191,126 @@ class PurchaseOrderController extends Controller
 
         return redirect()->route('admin.purchase-order.index')
             ->with('success', 'PO berhasil dihapus.');
+    }
+
+    // ===================== CONFIRM =====================
+
+    public function confirm(PurchaseOrder $purchase_order)
+    {
+        if ($purchase_order->po_status !== 'draft') {
+            if (request()->ajax()) return response()->json(['error' => 'Hanya PO draft yang bisa dikonfirmasi.'], 422);
+            return redirect()->back()->with('error', 'Hanya PO draft yang bisa dikonfirmasi.');
+        }
+
+        $purchase_order->update(['po_status' => 'ordered']);
+
+        if (request()->ajax()) {
+            return response()->json(['success' => 'PO berhasil dikonfirmasi.', 'status' => 'ordered']);
+        }
+
+        return redirect()->route('admin.purchase-order.show', $purchase_order)
+            ->with('success', 'PO berhasil dikonfirmasi. Status sekarang: Ordered.');
+    }
+
+    // ===================== CANCEL =====================
+
+    public function cancel(Request $request, PurchaseOrder $purchase_order)
+    {
+        $request->validate([
+            'cancellation_reason' => 'required|string|max:1000',
+        ]);
+
+        if (!in_array($purchase_order->po_status, ['draft', 'ordered'])) {
+            if (request()->ajax()) return response()->json(['error' => 'PO tidak bisa dibatalkan.'], 422);
+            return redirect()->back()->with('error', 'PO tidak bisa dibatalkan.');
+        }
+
+        if ($purchase_order->po_status === 'ordered') {
+            $hasReceived = $purchase_order->items()->where('received_qty', '>', 0)->exists();
+            if ($hasReceived) {
+                if (request()->ajax()) return response()->json(['error' => 'PO sudah ada barang diterima. Gunakan Return.'], 422);
+                return redirect()->back()->with('error', 'PO sudah ada barang diterima. Gunakan Return.');
+            }
+        }
+
+        $notes = $purchase_order->po_notes;
+        $cancelNote = '[DIBATALKAN: ' . now()->format('d M Y H:i') . '] ' . $request->cancellation_reason;
+        $notes = $notes ? $notes . "\n" . $cancelNote : $cancelNote;
+
+        $purchase_order->update([
+            'po_status' => 'cancelled',
+            'po_notes' => $notes,
+        ]);
+
+        if (request()->ajax()) {
+            return response()->json(['success' => 'PO berhasil dibatalkan.']);
+        }
+
+        return redirect()->route('admin.purchase-order.show', $purchase_order)
+            ->with('success', 'PO berhasil dibatalkan.');
+    }
+
+    // ===================== RETURN =====================
+
+    public function return(Request $request, PurchaseOrder $purchase_order)
+    {
+        $request->validate([
+            'stock_id' => 'required|string',
+            'qty' => 'required|integer|min:1',
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        if (!in_array($purchase_order->po_status, ['partial', 'completed'])) {
+            if (request()->ajax()) return response()->json(['error' => 'Hanya PO partial/completed yang bisa diretur.'], 422);
+            return redirect()->back()->with('error', 'Hanya PO partial/completed yang bisa diretur.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $poItem = $purchase_order->items()
+                ->where('stock_id', $request->stock_id)
+                ->firstOrFail();
+
+            $returnedQty = StockLog::where('reference_type', 'purchase_return')
+                ->where('reference_code', $purchase_order->po_code)
+                ->where('stock_id', $request->stock_id)
+                ->sum('qty');
+
+            $availableToReturn = $poItem->received_qty - $returnedQty;
+
+            if ($request->qty > $availableToReturn) {
+                if (request()->ajax()) return response()->json(['error' => 'Qty return melebihi sisa (sisa: ' . $availableToReturn . ').'], 422);
+                return redirect()->back()->with('error', 'Qty return melebihi sisa (sisa: ' . $availableToReturn . ').');
+            }
+
+            $stock = Stock::findOrFail($request->stock_id);
+            $stockBefore = $stock->stock_amount;
+            $stock->decrement('stock_amount', $request->qty);
+
+            StockLog::create([
+                'company_id' => $purchase_order->company_id,
+                'stock_id' => $request->stock_id,
+                'reference_type' => 'purchase_return',
+                'reference_code' => $purchase_order->po_code,
+                'type' => 'return',
+                'qty' => $request->qty,
+                'price' => $poItem->price,
+                'total' => $request->qty * $poItem->price,
+                'stock_before' => $stockBefore,
+                'stock_after' => $stockBefore - $request->qty,
+                'notes' => 'Return dari ' . $purchase_order->po_code . ': ' . $request->reason,
+            ]);
+
+            DB::commit();
+
+            if (request()->ajax()) return response()->json(['success' => 'Return berhasil. Stok berkurang.']);
+            return redirect()->route('admin.purchase-order.show', $purchase_order)
+                ->with('success', 'Return berhasil. Stok berkurang.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if (request()->ajax()) return response()->json(['error' => 'Gagal return: ' . $e->getMessage()], 422);
+            return redirect()->back()->with('error', 'Gagal return: ' . $e->getMessage());
+        }
     }
 
     // ===================== RECEIVING =====================

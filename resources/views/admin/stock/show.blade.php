@@ -26,23 +26,46 @@
   <div class="col-lg-8">
     <div class="card">
       <div class="card-header-flex"><h6><i class="bi bi-info-circle me-2"></i>Informasi Stok</h6></div>
-      <div class="card-body">
-        <table class="table table-borderless mb-0" style="font-size:0.9rem;">
-          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $stock->company?->company_name ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Kode Stok</td><td class="text-mono">{{ $stock->stock_code ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Nama</td><td class="fw-semibold">{{ $stock->stock_name }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Tipe</td><td>{{ $stock->stock_type ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Deskripsi</td><td>{{ $stock->stock_description ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Unit</td><td class="text-mono">{{ $stock->stock_unit ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Jumlah Stok</td>
-            <td class="text-mono fw-semibold {{ $stock->stock_amount <= 0 ? 'text-danger' : '' }}">
+      <div class="card-body p-0">
+        <table class="detail-table">
+          <tr>
+            <td class="detail-label">Perusahaan</td>
+            <td class="detail-value">{{ $stock->company?->company_name ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Kode Stok</td>
+            <td class="detail-value text-mono">{{ $stock->stock_code ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Nama</td>
+            <td class="detail-value fw-semibold">{{ $stock->stock_name }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Tipe</td>
+            <td class="detail-value">{{ $stock->stock_type ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Deskripsi</td>
+            <td class="detail-value">{{ $stock->stock_description ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Unit</td>
+            <td class="detail-value text-mono">{{ $stock->stock_unit ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Jumlah Stok</td>
+            <td class="detail-value text-mono fw-semibold {{ $stock->stock_amount <= 0 ? 'text-danger' : '' }}">
               {{ number_format($stock->stock_amount) }}
               @if($stock->stock_unit) {{ $stock->stock_unit }} @endif
             </td>
           </tr>
-          <tr><td style="color:var(--text-muted);">Harga Satuan</td><td class="text-mono">{{ $stock->stock_price ? 'Rp ' . number_format($stock->stock_price, 2) : '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Status</td>
-            <td>
+          <tr>
+            <td class="detail-label">Harga Satuan</td>
+            <td class="detail-value text-mono">{{ $stock->stock_price ? 'Rp ' . number_format($stock->stock_price, 2) : '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Status</td>
+            <td class="detail-value">
               @if($stock->stock_status)
                 <span class="pill pill-success">Aktif</span>
               @else
@@ -50,8 +73,14 @@
               @endif
             </td>
           </tr>
-          <tr><td style="color:var(--text-muted);">Dibuat</td><td>{{ $stock->created_at ? $stock->created_at->format('d M Y H:i') : '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Diupdate</td><td>{{ $stock->updated_at ? $stock->updated_at->format('d M Y H:i') : '-' }}</td></tr>
+          <tr>
+            <td class="detail-label">Dibuat</td>
+            <td class="detail-value">{{ $stock->created_at ? $stock->created_at->format('d M Y H:i') : '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Diupdate</td>
+            <td class="detail-value">{{ $stock->updated_at ? $stock->updated_at->format('d M Y H:i') : '-' }}</td>
+          </tr>
         </table>
       </div>
     </div>

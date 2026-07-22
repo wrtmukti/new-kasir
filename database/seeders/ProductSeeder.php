@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
+use App\Models\Admin\Stock;
 use App\Models\SysAdmin\Company;
 use Illuminate\Database\Seeder;
 
@@ -33,6 +34,9 @@ class ProductSeeder extends Seeder
                 ['category_slug' => 'topping', 'category_type' => 'produk', 'category_status' => 1]
             ),
         ];
+
+        // Ambil stock & index by code
+        $stocksByCode = Stock::pluck('stock_id', 'stock_code');
 
         $products = [
             // Makanan
@@ -80,11 +84,54 @@ class ProductSeeder extends Seeder
             ['name' => 'Whipped Cream', 'code' => 'PRD-036', 'category' => 'Topping', 'price' => 7000],
         ];
 
+        // Mapping tiap produk → stock apa aja yg dipake + quantity (dalam satuan unit stock)
+        $productStocks = [
+            'PRD-001' => ['BRS-001' => 200, 'MNY-001' => 50, 'CBE-001' => 20, 'BWG-001' => 10], // Nasi Goreng
+            'PRD-002' => ['AYM-001' => 100, 'BWG-001' => 10, 'CBE-001' => 10],                 // Mie Ayam Bakso
+            'PRD-003' => ['AYM-001' => 150, 'MNY-001' => 100, 'CBE-001' => 15, 'BWG-001' => 10, 'BRS-001' => 150], // Ayam Geprek
+            'PRD-004' => ['AYM-001' => 100, 'BRS-001' => 100],                                  // Sate Ayam
+            'PRD-005' => ['BRS-001' => 200, 'AYM-001' => 100, 'CBE-001' => 15, 'BWG-001' => 10], // Nasi Padang
+            'PRD-006' => ['MNY-001' => 50, 'BWG-001' => 10, 'CBE-001' => 10],                   // Kwetiau Goreng
+            'PRD-007' => ['AYM-001' => 100, 'BWG-001' => 5],                                     // Bakso Urat
+            'PRD-008' => ['BRS-001' => 200, 'CBE-001' => 10, 'BWG-001' => 5],                   // Nasi Uduk
+            'PRD-009' => ['MNY-001' => 50, 'BWG-001' => 10, 'CBE-001' => 10],                   // Mie Goreng Jawa
+            'PRD-010' => ['AYM-001' => 100, 'BRS-001' => 100, 'BWG-001' => 10],                 // Soto Ayam
+            'PRD-011' => ['BWG-001' => 10],                                                      // Gado-Gado
+            'PRD-012' => ['BRS-001' => 250, 'AYM-001' => 100, 'CBE-001' => 10, 'BWG-001' => 10], // Nasi Liwet
+            // Minuman — pake gelas plastik
+            'PRD-013' => ['GLN-001' => 1],
+            'PRD-014' => ['GLN-001' => 1],
+            'PRD-015' => ['GLN-001' => 1],
+            'PRD-016' => ['GLN-001' => 1],
+            'PRD-017' => ['GLN-001' => 1],
+            'PRD-018' => ['GLN-001' => 1],
+            'PRD-019' => ['GLN-001' => 1],
+            'PRD-020' => ['GLN-001' => 1],
+            'PRD-021' => ['GLN-001' => 1],
+            'PRD-022' => ['GLN-001' => 1],
+            // Snack
+            'PRD-023' => ['MNY-001' => 30, 'PLST-001' => 1],     // Kentang Goreng
+            'PRD-024' => ['MNY-001' => 20, 'PLST-001' => 1],     // Pisang Goreng
+            'PRD-025' => ['MNY-001' => 20, 'PLST-001' => 1],     // Tahu Crispy
+            'PRD-026' => ['MNY-001' => 15, 'PLST-001' => 1],     // Tempe Mendoan
+            'PRD-027' => ['MNY-001' => 20, 'PLST-001' => 1],     // Cireng Isi
+            'PRD-028' => ['PLST-001' => 1],                       // Siomay
+            'PRD-029' => ['MNY-001' => 10, 'PLST-001' => 1],     // Risol Mayo
+            'PRD-030' => ['MNY-001' => 15, 'PLST-001' => 1],     // Lumpia
+            // Topping — semua pake plastik
+            'PRD-031' => ['PLST-001' => 1],
+            'PRD-032' => ['PLST-001' => 1],
+            'PRD-033' => ['PLST-001' => 1],
+            'PRD-034' => ['PLST-001' => 1],
+            'PRD-035' => ['PLST-001' => 1],
+            'PRD-036' => ['PLST-001' => 1],
+        ];
+
         foreach ($products as $data) {
             $cat = $categories[$data['category']] ?? null;
             if (!$cat) continue;
 
-            Product::create([
+            $product = Product::create([
                 'company_id' => $company->company_id,
                 'category_id' => $cat->category_id,
                 'product_code' => $data['code'],
@@ -93,8 +140,24 @@ class ProductSeeder extends Seeder
                 'product_price' => $data['price'],
                 'product_status' => 1,
             ]);
+
+            // Hubungin product ke stock (pivot product_stock)
+            if (isset($productStocks[$data['code']])) {
+                $syncData = [];
+                foreach ($productStocks[$data['code']] as $stockCode => $qty) {
+                    if (isset($stocksByCode[$stockCode])) {
+                        $syncData[$stocksByCode[$stockCode]] = [
+                            'quantity' => $qty,
+                            'delete_status' => 0,
+                        ];
+                    }
+                }
+                if (!empty($syncData)) {
+                    $product->stocks()->sync($syncData);
+                }
+            }
         }
 
-        $this->command->info('✅ ' . Product::count() . ' produk berhasil di-seed.');
+        $this->command->info('✅ ' . Product::count() . ' produk + pivot stock berhasil di-seed.');
     }
 }

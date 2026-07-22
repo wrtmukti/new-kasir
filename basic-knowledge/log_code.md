@@ -85,3 +85,18 @@
 | 2026-07-20 | UPDATE | Purchase Order — input-skeleton + btn-loading + 400ms delay di create/edit, modal konfirmasi hapus di index | `views/admin/purchase-order/create.blade.php`, `edit.blade.php`, `index.blade.php` |
 | 2026-07-20 | UPDATE | Supplier/Stock/PO — row clickable ke halaman show (ganti link nama doang) | `_data.blade.php`, `index.blade.php` (supplier, stock, purchase-order) |
 | 2026-07-20 | CREATE | Todo list — Ingredients (BOM/Resep), seeder yg kurang, konsistensi, tahap 2-5 | `basic-knowledge/todo.md` |
+|
+| 2026-07-21 | PULL | Commit `e8decac` — "combine product > stock" (product↔stock pivot di create/edit via stepper) | ProductController, StockController, ProductRequest, views product/* |
+| 2026-07-21 | FIX | Relasi model `'ingredients'` → `'product_stock'` (ikuti rename migration) | `Product.php`, `Stock.php` |
+| 2026-07-21 | FIX | Table model — tambah `HasUlids` trait biar auto-generate PK | `Table.php` |
+| 2026-07-21 | UPDATE | ProductSeeder — 36 produk + pivot `product_stock` langsung (68 relasi) | `ProductSeeder.php` |
+| 2026-07-21 | CREATE | SupplierSeeder — 5 supplier (PT Sumber Bahan Pangan, CV Berkah Minyak, UD Ayam Segar, Toko Bumbu Makmur, CV Kemasan Plastik) | `SupplierSeeder.php` |
+| 2026-07-21 | CREATE | TableSeeder — 15 meja (kapasitas 2-10 kursi) | `TableSeeder.php` |
+| 2026-07-21 | CREATE | PurchaseOrderSeeder — 5 PO (3 received + receiving + stock_logs, 2 pending) | `PurchaseOrderSeeder.php` |
+| 2026-07-21 | UPDATE | DatabaseSeeder — urutan: Company→Supplier→Table→Stock→PO→Product→Bundle | `DatabaseSeeder.php` |
+| 2026-07-21 | FIX | Detail pages — Supplier/Stock/PO show: ganti `table table-borderless` → `detail-table` + CSS | `views admin/*/show.blade.php`, `main.css` |
+| 2026-07-21 | CREATE | Bundle CRUD — Model, BundleItem, FormRequest, Controller (full CRUD + AJAX), 5 views (index/_data/create/show/edit), routes, sidebar | `Bundle.php`, `BundleItem.php`, `BundleRequest.php`, `BundleController.php`, `views/admin/bundle/*`, `routes/web.php`, `layouts/app.blade.php` |
+| 2026-07-21 | CREATE | BundleSeeder — 8 bundle (Paket Nasi Goreng, Ayam Geprek, Bakso, Snack, Minuman, dll) | `BundleSeeder.php` |
+|
+| 2026-07-22 | UPDATE | PO Enhancement — confirm(), cancel(), return() + 3 route + 3 modal + validasi receiving + hapus Langsung Pesan + NexoraToast | `PurchaseOrderController.php`, `web.php`, `PurchaseReceivingRequest.php`, `show.blade.php`, `create.blade.php`, `index.blade.php` |
+| 2026-07-22 | UPDATE | PurchaseOrderSeeder — 10 PO dengan 5 status (2 draft, 2 ordered, 2 partial, 2 completed, 2 cancelled + 1 return) | `PurchaseOrderSeeder.php` |

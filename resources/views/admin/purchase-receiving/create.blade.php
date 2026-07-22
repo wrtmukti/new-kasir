@@ -21,10 +21,10 @@
   <div class="card-header-flex"><h6><i class="bi bi-info-circle me-2"></i>Referensi PO</h6></div>
   <div class="card-body">
     <div class="row g-2" style="font-size:0.9rem;">
-      <div class="col-md-3"><span class="text-muted-c">Supplier:</span> <span class="fw-semibold">{{ $order->supplier?->supplier_name ?? '-' }}</span></div>
-      <div class="col-md-2"><span class="text-muted-c">Tanggal:</span> {{ $order->po_date ? $order->po_date->format('d M Y') : '-' }}</div>
-      <div class="col-md-2"><span class="text-muted-c">Kode:</span> <span class="text-mono">{{ $order->po_code }}</span></div>
-      <div class="col-md-2"><span class="text-muted-c">Kode Receiving:</span> <span class="text-mono">{{ $receivingCode }}</span></div>
+      <div class="col-md-3"><span class="text-muted-c">Supplier:</span> <span class="fw-semibold" style="color:var(--text-primary);">{{ $order->supplier?->supplier_name ?? '-' }}</span></div>
+      <div class="col-md-2"><span class="text-muted-c">Tanggal:</span> <span style="color:var(--text-primary);">{{ $order->po_date ? $order->po_date->format('d M Y') : '-' }}</span></div>
+      <div class="col-md-2"><span class="text-muted-c">Kode:</span> <span class="text-mono" style="color:var(--text-primary);">{{ $order->po_code }}</span></div>
+      <div class="col-md-2"><span class="text-muted-c">Kode Receiving:</span> <span class="text-mono" style="color:var(--text-primary);">{{ $receivingCode }}</span></div>
     </div>
   </div>
 </div>
@@ -100,6 +100,13 @@
   </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.btn-success-grad { background:linear-gradient(135deg,#059669,#10B981); color:#fff; border:none; }
+.btn-success-grad:hover { background:linear-gradient(135deg,#047857,#059669); color:#fff; }
+</style>
+@endpush
 
 @push('scripts')
 <script>

@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('product_stock', function (Blueprint $table) {
             // $table->id('ingredients_id');
             $table->string('company_id')->nullable();
-            
+
             $table->string('product_id')->nullable();
             $table->string('stock_id')->nullable();
             $table->integer('quantity')->nullable();
-            
+
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();
-            $table->tinyInteger('delete_status')->default(0);//0 for not deleted, 1 for deleted
+            $table->tinyInteger('delete_status')->default(0); //0 for not deleted, 1 for deleted
             $table->timestamps();
-
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients');
+        Schema::dropIfExists('product_stock');
     }
 };

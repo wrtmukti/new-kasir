@@ -26,16 +26,35 @@
   <div class="col-lg-8">
     <div class="card">
       <div class="card-header-flex"><h6><i class="bi bi-info-circle me-2"></i>Informasi Supplier</h6></div>
-      <div class="card-body">
-        <table class="table table-borderless mb-0" style="font-size:0.9rem;">
-          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $supplier->company?->company_name ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Kode Supplier</td><td class="text-mono">{{ $supplier->supplier_code ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Nama</td><td class="fw-semibold">{{ $supplier->supplier_name }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Kontak Person</td><td>{{ $supplier->supplier_contact ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Telepon</td><td class="text-mono">{{ $supplier->supplier_phone ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Alamat</td><td>{{ $supplier->supplier_address ?? '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Status</td>
-            <td>
+      <div class="card-body p-0">
+        <table class="detail-table">
+          <tr>
+            <td class="detail-label">Perusahaan</td>
+            <td class="detail-value">{{ $supplier->company?->company_name ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Kode Supplier</td>
+            <td class="detail-value text-mono">{{ $supplier->supplier_code ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Nama</td>
+            <td class="detail-value fw-semibold">{{ $supplier->supplier_name }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Kontak Person</td>
+            <td class="detail-value">{{ $supplier->supplier_contact ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Telepon</td>
+            <td class="detail-value text-mono">{{ $supplier->supplier_phone ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Alamat</td>
+            <td class="detail-value">{{ $supplier->supplier_address ?? '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Status</td>
+            <td class="detail-value">
               @if($supplier->supplier_status)
                 <span class="pill pill-success">Aktif</span>
               @else
@@ -43,8 +62,14 @@
               @endif
             </td>
           </tr>
-          <tr><td style="color:var(--text-muted);">Dibuat</td><td>{{ $supplier->created_at ? $supplier->created_at->format('d M Y H:i') : '-' }}</td></tr>
-          <tr><td style="color:var(--text-muted);">Diupdate</td><td>{{ $supplier->updated_at ? $supplier->updated_at->format('d M Y H:i') : '-' }}</td></tr>
+          <tr>
+            <td class="detail-label">Dibuat</td>
+            <td class="detail-value">{{ $supplier->created_at ? $supplier->created_at->format('d M Y H:i') : '-' }}</td>
+          </tr>
+          <tr>
+            <td class="detail-label">Diupdate</td>
+            <td class="detail-value">{{ $supplier->updated_at ? $supplier->updated_at->format('d M Y H:i') : '-' }}</td>
+          </tr>
         </table>
       </div>
     </div>

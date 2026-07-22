@@ -2,11 +2,14 @@
 
 namespace App\Models\Admin;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SysAdmin\Company;
 
 class Table extends Model
 {
+    use HasUlids;
+
     protected $table = 'tables';
 
     protected $primaryKey = 'table_id';

@@ -4,21 +4,36 @@
 
 ---
 
-## Prioritas 1: Ingredients (BOM/Resep)
+## 🔴 TODAY (2026-07-22): PO Enhancement ✅
 
-**Tabel `ingredients` udah ada di migration, tapi layer aplikasi belum disentuh sama sekali.**
+**Flow lengkap PO: Draft → Confirm → Ordered → Receive → Partial/Completed + Cancel + Return**
 
 | Item | Status | Keterangan |
 |------|--------|------------|
-| Model `Ingredient` | ❌ | `app/Models/Admin/Ingredient.php` — belum dibuat |
-| Relasi `Product → ingredients()` | ❌ | `belongsToMany(Ingredient::class)` atau `hasMany` |
-| Relasi `Stock → ingredients()` | ❌ | kebalikannya |
-| Relasi `Product → stocks()` via ingredients | ❌ | `belongsToMany` biar bisa `$product->stocks` langsung |
-| Seeder ingredients | ❌ | bikin resep/BOM buat 36 produk dari stock yang ada |
-| CRUD ingredients | ❌ | form buat atur bahan baku per produk |
-| Auto-decrement stock pas transaksi | ❌ | lookup ingredients → StockLog(out) → stock_amount-- |
+| Controller — `confirm()` | ✅ | Draft→Ordered |
+| Controller — `cancel()` | ✅ | Draft/Ordered→Cancelled + alasan di `po_notes` |
+| Controller — `return()` | ✅ | StockLog type 'return' |
+| Controller — `store()` + `?confirm=1` | ✅ | Auto modal confirm abis create |
+| Validasi received ≤ remaining | ✅ | `PurchaseReceivingRequest.php` |
+| Routes — confirm/cancel/return | ✅ | 3 POST route baru |
+| Show view — tombol + 3 modal | ✅ | Confirm, Cancel (alasan), Return (qty+alasan) |
+| Create view — hapus "Langsung Pesan" | ✅ | Draft aja |
+| Flash → NexoraToast | ✅ | index & show |
 
-**Catatan:** Tanpa ingredients, fitur transaksi gak bisa otomatis ngurangin stok.
+## Prioritas 1: BOM/Resep (Product↔Stock Pivot)
+
+**Pivot `product_stock` udah jalan.** Relasi `$product->stocks` + `quantity` udah siap. Yang kurang tinggal auto-decrement stok pas transaksi.
+
+| Item | Status | Keterangan |
+|------|--------|------------|
+| Tabel pivot `product_stock` | ✅ | migration `create_product_stock_table.php` |
+| Relasi `Product → stocks()` | ✅ | `belongsToMany` via `product_stock` + `quantity` pivot |
+| Relasi `Stock → products()` | ✅ | kebalikannya |
+| Seeder pivot | ✅ | 68 relasi produk↔stock udah di-seed |
+| CRUD pivot di form produk | ✅ | stepper di create/edit produk |
+| **Auto-decrement stock pas transaksi** | ❌ | lookup pivot → StockLog(out) → stock_amount-- |
+
+**Catatan:** Tanpa auto-decrement, stok gak otomatis berkurang pas transaksi.
 
 ---
 
