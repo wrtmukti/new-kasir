@@ -100,3 +100,7 @@
 |
 | 2026-07-22 | UPDATE | PO Enhancement — confirm(), cancel(), return() + 3 route + 3 modal + validasi receiving + hapus Langsung Pesan + NexoraToast | `PurchaseOrderController.php`, `web.php`, `PurchaseReceivingRequest.php`, `show.blade.php`, `create.blade.php`, `index.blade.php` |
 | 2026-07-22 | UPDATE | PurchaseOrderSeeder — 10 PO dengan 5 status (2 draft, 2 ordered, 2 partial, 2 completed, 2 cancelled + 1 return) | `PurchaseOrderSeeder.php` |
+| 2026-07-22 | FIX | Bundle table — row clickable ke show (ganti link nama doang) | `views/admin/bundle/_data.blade.php`, `index.blade.php` |
+| 2026-07-22 | FIX | Bundle create/edit — .product-tag warna ilang di dark mode, tambah `color:var(--text-primary)` | `views/admin/bundle/create.blade.php`, `edit.blade.php` |
+| 2026-07-22 | FIX | Receiving create — teks referensi PO & tombol Konfirmasi Terima ilang di dark mode, tambah `color` + `btn-success-grad` style | `views/admin/purchase-receiving/create.blade.php` |
+| 2026-07-22 | RULES | Aturan 10 — setiap perubahan wajib catat di `log_code.md` langsung | `rule_ai.md` |

@@ -154,3 +154,8 @@
    - Setiap kali selesai baca basic-knowledge & siap ngoding, kasih tau user **lagi di branch apa sekarang**.
    - Ingatkan user **jangan commit di branch main/master**. Kalau lagi di main/master, saranin buat branch dulu.
    - Contoh: *"⚠️ Lagi di branch master. Jangan commit di sini. Mau bikin branch baru?"*
+
+10. **Setiap perubahan wajib dicatat di `log_code.md` langsung saat itu juga:**
+    - Setiap selesai buat file baru, update file, fix bug, rename, atau perubahan penting apapun → langsung catat di `basic-knowledge/log_code.md`.
+    - Format: `YYYY-MM-DD | [TIPE] | Deskripsi | File terkait`
+    - Jangan nunggu selesai sesi, jangan nunggu diminta. **Ada perubahan → langsung catat.**
