@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   perPageEl.addEventListener('change', function() { loadData(1, this.value); });
   document.querySelectorAll('#paginationContainer [data-page]').forEach(l=>{l.addEventListener('click',function(e){e.preventDefault();loadData(parseInt(this.dataset.page),perPageEl.value);});});
+  document.querySelectorAll('.row-clickable').forEach(function(row){row.addEventListener('click',function(e){if(e.target.closest('a')||e.target.closest('button')||e.target.closest('.btn'))return;window.location.href=this.dataset.url;});});
 });
 </script>
 @endpush

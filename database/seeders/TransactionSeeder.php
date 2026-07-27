@@ -26,12 +26,39 @@ class TransactionSeeder extends Seeder
         }
 
         foreach ($completedOrders as $order) {
-            // Hitung subtotal
-            $subtotal = 0;
+            $order->load('products');
+
+            $items = [];
+            $totalSubtotal = 0;
+
             foreach ($order->products as $product) {
                 $qty = (int) $product->pivot->quantity;
                 $price = (float) $product->product_price;
-                $subtotal += $price * $qty;
+                $discountType = $product->product_discount_type;
+                $discountValue = (float) ($product->product_discount_value ?? 0);
+
+                // Hitung discount_amount
+                $discountAmount = 0;
+                if ($discountType === 'percentage' && $discountValue > 0) {
+                    $discountAmount = round($price * ($discountValue / 100), 2);
+                } elseif ($discountType === 'nominal' && $discountValue > 0) {
+                    $discountAmount = min($discountValue, $price);
+                }
+                $discountAmount = min($discountAmount, $price);
+
+                $subtotal = ($price - $discountAmount) * $qty;
+                $totalSubtotal += $subtotal;
+
+                $items[] = [
+                    'product' => $product,
+                    'qty' => $qty,
+                    'price' => $price,
+                    'discount_type' => $discountType,
+                    'discount_value' => $discountValue,
+                    'discount_amount' => $discountAmount,
+                    'subtotal' => $subtotal,
+                    'note' => $product->pivot->note,
+                ];
             }
 
             // Simpan transaction
@@ -39,10 +66,10 @@ class TransactionSeeder extends Seeder
                 'company_id' => $order->company_id,
                 'transaction_code' => 'TRX-' . $order->order_id . '-' . $order->created_at->format('Ymd'),
                 'transaction_date' => $order->created_at,
-                'transaction_subtotal' => $subtotal,
+                'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => 0,
                 'transaction_service_charge' => 0,
-                'transaction_grand_total' => $subtotal,
+                'transaction_grand_total' => $totalSubtotal,
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
@@ -50,23 +77,27 @@ class TransactionSeeder extends Seeder
                 'created_by' => 'seeder',
             ]);
 
-            // Simpan transaction_items
-            foreach ($order->products as $product) {
-                $qty = (int) $product->pivot->quantity;
-                $price = (float) $product->product_price;
-
+            // Simpan transaction_items (include diskon)
+            foreach ($items as $item) {
+                $product = $item['product'];
                 TransactionItem::create([
                     'company_id' => $order->company_id,
                     'transaction_id' => $transaction->transaction_id,
                     'product_id' => $product->product_id,
                     'product_name' => $product->product_name,
-                    'price' => $price,
-                    'qty' => $qty,
-                    'subtotal' => $price * $qty,
-                    'note' => $product->pivot->note,
+                    'price' => $item['price'],
+                    'discount_type' => $item['discount_type'],
+                    'discount_value' => $item['discount_value'],
+                    'discount_amount' => $item['discount_amount'],
+                    'qty' => $item['qty'],
+                    'subtotal' => $item['subtotal'],
+                    'note' => $item['note'],
                     'created_by' => 'seeder',
                 ]);
             }
+
+            // Link order ke transaction
+            $order->update(['order_transaction_id' => $transaction->transaction_id]);
         }
 
         $this->command->info('✅ ' . Transaction::count() . ' transaksi + item berhasil di-seed dari order completed.');

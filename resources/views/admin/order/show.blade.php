@@ -71,7 +71,7 @@
 <div class="card mb-3">
   <div class="card-header-flex">
     <h6>Item Pesanan</h6>
-    <span class="chip-tag">{{ $order->products->count() }} item</span>
+    <span class="chip-tag">{{ $transactionItems ? $transactionItems->count() : $order->products->count() }} item</span>
   </div>
   <div class="card-body p-0">
     <div class="table-responsive">
@@ -80,18 +80,47 @@
           <tr>
             <th>Produk</th>
             <th style="width:100px;">Harga</th>
+            <th style="width:80px;">Diskon</th>
             <th style="width:80px;">Qty</th>
             <th style="width:150px;">Subtotal</th>
             <th>Keterangan</th>
           </tr>
         </thead>
         <tbody>
+          @if($order->order_status === 'completed' && $transactionItems)
+            @php $grandTotal = 0; @endphp
+            @foreach($transactionItems as $item)
+              @php $grandTotal += (float) $item->subtotal; @endphp
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span style="font-weight:500;">{{ $item->product_name }}</span>
+                  </div>
+                </td>
+                <td class="text-mono">Rp {{ number_format($item->price, 0) }}</td>
+                <td>
+                  @if($item->discount_amount > 0)
+                    <span style="color:var(--danger);font-size:0.85rem;">-Rp {{ number_format($item->discount_amount, 0) }}</span>
+                  @else
+                    <span class="text-muted-c">-</span>
+                  @endif
+                </td>
+                <td>{{ $item->qty }}</td>
+                <td class="text-mono">Rp {{ number_format($item->subtotal, 0) }}</td>
+                <td>{{ $item->note ?? '-' }}</td>
+              </tr>
+            @endforeach
+          @else
           @php $grandTotal = 0; @endphp
           @foreach($order->products as $product)
             @php
               $qty = (int) $product->pivot->quantity;
               $price = (float) $product->product_price;
-              $subtotal = $price * $qty;
+              $dPct = $product->product_discount_type === 'percentage' ? (float)($product->product_discount_value ?? 0) : 0;
+              $dNom = $product->product_discount_type === 'nominal' ? (float)($product->product_discount_value ?? 0) : 0;
+              $dAmt = $dPct > 0 ? $price * $dPct / 100 : ($dNom > 0 ? min($dNom, $price) : 0);
+              $dAmt = min($dAmt, $price);
+              $subtotal = ($price - $dAmt) * $qty;
               $grandTotal += $subtotal;
             @endphp
             <tr>
@@ -106,15 +135,17 @@
                 </div>
               </td>
               <td class="text-mono">Rp {{ number_format($price, 0) }}</td>
+              <td>@if($dAmt > 0)<span style="color:var(--danger);font-size:0.85rem;">-Rp {{ number_format($dAmt, 0) }}</span>@else<span class="text-muted-c">-</span>@endif</td>
               <td>{{ $qty }}</td>
               <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
               <td>{{ $product->pivot->note ?? '-' }}</td>
             </tr>
           @endforeach
+          @endif
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3" class="text-end fw-bold">Grand Total</td>
+            <td colspan="4" class="text-end fw-bold">Grand Total</td>
             <td class="text-mono fw-bold" style="color:var(--accent-1);font-size:1.05rem;">Rp {{ number_format($grandTotal, 0) }}</td>
             <td></td>
           </tr>

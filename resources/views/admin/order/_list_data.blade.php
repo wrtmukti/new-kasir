@@ -22,7 +22,14 @@
     @endphp
     <span class="pill {{ $badge }}">{{ str_replace('_', ' ', ucfirst($status)) }}</span>
   </td>
-  <td class="text-mono">Rp {{ number_format($order->order_grand_total ?? 0, 0) }}</td>
+  <td class="text-mono">
+    @php
+      $total = $order->order_status === 'completed' && $order->transaction
+        ? (float) $order->transaction->items->sum('subtotal')
+        : (float) ($order->order_grand_total ?? 0);
+    @endphp
+    Rp {{ number_format($total, 0) }}
+  </td>
   <td>{{ optional($order->created_at)->format('d M Y H:i') ?? '-' }}</td>
 </tr>
 @empty

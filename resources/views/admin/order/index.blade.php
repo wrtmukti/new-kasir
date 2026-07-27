@@ -139,6 +139,7 @@
             <tr>
               <th>Produk</th>
               <th style="width:100px;">Harga</th>
+              <th style="width:80px;">Diskon</th>
               <th style="width:120px;">Qty</th>
               <th style="width:120px;">Subtotal</th>
               <th style="width:40px;"></th>
@@ -196,7 +197,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== CART =====
   let cart = [];
   function count() { return cart.reduce((s,i) => s+i.qty, 0); }
-  function total() { return cart.reduce((s,i) => s+i.price*i.qty, 0); }
+  function discAmount(i) {
+    if (i.discountType === 'percentage' && i.discountValue > 0) return i.price * i.discountValue / 100;
+    if (i.discountType === 'nominal' && i.discountValue > 0) return Math.min(i.discountValue, i.price);
+    return 0;
+  }
+  function subtotal(i) { return (i.price - discAmount(i)) * i.qty; }
+  function total() { return cart.reduce((s,i) => s + subtotal(i), 0); }
   function fmt(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
 
   function updateCart() {
@@ -224,13 +231,15 @@ document.addEventListener('DOMContentLoaded', function() {
       const img = item.image
         ? '<img src="'+item.image+'" class="cart-item-img">'
         : '<span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="bi bi-image" style="color:var(--text-muted);"></i></span>';
+      const da = discAmount(item);
       html += '<tr>';
       html += '<td><div class="d-flex align-items-center gap-2">'+img+'<div><div style="font-weight:500;">'+item.name+'</div></div></div></td>';
       html += '<td class="text-mono">Rp '+fmt(item.price)+'</td>';
+      html += '<td>'+(da > 0 ? '<span style="color:var(--danger);font-size:0.85rem;">-Rp '+fmt(da)+'</span>' : '<span class="text-muted-c">-</span>')+'</td>';
       html += '<td><div class="d-flex align-items-center gap-1"><button class="btn-qty dec" data-i="'+idx+'">−</button>';
       html += '<input type="number" class="cart-qty-input qty-input" value="'+item.qty+'" min="1" data-i="'+idx+'">';
       html += '<button class="btn-qty inc" data-i="'+idx+'">+</button></div></td>';
-      html += '<td class="text-mono">Rp '+fmt(item.price*item.qty)+'</td>';
+      html += '<td class="text-mono">Rp '+fmt(subtotal(item))+'</td>';
       html += '<td><button class="btn btn-ghost btn-icon-sq btn-sm text-danger rm" data-i="'+idx+'"><i class="bi bi-x-lg"></i></button></td>';
       html += '</tr>';
     });
@@ -244,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const id = btn.dataset.id;
     const idx = cart.findIndex(i => i.id === id);
     if (idx > -1) cart[idx].qty++;
-    else cart.push({ id, name: btn.dataset.name, price: parseFloat(btn.dataset.price)||0, image: btn.dataset.image||'', qty: 1 });
+    else cart.push({ id, name: btn.dataset.name, price: parseFloat(btn.dataset.price)||0, discountType: btn.dataset.discountType||'', discountValue: parseFloat(btn.dataset.discountValue)||0, image: btn.dataset.image||'', qty: 1 });
     updateCart(); renderCart();
     NexoraToast(btn.dataset.name+' ditambahkan', 'success');
   });

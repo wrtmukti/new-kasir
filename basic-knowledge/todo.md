@@ -4,71 +4,41 @@
 
 ---
 
-## 🔴 TODAY (2026-07-22): PO Enhancement ✅
-
-**Flow lengkap PO: Draft → Confirm → Ordered → Receive → Partial/Completed + Cancel + Return**
+## ✅ Diskon Produk → Transaction (Opsi B — Selesai 2026-07-27)
 
 | Item | Status | Keterangan |
 |------|--------|------------|
-| Controller — `confirm()` | ✅ | Draft→Ordered |
-| Controller — `cancel()` | ✅ | Draft/Ordered→Cancelled + alasan di `po_notes` |
-| Controller — `return()` | ✅ | StockLog type 'return' |
-| Controller — `store()` + `?confirm=1` | ✅ | Auto modal confirm abis create |
-| Validasi received ≤ remaining | ✅ | `PurchaseReceivingRequest.php` |
-| Routes — confirm/cancel/return | ✅ | 3 POST route baru |
-| Show view — tombol + 3 modal | ✅ | Confirm, Cancel (alasan), Return (qty+alasan) |
-| Create view — hapus "Langsung Pesan" | ✅ | Draft aja |
-| Flash → NexoraToast | ✅ | index & show |
-
-## Prioritas 1: BOM/Resep (Product↔Stock Pivot)
-
-**Pivot `product_stock` udah jalan.** Relasi `$product->stocks` + `quantity` udah siap. Yang kurang tinggal auto-decrement stok pas transaksi.
-
-| Item | Status | Keterangan |
-|------|--------|------------|
-| Tabel pivot `product_stock` | ✅ | migration `create_product_stock_table.php` |
-| Relasi `Product → stocks()` | ✅ | `belongsToMany` via `product_stock` + `quantity` pivot |
-| Relasi `Stock → products()` | ✅ | kebalikannya |
-| Seeder pivot | ✅ | 68 relasi produk↔stock udah di-seed |
-| CRUD pivot di form produk | ✅ | stepper di create/edit produk |
-| **Auto-decrement stock pas transaksi** | ❌ | lookup pivot → StockLog(out) → stock_amount-- |
-
-**Catatan:** Tanpa auto-decrement, stok gak otomatis berkurang pas transaksi.
+| `OrderController@complete` — hitung diskon per item | ✅ | percentage/nominal, simpan ke transaction_items.discount_* |
+| `OrderController@complete` — link order→transaction | ✅ | `order_transaction_id` otomatis terisi |
+| `OrderController@show` — snapshot utk completed | ✅ | Load transaction_items instead of live products |
+| `OrderController@receipt` — snapshot | ✅ | Pake transaction_items, tampil harga+diskon+subtotal |
+| Order show view — kolom diskon | ✅ | Tampil harga, diskon, subtotal |
+| Transaction show view — kolom diskon | ✅ | Sama |
+| Receipt view — diskon per item | ✅ | Harga, diskon, sub |
+| TransactionSeeder — include diskon | ✅ | Hitung diskon + link order→transaction |
+| Pembahasan | ✅ | `basic-knowledge/pembahasan-diskon-transaksi-payment.md` |
 
 ---
 
-## Prioritas 2: Seeder yang Kurang
+## ⏳ Perlu Dibahas / Dilanjutin
 
-| Seeder | Status |
-|--------|--------|
-| CategorySeeder | ❌ — masih inline di ProductSeeder tanpa `company_id` |
-| SupplierSeeder | ❌ — perlu dummy supplier buat testing PO |
-| TableSeeder | ❌ — perlu dummy meja buat testing transaksi |
-
----
-
-## Prioritas 3: Konsistensi Seeder
-
-- **StockSeeder & ProductSeeder** — cuma buat company[0], perlu loop ke semua company
-- **Category di ProductSeeder** — `firstOrCreate` gak pake `company_id`, jadinya `null`
-- **company_code duplikat** — Company 1 & 2 sama-sama `'GGB'`, riskan kalau nambah unique
+| # | Item | Keterangan |
+|---|------|------------|
+| 1 | **Dropdown pilih diskon di form produk** | Di create/edit produk, tambah select buat milih diskon dari master |
+| 2 | **Diskon transaksi (voucher)** | Nanti — diskon manual pas checkout lewat voucher |
+| 3 | **Payment** | Nanti — terima uang, metode bayar |
+| 4 | **Auto-decrement stock pas transaksi** | BOM/Resep — lookup pivot → StockLog(out) |
+| 5 | **Seeder konsistensi** | CategorySeeder pisah, loop semua company, fix company_code duplikat |
 
 ---
 
-## Prioritas 4: Tahap 2 (Transaksi)
+## ⏳ Tahap Lanjutan (Nanti)
 
-- POS / Transaksi
-- Diskon, Voucher, Bundle
+- Voucher CRUD
+- Bundle (enhancement)
 - Payment
-- Struk
-- Auto-decrement stock via ingredients
-- PO Receiving flow
-
----
-
-## Prioritas 5: Tahap 3+
-
+- PO Receiving flow (lanjutan)
 - Auth & RBAC
 - QR Ordering
 - Laporan & Analitik
-- KDS (Kitchen Display System)
+- KDS

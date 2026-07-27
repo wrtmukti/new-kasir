@@ -115,3 +115,36 @@
 |
 | 2026-07-23 | UPDATE | Complete order — simpan ke transactions + transaction_items | `OrderController.php`, `app/Models/Admin/Transaction.php`, `app/Models/Admin/TransactionItem.php` |
 | 2026-07-23 | CREATE | Menu Transaksi — controller, views (index AJAX + show detail), route, sidebar di bawah Riwayat Pesanan | `TransactionController.php`, `views/admin/transaction/*`, `routes/web.php`, `layouts/app.blade.php` |
+|
+| 2026-07-25 | UPDATE | Migration diskon — tambah `start_date` + `end_date` ke `discounts` (histories udah ada) | `2026_06_27_000001_create_discounts_table.php` |
+| 2026-07-25 | UPDATE | Todo — fokus ke diskon, prioritas baru | `basic-knowledge/todo.md` |
+|
+| 2026-07-25 | CREATE | Model Discount + relasi hasMany Product | `app/Models/Admin/Discount.php` |
+| 2026-07-25 | CREATE | FormRequest Discount + validasi B.Indonesia | `app/Http/Requests/Admin/DiscountRequest.php` |
+| 2026-07-25 | CREATE | DiscountController — CRUD + AJAX data() + attachProduct/detachProduct + log ke product_histories | `app/Http/Controllers/Admin/DiscountController.php` |
+| 2026-07-25 | CREATE | 5 views Diskon — index, _data, create, edit, show (dengan attach/detach produk modal) | `resources/views/admin/discount/*.blade.php` |
+| 2026-07-25 | UPDATE | Routes — discount resource + attach/detach routes | `routes/web.php` |
+| 2026-07-25 | UPDATE | Sidebar — section Promo > Diskon | `resources/views/admin/layouts/app.blade.php` |
+| 2026-07-25 | UPDATE | Product model — relasi belongsTo Discount | `app/Models/Admin/Product.php` |
+| 2026-07-25 | CREATE | DiscountSeeder — 5 dummy diskon | `database/seeders/DiscountSeeder.php` |
+| 2026-07-25 | UPDATE | DatabaseSeeder — panggil DiscountSeeder | `database/seeders/DatabaseSeeder.php` |
+|
+| 2026-07-27 | UPDATE | OrderController@complete — hitung diskon produk per item, simpan discount_* ke transaction_items + link order→transaction via order_transaction_id | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | OrderController@show — kalo completed, load transaction_items buat snapshot harga & diskon | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | OrderController@receipt — pake transaction_items instead of live products | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | Order show view — tambah kolom Diskon, pake transaction_items kalo completed | `resources/views/admin/order/show.blade.php` |
+| 2026-07-27 | UPDATE | Transaction show view — tambah kolom Diskon | `resources/views/admin/transaction/show.blade.php` |
+| 2026-07-27 | UPDATE | Receipt view — tampilkan harga + diskon + subtotal per item dari transaction_items | `resources/views/admin/order/receipt.blade.php` |
+| 2026-07-27 | UPDATE | TransactionSeeder — hitung diskon produk, simpan discount_* + link order→transaction | `database/seeders/TransactionSeeder.php` |
+| 2026-07-27 | UPDATE | DiscountSeeder — link 9 produk ke 4 diskon + log ke product_histories | `database/seeders/DiscountSeeder.php` |
+| 2026-07-27 | UPDATE | Tampilan produk — harga diskon di order & product list/card view (inline hitung di blade, gak ubah backend) | `resources/views/admin/order/_data.blade.php`, `_card.blade.php`, `resources/views/admin/product/_data.blade.php`, `_card.blade.php` |
+| 2026-07-27 | UPDATE | Cart modal — tambah kolom Diskon + hitung subtotal pake diskon di JS | `resources/views/admin/order/index.blade.php` |
+| 2026-07-27 | UPDATE | Create order — tambah kolom Diskon +hitung subtotal include diskon | `resources/views/admin/order/create.blade.php` |
+| 2026-07-27 | UPDATE | Tombol Pesan — tambah data-discount-type & data-discount-value | `resources/views/admin/order/_data.blade.php`, `_card.blade.php` |
+| 2026-07-27 | CREATE | Pembahasan diskon-transaksi-payment | `basic-knowledge/pembahasan-diskon-transaksi-payment.md` |
+|
+| 2026-07-27 | UPDATE | Order list view — total completed ambil dari transaction_items (include diskon) | `views/admin/order/_list_data.blade.php` |
+| 2026-07-27 | UPDATE | Order model — relasi `transaction()` | `app/Models/Admin/Order.php` |
+| 2026-07-27 | UPDATE | OrderController list + listData — eager load transaction.items | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | Order show view — inline hitung diskon buat in_progress & completed tanpa transaction | `views/admin/order/show.blade.php` |
+| 2026-07-27 | UPDATE | Pembahasan — keputusan Opsi B (Single Snapshot di transaction_items) | `basic-knowledge/pembahasan-diskon-transaksi-payment.md` |

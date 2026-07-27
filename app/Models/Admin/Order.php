@@ -37,4 +37,9 @@ class Order extends Model
             ->wherePivot('delete_status', 0)
             ->withTimestamps();
     }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class, 'transaction_id', 'order_transaction_id');
+    }
 }

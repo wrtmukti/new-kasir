@@ -1,0 +1,142 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Tambah Diskon')
+
+@php $activeMenu = 'discount' @endphp
+
+@section('content')
+<div class="page-header">
+  <div>
+    <h1>Tambah Diskon</h1>
+    <div class="breadcrumb-trail">
+      <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('admin.discount.index') }}">Diskon</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <span>Tambah</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header-flex"><h6><i class="bi bi-percent me-2"></i>Informasi Diskon</h6></div>
+  <div class="card-body">
+    <form action="{{ route('admin.discount.store') }}" method="POST" class="form-submit-loading">
+      @csrf
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label-modern">Perusahaan</label>
+          <div class="input-skeleton">
+            <select name="company_id" class="form-select-modern">
+              <option value="">-- Pilih Perusahaan --</option>
+              @foreach($companies as $c)
+                <option value="{{ $c->company_id }}" {{ old('company_id') == $c->company_id ? 'selected' : '' }}>{{ $c->company_name }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Nama Diskon <span class="text-danger">*</span></label>
+          <div class="input-skeleton">
+            <input type="text" name="discount_name" class="form-control-modern @error('discount_name') is-invalid @enderror" value="{{ old('discount_name') }}" placeholder="Nama diskon">
+            @error('discount_name')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Tipe Diskon <span class="text-danger">*</span></label>
+          <div class="input-skeleton">
+            <select name="discount_type" class="form-select-modern @error('discount_type') is-invalid @enderror">
+              <option value="">-- Pilih Tipe --</option>
+              <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Persen (%)</option>
+              <option value="nominal" {{ old('discount_type') == 'nominal' ? 'selected' : '' }}>Nominal (Rp)</option>
+            </select>
+            @error('discount_type')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Nilai Diskon <span class="text-danger">*</span></label>
+          <div class="input-skeleton">
+            <input type="number" step="0.01" name="discount_value" class="form-control-modern @error('discount_value') is-invalid @enderror" value="{{ old('discount_value') }}" placeholder="0">
+            @error('discount_value')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Maksimal Potongan (cap)</label>
+          <div class="input-skeleton">
+            <input type="number" step="0.01" name="discount_max_amount" class="form-control-modern @error('discount_max_amount') is-invalid @enderror" value="{{ old('discount_max_amount') }}" placeholder="0">
+            @error('discount_max_amount')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Status</label>
+          <div class="input-skeleton">
+            <select name="discount_status" class="form-select-modern">
+              <option value="1" {{ old('discount_status', '1') == '1' ? 'selected' : '' }}>Aktif</option>
+              <option value="0" {{ old('discount_status') === '0' ? 'selected' : '' }}>Nonaktif</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Tanggal Mulai</label>
+          <div class="input-skeleton">
+            <input type="datetime-local" name="start_date" class="form-control-modern @error('start_date') is-invalid @enderror" value="{{ old('start_date') }}">
+            @error('start_date')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-modern">Tanggal Berakhir</label>
+          <div class="input-skeleton">
+            <input type="datetime-local" name="end_date" class="form-control-modern @error('end_date') is-invalid @enderror" value="{{ old('end_date') }}">
+            @error('end_date')
+              <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+            @enderror
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="form-label-modern">Deskripsi</label>
+          <div class="input-skeleton">
+            <textarea name="discount_description" class="form-control-modern" rows="3" placeholder="Deskripsi diskon">{{ old('discount_description') }}</textarea>
+          </div>
+        </div>
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary-grad btn-loading">Simpan</button>
+          <a href="{{ route('admin.discount.index') }}" class="btn btn-outline-soft">Batal</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.form-submit-loading');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    form.querySelectorAll('.input-skeleton').forEach(function(el) {
+      el.classList.add('is-loading');
+    });
+    const btn = form.querySelector('.btn-loading');
+    if (btn) {
+      btn.classList.add('is-loading');
+      btn.disabled = true;
+    }
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        form.submit();
+      }, 400);
+    });
+  });
+});
+</script>
+@endpush
+@endsection

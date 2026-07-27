@@ -87,6 +87,7 @@
             <tr>
               <th>Produk</th>
               <th style="width:100px;">Harga</th>
+              <th style="width:80px;">Diskon</th>
               <th style="width:80px;">Qty</th>
               <th style="width:150px;">Subtotal</th>
               <th>Keterangan</th>
@@ -96,7 +97,12 @@
             @php $grandTotal = 0; @endphp
             @foreach($cart as $index => $item)
               @php
-                $subtotal = $item['price'] * $item['qty'];
+                $price = (float) $item['price'];
+                $discType = $item['discountType'] ?? '';
+                $discVal = (float) ($item['discountValue'] ?? 0);
+                $discAmt = $discType === 'percentage' && $discVal > 0 ? $price * $discVal / 100 : ($discType === 'nominal' && $discVal > 0 ? min($discVal, $price) : 0);
+                $discAmt = min($discAmt, $price);
+                $subtotal = ($price - $discAmt) * $item['qty'];
                 $grandTotal += $subtotal;
               @endphp
               <tr>
@@ -116,7 +122,8 @@
                   <input type="hidden" name="items[{{ $index }}][price]" value="{{ $item['price'] }}">
                   <input type="hidden" name="items[{{ $index }}][qty]" value="{{ $item['qty'] }}">
                 </td>
-                <td class="text-mono">Rp {{ number_format($item['price'], 0) }}</td>
+                <td class="text-mono">Rp {{ number_format($price, 0) }}</td>
+                <td>@if($discAmt > 0)<span style="color:var(--danger);font-size:0.85rem;">-Rp {{ number_format($discAmt, 0) }}</span>@else<span class="text-muted-c">-</span>@endif</td>
                 <td>{{ $item['qty'] }}</td>
                 <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
                 <td>
@@ -127,7 +134,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3" class="text-end fw-bold">Grand Total</td>
+              <td colspan="4" class="text-end fw-bold">Grand Total</td>
               <td class="text-mono fw-bold" style="color:var(--accent-1);font-size:1.05rem;">Rp {{ number_format($grandTotal, 0) }}</td>
               <td></td>
             </tr>
@@ -167,7 +174,7 @@
         <div class="d-flex justify-content-between px-2 py-2 mt-1" style="background:var(--bg-elevated-2);border-radius:var(--radius-sm);">
           <span>Grand Total</span>
           <span class="fw-bold text-mono" id="modalGrandTotal" style="color:var(--accent-1);">
-            Rp {{ number_format(collect($cart)->sum(fn($i) => $i['price'] * $i['qty']), 0) }}
+            Rp {{ number_format($grandTotal, 0) }}
           </span>
         </div>
       </div>

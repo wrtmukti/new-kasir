@@ -60,6 +60,7 @@ use App\Http\Controllers\Admin\TableController;
 use App\Http\Controllers\Admin\BundleController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\DiscountController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -90,6 +91,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Bundle
     Route::get('bundle/data', [BundleController::class, 'data'])->name('bundle.data');
     Route::resource('bundle', BundleController::class);
+
+    // Discount
+    Route::get('discount/data', [DiscountController::class, 'data'])->name('discount.data');
+    Route::post('discount/{discount}/attach-product', [DiscountController::class, 'attachProduct'])->name('discount.attach-product');
+    Route::post('discount/{discount}/detach-product', [DiscountController::class, 'detachProduct'])->name('discount.detach-product');
+    Route::resource('discount', DiscountController::class);
 
     // Order — New order
     Route::get('order/data', [OrderController::class, 'data'])->name('order.data');

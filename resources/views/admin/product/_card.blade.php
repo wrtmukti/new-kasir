@@ -20,7 +20,21 @@
       @endif
     </div>
     <div class="product-card-category">{{ $product->category?->category_name ?? '-' }}</div>
-    <div class="product-card-price">{{ $product->product_price ? 'Rp ' . number_format($product->product_price, 0) : '-' }}</div>
+    <div class="product-card-price">
+      @php
+        $discPct = $product->product_discount_type === 'percentage' ? (float)($product->product_discount_value ?? 0) : 0;
+        $discNom = $product->product_discount_type === 'nominal' ? (float)($product->product_discount_value ?? 0) : 0;
+        $discAmt = $discPct > 0 ? $product->product_price * $discPct / 100 : ($discNom > 0 ? min($discNom, $product->product_price) : 0);
+        $priceDisc = $product->product_price - $discAmt;
+      @endphp
+      @if($discAmt > 0)
+        <span style="text-decoration:line-through;color:var(--text-muted);font-size:0.75rem;">Rp {{ number_format($product->product_price, 0) }}</span>
+        <span style="color:var(--danger);font-weight:700;display:block;font-size:1.1rem;">Rp {{ number_format($priceDisc, 0) }}</span>
+        <span class="pill pill-danger" style="font-size:0.6rem;padding:0.1rem 0.35rem;">-{{ $discPct > 0 ? $discPct.'%' : 'Rp'.number_format($discAmt,0) }}</span>
+      @else
+        Rp {{ number_format($product->product_price, 0) }}
+      @endif
+    </div>
     @if($product->relationLoaded('stocks') && $product->stocks->isNotEmpty())
       <div class="product-card-stock">
         <span class="stock-pill"><i class="bi bi-box-seam me-1" style="font-size:0.65rem;"></i>{{ $product->stocks->count() }} bahan</span>

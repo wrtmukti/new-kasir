@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('discount_max_amount', 15, 2)->nullable(); // cap maksimal
             $table->text('discount_description')->nullable();
             $table->tinyInteger('discount_status')->default(1); // 0 inactive, 1 active
+            $table->datetime('start_date')->nullable();
+            $table->datetime('end_date')->nullable();
 
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();

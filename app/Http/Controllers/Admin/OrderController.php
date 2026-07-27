@@ -62,6 +62,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('delete_status', 0)
             ->with('company')
+            ->with('transaction.items')
             ->latest()
             ->paginate(10);
         return view('admin.order.list', compact('orders'));
@@ -82,7 +83,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate($perPage);
+        $orders = $query->latest()->with('transaction.items')->paginate($perPage);
 
         if ($request->ajax()) {
             return response()->json([
@@ -109,12 +110,40 @@ class OrderController extends Controller
 
             $companyId = $order->company_id;
 
-            // Hitung subtotal & grand total
-            $subtotal = 0;
+            // Hitung per item (include diskon produk)
+            $items = [];
+            $totalSubtotal = 0;
+            $totalDiscount = 0;
+
             foreach ($order->products as $product) {
                 $qty = (int) $product->pivot->quantity;
                 $price = (float) $product->product_price;
-                $subtotal += $price * $qty;
+                $discountType = $product->product_discount_type;
+                $discountValue = (float) ($product->product_discount_value ?? 0);
+
+                // Hitung discount_amount
+                $discountAmount = 0;
+                if ($discountType === 'percentage' && $discountValue > 0) {
+                    $discountAmount = round($price * ($discountValue / 100), 2);
+                } elseif ($discountType === 'nominal' && $discountValue > 0) {
+                    $discountAmount = min($discountValue, $price);
+                }
+                // Cap biar gak minus
+                $discountAmount = min($discountAmount, $price);
+
+                $subtotal = ($price - $discountAmount) * $qty;
+                $totalSubtotal += $subtotal;
+                $totalDiscount += $discountAmount * $qty;
+
+                $items[] = [
+                    'product' => $product,
+                    'qty' => $qty,
+                    'price' => $price,
+                    'discount_type' => $discountType,
+                    'discount_value' => $discountValue,
+                    'discount_amount' => $discountAmount,
+                    'subtotal' => $subtotal,
+                ];
             }
 
             // Simpan transaction
@@ -122,10 +151,10 @@ class OrderController extends Controller
                 'company_id' => $companyId,
                 'transaction_code' => 'TRX-' . $order->order_id . '-' . now()->format('Ymd'),
                 'transaction_date' => now(),
-                'transaction_subtotal' => $subtotal,
+                'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => 0,
                 'transaction_service_charge' => 0,
-                'transaction_grand_total' => $subtotal,
+                'transaction_grand_total' => $totalSubtotal,
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
@@ -133,26 +162,30 @@ class OrderController extends Controller
                 'created_by' => 'admin',
             ]);
 
-            // Simpan transaction_items
-            foreach ($order->products as $product) {
-                $qty = (int) $product->pivot->quantity;
-                $price = (float) $product->product_price;
-
+            // Simpan transaction_items (include diskon)
+            foreach ($items as $item) {
+                $product = $item['product'];
                 TransactionItem::create([
                     'company_id' => $companyId,
                     'transaction_id' => $transaction->transaction_id,
                     'product_id' => $product->product_id,
                     'product_name' => $product->product_name,
-                    'price' => $price,
-                    'qty' => $qty,
-                    'subtotal' => $price * $qty,
+                    'price' => $item['price'],
+                    'discount_type' => $item['discount_type'],
+                    'discount_value' => $item['discount_value'],
+                    'discount_amount' => $item['discount_amount'],
+                    'qty' => $item['qty'],
+                    'subtotal' => $item['subtotal'],
                     'note' => $product->pivot->note,
                     'created_by' => 'admin',
                 ]);
             }
 
-            // Update status order
-            $order->update(['order_status' => 'completed']);
+            // Update status order + link ke transaction
+            $order->update([
+                'order_status' => 'completed',
+                'order_transaction_id' => $transaction->transaction_id,
+            ]);
 
             // Free table
             if ($order->order_table_id) {
@@ -177,7 +210,11 @@ class OrderController extends Controller
             abort(404);
         }
 
-        $order->load('products');
+        // Load transaction_items untuk snapshot harga & diskon
+        $transaction = Transaction::with('items')
+            ->where('transaction_id', $order->order_transaction_id)
+            ->where('delete_status', 0)
+            ->first();
 
         $table = null;
         if ($order->order_table_id) {
@@ -186,7 +223,7 @@ class OrderController extends Controller
 
         $company = Company::where('delete_status', 0)->first();
 
-        return view('admin.order.receipt', compact('order', 'table', 'company'));
+        return view('admin.order.receipt', compact('order', 'transaction', 'table', 'company'));
     }
 
     // ——— Detail pesanan ———
@@ -199,6 +236,19 @@ class OrderController extends Controller
 
         $order->load('company', 'products');
 
+        // Kalo completed, load transaction_items jg biar dapet snapshot harga & diskon
+        $transaction = null;
+        $transactionItems = null;
+        if ($order->order_status === 'completed' && $order->order_transaction_id) {
+            $transaction = Transaction::with('items')
+                ->where('transaction_id', $order->order_transaction_id)
+                ->where('delete_status', 0)
+                ->first();
+            if ($transaction) {
+                $transactionItems = $transaction->items;
+            }
+        }
+
         $table = null;
         if ($order->order_table_id) {
             $table = Table::where('table_id', $order->order_table_id)->first();
@@ -209,7 +259,7 @@ class OrderController extends Controller
             $customer = Customer::where('customer_id', $order->order_customer_id)->first();
         }
 
-        return view('admin.order.show', compact('order', 'table', 'customer'));
+        return view('admin.order.show', compact('order', 'table', 'customer', 'transaction', 'transactionItems'));
     }
 
     public function storeCart(Request $request)

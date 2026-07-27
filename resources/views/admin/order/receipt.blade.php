@@ -102,32 +102,60 @@ body {
         <th class="col-item">Item</th>
         <th class="col-qty">Qty</th>
         <th class="col-price">Harga</th>
+        <th class="col-price">Disc</th>
         <th class="col-total">Sub</th>
       </tr>
     </thead>
     <tbody>
       @php $grandTotal = 0; @endphp
-      @foreach($order->products as $product)
-        @php
-          $qty = (int) $product->pivot->quantity;
-          $price = (float) $product->product_price;
-          $subtotal = $price * $qty;
-          $grandTotal += $subtotal;
-          $name = $product->product_name;
-          if (strlen($name) > 20) $name = substr($name, 0, 18) . '..';
-        @endphp
-        <tr>
-          <td class="col-item">{{ $name }}</td>
-          <td class="col-qty">{{ $qty }}</td>
-          <td class="col-price">{{ number_format($price, 0) }}</td>
-          <td class="col-total">{{ number_format($subtotal, 0) }}</td>
-        </tr>
-        @if($product->pivot->note)
+      @if($transaction && $transaction->items)
+        @foreach($transaction->items as $item)
+          @php
+            $qty = (int) $item->qty;
+            $price = (float) $item->price;
+            $discount = (float) ($item->discount_amount ?? 0);
+            $subtotal = (float) $item->subtotal;
+            $grandTotal += $subtotal;
+            $name = $item->product_name;
+            if (strlen($name) > 16) $name = substr($name, 0, 14) . '..';
+          @endphp
           <tr>
-            <td colspan="4" style="font-size:10px;color:#666;padding-left:4px;">— {{ $product->pivot->note }}</td>
+            <td class="col-item">{{ $name }}</td>
+            <td class="col-qty">{{ $qty }}</td>
+            <td class="col-price">{{ number_format($price, 0) }}</td>
+            <td class="col-price">@if($discount > 0)-{{ number_format($discount, 0) }}@else-@endif</td>
+            <td class="col-total">{{ number_format($subtotal, 0) }}</td>
           </tr>
-        @endif
-      @endforeach
+          @if($item->note)
+            <tr>
+              <td colspan="5" style="font-size:10px;color:#666;padding-left:4px;">— {{ $item->note }}</td>
+            </tr>
+          @endif
+        @endforeach
+      @else
+        @foreach($order->products as $product)
+          @php
+            $qty = (int) $product->pivot->quantity;
+            $price = (float) $product->product_price;
+            $subtotal = $price * $qty;
+            $grandTotal += $subtotal;
+            $name = $product->product_name;
+            if (strlen($name) > 16) $name = substr($name, 0, 14) . '..';
+          @endphp
+          <tr>
+            <td class="col-item">{{ $name }}</td>
+            <td class="col-qty">{{ $qty }}</td>
+            <td class="col-price">{{ number_format($price, 0) }}</td>
+            <td class="col-price">-</td>
+            <td class="col-total">{{ number_format($subtotal, 0) }}</td>
+          </tr>
+          @if($product->pivot->note)
+            <tr>
+              <td colspan="5" style="font-size:10px;color:#666;padding-left:4px;">— {{ $product->pivot->note }}</td>
+            </tr>
+          @endif
+        @endforeach
+      @endif
     </tbody>
     <tfoot>
       <tr>

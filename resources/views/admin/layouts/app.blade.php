@@ -71,6 +71,13 @@
         </li>
       </ul>
 
+      <div class="nav-section-title">Promo</div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'discount') active @endif">
+          <a href="{{ route('admin.discount.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Diskon</span></a>
+        </li>
+      </ul>
+
       <div class="nav-section-title">Laporan</div>
       <ul class="list-unstyled">
         <li class="nav-item">

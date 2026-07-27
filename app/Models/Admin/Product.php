@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SysAdmin\Company;
+use App\Models\Admin\Discount;
 
 class Product extends Model
 {
@@ -46,5 +47,10 @@ class Product extends Model
             ->withPivot('quantity')
             ->wherePivot('delete_status', 0)
             ->withTimestamps();
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class, 'product_discount_id', 'discount_id');
     }
 }
