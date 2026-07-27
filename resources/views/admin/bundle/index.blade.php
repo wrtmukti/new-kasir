@@ -10,111 +10,329 @@
     <h1>Paket Bundle</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <a href="{{ route('admin.bundle.index') }}">Paket</a>
+      <span>Paket</span>
     </div>
   </div>
-  <div>
-    <a href="{{ route('admin.bundle.create') }}" class="btn btn-primary-grad">
-      <i class="bi bi-plus-lg me-1"></i>Tambah Paket
-    </a>
-  </div>
-</div>
-
-{{-- Filter Per Page --}}
-<div class="d-flex align-items-center gap-2 mb-3">
-  <label class="form-label-modern mb-0">Tampilkan</label>
-  <select class="form-select-modern" id="perPage" style="width:auto;">
-    <option value="10">10</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-  </select>
-  <span class="text-muted-c" style="font-size:0.85rem;">data</span>
+  <a href="{{ route('admin.bundle.create') }}" class="btn btn-primary-grad">
+    <i class="bi bi-plus-lg me-1"></i>Tambah Paket
+  </a>
 </div>
 
 <div class="card">
   <div class="card-header-flex">
     <h6><i class="bi bi-gift me-2"></i>Daftar Paket</h6>
-    <span class="selected-count" id="totalCount">{{ $bundles->total() }}</span>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label-modern mb-0" style="font-size:0.85rem;">Tampilkan</label>
+      <select class="form-select-modern" id="perPage" style="width:auto;min-width:70px;">
+        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
+        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+      </select>
+      <span class="text-muted-c" style="font-size:0.85rem;">data</span>
+      <span class="chip-tag" id="totalCount">{{ $bundles->total() }} item</span>
+      <button class="btn btn-ghost btn-sm" id="viewToggleBtn" data-view="list" title="Tampilan" style="flex-shrink:0;">
+        <i class="bi bi-grid-fill" id="viewToggleIcon"></i>
+      </button>
+    </div>
   </div>
-  <div id="table-body">
-    @include('admin.bundle._data', ['bundles' => $bundles])
+
+  {{-- List view --}}
+  <div id="listView" class="table-view">
+    <div class="table-responsive" id="tableContainer">
+      <table class="table-modern" id="dataTable">
+        <thead>
+          <tr>
+            <th>Paket</th>
+            <th>Harga</th>
+            <th>Item</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          @include('admin.bundle._data', ['bundles' => $bundles])
+        </tbody>
+      </table>
+    </div>
+    <div class="px-3 py-2 d-flex justify-content-between align-items-center" id="paginationContainer">
+      <span class="text-muted-c" style="font-size:0.85rem;" id="pageInfo">
+        Menampilkan {{ $bundles->firstItem() ?? 0 }} - {{ $bundles->lastItem() ?? 0 }} dari {{ $bundles->total() }}
+      </span>
+      {{ $bundles->onEachSide(1)->links('vendor.pagination.modern') }}
+    </div>
+  </div>
+
+  {{-- Card view --}}
+  <div id="cardView" class="card-view" style="display:none;">
+    <div class="bundle-card-grid" id="cardGrid">
+      @include('admin.bundle._card', ['bundles' => $bundles])
+    </div>
+    <div class="px-3 py-2 d-flex justify-content-between align-items-center" id="paginationContainerCard" style="display:none;">
+      <span class="text-muted-c" style="font-size:0.85rem;">
+        Menampilkan {{ $bundles->firstItem() ?? 0 }} - {{ $bundles->lastItem() ?? 0 }} dari {{ $bundles->total() }}
+      </span>
+      {{ $bundles->onEachSide(1)->links('vendor.pagination.modern') }}
+    </div>
   </div>
 </div>
 @endsection
 
+@push('styles')
+<style>
+.bundle-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+}
+.bundle-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+}
+.bundle-card:hover {
+  border-color: var(--accent-1);
+  transform: translateY(-2px);
+}
+.bundle-card-img {
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  background: var(--bg-elevated-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bundle-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bundle-card-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  color: var(--text-muted);
+}
+.bundle-card-body {
+  padding: 0.75rem;
+}
+.bundle-card-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  margin-bottom: 0.15rem;
+  color: var(--text-primary);
+}
+.bundle-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.15rem;
+}
+.bundle-card-code {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.bundle-card-items {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+.bundle-card-price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent-1);
+}
+.bundle-card-actions {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  display: flex;
+  gap: 0.2rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.bundle-card:hover .bundle-card-actions {
+  opacity: 1;
+}
+</style>
+@endpush
+
+{{-- Toast flash session --}}
+@if(session('success'))
+  <script>document.addEventListener('DOMContentLoaded', function() { NexoraToast('{{ session('success') }}', 'success'); });</script>
+@endif
+@if(session('error'))
+  <script>document.addEventListener('DOMContentLoaded', function() { NexoraToast('{{ session('error') }}', 'danger'); });</script>
+@endif
+
+{{-- Modal Konfirmasi Hapus --}}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="mb-0">Konfirmasi Hapus</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-exclamation-triangle-fill" style="font-size:2rem;color:var(--danger);"></i>
+        <p class="mt-2 mb-0">Yakin ingin menghapus paket ini?</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0 pt-0">
+        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const perPage = document.getElementById('perPage');
-  const tableBody = document.getElementById('table-body');
+  let currentPage = 1;
+  let activeView = 'list';
+  const perPageEl = document.getElementById('perPage');
+  const totalCount = document.getElementById('totalCount');
 
-  function loadData(page, perPageVal) {
-    const url = '{{ route('admin.bundle.data') }}' + '?page=' + page + '&per_page=' + perPageVal;
-
-    // Skeleton
-    const rows = Array.from({length: parseInt(perPageVal) || 3}, () => '<tr>' + Array.from({length: 5}, () => '<td><div class="skeleton skeleton-text"></div></td>').join('') + '</tr>');
-    tableBody.innerHTML = '<div class="table-responsive"><table class="table-modern"><thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Item</th><th>Aksi</th></tr></thead><tbody>' + rows.join('') + '</tbody></table></div>';
-
-    setTimeout(function() {
-      fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-        .then(r => r.json())
-        .then(d => {
-          tableBody.innerHTML = d.html;
-          document.querySelector('.pagination-modern')?.parentElement?.replaceWith(d.pagination);
-          document.getElementById('totalCount').textContent = d.total;
-          bindDelete();
-        })
-        .catch(() => { location.reload(); });
-    }, 400);
-  }
-
-  perPage.addEventListener('change', function() { loadData(1, this.value); });
-
-  document.addEventListener('click', function(e) {
-    const pageLink = e.target.closest('.pagination-modern a');
-    if (pageLink) {
-      e.preventDefault();
-      const url = new URL(pageLink.href);
-      loadData(url.searchParams.get('page') || 1, perPage.value);
-    }
+  // Toggle view
+  const toggleBtn = document.getElementById('viewToggleBtn');
+  const toggleIcon = document.getElementById('viewToggleIcon');
+  toggleBtn.addEventListener('click', function() {
+    activeView = activeView === 'list' ? 'card' : 'list';
+    toggleIcon.className = activeView === 'card' ? 'bi bi-list-ul' : 'bi bi-grid-fill';
+    this.dataset.view = activeView;
+    document.getElementById('listView').style.display = activeView === 'list' ? '' : 'none';
+    document.getElementById('cardView').style.display = activeView === 'card' ? '' : 'none';
+    loadData(currentPage, perPageEl.value);
   });
 
-  function bindDelete() {
+  // Skeleton
+  function showSkeleton(count) {
+    if (activeView === 'card') {
+      let cards = '';
+      for (let i = 0; i < count; i++) {
+        cards += '<div class="bundle-card" style="pointer-events:none;">';
+        cards += '<div class="bundle-card-img"><div class="skeleton" style="width:100%;height:100%;"></div></div>';
+        cards += '<div class="bundle-card-body">';
+        cards += '<div class="skeleton skeleton-text mb-2"></div>';
+        cards += '<div class="skeleton skeleton-text" style="width:60%;"></div>';
+        cards += '</div></div>';
+      }
+      return cards;
+    }
+    let rows = '';
+    for (let i = 0; i < count; i++) {
+      rows += '<tr>';
+      for (let j = 0; j < 5; j++) {
+        rows += '<td><div class="skeleton skeleton-text"></div></td>';
+      }
+      rows += '</tr>';
+    }
+    return rows;
+  }
+
+  const tableBody = document.getElementById('tableBody');
+  const paginationContainer = document.getElementById('paginationContainer');
+  const cardGrid = document.getElementById('cardGrid');
+  const paginationContainerCard = document.getElementById('paginationContainerCard');
+
+  function loadData(page, perPageVal) {
+    currentPage = page;
+
+    if (activeView === 'list') {
+      tableBody.innerHTML = showSkeleton(parseInt(perPageVal) || 10);
+      paginationContainer.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Memuat...</span><ul class="pagination-modern"><li class="disabled"><span>&laquo;</span></li><li class="active"><span>...</span></li><li class="disabled"><span>&raquo;</span></li></ul>';
+    } else {
+      cardGrid.innerHTML = showSkeleton(parseInt(perPageVal) || 10);
+      paginationContainerCard.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Memuat...</span><ul class="pagination-modern"><li class="disabled"><span>&laquo;</span></li><li class="active"><span>...</span></li><li class="disabled"><span>&raquo;</span></li></ul>';
+      paginationContainerCard.style.display = '';
+    }
+
+    const startTime = Date.now();
+    fetch('{{ route("admin.bundle.data") }}?page=' + page + '&per_page=' + perPageVal + '&view=' + activeView, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      const delay = Math.max(400 - (Date.now() - startTime), 0);
+      setTimeout(function() {
+        if (activeView === 'list') {
+          tableBody.innerHTML = data.html;
+          paginationContainer.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Menampilkan ' + (data.from ?? 0) + ' - ' + (data.to ?? 0) + ' dari ' + data.total + '</span>' + data.pagination;
+        } else {
+          cardGrid.innerHTML = data.html;
+          paginationContainerCard.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Menampilkan ' + (data.from ?? 0) + ' - ' + (data.to ?? 0) + ' dari ' + data.total + '</span>' + data.pagination;
+        }
+        totalCount.textContent = data.total + ' item';
+        attachHandlers();
+      }, delay);
+    })
+    .catch(function() { NexoraToast('Gagal memuat data.', 'danger'); });
+  }
+
+  function attachHandlers() {
+    document.querySelectorAll('#paginationContainer [data-page], #paginationContainerCard [data-page]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadData(parseInt(this.dataset.page), perPageEl.value);
+      });
+    });
+
     document.querySelectorAll('.btn-delete').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        const url = this.dataset.url;
-        const row = this.closest('tr');
-        // Bootstrap modal konfirmasi
-        const modal = document.createElement('div');
-        modal.className = 'modal fade';
-        modal.innerHTML = '<div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content" style="background:var(--bg-surface);border:1px solid var(--border-subtle);"><div class="modal-body text-center py-4"><i class="bi bi-exclamation-triangle text-danger" style="font-size:2rem;display:block;margin-bottom:0.75rem;"></i><p class="fw-semibold mb-0" style="color:var(--text-primary);">Hapus paket ini?</p><small class="text-muted-c">Data tidak bisa dikembalikan.</small></div><div class="modal-footer border-0 pt-0 justify-content-center"><button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Batal</button><button type="button" class="btn btn-danger-grad btn-confirm-delete">Hapus</button></div></div></div>';
-        document.body.appendChild(modal);
-        const m = new bootstrap.Modal(modal);
-        m.show();
-        modal.querySelector('.btn-confirm-delete').addEventListener('click', function() {
-          fetch(url, { method: 'DELETE', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
-            .then(r => r.json())
-            .then(d => {
-              m.hide();
-              modal.remove();
-              loadData(1, perPage.value);
-              NexoraToast(d.success || 'Paket berhasil dihapus.', 'success');
-            });
-        });
-        modal.addEventListener('hidden.bs.modal', function() { modal.remove(); });
+        document.getElementById('confirmDeleteBtn').dataset.url = this.dataset.url;
+        var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        modal.show();
+      });
+    });
+
+    document.querySelectorAll('.row-clickable').forEach(function(row) {
+      row.addEventListener('click', function(e) {
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.btn')) return;
+        window.location.href = this.dataset.url;
+      });
+    });
+
+    document.querySelectorAll('.bundle-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.btn')) return;
+        window.location.href = this.dataset.url;
       });
     });
   }
 
-  bindDelete();
-
-  // Row click → show
-  document.querySelectorAll('.row-clickable').forEach(function(row) {
-    row.addEventListener('click', function(e) {
-      if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.btn')) return;
-      window.location.href = this.dataset.url;
-    });
+  perPageEl.addEventListener('change', function() {
+    loadData(1, this.value);
   });
+
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    const url = this.dataset.url;
+    if (!url) return;
+    var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+    if (modal) modal.hide();
+    fetch(url, {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: '_token={{ csrf_token() }}&_method=DELETE'
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      NexoraToast(data.success || 'Berhasil dihapus.', 'success');
+      loadData(1, perPageEl.value);
+    })
+    .catch(function() { NexoraToast('Gagal menghapus data.', 'danger'); });
+  });
+
+  attachHandlers();
 });
 </script>
 @endpush

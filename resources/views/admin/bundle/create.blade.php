@@ -125,15 +125,15 @@
       </div>
 
       {{-- ============================================================ --}}
-      {{-- STEP 2: PILIH PRODUK --}}
+      {{-- STEP 2: Pilih Produk (Card Grid) --}}
       {{-- ============================================================ --}}
       <div class="step-panel" id="step2Panel" style="display:none;">
         <div class="mb-3">
-          <label class="form-label-modern">Pilih Produk <span class="text-muted-c" style="font-weight:400;font-size:0.8rem;">— klik produk untuk ditambahkan ke paket</span></label>
+          <label class="form-label-modern mb-2">Pilih Produk <span class="text-muted-c" style="font-weight:400;font-size:0.8rem;">— klik produk untuk ditambahkan ke paket</span></label>
           <div class="input-skeleton">
             {{-- Category tabs --}}
             @if($categories->count())
-            <div class="d-flex flex-wrap gap-2 mb-3" id="categoryTabs">
+            <div class="d-flex flex-wrap gap-2 mb-3" id="bprodCategoryTabs">
               <button type="button" class="pill pill-active" data-category="">Semua</button>
               @foreach($categories as $cat)
                 <button type="button" class="pill pill-neutral" data-category="{{ $cat->category_id }}">{{ $cat->category_name }}</button>
@@ -141,43 +141,38 @@
             </div>
             @endif
 
-            {{-- Search --}}
-            <div class="mb-3" style="position:relative;">
-              <input type="text" id="productSearchInput" class="form-control-modern" placeholder="Cari produk..." style="padding-left:2.2rem;">
-              <i class="bi bi-search" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:0.85rem;"></i>
+            {{-- Toolbar --}}
+            <div class="d-flex align-items-center gap-2 mb-3" style="flex-wrap:wrap;">
+              <div style="position:relative;flex:1;min-width:160px;">
+                <input type="text" id="bprodSearch" class="form-control-modern" placeholder="Cari produk..." style="padding-left:2.2rem;">
+                <i class="bi bi-search" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:0.85rem;"></i>
+              </div>
+              <label class="form-label-modern mb-0" style="font-size:0.85rem;">Tampilkan</label>
+              <select class="form-select-modern" id="bprodPerPage" style="width:auto;min-width:70px;">
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span class="text-muted-c" style="font-size:0.85rem;">data</span>
+              <span class="chip-tag" id="bprodTotal">0 item</span>
             </div>
 
-            {{-- Product tags --}}
-            <div class="product-tag-container" id="productTagContainer">
-              @foreach($products as $product)
-                <span class="product-tag" data-product-id="{{ $product->product_id }}"
-                      data-product-name="{{ $product->product_name }}"
-                      data-product-code="{{ $product->product_code }}"
-                      data-product-price="{{ $product->product_price }}"
-                      data-category-id="{{ $product->category_id }}">
-                  {{ $product->product_name }}
-                  <small style="opacity:0.6;font-size:0.65rem;">Rp {{ number_format($product->product_price, 0, ',', '.') }}</small>
-                  <i class="bi bi-plus-circle tag-add-icon"></i>
-                </span>
-              @endforeach
+            {{-- Product grid --}}
+            <div class="bprod-grid" id="bprodGrid">
+              <div class="text-center text-muted-c py-4">Memuat produk...</div>
             </div>
-            @if($products->isEmpty())
-              <div class="text-center text-muted-c py-4">
-                <i class="bi bi-cup-hot" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
-                Belum ada produk. <a href="{{ route('admin.product.create') }}" style="color:var(--accent-1);">Tambah produk</a> dulu.
-              </div>
-            @endif
+
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-center mt-3" id="bprodPagination"></div>
           </div>
         </div>
 
-        {{-- Selected products + quantity --}}
+        {{-- Selected products summary --}}
         <div class="selected-product-summary">
           <label class="form-label-modern">Produk Terpilih <span class="selected-count" id="selectedCount">0</span></label>
           <div id="selectedProductsList">
             <span class="text-muted-c" style="font-size:0.85rem;" id="emptySelectedMsg">Belum ada produk dipilih</span>
           </div>
-
-          {{-- Price info --}}
           <div id="priceInfo" style="display:none;" class="mt-3 pt-3" style="border-top:1px solid var(--border-subtle);">
             <div class="d-flex justify-content-between align-items-center">
               <span class="text-muted-c" style="font-size:0.85rem;">Total harga normal:</span>
@@ -187,7 +182,7 @@
               <span class="text-muted-c" style="font-size:0.85rem;">Harga paket:</span>
               <span class="text-mono fw-semibold text-success" id="bundlePriceDisplay">Rp 0</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center mt-1" id="hematRow">
+            <div class="d-flex justify-content-between align-items-center mt-1">
               <span class="text-muted-c" style="font-size:0.85rem;">Hemat:</span>
               <span class="text-mono fw-semibold text-danger" id="hematDisplay">Rp 0</span>
             </div>
@@ -222,61 +217,68 @@
 .step-panel { animation: fadeSlideIn 0.35s ease; }
 @keyframes fadeSlideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-.product-tag-container {
-  display:flex; flex-wrap:wrap; gap:0.5rem;
-  padding:0.75rem;
-  border:1px solid var(--border-subtle);
-  border-radius:var(--radius-md);
-  background:var(--bg-surface);
-  max-height:280px; overflow-y:auto; min-height:60px;
+.bprod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  min-height: 120px;
 }
-.product-tag-container::-webkit-scrollbar { width:4px; }
-.product-tag-container::-webkit-scrollbar-thumb { background:var(--border-subtle); border-radius:4px; }
+.bprod-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+  user-select: none;
+}
+.bprod-card:hover { border-color: var(--accent-1); transform: translateY(-2px); }
+.bprod-card.selected {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 2px var(--accent-1), 0 4px 12px rgba(37,99,235,0.2);
+}
+.bprod-card-img {
+  width: 100%; height: 100px;
+  overflow: hidden;
+  background: var(--bg-elevated-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.bprod-card-img img { width:100%; height:100%; object-fit:cover; }
+.bprod-card-img-placeholder { display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:1.8rem; color:var(--text-muted); }
+.bprod-card-check {
+  position: absolute; top:0.3rem; right:0.3rem;
+  width:24px; height:24px; border-radius:50%;
+  background: var(--accent-1); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; opacity:0; transition:opacity 0.2s;
+}
+.bprod-card.selected .bprod-card-check { opacity:1; }
+.bprod-card-body { padding:0.5rem 0.65rem 0.65rem; }
+.bprod-card-name { font-weight:600; font-size:0.82rem; line-height:1.3; color:var(--text-primary); margin-bottom:0.1rem; }
+.bprod-card-code { font-size:0.68rem; color:var(--text-muted); margin-bottom:0.25rem; }
+.bprod-card-price { font-weight:600; font-size:0.88rem; color:var(--accent-1); }
 
-.product-tag {
-  cursor:pointer; transition:all 0.2s ease; user-select:none;
-  border-color:var(--border-subtle); background:var(--bg-elevated);
-  color:var(--text-primary);
-}
-.product-tag:hover { border-color:var(--accent-1); background:rgba(37,99,235,0.08); transform:translateY(-1px); }
-.product-tag .tag-add-icon { opacity:0.4; transition:opacity 0.2s; }
-.product-tag:hover .tag-add-icon { opacity:1; color:var(--accent-1) !important; }
-
-.product-tag.selected { background:rgba(37,99,235,0.18); color:var(--accent-1); border-color:rgba(37,99,235,0.35); box-shadow:0 2px 8px rgba(37,99,235,0.15); }
-.product-tag.selected .tag-add-icon::before { content:"\F633"; }
-.product-tag.selected .tag-add-icon { opacity:1; color:var(--accent-1) !important; }
-
-.selected-product-summary {
-  padding:1rem;
-  border:1px solid var(--border-subtle);
-  border-radius:var(--radius-md);
-  background:var(--bg-surface);
-}
-.selected-product-item {
-  display:flex; align-items:center; gap:0.75rem;
-  padding:0.6rem 0;
-  border-bottom:1px solid var(--border-subtle);
-}
+.selected-product-summary { padding:1rem; border:1px solid var(--border-subtle); border-radius:var(--radius-md); background:var(--bg-surface); }
+.selected-product-item { display:flex; align-items:center; gap:0.75rem; padding:0.6rem 0; border-bottom:1px solid var(--border-subtle); }
 .selected-product-item:last-child { border-bottom:none; }
 .selected-product-info { flex:1; min-width:0; }
 .selected-product-name { font-weight:600; font-size:0.88rem; color:var(--text-primary); }
 .selected-product-meta { font-size:0.75rem; color:var(--text-muted); }
-.selected-product-qty { flex-shrink:0; display:flex; align-items:center; gap:0.5rem; }
-.selected-product-qty .form-control-modern { width:80px; text-align:center; font-weight:600; }
-
-.pill-active {
-  display:inline-flex; align-items:center; padding:0.35rem 0.9rem;
-  background:var(--accent-gradient); color:#fff; border:none;
-  border-radius:var(--radius-full); font-size:0.78rem; font-weight:500; cursor:pointer;
-}
-.pill-neutral {
-  display:inline-flex; align-items:center; padding:0.35rem 0.9rem;
-  background:var(--bg-elevated); color:var(--text-secondary); border:1px solid var(--border-subtle);
-  border-radius:var(--radius-full); font-size:0.78rem; font-weight:500; cursor:pointer;
-}
-
+.selected-product-qty { flex-shrink:0; }
+.selected-product-qty .form-control-modern { width:70px; text-align:center; font-weight:600; }
 .remove-product { cursor:pointer; opacity:0.5; transition:opacity 0.15s; }
 .remove-product:hover { opacity:1; color:var(--danger); }
+
+.pill-active { display:inline-flex; align-items:center; padding:0.35rem 0.9rem; background:var(--accent-gradient); color:#fff; border:none; border-radius:var(--radius-full); font-size:0.78rem; font-weight:500; cursor:pointer; }
+.pill-neutral { display:inline-flex; align-items:center; padding:0.35rem 0.9rem; background:var(--bg-elevated); color:var(--text-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-full); font-size:0.78rem; font-weight:500; cursor:pointer; }
 
 .btn-success-grad { background:linear-gradient(135deg,#059669,#10B981); color:#fff; border:none; }
 .btn-success-grad:hover { background:linear-gradient(135deg,#047857,#059669); color:#fff; }
@@ -298,10 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextBtn = document.getElementById('nextBtn');
   const submitBtn = document.getElementById('submitBtn');
   const cancelBtn = document.getElementById('cancelBtn');
-  const productTags = document.querySelectorAll('.product-tag');
-  const searchInput = document.getElementById('productSearchInput');
   const selectedList = document.getElementById('selectedProductsList');
-  const emptyMsg = document.getElementById('emptySelectedMsg');
   const countEl = document.getElementById('selectedCount');
   const idsInput = document.getElementById('productIdsInput');
   const totalNormalEl = document.getElementById('totalNormalPrice');
@@ -326,59 +325,104 @@ document.addEventListener('DOMContentLoaded', function() {
     removeBtn.addEventListener('click', function() { fileInput.value = ''; preview.innerHTML = '<i class="bi bi-image" style="font-size:2.5rem;color:var(--text-muted);"></i><span class="text-muted-c" style="font-size:0.85rem;">Belum ada gambar</span>'; preview.classList.remove('has-image'); removeBtn.style.display = 'none'; });
   }
 
-  // Category filter
-  document.querySelectorAll('#categoryTabs .pill').forEach(function(btn) {
+  // ===== PRODUCT GRID (Step 2) =====
+  let bprodPage = 1;
+  let bprodCat = '';
+  let bprodSearchVal = '';
+  const bprodGrid = document.getElementById('bprodGrid');
+  const bprodPagination = document.getElementById('bprodPagination');
+  const bprodTotal = document.getElementById('bprodTotal');
+  const bprodPerPage = document.getElementById('bprodPerPage');
+  const bprodSearch = document.getElementById('bprodSearch');
+
+  function loadProducts(page, cat, search, perPage) {
+    bprodGrid.innerHTML = '<div class="text-center py-4" style="grid-column:1/-1;"><div class="skeleton" style="width:100%;height:100px;margin-bottom:0.5rem;"></div><div class="skeleton skeleton-text" style="width:60%;margin:0 auto;"></div></div>'.repeat(Math.min(parseInt(perPage)||10, 10));
+    const start = Date.now();
+    const params = '?page='+page+'&per_page='+perPage+'&category_id='+cat+'&search='+encodeURIComponent(search)+'&view=card';
+    fetch('{{ route("admin.bundle.product-data") }}'+params, { headers: { 'X-Requested-With':'XMLHttpRequest' } })
+    .then(r => r.json())
+    .then(d => {
+      setTimeout(function() {
+        bprodGrid.innerHTML = d.html;
+        bprodPagination.innerHTML = d.pagination;
+        bprodTotal.textContent = d.total+' item';
+        attachBprodClick();
+        attachBprodPagination();
+        selectedProducts.forEach(function(p) {
+          bprodGrid.querySelectorAll('.bprod-card').forEach(function(c) {
+            if (c.dataset.productId === p.id) c.classList.add('selected');
+          });
+        });
+      }, Math.max(400-(Date.now()-start),0));
+    })
+    .catch(function() { NexoraToast('Gagal memuat produk.', 'danger'); });
+  }
+
+  function attachBprodClick() {
+    bprodGrid.querySelectorAll('.bprod-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        const id = this.dataset.productId;
+        const name = this.dataset.productName;
+        const code = this.dataset.productCode;
+        const price = parseFloat(this.dataset.productPrice)||0;
+        const idx = selectedProducts.findIndex(p => p.id === id);
+        if (idx === -1) {
+          selectedProducts.push({id, name, code, price, qty: 1});
+          this.classList.add('selected');
+        } else {
+          selectedProducts.splice(idx, 1);
+          this.classList.remove('selected');
+        }
+        updateSelected();
+      });
+    });
+  }
+
+  function attachBprodPagination() {
+    bprodPagination.querySelectorAll('[data-page]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        bprodPage = parseInt(this.dataset.page);
+        loadProducts(bprodPage, bprodCat, bprodSearchVal, bprodPerPage.value);
+      });
+    });
+  }
+
+  document.querySelectorAll('#bprodCategoryTabs .pill').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('#categoryTabs .pill').forEach(function(b) { b.className = 'pill pill-neutral'; });
+      document.querySelectorAll('#bprodCategoryTabs .pill').forEach(function(b) { b.className = 'pill pill-neutral'; });
       this.className = 'pill pill-active';
-      filterProducts();
+      bprodCat = this.dataset.category || '';
+      bprodPage = 1;
+      loadProducts(bprodPage, bprodCat, bprodSearchVal, bprodPerPage.value);
     });
   });
 
-  // Search
-  if (searchInput) {
-    searchInput.addEventListener('input', function() { filterProducts(); });
-  }
-
-  function filterProducts() {
-    const activeCat = document.querySelector('#categoryTabs .pill-active');
-    const catId = activeCat ? activeCat.dataset.category : '';
-    const q = (searchInput?.value || '').toLowerCase().trim();
-    productTags.forEach(function(tag) {
-      const name = tag.dataset.productName.toLowerCase();
-      const code = tag.dataset.productCode.toLowerCase();
-      const tagCat = tag.dataset.categoryId;
-      const matchCat = !catId || tagCat === catId;
-      const matchSearch = name.includes(q) || code.includes(q);
-      tag.style.display = matchCat && matchSearch ? '' : 'none';
+  let searchTimer;
+  if (bprodSearch) {
+    bprodSearch.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        bprodSearchVal = bprodSearch.value.trim();
+        bprodPage = 1;
+        loadProducts(bprodPage, bprodCat, bprodSearchVal, bprodPerPage.value);
+      }, 400);
     });
   }
 
-  // Product selection
-  productTags.forEach(function(tag) {
-    tag.addEventListener('click', function() {
-      const id = this.dataset.productId;
-      const name = this.dataset.productName;
-      const code = this.dataset.productCode;
-      const price = parseFloat(this.dataset.productPrice) || 0;
-      const idx = selectedProducts.findIndex(p => p.id === id);
-      if (idx === -1) {
-        selectedProducts.push({ id, name, code, price, qty: 1 });
-        this.classList.add('selected');
-      } else {
-        selectedProducts.splice(idx, 1);
-        this.classList.remove('selected');
-      }
-      updateSelected();
+  if (bprodPerPage) {
+    bprodPerPage.addEventListener('change', function() {
+      bprodPage = 1;
+      loadProducts(bprodPage, bprodCat, bprodSearchVal, bprodPerPage.value);
     });
-  });
+  }
 
   function updateSelected() {
     idsInput.value = JSON.stringify(selectedProducts.map(p => p.id));
     countEl.textContent = selectedProducts.length;
 
     if (selectedProducts.length === 0) {
-      selectedList.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;" id="emptySelectedMsg">Belum ada produk dipilih</span>';
+      selectedList.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Belum ada produk dipilih</span>';
       priceInfo.style.display = 'none';
       return;
     }
@@ -389,19 +433,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const subtotal = p.price * p.qty;
       totalNormal += subtotal;
       html += '<div class="selected-product-item" data-index="' + i + '">'
-            + '<div class="selected-product-info">'
-            + '<div class="selected-product-name">' + p.name + '</div>'
-            + '<div class="selected-product-meta">' + p.code + ' &middot; Rp ' + Number(p.price).toLocaleString('id-ID') + '</div>'
-            + '</div>'
+            + '<div class="selected-product-info"><div class="selected-product-name">' + p.name + '</div>'
+            + '<div class="selected-product-meta">' + p.code + ' &middot; Rp ' + Number(p.price).toLocaleString('id-ID') + '</div></div>'
             + '<div class="selected-product-qty">'
             + '<input type="number" name="quantities[' + i + ']" class="form-control-modern" value="' + p.qty + '" min="1" step="1" style="width:70px;text-align:center;font-weight:600;">'
-            + '</div>'
-            + '<i class="bi bi-x-lg remove-product" data-id="' + p.id + '"></i>'
-            + '</div>';
+            + '</div><i class="bi bi-x-lg remove-product" data-id="' + p.id + '"></i></div>';
     });
     selectedList.innerHTML = html;
 
-    // Attach qty change & remove
     selectedList.querySelectorAll('input[name^="quantities["]').forEach(function(inp) {
       inp.addEventListener('change', function() {
         const index = parseInt(this.name.match(/\d+/)[0]);
@@ -415,14 +454,13 @@ document.addEventListener('DOMContentLoaded', function() {
       el.addEventListener('click', function() {
         const id = this.dataset.id;
         selectedProducts = selectedProducts.filter(p => p.id !== id);
-        document.querySelectorAll('.product-tag').forEach(function(t) {
-          if (t.dataset.productId === id) t.classList.remove('selected');
+        bprodGrid.querySelectorAll('.bprod-card').forEach(function(c) {
+          if (c.dataset.productId === id) c.classList.remove('selected');
         });
         updateSelected();
       });
     });
 
-    // Price info
     const bundlePrice = parseFloat(bundlePriceInput.value) || 0;
     totalNormalEl.textContent = 'Rp ' + Number(totalNormal).toLocaleString('id-ID');
     bundlePriceDisplay.textContent = 'Rp ' + Number(bundlePrice).toLocaleString('id-ID');
@@ -431,14 +469,12 @@ document.addEventListener('DOMContentLoaded', function() {
     priceInfo.style.display = '';
   }
 
-  // Live bundle price update
   if (bundlePriceInput) {
     bundlePriceInput.addEventListener('input', function() {
       if (selectedProducts.length > 0) updateSelected();
     });
   }
 
-  // Navigation
   function goToStep(step) {
     currentStep = step;
     panel1.style.display = 'none';
@@ -452,8 +488,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     stepTitle.innerHTML = stepLabels[step];
     prevBtn.style.display = step > 1 ? '' : 'none';
-    if (step === STEP_PRODUCT) { nextBtn.style.display = 'none'; submitBtn.style.display = ''; cancelBtn.style.display = 'none'; }
-    else { nextBtn.style.display = ''; submitBtn.style.display = 'none'; cancelBtn.style.display = ''; }
+    if (step === STEP_PRODUCT) {
+      nextBtn.style.display = 'none'; submitBtn.style.display = ''; cancelBtn.style.display = 'none';
+      loadProducts(bprodPage, bprodCat, bprodSearchVal, bprodPerPage.value);
+    } else {
+      nextBtn.style.display = ''; submitBtn.style.display = 'none'; cancelBtn.style.display = '';
+    }
     document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -474,7 +514,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentStep === STEP_PRODUCT) goToStep(STEP_INFO);
   });
 
-  // Submit
   const form = document.getElementById('bundleForm');
   if (form) {
     form.addEventListener('submit', function(e) {
@@ -492,17 +531,12 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       const oldIds = JSON.parse(idsInput.value || '[]');
       if (Array.isArray(oldIds) && oldIds.length > 0) {
-        productTags.forEach(function(tag) {
-          if (oldIds.includes(tag.dataset.productId)) {
-            const id = tag.dataset.productId, name = tag.dataset.productName, code = tag.dataset.productCode, price = parseFloat(tag.dataset.productPrice) || 0;
-            if (!selectedProducts.find(p => p.id === id)) { selectedProducts.push({ id, name, code, price, qty: 1 }); tag.classList.add('selected'); }
+        var allCards = document.querySelectorAll('.bprod-card');
+        allCards.forEach(function(card) {
+          if (oldIds.includes(card.dataset.productId)) {
+            var id = card.dataset.productId, name = card.dataset.productName, code = card.dataset.productCode, price = parseFloat(card.dataset.productPrice) || 0;
+            if (!selectedProducts.find(p => p.id === id)) { selectedProducts.push({ id, name, code, price, qty: 1 }); }
           }
-        });
-        // Restore quantities
-        const oldQtys = document.querySelectorAll('input[name^="quantities["]');
-        oldQtys.forEach(function(inp) {
-          const idx = parseInt(inp.name.match(/\d+/)[0]);
-          if (selectedProducts[idx]) selectedProducts[idx].qty = parseInt(inp.value) || 1;
         });
         updateSelected();
       }

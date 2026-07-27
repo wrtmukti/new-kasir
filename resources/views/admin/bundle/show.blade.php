@@ -47,7 +47,9 @@
                 <img src="{{ asset('storage/' . $bundle->bundle_image) }}" alt="{{ $bundle->bundle_name }}"
                      style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
               @else
-                <span class="text-muted-c">-</span>
+                <span style="width:80px;height:80px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-md);background:var(--bg-elevated-2);border:1px solid var(--border-subtle);">
+                  <i class="bi bi-gift" style="font-size:1.8rem;color:var(--text-muted);"></i>
+                </span>
               @endif
             </td>
           </tr>

@@ -91,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Bundle
     Route::get('bundle/data', [BundleController::class, 'data'])->name('bundle.data');
+    Route::get('bundle/product-data', [BundleController::class, 'productData'])->name('bundle.product-data');
     Route::resource('bundle', BundleController::class);
 
     // Discount

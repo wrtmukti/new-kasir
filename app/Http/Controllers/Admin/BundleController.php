@@ -26,6 +26,7 @@ class BundleController extends Controller
     public function data(Request $request)
     {
         $perPage = $request->input('per_page', 10);
+        $view = $request->input('view', 'list');
 
         $query = Bundle::where('delete_status', 0)
             ->with('company', 'items.product');
@@ -33,8 +34,9 @@ class BundleController extends Controller
         $bundles = $query->latest()->paginate($perPage);
 
         if ($request->ajax()) {
+            $partial = $view === 'card' ? 'admin.bundle._card' : 'admin.bundle._data';
             return response()->json([
-                'html' => view('admin.bundle._data', compact('bundles'))->render(),
+                'html' => view($partial, compact('bundles'))->render(),
                 'pagination' => $bundles->links('vendor.pagination.modern')->toHtml(),
                 'total' => $bundles->total(),
                 'from' => $bundles->firstItem(),
@@ -43,6 +45,43 @@ class BundleController extends Controller
         }
 
         return view('admin.bundle.index', compact('bundles'));
+    }
+
+    public function productData(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $categoryId = $request->input('category_id');
+        $search = $request->input('search');
+        $view = $request->input('view', 'card');
+
+        $query = Product::where('delete_status', 0)->where('product_status', 1)
+            ->with('category');
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('product_name', 'like', '%'.$search.'%')
+                  ->orWhere('product_code', 'like', '%'.$search.'%');
+            });
+        }
+
+        $products = $query->orderBy('product_name')->paginate($perPage);
+
+        if ($request->ajax()) {
+            $partial = 'admin.bundle._product_card';
+            return response()->json([
+                'html' => view($partial, compact('products'))->render(),
+                'pagination' => $products->links('vendor.pagination.modern')->toHtml(),
+                'total' => $products->total(),
+                'from' => $products->firstItem(),
+                'to' => $products->lastItem(),
+            ]);
+        }
+
+        return $products;
     }
 
     public function create()

@@ -169,3 +169,14 @@
 | 2026-07-27 | UPDATE | Sidebar admin — tambah Voucher di section Promo | `resources/views/admin/layouts/app.blade.php` |
 | 2026-07-27 | CREATE | VoucherSeeder — 5 voucher (BARU10, ULTAH15, HEMAT20, NGOPI50, GRATIS01) | `database/seeders/VoucherSeeder.php` |
 | 2026-07-27 | UPDATE | DatabaseSeeder — panggil VoucherSeeder setelah DiscountSeeder | `database/seeders/DatabaseSeeder.php` |
+|
+| 2026-07-27 | UPDATE | Bundle _data — tambah kolom foto thumbnail (kayak produk) | `views/admin/bundle/_data.blade.php` |
+| 2026-07-27 | CREATE | Bundle _card — card view buat toggle List/Card | `views/admin/bundle/_card.blade.php` |
+| 2026-07-27 | UPDATE | Bundle index — tambah toggle List/Card, skeleton shimmer, modal hapus | `views/admin/bundle/index.blade.php` |
+| 2026-07-27 | UPDATE | BundleController@data — dukung parameter view (list/card) | `app/Http/Controllers/Admin/BundleController.php` |
+| 2026-07-27 | FIX | Duplikat @endsection + section di luar content — error 500 | `views/admin/bundle/index.blade.php` |
+| 2026-07-28 | UPDATE | Bundle show — placeholder gambar pake icon gift kalo kosong | `views/admin/bundle/show.blade.php` |
+| 2026-07-28 | ROUTE | Tambah route bundle.product-data | `routes/web.php` |
+| 2026-07-28 | CREATE | BundleController@productData — AJAX paginated product picker | `app/Http/Controllers/Admin/BundleController.php` |
+| 2026-07-28 | CREATE | Bundle _product_card — partial card + foto buat product picker | `views/admin/bundle/_product_card.blade.php` |
+| 2026-07-28 | UPDATE | Bundle create/edit — Step 2 Pilih Produk jadi card grid + foto + pagination 10/page + search | `views/admin/bundle/create.blade.php`, `edit.blade.php` |
