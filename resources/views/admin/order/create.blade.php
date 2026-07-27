@@ -144,6 +144,41 @@
     </div>
   </div>
 
+  {{-- Voucher --}}
+  <div class="card mb-3">
+    <div class="card-header-flex">
+      <h6>Voucher</h6>
+      <span class="text-muted-c" style="font-size:0.8rem;">Opsional</span>
+    </div>
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+          <div class="input-skeleton">
+            <label class="form-label-modern">Kode Voucher</label>
+            <input type="text" name="voucher_code" id="voucherCode" class="form-control-modern @error('voucher_code') is-invalid @enderror" value="{{ old('voucher_code') }}" placeholder="Masukkan kode voucher..." maxlength="50">
+            @error('voucher_code') <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span> @enderror
+          </div>
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-outline-soft" id="checkVoucherBtn" style="width:100%;">
+            <i class="bi bi-ticket-perforated me-1"></i>Cek Voucher
+          </button>
+        </div>
+        <div class="col-md-3">
+          <div id="voucherResult" style="display:none;">
+            <div class="d-flex align-items-center gap-2 p-2" style="background:var(--bg-elevated-2);border-radius:var(--radius-sm);">
+              <i class="bi bi-check-circle-fill" style="color:var(--success);"></i>
+              <div>
+                <div style="font-size:0.85rem;font-weight:500;" id="voucherName"></div>
+                <div style="font-size:0.75rem;color:var(--text-muted);">Potongan: <span id="voucherDiscountDisplay" class="text-mono"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {{-- Tombol --}}
   <div class="d-flex justify-content-end gap-2">
     <a href="{{ route('admin.order.index') }}" class="btn btn-outline-soft">Kembali</a>
@@ -177,6 +212,10 @@
             Rp {{ number_format($grandTotal, 0) }}
           </span>
         </div>
+        <div id="modalVoucherInfo" style="display:none;" class="d-flex justify-content-between px-2 py-2 mt-1" style="background:var(--bg-elevated-2);border-radius:var(--radius-sm);">
+          <span>Potongan Voucher</span>
+          <span class="fw-bold text-mono" id="modalVoucherAmount" style="color:var(--danger);">-Rp 0</span>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Cek Lagi</button>
@@ -201,6 +240,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('orderForm');
   const confirmBtn = document.getElementById('confirmBtn');
   const submitBtn = document.getElementById('submitBtn');
+  const voucherCode = document.getElementById('voucherCode');
+  const checkVoucherBtn = document.getElementById('checkVoucherBtn');
+  const voucherResult = document.getElementById('voucherResult');
+  const voucherName = document.getElementById('voucherName');
+  const voucherDiscountDisplay = document.getElementById('voucherDiscountDisplay');
+  const modalVoucherInfo = document.getElementById('modalVoucherInfo');
+  const modalVoucherAmount = document.getElementById('modalVoucherAmount');
+  const modalGrandTotal = document.getElementById('modalGrandTotal');
+
+  let grandTotal = {{ $grandTotal }};
+  let voucherAmount = 0;
 
   confirmBtn.addEventListener('click', function() {
     var modal = new bootstrap.Modal(document.getElementById('confirmModal'));
@@ -212,6 +262,66 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memproses...';
     form.submit();
+  });
+
+  // Cek voucher via AJAX
+  checkVoucherBtn.addEventListener('click', function() {
+    const code = voucherCode.value.trim();
+    if (!code) {
+      NexoraToast('Masukkan kode voucher terlebih dahulu.', 'danger');
+      return;
+    }
+
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mengecek...';
+
+    fetch('{{ route("admin.order.check-voucher") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+      },
+      body: JSON.stringify({ voucher_code: code, grand_total: grandTotal })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        voucherAmount = data.voucher_amount;
+        voucherResult.style.display = 'block';
+        voucherName.textContent = data.voucher_name;
+        voucherDiscountDisplay.textContent = '-Rp ' + new Intl.NumberFormat('id-ID').format(voucherAmount);
+
+        // Update modal
+        const afterVoucher = grandTotal - voucherAmount;
+        modalVoucherInfo.style.display = 'flex';
+        modalVoucherAmount.textContent = '-Rp ' + new Intl.NumberFormat('id-ID').format(voucherAmount);
+        modalGrandTotal.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(afterVoucher);
+
+        NexoraToast('Voucher berlaku! Potongan Rp ' + new Intl.NumberFormat('id-ID').format(voucherAmount), 'success');
+      } else {
+        voucherResult.style.display = 'none';
+        voucherAmount = 0;
+        modalVoucherInfo.style.display = 'none';
+        modalGrandTotal.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(grandTotal);
+        NexoraToast(data.message || 'Voucher tidak valid.', 'danger');
+      }
+    })
+    .catch(() => {
+      NexoraToast('Gagal mengecek voucher.', 'danger');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-ticket-perforated me-1"></i>Cek Voucher';
+    });
+  });
+
+  // Reset voucher state kalo kode diubah
+  voucherCode.addEventListener('input', function() {
+    voucherResult.style.display = 'none';
+    voucherAmount = 0;
+    modalVoucherInfo.style.display = 'none';
+    modalGrandTotal.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(grandTotal);
   });
 });
 </script>

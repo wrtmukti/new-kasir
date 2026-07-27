@@ -149,6 +149,17 @@
             <td class="text-mono fw-bold" style="color:var(--accent-1);font-size:1.05rem;">Rp {{ number_format($grandTotal, 0) }}</td>
             <td></td>
           </tr>
+          @if($order->vouchers->isNotEmpty())
+            @foreach($order->vouchers as $v)
+            <tr>
+              <td colspan="4" class="text-end" style="font-size:0.85rem;color:var(--text-muted);">
+                <i class="bi bi-ticket-perforated me-1"></i>Voucher {{ $v->voucher_code }}
+              </td>
+              <td class="text-mono" style="color:var(--danger);font-size:0.9rem;">-Rp {{ number_format($v->voucher_amount, 0) }}</td>
+              <td></td>
+            </tr>
+            @endforeach
+          @endif
         </tfoot>
       </table>
     </div>

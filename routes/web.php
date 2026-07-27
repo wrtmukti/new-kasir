@@ -61,6 +61,7 @@ use App\Http\Controllers\Admin\BundleController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\VoucherController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -98,12 +99,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('discount/{discount}/detach-product', [DiscountController::class, 'detachProduct'])->name('discount.detach-product');
     Route::resource('discount', DiscountController::class);
 
+    // Voucher
+    Route::get('voucher/data', [VoucherController::class, 'data'])->name('voucher.data');
+    Route::resource('voucher', VoucherController::class);
+
     // Order — New order
     Route::get('order/data', [OrderController::class, 'data'])->name('order.data');
     Route::get('order', [OrderController::class, 'index'])->name('order.index');
     Route::post('order/store-cart', [OrderController::class, 'storeCart'])->name('order.store-cart');
     Route::get('order/create', [OrderController::class, 'create'])->name('order.create');
     Route::post('order', [OrderController::class, 'store'])->name('order.store');
+    Route::post('order/check-voucher', [OrderController::class, 'checkVoucher'])->name('order.check-voucher');
     // Order — List & detail
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
     Route::get('order/list-data', [OrderController::class, 'listData'])->name('order.list-data');

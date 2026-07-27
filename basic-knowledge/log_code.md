@@ -148,3 +148,24 @@
 | 2026-07-27 | UPDATE | OrderController list + listData — eager load transaction.items | `app/Http/Controllers/Admin/OrderController.php` |
 | 2026-07-27 | UPDATE | Order show view — inline hitung diskon buat in_progress & completed tanpa transaction | `views/admin/order/show.blade.php` |
 | 2026-07-27 | UPDATE | Pembahasan — keputusan Opsi B (Single Snapshot di transaction_items) | `basic-knowledge/pembahasan-diskon-transaksi-payment.md` |
+|
+| 2026-07-27 | CREATE | Migration order_voucher — pivot order↔voucher dengan snapshot | `database/migrations/2026_07_27_000001_create_order_voucher_table.php` |
+| 2026-07-27 | CREATE | Model Voucher (belongsTo Company, scope active/byCode) | `app/Models/Admin/Voucher.php` |
+| 2026-07-27 | CREATE | Model OrderVoucher (belongsTo Order) | `app/Models/Admin/OrderVoucher.php` |
+| 2026-07-27 | UPDATE | Order model — tambah relasi `vouchers()` hasMany OrderVoucher | `app/Models/Admin/Order.php` |
+| 2026-07-27 | UPDATE | OrderController — create() load vouchers aktif, store() hitung grand_total include diskon + potongan voucher | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | CREATE | OrderController@checkVoucher — AJAX cek voucher (validasi, hitung potongan) | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | OrderController@complete — transaksi terima bersih order_grand_total (udah include voucher) | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | OrderController@receipt — load vouchers buat tampil di struk | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-27 | UPDATE | Routes — tambah POST order/check-voucher | `routes/web.php` |
+| 2026-07-27 | UPDATE | View create order — input voucher + AJAX cek + modal konfirmasi tampil potongan | `resources/views/admin/order/create.blade.php` |
+| 2026-07-27 | UPDATE | View show order — tampil baris voucher di tfoot | `resources/views/admin/order/show.blade.php` |
+| 2026-07-27 | UPDATE | View receipt — tampil baris voucher di receipt | `resources/views/admin/order/receipt.blade.php` |
+|
+| 2026-07-27 | CREATE | VoucherRequest — validasi field voucher B.Indonesia | `app/Http/Requests/Admin/VoucherRequest.php` |
+| 2026-07-27 | CREATE | VoucherController — CRUD + AJAX data() + destroy | `app/Http/Controllers/Admin/VoucherController.php` |
+| 2026-07-27 | CREATE | 5 view Voucher — index, _data, create, edit, show (ikut pattern Diskon) | `resources/views/admin/voucher/*.blade.php` |
+| 2026-07-27 | UPDATE | Routes — tambah route resource voucher + prefix admin, name admin.voucher.* | `routes/web.php` |
+| 2026-07-27 | UPDATE | Sidebar admin — tambah Voucher di section Promo | `resources/views/admin/layouts/app.blade.php` |
+| 2026-07-27 | CREATE | VoucherSeeder — 5 voucher (BARU10, ULTAH15, HEMAT20, NGOPI50, GRATIS01) | `database/seeders/VoucherSeeder.php` |
+| 2026-07-27 | UPDATE | DatabaseSeeder — panggil VoucherSeeder setelah DiscountSeeder | `database/seeders/DatabaseSeeder.php` |

@@ -162,6 +162,14 @@ body {
         <td colspan="3">Total</td>
         <td class="col-total">{{ number_format($grandTotal, 0) }}</td>
       </tr>
+      @if($order->vouchers->isNotEmpty())
+        @foreach($order->vouchers as $v)
+        <tr>
+          <td colspan="3" style="font-size:10px;">Voucher {{ $v->voucher_code }}</td>
+          <td class="col-total" style="font-size:10px;">-{{ number_format($v->voucher_amount, 0) }}</td>
+        </tr>
+        @endforeach
+      @endif
     </tfoot>
   </table>
 

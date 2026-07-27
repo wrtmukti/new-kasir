@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Order;
+use App\Models\Admin\OrderVoucher;
 use App\Models\Admin\Product;
 use App\Models\Admin\Category;
 use App\Models\Admin\Table;
 use App\Models\Admin\Customer;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
+use App\Models\Admin\Voucher;
 use App\Models\SysAdmin\Company;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -146,7 +149,7 @@ class OrderController extends Controller
                 ];
             }
 
-            // Simpan transaction
+            // Simpan transaction — grand_total pake dari order (udah include voucher)
             $transaction = Transaction::create([
                 'company_id' => $companyId,
                 'transaction_code' => 'TRX-' . $order->order_id . '-' . now()->format('Ymd'),
@@ -154,7 +157,7 @@ class OrderController extends Controller
                 'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => 0,
                 'transaction_service_charge' => 0,
-                'transaction_grand_total' => $totalSubtotal,
+                'transaction_grand_total' => (float) $order->order_grand_total,
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
@@ -211,6 +214,7 @@ class OrderController extends Controller
         }
 
         // Load transaction_items untuk snapshot harga & diskon
+        $order->load('vouchers');
         $transaction = Transaction::with('items')
             ->where('transaction_id', $order->order_transaction_id)
             ->where('delete_status', 0)
@@ -234,7 +238,7 @@ class OrderController extends Controller
                 ->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $order->load('company', 'products');
+        $order->load('company', 'products', 'vouchers');
 
         // Kalo completed, load transaction_items jg biar dapet snapshot harga & diskon
         $transaction = null;
@@ -275,6 +279,50 @@ class OrderController extends Controller
         return response()->json(['ok' => true]);
     }
 
+    // ——— Cek voucher via AJAX ———
+    public function checkVoucher(Request $request): JsonResponse
+    {
+        $request->validate([
+            'voucher_code' => 'required|string|max:50',
+            'grand_total' => 'required|numeric|min:0',
+        ]);
+
+        $voucher = Voucher::active()->byCode($request->voucher_code)->first();
+
+        if (!$voucher) {
+            return response()->json(['ok' => false, 'message' => 'Kode voucher tidak valid atau sudah kedaluwarsa.']);
+        }
+
+        $grandTotal = (float) $request->grand_total;
+        $minPurchase = (float) ($voucher->voucher_min_purchase ?? 0);
+
+        if ($grandTotal < $minPurchase) {
+            return response()->json(['ok' => false, 'message' => 'Minimal belanja Rp ' . number_format($minPurchase, 0) . ' untuk menggunakan voucher ini.']);
+        }
+
+        // Hitung voucher_amount
+        $voucherAmount = 0;
+        if ($voucher->voucher_type === 'percentage') {
+            $voucherAmount = round($grandTotal * ((float) $voucher->voucher_value / 100), 2);
+            $maxDisc = (float) ($voucher->voucher_max_discount ?? 0);
+            if ($maxDisc > 0) {
+                $voucherAmount = min($voucherAmount, $maxDisc);
+            }
+        } elseif ($voucher->voucher_type === 'nominal') {
+            $voucherAmount = min((float) $voucher->voucher_value, $grandTotal);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'voucher_name' => $voucher->voucher_name,
+            'voucher_code' => $voucher->voucher_code,
+            'voucher_type' => $voucher->voucher_type,
+            'voucher_value' => (float) $voucher->voucher_value,
+            'voucher_max_discount' => (float) ($voucher->voucher_max_discount ?? 0),
+            'voucher_amount' => $voucherAmount,
+        ]);
+    }
+
     public function create()
     {
         $cart = session('order_cart', []);
@@ -290,8 +338,9 @@ class OrderController extends Controller
         $customers = Customer::where('delete_status', 0)
             ->orderBy('customer_name')
             ->get(['customer_id', 'customer_name', 'customer_phone']);
+        $vouchers = Voucher::active()->get();
 
-        return view('admin.order.create', compact('cart', 'tables', 'customers'));
+        return view('admin.order.create', compact('cart', 'tables', 'customers', 'vouchers'));
     }
 
     public function store(Request $request)
@@ -301,6 +350,7 @@ class OrderController extends Controller
             'order_table_id' => 'nullable|string',
             'order_customer_id' => 'nullable|string',
             'order_remark' => 'nullable|string',
+            'voucher_code' => 'nullable|string|max:50',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|string',
             'items.*.product_name' => 'required|string',
@@ -311,14 +361,86 @@ class OrderController extends Controller
 
         $companyId = Company::where('delete_status', 0)->value('company_id');
 
-        $grandTotal = collect($validated['items'])->sum(fn($i) => $i['price'] * $i['qty']);
+        // Hitung grand total include diskon produk
+        $grandTotal = 0;
+        $itemDetails = [];
+        foreach ($validated['items'] as $item) {
+            $price = (float) $item['price'];
+            $product = Product::find($item['product_id']);
+            $discountType = $product ? $product->product_discount_type : null;
+            $discountValue = $product ? (float) ($product->product_discount_value ?? 0) : 0;
 
-        DB::transaction(function () use ($validated, $companyId, $grandTotal, $request) {
+            $discountAmount = 0;
+            if ($discountType === 'percentage' && $discountValue > 0) {
+                $discountAmount = round($price * ($discountValue / 100), 2);
+            } elseif ($discountType === 'nominal' && $discountValue > 0) {
+                $discountAmount = min($discountValue, $price);
+            }
+            $discountAmount = min($discountAmount, $price);
+
+            $subtotal = ($price - $discountAmount) * (int) $item['qty'];
+            $grandTotal += $subtotal;
+
+            $itemDetails[] = [
+                'product_id' => $item['product_id'],
+                'qty' => (int) $item['qty'],
+                'note' => $item['note'] ?? null,
+                'price' => $price,
+                'discount_type' => $discountType,
+                'discount_value' => $discountValue,
+                'discount_amount' => $discountAmount,
+                'subtotal' => $subtotal,
+            ];
+        }
+
+        // Proses voucher
+        $voucherAmount = 0;
+        $voucherData = null;
+        $voucherCode = $validated['voucher_code'] ?? null;
+
+        if ($voucherCode) {
+            $voucher = Voucher::active()->byCode($voucherCode)->first();
+
+            if (!$voucher) {
+                return back()->withErrors(['voucher_code' => 'Kode voucher tidak valid atau sudah kedaluwarsa.'])->withInput();
+            }
+
+            // Cek min purchase
+            $minPurchase = (float) ($voucher->voucher_min_purchase ?? 0);
+            if ($grandTotal < $minPurchase) {
+                return back()->withErrors(['voucher_code' => 'Minimal belanja Rp ' . number_format($minPurchase, 0) . ' untuk menggunakan voucher ini.'])->withInput();
+            }
+
+            // Hitung voucher_amount
+            if ($voucher->voucher_type === 'percentage') {
+                $voucherAmount = round($grandTotal * ((float) $voucher->voucher_value / 100), 2);
+                $maxDisc = (float) ($voucher->voucher_max_discount ?? 0);
+                if ($maxDisc > 0) {
+                    $voucherAmount = min($voucherAmount, $maxDisc);
+                }
+            } elseif ($voucher->voucher_type === 'nominal') {
+                $voucherAmount = min((float) $voucher->voucher_value, $grandTotal);
+            }
+
+            $voucherData = [
+                'company_id' => $companyId,
+                'voucher_code' => $voucher->voucher_code,
+                'voucher_type' => $voucher->voucher_type,
+                'voucher_value' => (float) $voucher->voucher_value,
+                'voucher_max_discount' => (float) ($voucher->voucher_max_discount ?? 0),
+                'voucher_amount' => $voucherAmount,
+                'created_by' => 'admin',
+            ];
+        }
+
+        $finalGrandTotal = $grandTotal - $voucherAmount;
+
+        DB::transaction(function () use ($validated, $companyId, $finalGrandTotal, $itemDetails, $voucherData, $request) {
             $order = Order::create([
                 'company_id' => $companyId,
                 'order_type' => $validated['order_type'],
                 'order_status' => 'in_progress',
-                'order_grand_total' => $grandTotal,
+                'order_grand_total' => $finalGrandTotal,
                 'order_remark' => $validated['order_remark'] ?? null,
                 'order_table_id' => $validated['order_table_id'] ?? null,
                 'order_customer_id' => $validated['order_customer_id'] ?? null,
@@ -327,7 +449,7 @@ class OrderController extends Controller
 
             // Sync products ke pivot order_product
             $syncData = [];
-            foreach ($validated['items'] as $item) {
+            foreach ($itemDetails as $item) {
                 $syncData[$item['product_id']] = [
                     'company_id' => $companyId,
                     'quantity' => $item['qty'],
@@ -338,12 +460,18 @@ class OrderController extends Controller
             }
             $order->products()->sync($syncData);
 
+            // Simpan voucher kalo ada
+            if ($voucherData) {
+                $voucherData['order_id'] = $order->order_id;
+                OrderVoucher::create($voucherData);
+            }
+
             // Auto-decrement stok
-            foreach ($validated['items'] as $item) {
+            foreach ($itemDetails as $item) {
                 $product = Product::with('stocks')->find($item['product_id']);
                 if (!$product) continue;
 
-                $orderQty = (int) $item['qty'];
+                $orderQty = $item['qty'];
 
                 foreach ($product->stocks as $stock) {
                     $bomQty = (int) $stock->pivot->quantity;

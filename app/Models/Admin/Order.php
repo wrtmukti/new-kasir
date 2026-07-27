@@ -42,4 +42,9 @@ class Order extends Model
     {
         return $this->hasOne(Transaction::class, 'transaction_id', 'order_transaction_id');
     }
+
+    public function vouchers()
+    {
+        return $this->hasMany(OrderVoucher::class, 'order_id', 'order_id');
+    }
 }

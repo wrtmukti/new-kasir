@@ -76,6 +76,9 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'discount') active @endif">
           <a href="{{ route('admin.discount.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Diskon</span></a>
         </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'voucher') active @endif">
+          <a href="{{ route('admin.voucher.index') }}" class="nav-link"><i class="bi bi-ticket-perforated"></i><span class="nav-label-text">Voucher</span></a>
+        </li>
       </ul>
 
       <div class="nav-section-title">Laporan</div>
