@@ -11,6 +11,18 @@ class Voucher extends Model
 
     protected $primaryKey = 'voucher_id';
 
+    protected $casts = [
+        'voucher_value' => 'decimal:2',
+        'voucher_max_discount' => 'decimal:2',
+        'voucher_min_purchase' => 'decimal:2',
+        'voucher_usage_limit' => 'integer',
+        'voucher_usage_per_customer' => 'integer',
+        'voucher_status' => 'integer',
+        'delete_status' => 'integer',
+        'voucher_start_date' => 'datetime',
+        'voucher_end_date' => 'datetime',
+    ];
+
     protected $fillable = [
         'company_id',
         'voucher_code',

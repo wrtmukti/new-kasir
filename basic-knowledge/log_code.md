@@ -168,7 +168,10 @@
 | 2026-07-27 | UPDATE | Routes — tambah route resource voucher + prefix admin, name admin.voucher.* | `routes/web.php` |
 | 2026-07-27 | UPDATE | Sidebar admin — tambah Voucher di section Promo | `resources/views/admin/layouts/app.blade.php` |
 | 2026-07-27 | CREATE | VoucherSeeder — 5 voucher (BARU10, ULTAH15, HEMAT20, NGOPI50, GRATIS01) | `database/seeders/VoucherSeeder.php` |
-| 2026-07-27 | UPDATE | DatabaseSeeder — panggil VoucherSeeder setelah DiscountSeeder | `database/seeders/DatabaseSeeder.php` |
+| 2026-07-28 | UPDATE | Voucher model — tambah $casts (datetime buat start_date/end_date) | `app/Models/Admin/Voucher.php` |
+| 2026-07-28 | UPDATE | VoucherController — redirect show ke edit, log history di store/update/destroy | `app/Http/Controllers/Admin/VoucherController.php` |
+| 2026-07-28 | UPDATE | Voucher _data — row clickable langsung ke edit (bukan show) | `resources/views/admin/voucher/_data.blade.php` |
+| 2026-07-28 | UPDATE | DatabaseSeeder — panggil VoucherSeeder setelah DiscountSeeder | `database/seeders/DatabaseSeeder.php` |
 |
 | 2026-07-27 | UPDATE | Bundle _data — tambah kolom foto thumbnail (kayak produk) | `views/admin/bundle/_data.blade.php` |
 | 2026-07-27 | CREATE | Bundle _card — card view buat toggle List/Card | `views/admin/bundle/_card.blade.php` |

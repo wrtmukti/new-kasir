@@ -1,5 +1,5 @@
 @forelse($vouchers as $voucher)
-<tr class="row-clickable" data-url="{{ route('admin.voucher.show', $voucher) }}">
+<tr class="row-clickable" data-url="{{ route('admin.voucher.edit', $voucher) }}">
   <td class="cell-primary">
     <span class="text-mono fw-semibold">{{ $voucher->voucher_code }}</span>
   </td>
@@ -40,9 +40,6 @@
   </td>
   <td>
     <div class="d-flex gap-1">
-      <a href="{{ route('admin.voucher.edit', $voucher) }}" class="btn btn-ghost btn-icon-sq btn-sm" title="Edit">
-        <i class="bi bi-pencil"></i>
-      </a>
       <button type="button" class="btn btn-ghost btn-icon-sq btn-sm text-danger btn-delete" data-url="{{ route('admin.voucher.destroy', $voucher) }}" title="Hapus">
         <i class="bi bi-trash"></i>
       </button>
