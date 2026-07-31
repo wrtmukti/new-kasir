@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Order;
+use App\Models\Admin\OrderBundle;
 use App\Models\Admin\OrderVoucher;
 use App\Models\Admin\Product;
 use App\Models\Admin\Category;
@@ -12,6 +13,7 @@ use App\Models\Admin\Customer;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
 use App\Models\Admin\Voucher;
+use App\Models\Admin\Bundle;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -60,12 +62,39 @@ class OrderController extends Controller
         return view('admin.order.index', compact('products'));
     }
 
+    // ——— Bundle data (AJAX) ———
+    public function bundleData(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $view = $request->input('view', 'card');
+
+        $bundles = Bundle::where('delete_status', 0)
+            ->where('bundle_status', 1)
+            ->with('items.product')
+            ->latest()
+            ->paginate($perPage);
+
+        if ($request->ajax()) {
+            $partial = $view === 'list' ? 'admin.order._bundle_data' : 'admin.order._bundle_card';
+            return response()->json([
+                'html' => view($partial, compact('bundles'))->render(),
+                'pagination' => $bundles->links('vendor.pagination.modern')->toHtml(),
+                'total' => $bundles->total(),
+                'from' => $bundles->firstItem(),
+                'to' => $bundles->lastItem(),
+            ]);
+        }
+
+        return response()->json(['html' => '', 'pagination' => '']);
+    }
+
     // ——— List pesanan (table) ———
     public function list()
     {
         $orders = Order::where('delete_status', 0)
             ->with('company')
             ->with('transaction.items')
+            ->with('bundles')
             ->latest()
             ->paginate(10);
         return view('admin.order.list', compact('orders'));
@@ -86,7 +115,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->with('transaction.items')->paginate($perPage);
+        $orders = $query->latest()->with('transaction.items', 'bundles')->paginate($perPage);
 
         if ($request->ajax()) {
             return response()->json([
@@ -109,7 +138,7 @@ class OrderController extends Controller
         }
 
         DB::transaction(function () use ($order) {
-            $order->load('products');
+            $order->load('products', 'bundles');
 
             $companyId = $order->company_id;
 
@@ -121,8 +150,10 @@ class OrderController extends Controller
             foreach ($order->products as $product) {
                 $qty = (int) $product->pivot->quantity;
                 $price = (float) $product->product_price;
-                $discountType = $product->product_discount_type;
-                $discountValue = (float) ($product->product_discount_value ?? 0);
+                // Baca diskon dari pivot aktif
+                $activeDisc = $product->activeDiscount()->first();
+                $discountType = $activeDisc?->discount_type;
+                $discountValue = $activeDisc ? (float) ($activeDisc->discount_value ?? 0) : 0;
 
                 // Hitung discount_amount
                 $discountAmount = 0;
@@ -147,6 +178,11 @@ class OrderController extends Controller
                     'discount_amount' => $discountAmount,
                     'subtotal' => $subtotal,
                 ];
+            }
+
+            // Bundle masuk ke transaction_subtotal (bundle_price x qty, tanpa diskon)
+            foreach ($order->bundles as $ob) {
+                $totalSubtotal += (float) $ob->bundle_price * (int) $ob->quantity;
             }
 
             // Simpan transaction — grand_total pake dari order (udah include voucher)
@@ -184,6 +220,12 @@ class OrderController extends Controller
                 ]);
             }
 
+            // Link bundle ke transaction (isi transaction_id — 1 tabel utuh)
+            $order->bundles()->update([
+                'transaction_id' => $transaction->transaction_id,
+                'updated_by' => 'admin',
+            ]);
+
             // Update status order + link ke transaction
             $order->update([
                 'order_status' => 'completed',
@@ -214,7 +256,7 @@ class OrderController extends Controller
         }
 
         // Load transaction_items untuk snapshot harga & diskon
-        $order->load('vouchers');
+        $order->load('vouchers', 'bundles.bundle.items.product');
         $transaction = Transaction::with('items')
             ->where('transaction_id', $order->order_transaction_id)
             ->where('delete_status', 0)
@@ -238,7 +280,7 @@ class OrderController extends Controller
                 ->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $order->load('company', 'products', 'vouchers');
+        $order->load('company', 'products', 'vouchers', 'bundles.bundle.items.product');
 
         // Kalo completed, load transaction_items jg biar dapet snapshot harga & diskon
         $transaction = null;
@@ -351,24 +393,37 @@ class OrderController extends Controller
             'order_customer_id' => 'nullable|string',
             'order_remark' => 'nullable|string',
             'voucher_code' => 'nullable|string|max:50',
-            'items' => 'required|array|min:1',
+            'items' => 'nullable|array',
             'items.*.product_id' => 'required|string',
             'items.*.product_name' => 'required|string',
             'items.*.price' => 'required|numeric|min:0',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:500',
+            'bundles' => 'nullable|array',
+            'bundles.*.bundle_id' => 'required|string',
+            'bundles.*.bundle_name' => 'required|string',
+            'bundles.*.bundle_price' => 'required|numeric|min:0',
+            'bundles.*.qty' => 'required|integer|min:1',
+            'bundles.*.items' => 'required|array|min:1',
+            'bundles.*.items.*.product_id' => 'required|string',
+            'bundles.*.items.*.quantity' => 'required|integer|min:1',
         ]);
+
+        if (empty($validated['items'] ?? []) && empty($validated['bundles'] ?? [])) {
+            return back()->withErrors(['items' => 'Minimal satu item produk atau bundle.'])->withInput();
+        }
 
         $companyId = Company::where('delete_status', 0)->value('company_id');
 
         // Hitung grand total include diskon produk
         $grandTotal = 0;
         $itemDetails = [];
-        foreach ($validated['items'] as $item) {
+        foreach ($validated['items'] ?? [] as $item) {
             $price = (float) $item['price'];
             $product = Product::find($item['product_id']);
-            $discountType = $product ? $product->product_discount_type : null;
-            $discountValue = $product ? (float) ($product->product_discount_value ?? 0) : 0;
+            $activeDisc = $product ? $product->activeDiscount()->first() : null;
+            $discountType = $activeDisc?->discount_type;
+            $discountValue = $activeDisc ? (float) ($activeDisc->discount_value ?? 0) : 0;
 
             $discountAmount = 0;
             if ($discountType === 'percentage' && $discountValue > 0) {
@@ -390,6 +445,23 @@ class OrderController extends Controller
                 'discount_value' => $discountValue,
                 'discount_amount' => $discountAmount,
                 'subtotal' => $subtotal,
+            ];
+        }
+
+        // Hitung bundle (harga paket tetap, tanpa diskon)
+        $bundleDetails = [];
+        foreach ($validated['bundles'] ?? [] as $b) {
+            $bSubtotal = (float) $b['bundle_price'] * (int) $b['qty'];
+            $grandTotal += $bSubtotal;
+            $bundleDetails[] = [
+                'bundle_id' => $b['bundle_id'],
+                'bundle_name' => $b['bundle_name'],
+                'bundle_price' => (float) $b['bundle_price'],
+                'qty' => (int) $b['qty'],
+                'items' => array_map(fn($i) => [
+                    'product_id' => $i['product_id'],
+                    'quantity' => (int) $i['quantity'],
+                ], $b['items']),
             ];
         }
 
@@ -435,7 +507,7 @@ class OrderController extends Controller
 
         $finalGrandTotal = $grandTotal - $voucherAmount;
 
-        DB::transaction(function () use ($validated, $companyId, $finalGrandTotal, $itemDetails, $voucherData, $request) {
+        DB::transaction(function () use ($validated, $companyId, $finalGrandTotal, $itemDetails, $bundleDetails, $voucherData, $request) {
             $order = Order::create([
                 'company_id' => $companyId,
                 'order_type' => $validated['order_type'],
@@ -460,6 +532,20 @@ class OrderController extends Controller
             }
             $order->products()->sync($syncData);
 
+            // Simpan bundle: 1 baris per bundle di order_bundle (identitas utuh)
+            foreach ($bundleDetails as $bd) {
+                OrderBundle::create([
+                    'company_id' => $companyId,
+                    'order_id' => $order->order_id,
+                    'bundle_id' => $bd['bundle_id'],
+                    'bundle_name' => $bd['bundle_name'],
+                    'bundle_price' => $bd['bundle_price'],
+                    'quantity' => $bd['qty'],
+                    'subtotal' => (float) $bd['bundle_price'] * $bd['qty'],
+                    'created_by' => 'admin',
+                ]);
+            }
+
             // Simpan voucher kalo ada
             if ($voucherData) {
                 $voucherData['order_id'] = $order->order_id;
@@ -481,6 +567,26 @@ class OrderController extends Controller
 
                     $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
                     $stock->update(['stock_amount' => $stockAfter]);
+                }
+            }
+
+            // Auto-decrement stok isi bundle (BOM per produk isinya)
+            foreach ($bundleDetails as $bd) {
+                foreach ($bd['items'] as $bi) {
+                    $product = Product::with('stocks')->find($bi['product_id']);
+                    if (!$product) continue;
+
+                    $orderQty = $bi['quantity'] * $bd['qty'];
+
+                    foreach ($product->stocks as $stock) {
+                        $bomQty = (int) $stock->pivot->quantity;
+                        $deductQty = $bomQty * $orderQty;
+
+                        if ($deductQty <= 0) continue;
+
+                        $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
+                        $stock->update(['stock_amount' => $stockAfter]);
+                    }
                 }
             }
 

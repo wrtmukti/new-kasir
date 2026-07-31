@@ -96,40 +96,81 @@
           <tbody>
             @php $grandTotal = 0; @endphp
             @foreach($cart as $index => $item)
-              @php
-                $price = (float) $item['price'];
-                $discType = $item['discountType'] ?? '';
-                $discVal = (float) ($item['discountValue'] ?? 0);
-                $discAmt = $discType === 'percentage' && $discVal > 0 ? $price * $discVal / 100 : ($discType === 'nominal' && $discVal > 0 ? min($discVal, $price) : 0);
-                $discAmt = min($discAmt, $price);
-                $subtotal = ($price - $discAmt) * $item['qty'];
-                $grandTotal += $subtotal;
-              @endphp
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-                    @if(!empty($item['image']))
-                      <img src="{{ $item['image'] }}" class="cart-item-img">
-                    @else
-                      <span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="bi bi-image" style="color:var(--text-muted);"></i></span>
-                    @endif
-                    <div>
-                      <div style="font-weight:500;">{{ $item['name'] }}</div>
+              @php $isBundle = ($item['type'] ?? 'product') === 'bundle'; @endphp
+              @if($isBundle)
+                @php
+                  $price = (float) $item['price'];
+                  $qty = (int) $item['qty'];
+                  $subtotal = $price * $qty;
+                  $grandTotal += $subtotal;
+                @endphp
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="bi bi-gift" style="color:var(--accent-1);"></i></span>
+                      <div>
+                        <div style="font-weight:500;">{{ $item['name'] }} <span class="chip-tag" style="font-size:0.68rem;">Paket</span></div>
+                        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                          Isi:
+                          @foreach($item['items'] ?? [] as $bi)
+                            <span class="chip-tag" style="font-size:0.65rem;background:var(--bg-elevated-2);border:1px solid var(--border-subtle);color:var(--text-secondary);">
+                              {{ $bi['product_name'] ?? $bi['product_id'] ?? 'Produk' }} <strong>x{{ $bi['quantity'] ?? 1 }}</strong>
+                            </span>
+                          @endforeach
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <input type="hidden" name="items[{{ $index }}][product_id]" value="{{ $item['id'] }}">
-                  <input type="hidden" name="items[{{ $index }}][product_name]" value="{{ $item['name'] }}">
-                  <input type="hidden" name="items[{{ $index }}][price]" value="{{ $item['price'] }}">
-                  <input type="hidden" name="items[{{ $index }}][qty]" value="{{ $item['qty'] }}">
-                </td>
-                <td class="text-mono">Rp {{ number_format($price, 0) }}</td>
-                <td>@if($discAmt > 0)<span style="color:var(--danger);font-size:0.85rem;">-Rp {{ number_format($discAmt, 0) }}</span>@else<span class="text-muted-c">-</span>@endif</td>
-                <td>{{ $item['qty'] }}</td>
-                <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
-                <td>
-                  <input type="text" name="items[{{ $index }}][note]" class="form-control-modern" placeholder="Catatan..." value="{{ old('items.'.$index.'.note') }}" style="min-width:120px;">
-                </td>
-              </tr>
+                    <input type="hidden" name="bundles[{{ $index }}][bundle_id]" value="{{ $item['id'] }}">
+                    <input type="hidden" name="bundles[{{ $index }}][bundle_name]" value="{{ $item['name'] }}">
+                    <input type="hidden" name="bundles[{{ $index }}][bundle_price]" value="{{ $item['price'] }}">
+                    <input type="hidden" name="bundles[{{ $index }}][qty]" value="{{ $item['qty'] }}">
+                    @foreach($item['items'] ?? [] as $biIdx => $bi)
+                      <input type="hidden" name="bundles[{{ $index }}][items][{{ $biIdx }}][product_id]" value="{{ $bi['product_id'] ?? '' }}">
+                      <input type="hidden" name="bundles[{{ $index }}][items][{{ $biIdx }}][quantity]" value="{{ $bi['quantity'] ?? 1 }}">
+                    @endforeach
+                  </td>
+                  <td class="text-mono">Rp {{ number_format($price, 0) }}</td>
+                  <td><span class="text-muted-c">-</span></td>
+                  <td>{{ $qty }}</td>
+                  <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
+                  <td></td>
+                </tr>
+              @else
+                @php
+                  $price = (float) $item['price'];
+                  $discType = $item['discountType'] ?? '';
+                  $discVal = (float) ($item['discountValue'] ?? 0);
+                  $discAmt = $discType === 'percentage' && $discVal > 0 ? $price * $discVal / 100 : ($discType === 'nominal' && $discVal > 0 ? min($discVal, $price) : 0);
+                  $discAmt = min($discAmt, $price);
+                  $subtotal = ($price - $discAmt) * $item['qty'];
+                  $grandTotal += $subtotal;
+                @endphp
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      @if(!empty($item['image']))
+                        <img src="{{ $item['image'] }}" class="cart-item-img">
+                      @else
+                        <span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="bi bi-image" style="color:var(--text-muted);"></i></span>
+                      @endif
+                      <div>
+                        <div style="font-weight:500;">{{ $item['name'] }}</div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="items[{{ $index }}][product_id]" value="{{ $item['id'] }}">
+                    <input type="hidden" name="items[{{ $index }}][product_name]" value="{{ $item['name'] }}">
+                    <input type="hidden" name="items[{{ $index }}][price]" value="{{ $item['price'] }}">
+                    <input type="hidden" name="items[{{ $index }}][qty]" value="{{ $item['qty'] }}">
+                  </td>
+                  <td class="text-mono">Rp {{ number_format($price, 0) }}</td>
+                  <td>@if($discAmt > 0)<span style="color:var(--danger);font-size:0.85rem;">-Rp {{ number_format($discAmt, 0) }}</span>@else<span class="text-muted-c">-</span>@endif</td>
+                  <td>{{ $item['qty'] }}</td>
+                  <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
+                  <td>
+                    <input type="text" name="items[{{ $index }}][note]" class="form-control-modern" placeholder="Catatan..." value="{{ old('items.'.$index.'.note') }}" style="min-width:120px;">
+                  </td>
+                </tr>
+              @endif
             @endforeach
           </tbody>
           <tfoot>

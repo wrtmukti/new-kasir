@@ -25,7 +25,7 @@
   <td class="text-mono">
     @php
       $total = $order->order_status === 'completed' && $order->transaction
-        ? (float) $order->transaction->items->sum('subtotal')
+        ? (float) $order->transaction->items->sum('subtotal') + (float) $order->bundles->sum('subtotal')
         : (float) ($order->order_grand_total ?? 0);
     @endphp
     Rp {{ number_format($total, 0) }}

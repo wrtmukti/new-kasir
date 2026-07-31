@@ -71,7 +71,7 @@
 <div class="card mb-3">
   <div class="card-header-flex">
     <h6>Item Pesanan</h6>
-    <span class="chip-tag">{{ $transactionItems ? $transactionItems->count() : $order->products->count() }} item</span>
+    <span class="chip-tag">{{ ($transactionItems ? $transactionItems->count() : $order->products->count()) + $order->bundles->count() }} item</span>
   </div>
   <div class="card-body p-0">
     <div class="table-responsive">
@@ -110,14 +110,44 @@
                 <td>{{ $item->note ?? '-' }}</td>
               </tr>
             @endforeach
+            @foreach($order->bundles as $ob)
+              @php $grandTotal += (float) $ob->subtotal; @endphp
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg-elevated-2);"><i class="bi bi-gift" style="color:var(--accent-1);"></i></span>
+                    <div>
+                      <div style="font-weight:500;">{{ $ob->bundle_name }} <span class="chip-tag" style="font-size:0.68rem;">Paket</span></div>
+                      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                        @if($ob->bundle)
+                          @foreach($ob->bundle->items as $bi)
+                            <span class="chip-tag" style="font-size:0.65rem;background:var(--bg-elevated-2);border:1px solid var(--border-subtle);color:var(--text-secondary);">
+                              {{ $bi->product?->product_name ?? 'Produk' }} <strong>x{{ $bi->quantity }}</strong>
+                            </span>
+                          @endforeach
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-mono">Rp {{ number_format($ob->bundle_price, 0) }}</td>
+                <td><span class="text-muted-c">-</span></td>
+                <td>{{ $ob->quantity }}</td>
+                <td class="text-mono">Rp {{ number_format($ob->subtotal, 0) }}</td>
+                <td>-</td>
+              </tr>
+            @endforeach
           @else
           @php $grandTotal = 0; @endphp
           @foreach($order->products as $product)
             @php
               $qty = (int) $product->pivot->quantity;
               $price = (float) $product->product_price;
-              $dPct = $product->product_discount_type === 'percentage' ? (float)($product->product_discount_value ?? 0) : 0;
-              $dNom = $product->product_discount_type === 'nominal' ? (float)($product->product_discount_value ?? 0) : 0;
+              $activeDisc = $product->activeDiscount()->first();
+              $discType = $activeDisc?->discount_type;
+              $discVal = $activeDisc ? (float)($activeDisc->discount_value ?? 0) : 0;
+              $dPct = $discType === 'percentage' ? $discVal : 0;
+              $dNom = $discType === 'nominal' ? $discVal : 0;
               $dAmt = $dPct > 0 ? $price * $dPct / 100 : ($dNom > 0 ? min($dNom, $price) : 0);
               $dAmt = min($dAmt, $price);
               $subtotal = ($price - $dAmt) * $qty;
@@ -139,6 +169,33 @@
               <td>{{ $qty }}</td>
               <td class="text-mono">Rp {{ number_format($subtotal, 0) }}</td>
               <td>{{ $product->pivot->note ?? '-' }}</td>
+            </tr>
+          @endforeach
+          @foreach($order->bundles as $ob)
+            @php $grandTotal += (float) $ob->subtotal; @endphp
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg-elevated-2);"><i class="bi bi-gift" style="color:var(--accent-1);"></i></span>
+                  <div>
+                    <div style="font-weight:500;">{{ $ob->bundle_name }} <span class="chip-tag" style="font-size:0.68rem;">Paket</span></div>
+                    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                      @if($ob->bundle)
+                        @foreach($ob->bundle->items as $bi)
+                          <span class="chip-tag" style="font-size:0.65rem;background:var(--bg-elevated-2);border:1px solid var(--border-subtle);color:var(--text-secondary);">
+                            {{ $bi->product?->product_name ?? 'Produk' }} <strong>x{{ $bi->quantity }}</strong>
+                          </span>
+                        @endforeach
+                      @endif
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-mono">Rp {{ number_format($ob->bundle_price, 0) }}</td>
+              <td><span class="text-muted-c">-</span></td>
+              <td>{{ $ob->quantity }}</td>
+              <td class="text-mono">Rp {{ number_format($ob->subtotal, 0) }}</td>
+              <td>-</td>
             </tr>
           @endforeach
           @endif

@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StockRequest;
 use App\Models\Admin\Stock;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
@@ -69,7 +70,31 @@ class StockController extends Controller
         $validated['stock_status'] = $validated['stock_status'] ?? 1;
         $validated['stock_amount'] = $validated['stock_amount'] ?? 0;
 
-        Stock::create($validated);
+        $stock = Stock::create($validated);
+
+        // Log ke stock_histories
+        DB::table('stock_histories')->insert([
+            'stock_id' => $stock->stock_id,
+            'company_id' => $stock->company_id,
+            'stock_code' => $stock->stock_code,
+            'stock_name' => $stock->stock_name,
+            'stock_slug' => $stock->stock_slug,
+            'stock_description' => $stock->stock_description,
+            'stock_type' => $stock->stock_type,
+            'stock_unit' => $stock->stock_unit,
+            'stock_counted' => $stock->stock_counted,
+            'stock_amount' => $stock->stock_amount,
+            'stock_price' => $stock->stock_price,
+            'stock_status' => $stock->stock_status,
+            'stock_image' => $stock->stock_image,
+            'effective_date' => now(),
+            'action_type' => 'create',
+            'changed_by' => $validated['created_by'] ?? 'admin',
+            'created_by' => $validated['created_by'],
+            'delete_status' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil ditambahkan.');
@@ -95,12 +120,60 @@ class StockController extends Controller
 
         $stock->update($validated);
 
+        // Log ke stock_histories
+        DB::table('stock_histories')->insert([
+            'stock_id' => $stock->stock_id,
+            'company_id' => $stock->company_id,
+            'stock_code' => $stock->stock_code,
+            'stock_name' => $stock->stock_name,
+            'stock_slug' => $stock->stock_slug,
+            'stock_description' => $stock->stock_description,
+            'stock_type' => $stock->stock_type,
+            'stock_unit' => $stock->stock_unit,
+            'stock_counted' => $stock->stock_counted,
+            'stock_amount' => $stock->stock_amount,
+            'stock_price' => $stock->stock_price,
+            'stock_status' => $stock->stock_status,
+            'stock_image' => $stock->stock_image,
+            'effective_date' => now(),
+            'action_type' => 'update',
+            'changed_by' => $validated['updated_by'] ?? 'admin',
+            'created_by' => $validated['updated_by'],
+            'delete_status' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil diperbarui.');
     }
 
     public function destroy(Stock $stock)
     {
+        // Log ke stock_histories dulu sebelum soft delete
+        DB::table('stock_histories')->insert([
+            'stock_id' => $stock->stock_id,
+            'company_id' => $stock->company_id,
+            'stock_code' => $stock->stock_code,
+            'stock_name' => $stock->stock_name,
+            'stock_slug' => $stock->stock_slug,
+            'stock_description' => $stock->stock_description,
+            'stock_type' => $stock->stock_type,
+            'stock_unit' => $stock->stock_unit,
+            'stock_counted' => $stock->stock_counted,
+            'stock_amount' => $stock->stock_amount,
+            'stock_price' => $stock->stock_price,
+            'stock_status' => $stock->stock_status,
+            'stock_image' => $stock->stock_image,
+            'effective_date' => now(),
+            'action_type' => 'delete',
+            'changed_by' => 'admin',
+            'created_by' => 'admin',
+            'delete_status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         $stock->update(['delete_status' => 1]);
 
         if (request()->ajax()) {

@@ -156,6 +156,28 @@ body {
           @endif
         @endforeach
       @endif
+      @foreach($order->bundles as $ob)
+        @php
+          $bSub = (float) $ob->subtotal;
+          $grandTotal += $bSub;
+          $bName = $ob->bundle_name;
+          if (strlen($bName) > 16) $bName = substr($bName, 0, 14) . '..';
+        @endphp
+        <tr>
+          <td class="col-item">{{ $bName }} (Paket)</td>
+          <td class="col-qty">{{ $ob->quantity }}</td>
+          <td class="col-price">{{ number_format($ob->bundle_price, 0) }}</td>
+          <td class="col-price">-</td>
+          <td class="col-total">{{ number_format($bSub, 0) }}</td>
+        </tr>
+        @if($ob->bundle)
+          @foreach($ob->bundle->items as $bi)
+            <tr>
+              <td colspan="5" style="font-size:10px;color:#666;padding-left:6px;">├ {{ $bi->product?->product_name ?? 'Produk' }} x{{ $bi->quantity }}</td>
+            </tr>
+          @endforeach
+        @endif
+      @endforeach
     </tbody>
     <tfoot>
       <tr>

@@ -50,4 +50,10 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionItem::class, 'transaction_id', 'transaction_id');
     }
+
+    public function bundles()
+    {
+        return $this->hasMany(OrderBundle::class, 'transaction_id', 'transaction_id')
+            ->where('delete_status', 0);
+    }
 }

@@ -19,8 +19,11 @@
   <td>{{ $product->category?->category_name ?? '-' }}</td>
   <td class="text-mono">
     @php
-      $discPct = $product->product_discount_type === 'percentage' ? (float)($product->product_discount_value ?? 0) : 0;
-      $discNom = $product->product_discount_type === 'nominal' ? (float)($product->product_discount_value ?? 0) : 0;
+      $activeDisc = $product->activeDiscount()->first();
+      $discType = $activeDisc?->discount_type;
+      $discVal = $activeDisc ? (float)($activeDisc->discount_value ?? 0) : 0;
+      $discPct = $discType === 'percentage' ? $discVal : 0;
+      $discNom = $discType === 'nominal' ? $discVal : 0;
       $discAmt = $discPct > 0 ? $product->product_price * $discPct / 100 : ($discNom > 0 ? min($discNom, $product->product_price) : 0);
       $priceDisc = $product->product_price - $discAmt;
     @endphp

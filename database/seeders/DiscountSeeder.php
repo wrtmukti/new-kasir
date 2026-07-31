@@ -108,10 +108,15 @@ class DiscountSeeder extends Seeder
                 $product = $products->get($code);
                 if (!$product) continue;
 
-                $product->update([
-                    'product_discount_id' => $discount->discount_id,
-                    'product_discount_type' => $discount->discount_type,
-                    'product_discount_value' => $discount->discount_value,
+                // Simpan ke pivot discount_product (bukan kolom produk)
+                DB::table('discount_product')->insert([
+                    'company_id' => $companyId,
+                    'product_id' => $product->product_id,
+                    'discount_id' => $discount->discount_id,
+                    'start_date' => now(),
+                    'created_by' => 'seeder',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
                 // Log ke product_histories

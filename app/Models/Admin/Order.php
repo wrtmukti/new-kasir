@@ -47,4 +47,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderVoucher::class, 'order_id', 'order_id');
     }
+
+    public function bundles()
+    {
+        return $this->hasMany(OrderBundle::class, 'order_id', 'order_id')
+            ->where('delete_status', 0);
+    }
 }

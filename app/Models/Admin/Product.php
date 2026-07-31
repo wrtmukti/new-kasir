@@ -20,9 +20,6 @@ class Product extends Model
         'product_slug',
         'product_description',
         'product_price',
-        'product_discount_id',
-        'product_discount_type',
-        'product_discount_value',
         'product_status',
         'product_image',
         'category_remark',
@@ -49,8 +46,19 @@ class Product extends Model
             ->withTimestamps();
     }
 
-    public function discount()
+    public function discounts()
     {
-        return $this->belongsTo(Discount::class, 'product_discount_id', 'discount_id');
+        return $this->belongsToMany(Discount::class, 'discount_product', 'product_id', 'discount_id')
+            ->withPivot('start_date', 'end_date')
+            ->wherePivot('delete_status', 0)
+            ->withTimestamps();
+    }
+
+    public function activeDiscount()
+    {
+        return $this->belongsToMany(Discount::class, 'discount_product', 'product_id', 'discount_id')
+            ->wherePivot('delete_status', 0)
+            ->wherePivot('end_date', null)
+            ->withTimestamps();
     }
 }

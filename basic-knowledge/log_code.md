@@ -183,3 +183,62 @@
 | 2026-07-28 | CREATE | BundleController@productData — AJAX paginated product picker | `app/Http/Controllers/Admin/BundleController.php` |
 | 2026-07-28 | CREATE | Bundle _product_card — partial card + foto buat product picker | `views/admin/bundle/_product_card.blade.php` |
 | 2026-07-28 | UPDATE | Bundle create/edit — Step 2 Pilih Produk jadi card grid + foto + pagination 10/page + search | `views/admin/bundle/create.blade.php`, `edit.blade.php` |
+|
+| 2026-07-30 | PIVOT | Implementasi pivot discount_product — migration, model, controller, view | `database/migrations/2026_07_29_000001_create_discount_product_table.php` |
+| 2026-07-30 | UPDATE | Product.php — hapus relasi discount(), tambah discounts() & activeDiscount() belongsToMany via pivot | `app/Models/Admin/Product.php` |
+| 2026-07-30 | UPDATE | Discount.php — ganti products() → activeProducts() belongsToMany via pivot | `app/Models/Admin/Discount.php` |
+| 2026-07-30 | UPDATE | DiscountController — attach/detach nulis ke pivot, show pake activeProducts | `app/Http/Controllers/Admin/DiscountController.php` |
+| 2026-07-30 | UPDATE | OrderController — baca diskon dari pivot aktif (tanpa fallback), kolom produk udah dihapus | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-30 | UPDATE | ProductController — tambah dropdown diskon di create/edit + simpan ke pivot | `app/Http/Controllers/Admin/ProductController.php` |
+| 2026-07-30 | UPDATE | View produk — tambah select diskon di create & edit | `views/admin/product/create.blade.php`, `edit.blade.php` |
+| 2026-07-30 | UPDATE | View diskon show — ganti $discount->products → activeProducts | `views/admin/discount/show.blade.php` |
+| 2026-07-30 | UPDATE | Views — ganti semua $product->product_discount_* → activeDiscount() (5 file) | `views/admin/product/_card.blade.php`, `_data.blade.php`, `views/admin/order/_card.blade.php`, `_data.blade.php`, `show.blade.php` |
+| 2026-07-30 | UPDATE | DiscountSeeder & TransactionSeeder — pake pivot bukan kolom produk | `database/seeders/DiscountSeeder.php`, `TransactionSeeder.php` |
+| 2026-07-30 | SEED | DiscountProductSeeder — 9 pivot records backfill | `database/seeders/DiscountProductSeeder.php` |
+| 2026-07-30 | CLEAN | Hapus product_discount_* dari fillable Product.php | `app/Models/Admin/Product.php` |
+| 2026-07-30 | CLEAN | Hapus DiscountProductSeeder dari DatabaseSeeder (udah jalan sekali) | `database/seeders/DatabaseSeeder.php` |
+|
+| 2026-07-31 | UPDATE | StockController — nulis stock_histories pas store/update/destroy | `app/Http/Controllers/Admin/StockController.php` |
+| 2026-07-31 | UPDATE | DiscountController — nulis discount_histories pas store/update/destroy | `app/Http/Controllers/Admin/DiscountController.php` |
+| 2026-07-31 | UPDATE | BundleController — nulis bundle_histories pas store/update/destroy | `app/Http/Controllers/Admin/BundleController.php` |
+| 2026-07-31 | CREATE | HistoryController — 6 method (stock/discount/bundle index + data) | `app/Http/Controllers/Admin/HistoryController.php` |
+| 2026-07-31 | CREATE | 6 view history — stock, discount, bundle (index + _data) | `resources/views/admin/history/{stock,discount,bundle}/*.blade.php` |
+| 2026-07-31 | UPDATE | Routes — tambah prefix /admin/history/ (6 route) | `routes/web.php` |
+| 2026-07-31 | UPDATE | Sidebar — tambah section Riwayat (Stok, Diskon, Bundle) | `views/admin/layouts/app.blade.php` |
+| 2026-07-31 | CREATE | HistoryStockSeeder — backfill stock_histories dari tabel stocks | `database/seeders/HistoryStockSeeder.php` |
+| 2026-07-31 | CREATE | HistoryDiscountSeeder — backfill discount_histories dari tabel discounts | `database/seeders/HistoryDiscountSeeder.php` |
+| 2026-07-31 | CREATE | HistoryBundleSeeder — backfill bundle_histories dari tabel bundles | `database/seeders/HistoryBundleSeeder.php` |
+| 2026-07-31 | CREATE | Detail history — stock/discount/bundle show (info + comparison table) | `views/admin/history/{stock,discount,bundle}/show.blade.php` |
+| 2026-07-31 | UPDATE | HistoryController — tambah stockShow, discountShow, bundleShow | `app/Http/Controllers/Admin/HistoryController.php` |
+| 2026-07-31 | UPDATE | Routes — tambah 3 route history/{type}/{id} | `routes/web.php` |
+| 2026-07-31 | UPDATE | History _data — row clickable ke detail | `views/admin/history/*/_data.blade.php` |
+| 2026-07-31 | CREATE | OrderController@bundleData — AJAX pagination bundle aktif (method baru) | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | ROUTE | Tambah route order/bundle-data | `routes/web.php` |
+| 2026-07-31 | CREATE | _bundle_card.blade.php — partial card bundle + data-items buat cart | `resources/views/admin/order/_bundle_card.blade.php` |
+| 2026-07-31 | UPDATE | order/index.blade.php — tambah tab Bundel + panel + JS handler (gak ubah existing) | `resources/views/admin/order/index.blade.php` |
+| 2026-07-31 | FIX | _bundle_card — Unclosed '[' @json → pindah ke @php block | `views/admin/order/_bundle_card.blade.php` |
+| 2026-07-31 | CREATE | _bundle_data.blade.php — list/table view bundle | `resources/views/admin/order/_bundle_data.blade.php` |
+| 2026-07-31 | UPDATE | OrderController@bundleData — dukung view (card/list) | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | UPDATE | order/index — toggle view khusus bundle (list/card) tanpa ganggu produk | `resources/views/admin/order/index.blade.php` |
+| 2026-07-31 | CREATE | Migration order_bundle — pivot order↔bundle snapshot | `database/migrations/2026_07_31_000001_create_order_bundle_table.php` |
+| 2026-07-31 | CREATE | Migration transaction_bundle — snapshot bundle frozen | `database/migrations/2026_07_31_000002_create_transaction_bundle_table.php` |
+| 2026-07-31 | CREATE | OrderBundleSeeder — backfill bundle ke order yg cocok | `database/seeders/OrderBundleSeeder.php` |
+| 2026-07-31 | CREATE | TransactionBundleSeeder — backfill ke transaksi | `database/seeders/TransactionBundleSeeder.php` |
+| 2026-07-31 | CREATE | Plan bundle order | `basic-knowledge/plan-bundle-order.md` |
+| 2026-07-31 | IMPL | Eksekusi plan bundle order — 1 tabel `order_bundle` (order+transaksi digabung, transaction_id nullable diisi pas complete) | `database/migrations/2026_07_31_000001_create_order_bundle_table.php` |
+| 2026-07-31 | DELETE | Migration `transaction_bundle` + `TransactionBundleSeeder` — konsep masuk 1 tabel | `2026_07_31_000002...`, `TransactionBundleSeeder.php` |
+| 2026-07-31 | UPDATE | OrderBundleSeeder — backfill + isi transaction_id utk order completed | `database/seeders/OrderBundleSeeder.php` |
+| 2026-07-31 | UPDATE | DatabaseSeeder — hapus TransactionBundleSeeder | `database/seeders/DatabaseSeeder.php` |
+| 2026-07-31 | CREATE | Model OrderBundle + relasi Order::bundles() & Transaction::bundles() | `app/Models/Admin/OrderBundle.php`, `Order.php`, `Transaction.php` |
+| 2026-07-31 | UPDATE | Cart JS — bundle jadi 1 entitas (type:bundle), render isi di keranjang | `views/admin/order/index.blade.php` |
+| 2026-07-31 | UPDATE | Tombol bundle — tambah data-bundle-id & data-bundle-price | `views/admin/order/_bundle_card.blade.php`, `_bundle_data.blade.php` |
+| 2026-07-31 | UPDATE | OrderController@store — validasi bundles, insert order_bundle, decrement stok isi bundle via BOM | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | UPDATE | OrderController@complete — subtotal include bundle, isi transaction_id di order_bundle | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | UPDATE | OrderController@show & @receipt — load bundles.bundle.items.product | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | UPDATE | OrderController@list & @listData — eager load bundles | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-07-31 | UPDATE | create.blade.php — render item bundle + hidden inputs bundles.* | `resources/views/admin/order/create.blade.php` |
+| 2026-07-31 | UPDATE | show.blade.php — baris bundle + isi (in_progress & completed), item count & grand total include bundle | `resources/views/admin/order/show.blade.php` |
+| 2026-07-31 | UPDATE | receipt.blade.php — baris bundle + isi di struk | `resources/views/admin/order/receipt.blade.php` |
+| 2026-07-31 | UPDATE | transaction/show.blade.php — baris bundle + isi | `resources/views/admin/transaction/show.blade.php` |
+| 2026-07-31 | UPDATE | _list_data.blade.php — total completed include subtotal bundle | `views/admin/order/_list_data.blade.php` |
+| 2026-07-31 | FIX | validasi store — items & bundles nullable (cart boleh isi bundle doang), wajib minimal 1 | `app/Http/Controllers/Admin/OrderController.php` |

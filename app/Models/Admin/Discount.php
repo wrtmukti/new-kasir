@@ -39,8 +39,11 @@ class Discount extends Model
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
     }
 
-    public function products()
+    public function activeProducts()
     {
-        return $this->hasMany(Product::class, 'product_discount_id', 'discount_id');
+        return $this->belongsToMany(Product::class, 'discount_product', 'discount_id', 'product_id')
+            ->wherePivot('delete_status', 0)
+            ->wherePivot('end_date', null)
+            ->withTimestamps();
     }
 }

@@ -93,6 +93,23 @@
             </div>
           </div>
           <div class="col-md-6">
+            <label class="form-label-modern">Diskon</label>
+            <div class="input-skeleton">
+              <select name="discount_id" class="form-select-modern @error('discount_id') is-invalid @enderror">
+                <option value="">-- Tidak Ada Diskon --</option>
+                @foreach($discounts as $d)
+                  <option value="{{ $d->discount_id }}" {{ old('discount_id', $activeDiscountId ?? '') == $d->discount_id ? 'selected' : '' }}>
+                    {{ $d->discount_name }}
+                    ({{ $d->discount_type == 'percentage' ? $d->discount_value.'%' : 'Rp '.number_format($d->discount_value, 0) }})
+                  </option>
+                @endforeach
+              </select>
+              @error('discount_id')
+                <span class="text-danger d-block mt-1" style="font-size:0.85rem;">{{ $message }}</span>
+              @enderror
+            </div>
+          </div>
+          <div class="col-md-6">
             <label class="form-label-modern">Deskripsi</label>
             <div class="input-skeleton">
               <textarea name="product_description" class="form-control-modern" rows="3" placeholder="Deskripsi produk">{{ old('product_description', $product->product_description) }}</textarea>

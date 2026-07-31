@@ -137,6 +137,26 @@ class BundleController extends Controller
             if (!empty($syncData)) {
                 $bundle->products()->sync($syncData);
             }
+
+            // Log ke bundle_histories
+            DB::table('bundle_histories')->insert([
+                'bundle_id' => $bundle->bundle_id,
+                'company_id' => $bundle->company_id,
+                'bundle_code' => $bundle->bundle_code,
+                'bundle_name' => $bundle->bundle_name,
+                'bundle_slug' => $bundle->bundle_slug,
+                'bundle_description' => $bundle->bundle_description,
+                'bundle_price' => $bundle->bundle_price,
+                'bundle_status' => $bundle->bundle_status,
+                'bundle_image' => $bundle->bundle_image,
+                'effective_date' => now(),
+                'action_type' => 'create',
+                'changed_by' => $validated['created_by'] ?? 'admin',
+                'created_by' => $validated['created_by'],
+                'delete_status' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         });
 
         return redirect()->route('admin.bundle.index')
@@ -205,6 +225,26 @@ class BundleController extends Controller
             }
 
             $bundle->products()->sync($syncData);
+
+            // Log ke bundle_histories
+            DB::table('bundle_histories')->insert([
+                'bundle_id' => $bundle->bundle_id,
+                'company_id' => $bundle->company_id,
+                'bundle_code' => $bundle->bundle_code,
+                'bundle_name' => $bundle->bundle_name,
+                'bundle_slug' => $bundle->bundle_slug,
+                'bundle_description' => $bundle->bundle_description,
+                'bundle_price' => $bundle->bundle_price,
+                'bundle_status' => $bundle->bundle_status,
+                'bundle_image' => $bundle->bundle_image,
+                'effective_date' => now(),
+                'action_type' => 'update',
+                'changed_by' => $validated['updated_by'] ?? 'admin',
+                'created_by' => $validated['updated_by'],
+                'delete_status' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         });
 
         return redirect()->route('admin.bundle.index')
@@ -213,6 +253,26 @@ class BundleController extends Controller
 
     public function destroy(Bundle $bundle)
     {
+        // Log ke bundle_histories dulu sebelum soft delete
+        DB::table('bundle_histories')->insert([
+            'bundle_id' => $bundle->bundle_id,
+            'company_id' => $bundle->company_id,
+            'bundle_code' => $bundle->bundle_code,
+            'bundle_name' => $bundle->bundle_name,
+            'bundle_slug' => $bundle->bundle_slug,
+            'bundle_description' => $bundle->bundle_description,
+            'bundle_price' => $bundle->bundle_price,
+            'bundle_status' => $bundle->bundle_status,
+            'bundle_image' => $bundle->bundle_image,
+            'effective_date' => now(),
+            'action_type' => 'delete',
+            'changed_by' => 'admin',
+            'created_by' => 'admin',
+            'delete_status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         if ($bundle->bundle_image) {
             Storage::disk('public')->delete($bundle->bundle_image);
         }

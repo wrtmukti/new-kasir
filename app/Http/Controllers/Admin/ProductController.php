@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Admin\Category;
+use App\Models\Admin\Discount;
 use App\Models\Admin\Product;
 use App\Models\Admin\Stock;
 use App\Models\SysAdmin\Company;
@@ -61,7 +62,8 @@ class ProductController extends Controller
         $stocks = Stock::where('delete_status', 0)->where('stock_status', 1)
             ->orderBy('stock_name')
             ->get(['stock_id', 'stock_name', 'stock_code', 'stock_unit', 'stock_price', 'stock_amount']);
-        return view('admin.product.create', compact('companies', 'categories', 'stocks'));
+        $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
+        return view('admin.product.create', compact('companies', 'categories', 'stocks', 'discounts'));
     }
 
     public function store(ProductRequest $request)
@@ -106,6 +108,19 @@ class ProductController extends Controller
             if (!empty($syncData)) {
                 $product->stocks()->sync($syncData);
             }
+
+            // Simpan diskon ke pivot kalo dipilih
+            if ($request->filled('discount_id')) {
+                DB::table('discount_product')->insert([
+                    'company_id' => $product->company_id,
+                    'product_id' => $product->product_id,
+                    'discount_id' => $request->discount_id,
+                    'start_date' => now(),
+                    'created_by' => $validated['created_by'] ?? 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         });
 
         return redirect()->route('admin.product.index')
@@ -126,7 +141,10 @@ class ProductController extends Controller
             ->orderBy('stock_name')
             ->get(['stock_id', 'stock_name', 'stock_code', 'stock_unit', 'stock_price', 'stock_amount']);
         $product->load('stocks');
-        return view('admin.product.edit', compact('product', 'companies', 'categories', 'stocks'));
+        $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
+        $activeDiscount = $product->activeDiscount()->first();
+        $activeDiscountId = $activeDiscount?->id;
+        return view('admin.product.edit', compact('product', 'companies', 'categories', 'stocks', 'discounts', 'activeDiscountId'));
     }
 
     public function update(ProductRequest $request, Product $product)
@@ -173,6 +191,37 @@ class ProductController extends Controller
             }
 
             $product->stocks()->sync($syncData);
+
+            // Handle perubahan diskon via pivot
+            $newDiscountId = $request->discount_id;
+            $activeDisc = $product->activeDiscount()->first();
+            $oldDiscountId = $activeDisc?->id;
+
+            if ($newDiscountId != $oldDiscountId) {
+                // Matikan pivot lama kalo ada
+                if ($oldDiscountId) {
+                    DB::table('discount_product')
+                        ->where('product_id', $product->product_id)
+                        ->whereNull('end_date')
+                        ->update([
+                            'end_date' => now(),
+                            'updated_by' => $validated['updated_by'] ?? 'admin',
+                            'updated_at' => now(),
+                        ]);
+                }
+                // Aktifkan diskon baru kalo dipilih
+                if ($newDiscountId) {
+                    DB::table('discount_product')->insert([
+                        'company_id' => $product->company_id,
+                        'product_id' => $product->product_id,
+                        'discount_id' => $newDiscountId,
+                        'start_date' => now(),
+                        'created_by' => $validated['updated_by'] ?? 'admin',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
         });
 
         return redirect()->route('admin.product.index')

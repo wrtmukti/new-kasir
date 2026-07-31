@@ -62,6 +62,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\HistoryController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -111,6 +112,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('order/create', [OrderController::class, 'create'])->name('order.create');
     Route::post('order', [OrderController::class, 'store'])->name('order.store');
     Route::post('order/check-voucher', [OrderController::class, 'checkVoucher'])->name('order.check-voucher');
+    Route::get('order/bundle-data', [OrderController::class, 'bundleData'])->name('order.bundle-data');
     // Order — List & detail
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
     Route::get('order/list-data', [OrderController::class, 'listData'])->name('order.list-data');
@@ -122,6 +124,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('transaction/data', [TransactionController::class, 'data'])->name('transaction.data');
     Route::get('transaction', [TransactionController::class, 'index'])->name('transaction.index');
     Route::get('transaction/{transaction}', [TransactionController::class, 'show'])->name('transaction.show');
+
+    // History
+    Route::prefix('history')->name('history.')->group(function () {
+        Route::get('stock', [HistoryController::class, 'stockIndex'])->name('stock.index');
+        Route::get('stock/data', [HistoryController::class, 'stockData'])->name('stock.data');
+        Route::get('stock/{id}', [HistoryController::class, 'stockShow'])->name('stock.show');
+        Route::get('discount', [HistoryController::class, 'discountIndex'])->name('discount.index');
+        Route::get('discount/data', [HistoryController::class, 'discountData'])->name('discount.data');
+        Route::get('discount/{id}', [HistoryController::class, 'discountShow'])->name('discount.show');
+        Route::get('bundle', [HistoryController::class, 'bundleIndex'])->name('bundle.index');
+        Route::get('bundle/data', [HistoryController::class, 'bundleData'])->name('bundle.data');
+        Route::get('bundle/{id}', [HistoryController::class, 'bundleShow'])->name('bundle.show');
+    });
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

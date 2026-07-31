@@ -46,6 +46,7 @@
         @foreach($categories as $cat)
           <span class="tab-link" data-tab-target="#tabCat{{ $cat->category_id }}" data-category-id="{{ $cat->category_id }}">{{ $cat->category_name }}</span>
         @endforeach
+        <span class="tab-link" data-tab-target="#tabBundle" data-bundle="true">Bundel</span>
       </div>
       <button class="btn btn-ghost btn-sm" id="viewToggleBtn" data-view="list" title="Tampilan" style="flex-shrink:0;">
         <i class="bi bi-grid-fill" id="viewToggleIcon"></i>
@@ -119,6 +120,18 @@
     </div>
   </div>
   @endforeach
+
+  {{-- PANEL BUNDEL --}}
+  <div id="tabBundle" data-tab-panel style="display:none;">
+    <div class="card-body p-0">
+      <div id="bundleContainer" style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;">
+        <div class="text-center text-muted-c py-4" id="bundleLoader">
+          <div class="spinner-border spinner-border-sm me-1" role="status"></div>Memuat bundle...
+        </div>
+      </div>
+      <div class="px-3 py-2 d-flex justify-content-between align-items-center" id="bundlePagination" style="display:none;"></div>
+    </div>
+  </div>
 </div>
 
 {{-- MODAL KERANJANG --}}
@@ -228,12 +241,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let html = '';
     cart.forEach((item, idx) => {
+      const isBundle = item.type === 'bundle';
       const img = item.image
         ? '<img src="'+item.image+'" class="cart-item-img">'
-        : '<span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="bi bi-image" style="color:var(--text-muted);"></i></span>';
+        : '<span class="cart-item-img" style="background:var(--bg-elevated-2);display:inline-flex;align-items:center;justify-content:center;"><i class="'+(isBundle?'bi bi-gift':'bi bi-image')+'" style="color:var(--text-muted);"></i></span>';
+      const isiLine = isBundle && item.items && item.items.length
+        ? '<div style="font-size:0.7rem;color:var(--text-muted);margin-top:2px;">Isi: '+item.items.map(x=>x.product_name||x.product_id).join(', ')+'</div>'
+        : '';
       const da = discAmount(item);
       html += '<tr>';
-      html += '<td><div class="d-flex align-items-center gap-2">'+img+'<div><div style="font-weight:500;">'+item.name+'</div></div></div></td>';
+      html += '<td><div class="d-flex align-items-center gap-2">'+img+'<div><div style="font-weight:500;">'+item.name+'</div>'+isiLine+'</div></div></td>';
       html += '<td class="text-mono">Rp '+fmt(item.price)+'</td>';
       html += '<td>'+(da > 0 ? '<span style="color:var(--danger);font-size:0.85rem;">-Rp '+fmt(da)+'</span>' : '<span class="text-muted-c">-</span>')+'</td>';
       html += '<td><div class="d-flex align-items-center gap-1"><button class="btn-qty dec" data-i="'+idx+'">−</button>';
@@ -251,9 +268,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const btn = e.target.closest('.btn-add-cart, .btn-add-cart-card');
     if (!btn) return;
     const id = btn.dataset.id;
-    const idx = cart.findIndex(i => i.id === id);
+    const idx = cart.findIndex(i => i.type === 'product' && i.id === id);
     if (idx > -1) cart[idx].qty++;
-    else cart.push({ id, name: btn.dataset.name, price: parseFloat(btn.dataset.price)||0, discountType: btn.dataset.discountType||'', discountValue: parseFloat(btn.dataset.discountValue)||0, image: btn.dataset.image||'', qty: 1 });
+    else cart.push({ type: 'product', id, name: btn.dataset.name, price: parseFloat(btn.dataset.price)||0, discountType: btn.dataset.discountType||'', discountValue: parseFloat(btn.dataset.discountValue)||0, image: btn.dataset.image||'', qty: 1 });
     updateCart(); renderCart();
     NexoraToast(btn.dataset.name+' ditambahkan', 'success');
   });
@@ -437,6 +454,91 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   attachHandlers();
+
+  // ===== BUNDLE TAB =====
+  let bundlePage = 1;
+  const bundlePerPage = 10;
+  const bundleContainer = document.getElementById('bundleContainer');
+  const bundlePagination = document.getElementById('bundlePagination');
+  const bundleTabLink = document.querySelector('[data-bundle="true"]');
+  let bundleView = 'card';
+
+  function loadBundleData(page) {
+    bundlePage = page;
+    bundleContainer.innerHTML = '<div class="text-center text-muted-c py-4"><div class="skeleton" style="height:20px;margin:4px 0;"></div><div class="skeleton" style="height:20px;margin:4px 0;"></div><div class="skeleton" style="height:20px;margin:4px 0;"></div></div>';
+    const start = Date.now();
+    fetch('{{ route("admin.order.bundle-data") }}?page=' + page + '&per_page=' + bundlePerPage + '&view=' + bundleView, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(r => r.json())
+      .then(d => {
+        setTimeout(() => {
+          bundleContainer.innerHTML = d.html;
+          if (d.pagination) {
+            bundlePagination.style.display = '';
+            bundlePagination.innerHTML = '<span class="text-muted-c" style="font-size:0.85rem;">Menampilkan '+(d.from||0)+' - '+(d.to||0)+' dari '+d.total+'</span>'+d.pagination;
+          } else {
+            bundlePagination.style.display = 'none';
+          }
+        }, Math.max(400-(Date.now()-start),0));
+      });
+  }
+
+  if (bundleTabLink) {
+    bundleTabLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.tabs-modern .tab-link').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('[data-tab-panel]').forEach(p => p.style.display = 'none');
+      const target = document.querySelector('#tabBundle');
+      if (target) { target.style.display = 'block'; }
+      bundlePage = 1;
+      loadBundleData(1);
+    });
+  }
+
+  // Toggle view (list/card) — khusus bundle, tanpa ganggu produk
+  const bundleToggleBtn = document.getElementById('viewToggleBtn');
+  if (bundleToggleBtn) {
+    bundleToggleBtn.addEventListener('click', function() {
+      const bundlePanel = document.getElementById('tabBundle');
+      if (bundlePanel && bundlePanel.style.display === 'block') {
+        bundleView = bundleView === 'card' ? 'list' : 'card';
+        bundlePage = 1;
+        loadBundleData(1);
+      }
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    const pageLink = e.target.closest('#bundlePagination [data-page]');
+    if (pageLink) {
+      e.preventDefault();
+      loadBundleData(parseInt(pageLink.dataset.page));
+    }
+  });
+
+  // ===== BUNDLE PESAN → CART (1 entitas, gak dipecah) =====
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn-add-bundle');
+    if (!btn) return;
+    const id = btn.dataset.bundleId;
+    if (!id) return;
+    const idx = cart.findIndex(i => i.type === 'bundle' && i.id === id);
+    if (idx > -1) {
+      cart[idx].qty++;
+    } else {
+      cart.push({
+        type: 'bundle',
+        id: id,
+        name: btn.dataset.bundleName || 'Paket',
+        price: parseFloat(btn.dataset.bundlePrice) || 0,
+        items: JSON.parse(btn.dataset.bundleItems || '[]'),
+        qty: 1,
+      });
+    }
+    updateCart();
+    renderCart();
+    NexoraToast(btn.dataset.bundleName + ' ditambahkan', 'success');
+  });
 });
 </script>
 @endpush

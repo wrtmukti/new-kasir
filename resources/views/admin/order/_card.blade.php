@@ -22,8 +22,11 @@
     <div class="product-card-category">{{ $product->category?->category_name ?? '-' }}</div>
     <div class="product-card-price">
       @php
-        $discPct = $product->product_discount_type === 'percentage' ? (float)($product->product_discount_value ?? 0) : 0;
-        $discNom = $product->product_discount_type === 'nominal' ? (float)($product->product_discount_value ?? 0) : 0;
+        $activeDisc = $product->activeDiscount()->first();
+        $discType = $activeDisc?->discount_type;
+        $discVal = $activeDisc ? (float)($activeDisc->discount_value ?? 0) : 0;
+        $discPct = $discType === 'percentage' ? $discVal : 0;
+        $discNom = $discType === 'nominal' ? $discVal : 0;
         $discAmt = $discPct > 0 ? $product->product_price * $discPct / 100 : ($discNom > 0 ? min($discNom, $product->product_price) : 0);
         $priceDisc = $product->product_price - $discAmt;
       @endphp
@@ -39,8 +42,8 @@
       data-id="{{ $product->product_id }}"
       data-name="{{ $product->product_name }}"
       data-price="{{ $product->product_price ?? 0 }}"
-      data-discount-type="{{ $product->product_discount_type ?? '' }}"
-      data-discount-value="{{ $product->product_discount_value ?? 0 }}"
+      data-discount-type="{{ $discType ?? '' }}"
+      data-discount-value="{{ $discVal ?? 0 }}"
       data-image="{{ $product->product_image ? asset('storage/' . $product->product_image) : '' }}">
       <i class="bi bi-cart-plus me-1"></i>Pesan
     </button>

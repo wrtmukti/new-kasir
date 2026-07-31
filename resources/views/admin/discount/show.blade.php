@@ -112,12 +112,12 @@
     <div class="card h-100">
       <div class="card-header-flex">
         <h6><i class="bi bi-box me-2"></i>Produk Terkait</h6>
-        <span class="chip-tag">{{ $discount->products->count() }} produk</span>
+        <span class="chip-tag">{{ $discount->activeProducts->count() }} produk</span>
       </div>
       <div class="card-body p-0" style="max-height:400px;overflow-y:auto;">
-        @if($discount->products->count() > 0)
+        @if($discount->activeProducts->count() > 0)
           <div class="discount-product-list">
-            @foreach($discount->products as $product)
+            @foreach($discount->activeProducts as $product)
               <div class="discount-product-item">
                 <div class="discount-product-info">
                   <div class="discount-product-name">{{ $product->product_name }}</div>
@@ -162,7 +162,7 @@
             <option value="">-- Pilih Produk --</option>
             @foreach($products as $product)
               <option value="{{ $product->product_id }}"
-                {{ $discount->products->contains('product_id', $product->product_id) ? 'disabled' : '' }}>
+                {{ $discount->activeProducts->contains('product_id', $product->product_id) ? 'disabled' : '' }}>
                 [{{ $product->product_code }}] {{ $product->product_name }}
                 @if($product->category)
                   ({{ $product->category->category_name }})

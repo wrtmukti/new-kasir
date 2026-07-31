@@ -46,7 +46,7 @@ class TransactionController extends Controller
                 ->with('error', 'Transaksi tidak ditemukan.');
         }
 
-        $transaction->load('items');
+        $transaction->load('items', 'bundles.bundle.items.product');
         return view('admin.transaction.show', compact('transaction'));
     }
 }

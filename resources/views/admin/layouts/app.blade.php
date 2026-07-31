@@ -49,6 +49,19 @@
         </li>
       </ul>
 
+      <div class="nav-section-title">Riwayat</div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'history-stock') active @endif">
+          <a href="{{ route('admin.history.stock.index') }}" class="nav-link"><i class="bi bi-archive"></i><span class="nav-label-text">Riwayat Stok</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'history-discount') active @endif">
+          <a href="{{ route('admin.history.discount.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Riwayat Diskon</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'history-bundle') active @endif">
+          <a href="{{ route('admin.history.bundle.index') }}" class="nav-link"><i class="bi bi-gift"></i><span class="nav-label-text">Riwayat Bundle</span></a>
+        </li>
+      </ul>
+
       <div class="nav-section-title">Sample Menu</div>
       <ul class="list-unstyled">
         <li class="nav-item @if(($activeMenu ?? '') === 'category') active @endif">

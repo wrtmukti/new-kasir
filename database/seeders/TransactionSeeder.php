@@ -34,8 +34,9 @@ class TransactionSeeder extends Seeder
             foreach ($order->products as $product) {
                 $qty = (int) $product->pivot->quantity;
                 $price = (float) $product->product_price;
-                $discountType = $product->product_discount_type;
-                $discountValue = (float) ($product->product_discount_value ?? 0);
+                $activeDisc = $product->activeDiscount()->first();
+                $discountType = $activeDisc?->discount_type;
+                $discountValue = $activeDisc ? (float) ($activeDisc->discount_value ?? 0) : 0;
 
                 // Hitung discount_amount
                 $discountAmount = 0;
