@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             HistoryStockSeeder::class,
             HistoryDiscountSeeder::class,
             HistoryBundleSeeder::class,
+            HistoryProductSeeder::class,
+            HistoryVoucherSeeder::class,
             OrderBundleSeeder::class,
         ]);
     }

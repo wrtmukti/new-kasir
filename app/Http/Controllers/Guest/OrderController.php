@@ -177,7 +177,7 @@ class OrderController extends Controller
         $validated = $request->validate([
             'table_id' => 'required|string',
             'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|string',
+            'items.*.product_id' => 'required|alpha_num',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:500',
             'order_remark' => 'nullable|string|max:500',

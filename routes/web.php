@@ -137,6 +137,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('bundle', [HistoryController::class, 'bundleIndex'])->name('bundle.index');
         Route::get('bundle/data', [HistoryController::class, 'bundleData'])->name('bundle.data');
         Route::get('bundle/{id}', [HistoryController::class, 'bundleShow'])->name('bundle.show');
+        Route::get('product', [HistoryController::class, 'productIndex'])->name('product.index');
+        Route::get('product/data', [HistoryController::class, 'productData'])->name('product.data');
+        Route::get('product/{id}', [HistoryController::class, 'productShow'])->name('product.show');
+        Route::get('voucher', [HistoryController::class, 'voucherIndex'])->name('voucher.index');
+        Route::get('voucher/data', [HistoryController::class, 'voucherData'])->name('voucher.data');
+        Route::get('voucher/{id}', [HistoryController::class, 'voucherShow'])->name('voucher.show');
     });
 });
 

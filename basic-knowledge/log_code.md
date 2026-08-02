@@ -259,3 +259,13 @@
 | 2026-07-31 | UPDATE | transaction/show.blade.php — baris bundle + isi | `resources/views/admin/transaction/show.blade.php` |
 | 2026-07-31 | UPDATE | _list_data.blade.php — total completed include subtotal bundle | `views/admin/order/_list_data.blade.php` |
 | 2026-07-31 | FIX | validasi store — items & bundles nullable (cart boleh isi bundle doang), wajib minimal 1 | `app/Http/Controllers/Admin/OrderController.php` |
+|
+| 2026-08-02 | UPDATE | HistoryController — tambah productIndex/productData/productShow + voucherIndex/voucherData/voucherShow (6 method baru) | `app/Http/Controllers/Admin/HistoryController.php` |
+| 2026-08-02 | CREATE | 6 view riwayat product & voucher — index/_data/show (ikut pattern stock/discount/bundle) | `resources/views/admin/history/{product,voucher}/*.blade.php` |
+| 2026-08-02 | ROUTE | Tambah 6 route history product & voucher | `routes/web.php` |
+| 2026-08-02 | UPDATE | Sidebar — tambah Riwayat Produk & Riwayat Voucher di section Riwayat | `views/admin/layouts/app.blade.php` |
+| 2026-08-02 | CREATE | HistoryProductSeeder — backfill product_histories (27 produk) | `database/seeders/HistoryProductSeeder.php` |
+| 2026-08-02 | CREATE | HistoryVoucherSeeder — backfill voucher_histories (5 voucher, tabel awalnya kosong) | `database/seeders/HistoryVoucherSeeder.php` |
+| 2026-08-02 | UPDATE | DatabaseSeeder — register HistoryProductSeeder & HistoryVoucherSeeder | `database/seeders/DatabaseSeeder.php` |
+| 2026-08-02 | TEST | Riwayat product & voucher — index 200, data AJAX OK, show 200 (product_histories 36, voucher_histories 5) | curl + route:list |
+| 2026-08-02 | FIX | Guest submit 302 — validasi items.*.product_id `required|string` tolak int (itemsJson @json kirim number), ganti `required|alpha_num` | `app/Http/Controllers/Guest/OrderController.php` |

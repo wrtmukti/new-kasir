@@ -66,6 +66,121 @@ class HistoryController extends Controller
         return view('admin.history.stock.index', compact('histories'));
     }
 
+    // ============ PRODUCT HISTORY ============
+
+    public function productShow($id)
+    {
+        $history = DB::table('product_histories')->where('product_history_id', $id)->first();
+
+        if (!$history) {
+            return redirect()->route('admin.history.product.index')
+                ->with('error', 'Riwayat tidak ditemukan.');
+        }
+
+        // Cari record sebelumnya (buat perbandingan)
+        $previous = DB::table('product_histories')
+            ->where('product_id', $history->product_id)
+            ->where('product_history_id', '<', $id)
+            ->where('delete_status', 0)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return view('admin.history.product.show', compact('history', 'previous'));
+    }
+
+    public function productIndex()
+    {
+        $histories = DB::table('product_histories')
+            ->where('delete_status', 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.history.product.index', compact('histories'));
+    }
+
+    public function productData(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $actionFilter = $request->input('action_type');
+
+        $query = DB::table('product_histories')->where('delete_status', 0);
+
+        if ($actionFilter && $actionFilter !== '') {
+            $query->where('action_type', $actionFilter);
+        }
+
+        $histories = $query->orderBy('created_at', 'desc')->paginate($perPage);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.history.product._data', compact('histories'))->render(),
+                'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
+                'total' => $histories->total(),
+                'from' => $histories->firstItem(),
+                'to' => $histories->lastItem(),
+            ]);
+        }
+
+        return view('admin.history.product.index', compact('histories'));
+    }
+
+    // ============ VOUCHER HISTORY ============
+
+    public function voucherShow($id)
+    {
+        $history = DB::table('voucher_histories')->where('history_id', $id)->first();
+
+        if (!$history) {
+            return redirect()->route('admin.history.voucher.index')
+                ->with('error', 'Riwayat tidak ditemukan.');
+        }
+
+        $previous = DB::table('voucher_histories')
+            ->where('voucher_id', $history->voucher_id)
+            ->where('history_id', '<', $id)
+            ->where('delete_status', 0)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return view('admin.history.voucher.show', compact('history', 'previous'));
+    }
+
+    public function voucherIndex()
+    {
+        $histories = DB::table('voucher_histories')
+            ->where('delete_status', 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.history.voucher.index', compact('histories'));
+    }
+
+    public function voucherData(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $actionFilter = $request->input('action_type');
+
+        $query = DB::table('voucher_histories')->where('delete_status', 0);
+
+        if ($actionFilter && $actionFilter !== '') {
+            $query->where('action', $actionFilter);
+        }
+
+        $histories = $query->orderBy('created_at', 'desc')->paginate($perPage);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.history.voucher._data', compact('histories'))->render(),
+                'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
+                'total' => $histories->total(),
+                'from' => $histories->firstItem(),
+                'to' => $histories->lastItem(),
+            ]);
+        }
+
+        return view('admin.history.voucher.index', compact('histories'));
+    }
+
     // ============ DISCOUNT HISTORY ============
 
     public function discountShow($id)
