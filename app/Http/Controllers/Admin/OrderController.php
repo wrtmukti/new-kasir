@@ -248,6 +248,65 @@ class OrderController extends Controller
             ->with('success', 'Pesanan selesai.');
     }
 
+    // ——— Terima pesanan (pending → in_progress, decrement stock, meja terisi) ———
+    public function accept(Order $order)
+    {
+        if ($order->delete_status || $order->order_status !== 'pending') {
+            return response()->json(['success' => false, 'message' => 'Pesanan tidak dapat diterima.'], 400);
+        }
+
+        DB::transaction(function () use ($order) {
+            $order->load('products', 'bundles');
+
+            // Auto-decrement stok produk
+            foreach ($order->products as $product) {
+                $orderQty = (int) $product->pivot->quantity;
+                $product->load('stocks');
+                foreach ($product->stocks as $stock) {
+                    $bomQty = (int) $stock->pivot->quantity;
+                    $deductQty = $bomQty * $orderQty;
+                    if ($deductQty <= 0) continue;
+                    $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
+                    $stock->update(['stock_amount' => $stockAfter]);
+                }
+            }
+
+            // Auto-decrement stok isi bundle
+            foreach ($order->bundles as $ob) {
+                $bd = $ob->bundle;
+                if (!$bd) continue;
+                foreach ($bd->items as $bi) {
+                    $product = Product::with('stocks')->find($bi->product_id);
+                    if (!$product) continue;
+                    $orderQty = (int) $bi->quantity * (int) $ob->quantity;
+                    foreach ($product->stocks as $stock) {
+                        $bomQty = (int) $stock->pivot->quantity;
+                        $deductQty = $bomQty * $orderQty;
+                        if ($deductQty <= 0) continue;
+                        $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
+                        $stock->update(['stock_amount' => $stockAfter]);
+                    }
+                }
+            }
+
+            // Update status order + meja jadi terisi
+            $order->update(['order_status' => 'in_progress']);
+
+            if ($order->order_table_id) {
+                Table::where('table_id', $order->order_table_id)
+                    ->where('delete_status', 0)
+                    ->update(['table_status' => 'terisi']);
+            }
+        });
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Pesanan diterima.']);
+        }
+
+        return redirect()->route('admin.order.show', $order)
+            ->with('success', 'Pesanan diterima.');
+    }
+
     // ——— Cetak struk ———
     public function receipt(Order $order)
     {

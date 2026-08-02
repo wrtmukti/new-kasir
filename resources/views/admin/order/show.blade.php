@@ -227,6 +227,12 @@
 <div class="d-flex justify-content-end gap-2">
   <a href="{{ route('admin.order.list') }}" class="btn btn-outline-soft">Kembali</a>
 
+  @if($order->order_status === 'pending')
+    <button type="button" class="btn btn-primary-grad" id="acceptBtn">
+      <i class="bi bi-check-lg me-1"></i>Terima Pesanan
+    </button>
+  @endif
+
   @if($order->order_status === 'in_progress')
     <button type="button" class="btn btn-success-grad" id="completeBtn">
       <i class="bi bi-check2-circle me-1"></i>Selesaikan Pesanan
@@ -240,6 +246,29 @@
   @endif
 </div>
 @endsection
+
+{{-- MODAL KONFIRMASI TERIMA --}}
+<div class="modal fade" id="acceptModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="mb-0"><i class="bi bi-check-lg me-2"></i>Terima Pesanan</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center py-3">
+        <i class="bi bi-clipboard-check" style="font-size:2.5rem;color:var(--accent-1);display:block;margin-bottom:0.5rem;"></i>
+        <p class="mb-0">Terima pesanan <strong>#{{ $order->order_id }}</strong>?</p>
+        <small class="text-muted-c">Stok bahan akan otomatis dikurangi dan meja ditandai terisi.</small>
+      </div>
+      <div class="modal-footer justify-content-center border-0 pt-0">
+        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary-grad" id="confirmAcceptBtn">
+          <i class="bi bi-check-lg me-1"></i>Ya, Terima
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {{-- MODAL KONFIRMASI SELESAI --}}
 <div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
@@ -292,6 +321,43 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const acceptBtn = document.getElementById('acceptBtn');
+  const confirmAcceptBtn = document.getElementById('confirmAcceptBtn');
+
+  if (acceptBtn) {
+    acceptBtn.addEventListener('click', function() {
+      var modal = new bootstrap.Modal(document.getElementById('acceptModal'));
+      modal.show();
+    });
+  }
+
+  if (confirmAcceptBtn) {
+    confirmAcceptBtn.addEventListener('click', function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memproses...';
+      var modal = bootstrap.Modal.getInstance(document.getElementById('acceptModal'));
+      if (modal) modal.hide();
+      fetch('{{ route("admin.order.accept", $order) }}', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: '_token={{ csrf_token() }}'
+      })
+      .then(r => r.json())
+      .then(d => {
+        if (d.success) {
+          NexoraToast(d.message || 'Pesanan diterima.', 'success');
+          setTimeout(() => location.reload(), 800);
+        } else {
+          NexoraToast(d.message || 'Gagal.', 'danger');
+        }
+      })
+      .catch(() => {
+        NexoraToast('Terjadi kesalahan.', 'danger');
+      });
+    });
+  }
+
   const completeBtn = document.getElementById('completeBtn');
   const confirmBtn = document.getElementById('confirmCompleteBtn');
 

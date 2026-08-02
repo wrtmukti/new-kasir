@@ -200,3 +200,27 @@ TransactionItem::whereHas('transaction', function($q) {
 - QR Ordering
 - Laporan & Analitik
 - KDS
+
+---
+
+## ✅ QR Ordering (Guest) — Selesai 2026-08-02 (Core)
+
+| Item | Status | Keterangan |
+|------|--------|------------|
+| Guest/OrderController | ✅ | menu, checkout, submit (pending), status, checkVoucher |
+| Guest layout + index (menu) | ✅ | Bootstrap 5 mobile, hero, kategori, search, cart |
+| Guest review (note + voucher) | ✅ | flow voucher bagaskara (AJAX cek → potongan) |
+| Guest status (track per meja) | ✅ | progress stepper per status |
+| Submit → order pending | ✅ | gak decrement stock, nunggu kasir terima |
+| Admin accept (pending→in_progress) | ✅ | + decrement stock + meja terisi |
+| Route guest + admin.accept | ✅ | `guest.*`, `admin.order.accept` |
+
+### ⏳ Belum (lanjutan QR Ordering)
+
+| # | Item |
+|---|------|
+| 1 | QR code per meja (scan → /guest/menu/{table_id}) |
+| 2 | Bundle di halaman guest (sekarang cuma produk) |
+| 3 | Halaman landing `/` (redirect ke menu atau pilih meja) |
+| 4 | Auto-refresh status page (polling AJAX) |
+| 5 | Detail harga sebelum/sesudah diskon di review (sekarang cuma di menu) |

@@ -192,6 +192,23 @@
 | 2026-07-30 | UPDATE | ProductController — tambah dropdown diskon di create/edit + simpan ke pivot | `app/Http/Controllers/Admin/ProductController.php` |
 | 2026-07-30 | UPDATE | View produk — tambah select diskon di create & edit | `views/admin/product/create.blade.php`, `edit.blade.php` |
 | 2026-07-30 | UPDATE | View diskon show — ganti $discount->products → activeProducts | `views/admin/discount/show.blade.php` |
+|
+| 2026-08-02 | BRANCH | Branch `feature/guest-ordering` — QR ordering halaman guest (Opsi A: pending dulu) | git |
+| 2026-08-02 | CREATE | Guest/OrderController — index(menu), checkout, submit(order pending + voucher), status, checkVoucher | `app/Http/Controllers/Guest/OrderController.php` |
+| 2026-08-02 | CREATE | Guest layout Bootstrap 5 mobile + 3 view (index, review, status) + partial _product_card | `resources/views/guest/*` |
+| 2026-08-02 | CREATE | CSS & JS guest standalone (NexoraGuestToast, cart sessionStorage) | `public/guest/css/guest.css`, `public/guest/js/guest.js` |
+| 2026-08-02 | ROUTE | Tambah route guest (menu, checkout, submit, status, check-voucher) | `routes/web.php` |
+| 2026-08-02 | UPDATE | Admin/OrderController — method baru `accept()` pending→in_progress + decrement stock + meja terisi | `app/Http/Controllers/Admin/OrderController.php` |
+| 2026-08-02 | ROUTE | Tambah route admin.order.accept | `routes/web.php` |
+| 2026-08-02 | UPDATE | Admin order show — tombol & modal Terima Pesanan untuk status pending | `views/admin/order/show.blade.php` |
+| 2026-08-02 | FIX | Category model — tambah relasi products() (dipakai guest index) | `app/Models/Admin/Category.php` |
+| 2026-08-02 | FIX | Guest review — itemsJson dibangun di controller (fix Blade @json + array_map error) | `app/Http/Controllers/Guest/OrderController.php`, `views/guest/review.blade.php` |
+| 2026-08-02 | TEST | Tested: menu 200, checkout 200, submit pending + voucher, check-voucher, accept logic, status 200, admin list 200 | curl + tinker |
+| 2026-08-02 | FIX | Guest PRG — checkout POST simpan session + redirect ke review GET (refresh-safe, fix "GET method not supported"), submit balikin redirect (browser pindah halaman) | `Guest/OrderController.php`, `routes/web.php` |
+| 2026-08-02 | UPDATE | Guest review — total_price hidden field di-set JS ke nilai final (setelah voucher) | `views/guest/review.blade.php` |
+| 2026-08-02 | FIX | Guest review & status error `Undefined variable $company` — layout guest butuh $company (navbar/hero), kirim dari controller | `Guest/OrderController.php` |
+| 2026-08-02 | FIX | Guest checkout 302 — root cause ParseError `Unclosed '['` di review.blade.php (sudah fix jam 19:39) + clear view cache | `php artisan view:clear` |
+| 2026-08-02 | TEST | Review & status guest render OK (tinker, status 200) setelah fix $company | tinker |
 | 2026-07-30 | UPDATE | Views — ganti semua $product->product_discount_* → activeDiscount() (5 file) | `views/admin/product/_card.blade.php`, `_data.blade.php`, `views/admin/order/_card.blade.php`, `_data.blade.php`, `show.blade.php` |
 | 2026-07-30 | UPDATE | DiscountSeeder & TransactionSeeder — pake pivot bukan kolom produk | `database/seeders/DiscountSeeder.php`, `TransactionSeeder.php` |
 | 2026-07-30 | SEED | DiscountProductSeeder — 9 pivot records backfill | `database/seeders/DiscountProductSeeder.php` |

@@ -117,6 +117,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
     Route::get('order/list-data', [OrderController::class, 'listData'])->name('order.list-data');
     Route::post('order/{order}/complete', [OrderController::class, 'complete'])->name('order.complete');
+    Route::post('order/{order}/accept', [OrderController::class, 'accept'])->name('order.accept');
     Route::get('order/{order}/receipt', [OrderController::class, 'receipt'])->name('order.receipt');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.show');
 
@@ -142,4 +143,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {
     Route::get('company/data', [CompanyController::class, 'data'])->name('company.data');
     Route::resource('company', CompanyController::class);
+});
+
+// ===================== GUEST (QR Ordering) =====================
+use App\Http\Controllers\Guest\OrderController as GuestOrderController;
+
+Route::prefix('guest')->name('guest.')->group(function () {
+    // Menu (QR meja)
+    Route::get('/menu/{table_id}', [GuestOrderController::class, 'index'])->name('index');
+    // Review & checkout
+    Route::post('/checkout', [GuestOrderController::class, 'checkout'])->name('checkout');
+    Route::get('/review/{table_id}', [GuestOrderController::class, 'review'])->name('review');
+    Route::post('/submit', [GuestOrderController::class, 'submit'])->name('submit');
+    // Status pesanan per meja
+    Route::get('/status/{table_id}', [GuestOrderController::class, 'status'])->name('status');
+    // Cek voucher (AJAX)
+    Route::post('/check-voucher', [GuestOrderController::class, 'checkVoucher'])->name('check-voucher');
 });

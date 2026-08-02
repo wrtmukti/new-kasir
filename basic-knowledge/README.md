@@ -66,6 +66,15 @@ Tiap master data punya history table. Transaksi di-snapshot biar laporan akurat.
 
 > **Catatan:** Migration company & stock sudah ada sebelum gue kerja. Yang gue tambahin cuma layer aplikasi (Model, Controller, View, Route, Seeder).
 
+## QR Ordering (Guest) — 2026-08-02
+
+- **Controller:** `app/Http/Controllers/Guest/OrderController.php` — menu, checkout, submit, status, checkVoucher
+- **Views:** `resources/views/guest/` (index, review, status, partials) — Bootstrap 5 mobile
+- **Assets:** `public/guest/css/guest.css`, `public/guest/js/guest.js`
+- **Routes:** prefix `guest.` (`/guest/menu/{table_id}`, `/guest/checkout`, `/guest/submit`, `/guest/status/{table_id}`, `/guest/check-voucher`)
+- **Alur:** Guest submit → `order_status = 'pending'` → kasir terima (`admin.order.accept`) → `in_progress` + decrement stock + meja terisi → complete (existing)
+- **UI adaptasi:** konsep UX dari `D:\MY PROJECT\POS-KASIR\bagaskara` (menu mobile, cart, review, status per meja), di-rewrite ke Bootstrap 5 + skema tabel project ini
+
 ## Alur Bisnis
 
 1. **Purchasing:** Supplier → PO → Receiving → StockLog(in) → stock_amount++
