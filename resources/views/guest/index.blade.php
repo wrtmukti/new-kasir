@@ -23,6 +23,14 @@
   </div>
 </div>
 
+{{-- Status toko + cek status pesanan --}}
+<div class="guest-store-row">
+  <span class="guest-open-status"><i class="bi bi-circle-fill"></i> Buka 10:00 - 22:00 WIB</span>
+  <a href="{{ route('guest.status', $table->table_id) }}" class="guest-status-link">
+    Cek Status Pesanan <i class="bi bi-arrow-right"></i>
+  </a>
+</div>
+
 {{-- Search --}}
 <div class="guest-search-wrap sticky-guest-top">
   <div class="guest-search">
@@ -34,8 +42,26 @@
 {{-- Kategori --}}
 <div class="guest-cats-wrap sticky-guest-top">
   <button class="guest-cat-btn active" data-cat="all">Semua</button>
+  @if($bundles->isNotEmpty())
+    <button class="guest-cat-btn" data-cat="bundle">Bundle</button>
+  @endif
   @foreach($categories as $cat)
     <button class="guest-cat-btn" data-cat="{{ $cat->category_id }}">{{ $cat->category_name }}</button>
+  @endforeach
+</div>
+
+{{-- Header produk + toggle view --}}
+<div class="guest-products-head">
+  <span class="guest-products-title">Menu</span>
+  <button type="button" class="guest-view-toggle" id="guestViewToggle" title="Tampilan daftar">
+    <i class="bi bi-list-ul"></i>
+  </button>
+</div>
+
+{{-- Bundle --}}
+<div class="guest-products" id="guestBundles" style="display:none;">
+  @foreach($bundles as $bundle)
+    @include('guest.partials._bundle_card', ['bundle' => $bundle])
   @endforeach
 </div>
 
@@ -46,7 +72,7 @@
   @endforeach
 </div>
 
-@if($products->isEmpty())
+@if($products->isEmpty() && $bundles->isEmpty())
 <div class="guest-empty">
   <i class="bi bi-cup-straw"></i>
   <p>Belum ada menu tersedia.</p>
@@ -55,31 +81,32 @@
 @endsection
 
 @section('floating')
-{{-- FAB keranjang --}}
-<button class="guest-cart-fab" id="guestCartFab" type="button">
-  <i class="bi bi-bag"></i>
-  <span class="guest-cart-count" id="guestCartCount">0</span>
+{{-- Cart bar (muncul dari bawah saat ada item) --}}
+<button class="guest-cart-bar" id="guestCartBar" type="button">
+  <span class="guest-cart-bar-icon"><i class="bi bi-bag"></i></span>
+  <span class="guest-cart-bar-info" id="guestCartInfo">0 item • Rp 0</span>
+  <span class="guest-cart-bar-cta">Cek Keranjang <i class="bi bi-chevron-up"></i></span>
 </button>
 
-{{-- Cart offcanvas --}}
-<div class="offcanvas offcanvas-end guest-cart" tabindex="-1" id="guestCartPanel">
-  <div class="offcanvas-header">
-    <h6 class="mb-0"><i class="bi bi-bag me-2"></i>Pesanan Saya</h6>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+{{-- Bottom sheet keranjang --}}
+<div class="guest-cart-sheet" id="guestCartSheet">
+  <div class="guest-cart-sheet-handle"></div>
+  <div class="guest-cart-sheet-header">
+    <h6 class="mb-0"><i class="bi bi-bag me-2"></i>Keranjang Saya</h6>
+    <button type="button" class="guest-cart-sheet-close" id="guestCartSheetClose"><i class="bi bi-x-lg"></i></button>
   </div>
-  <div class="offcanvas-body d-flex flex-column">
-    <div id="guestCartItems" class="flex-grow-1"></div>
-    <div class="guest-cart-footer">
-      <div class="guest-cart-total-row">
-        <span>Total</span>
-        <span class="guest-cart-total" id="guestCartTotal">Rp 0</span>
-      </div>
-      <button type="button" class="btn btn-primary-guest w-100 btn-loading" id="guestCheckoutBtn">
-        <i class="bi bi-arrow-right me-1"></i>Lanjut ke Pembayaran
-      </button>
+  <div class="guest-cart-sheet-body" id="guestCartItems"></div>
+  <div class="guest-cart-sheet-footer">
+    <div class="guest-cart-total-row">
+      <span>Total</span>
+      <span class="guest-cart-total" id="guestCartTotal">Rp 0</span>
     </div>
+    <button type="button" class="btn btn-primary-guest w-100 btn-loading" id="guestCheckoutBtn">
+      <i class="bi bi-arrow-right me-1"></i>Lanjut ke Pembayaran
+    </button>
   </div>
 </div>
+<div class="guest-cart-sheet-backdrop" id="guestCartBackdrop"></div>
 
 {{-- Modal tambah item --}}
 <div class="modal fade" id="guestItemModal" tabindex="-1" aria-hidden="true">
@@ -131,15 +158,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ——— Kategori filter ———
   const catBtns = document.querySelectorAll('.guest-cat-btn');
+  const bundlesWrap = document.getElementById('guestBundles');
   catBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       catBtns.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       const cat = this.dataset.cat;
+      // Tab bundle: tampil/hilang #guestBundles, sembunyikan produk
+      if (bundlesWrap) {
+        bundlesWrap.style.display = (cat === 'all' || cat === 'bundle') ? '' : 'none';
+      }
       document.querySelectorAll('#guestProducts .guest-product-card').forEach(card => {
-        card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        const show = (cat === 'all' || card.dataset.cat === cat);
+        // di tab bundle, sembunyikan semua produk (kecuali 'all')
+        card.style.display = (cat === 'bundle') ? 'none' : (show ? '' : 'none');
       });
     });
+  });
+
+  // ——— Toggle view list/card ———
+  const productsWrap = document.getElementById('guestProducts');
+  const viewToggle = document.getElementById('guestViewToggle');
+  function setView(list) {
+    const wrap = productsWrap;
+    const btn = viewToggle;
+    if (list) {
+      wrap.classList.add('guest-list-view');
+      btn.classList.add('active');
+      btn.title = 'Tampilan kartu';
+      btn.innerHTML = '<i class="bi bi-grid-3x3-gap"></i>';
+    } else {
+      wrap.classList.remove('guest-list-view');
+      btn.classList.remove('active');
+      btn.title = 'Tampilan daftar';
+      btn.innerHTML = '<i class="bi bi-list-ul"></i>';
+    }
+  }
+  const savedView = sessionStorage.getItem('guest_view') === 'list';
+  setView(savedView);
+  viewToggle.addEventListener('click', function() {
+    const list = !productsWrap.classList.contains('guest-list-view');
+    setView(list);
+    sessionStorage.setItem('guest_view', list ? 'list' : 'card');
   });
 
   // ——— Search ———
@@ -163,13 +223,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function renderCart() {
     const wrap = document.getElementById('guestCartItems');
-    const ids = Object.keys(cart);
-    const countEl = document.getElementById('guestCartCount');
+    const bar = document.getElementById('guestCartBar');
+    const barInfo = document.getElementById('guestCartInfo');
     const totalEl = document.getElementById('guestCartTotal');
+    const ids = Object.keys(cart);
 
     let total = 0, count = 0;
     if (ids.length === 0) {
       wrap.innerHTML = '<div class="guest-cart-empty"><i class="bi bi-bag"></i><p>Keranjang masih kosong.</p></div>';
+      bar.classList.remove('show');
+      hideSheet();
     } else {
       wrap.innerHTML = '';
       ids.forEach(id => {
@@ -179,10 +242,17 @@ document.addEventListener('DOMContentLoaded', function() {
         count += it.qty;
         const row = document.createElement('div');
         row.className = 'guest-cart-item';
+        const isBundle = it.type === 'bundle';
+        const bundleChips = isBundle && it.items && it.items.length
+          ? '<div class="guest-cart-bundle-chips">' + it.items.map(i =>
+              '<span class="guest-cart-note">' + (i.product_name || 'Produk') + ' x' + i.quantity + '</span>'
+            ).join('') + '</div>'
+          : '';
         row.innerHTML = `
-          <img src="${it.image || 'https://via.placeholder.com/60x60?text=Menu'}" alt="">
+          <img src="${it.image || (isBundle ? '' : 'https://via.placeholder.com/60x60?text=Menu')}" alt="">
           <div class="flex-grow-1">
-            <div class="fw-semibold">${it.name}</div>
+            <div class="fw-semibold">${isBundle ? '<span class="guest-bundle-tag">Paket</span> ' : ''}${it.name}</div>
+            ${bundleChips}
             ${it.discount_amount > 0 ? '<div class="guest-cart-disc">diskon -' + fmtRp(it.discount_amount) + '</div>' : ''}
             <div class="guest-cart-subtotal">${fmtRp(sub)}</div>
             ${it.note ? '<div class="guest-cart-note">' + it.note + '</div>' : ''}
@@ -196,11 +266,17 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         wrap.appendChild(row);
       });
+      barInfo.textContent = count + ' item • ' + fmtRp(total);
+      bar.classList.add('show');
     }
-    countEl.textContent = count;
     totalEl.textContent = fmtRp(total);
-    countEl.style.display = count > 0 ? '' : 'none';
   }
+
+  // ——— Bottom sheet buka/tutup ———
+  const sheetEl = document.getElementById('guestCartSheet');
+  const backdropEl = document.getElementById('guestCartBackdrop');
+  function showSheet() { sheetEl.classList.add('show'); backdropEl.classList.add('show'); }
+  function hideSheet() { sheetEl.classList.remove('show'); backdropEl.classList.remove('show'); }
 
   function saveCart() {
     sessionStorage.setItem('guest_cart', JSON.stringify(cart));
@@ -239,6 +315,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 400);
   });
 
+  // ——— Tambah bundle ke cart ———
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.guest-bundle-add');
+    if (!btn) return;
+    const key = 'bundle:' + btn.dataset.bundleId;
+    const items = JSON.parse(btn.dataset.bundleItems || '[]');
+    const bundle = {
+      type: 'bundle',
+      bundle_id: btn.dataset.bundleId,
+      name: btn.dataset.bundleName,
+      price: Number(btn.dataset.bundlePrice || 0),
+      image: '',
+      qty: (cart[key] ? cart[key].qty : 0) + 1,
+      discount_amount: 0,
+      final_price: Number(btn.dataset.bundlePrice || 0),
+      items: items, // isi bundle utk render & submit
+    };
+    cart[key] = bundle;
+    saveCart();
+    NexoraGuestToast('Paket ditambahkan.', 'success');
+  });
+
   // ——— Event delegation cart ———
   document.getElementById('guestCartItems').addEventListener('click', function(e) {
     const plus = e.target.closest('[data-act="plus"]');
@@ -253,22 +351,40 @@ document.addEventListener('DOMContentLoaded', function() {
     else if (remove) { delete cart[remove.dataset.id]; saveCart(); }
   });
 
-  // ——— FAB buka cart ———
-  document.getElementById('guestCartFab').addEventListener('click', () => {
+  // ——— Cart bar klik → buka bottom sheet ———
+  document.getElementById('guestCartBar').addEventListener('click', () => {
     if (Object.keys(cart).length === 0) { NexoraGuestToast('Keranjang masih kosong.', 'default'); return; }
-    new bootstrap.Offcanvas(document.getElementById('guestCartPanel')).show();
+    showSheet();
   });
+  document.getElementById('guestCartSheetClose').addEventListener('click', hideSheet);
+  backdropEl.addEventListener('click', hideSheet);
 
   // ——— Checkout ———
   document.getElementById('guestCheckoutBtn').addEventListener('click', function() {
     const btn = this;
     btn.disabled = true;
     setTimeout(() => {
-      const cartArr = Object.keys(cart).map(id => ({
-        product_id: id,
-        qty: cart[id].qty,
-        note: cart[id].note || '',
-      }));
+      // Produk: item non-bundle
+      const cartArr = Object.keys(cart)
+        .filter(id => cart[id].type !== 'bundle')
+        .map(id => ({
+          product_id: id,
+          qty: cart[id].qty,
+          note: cart[id].note || '',
+        }));
+      // Bundle: item type bundle
+      const bundleArr = Object.keys(cart)
+        .filter(id => cart[id].type === 'bundle')
+        .map(id => ({
+          bundle_id: cart[id].bundle_id,
+          bundle_name: cart[id].name,
+          bundle_price: cart[id].price,
+          qty: cart[id].qty,
+          items: cart[id].items.map(i => ({
+            product_id: i.product_id,
+            quantity: i.quantity,
+          })),
+        }));
       let total = 0;
       Object.keys(cart).forEach(id => { total += cart[id].final_price * cart[id].qty; });
 
@@ -277,9 +393,10 @@ document.addEventListener('DOMContentLoaded', function() {
       form.action = '{{ route("guest.checkout") }}';
       const csrf = document.createElement('input'); csrf.type = 'hidden'; csrf.name = '_token'; csrf.value = '{{ csrf_token() }}';
       const cartData = document.createElement('input'); cartData.type = 'hidden'; cartData.name = 'cart_data'; cartData.value = JSON.stringify(cartArr);
+      const bundleData = document.createElement('input'); bundleData.type = 'hidden'; bundleData.name = 'bundle_data'; bundleData.value = JSON.stringify(bundleArr);
       const totalInput = document.createElement('input'); totalInput.type = 'hidden'; totalInput.name = 'total_price'; totalInput.value = total;
       const tableInput = document.createElement('input'); tableInput.type = 'hidden'; tableInput.name = 'table_id'; tableInput.value = '{{ $table->table_id }}';
-      form.appendChild(csrf); form.appendChild(cartData); form.appendChild(totalInput); form.appendChild(tableInput);
+      form.appendChild(csrf); form.appendChild(cartData); form.appendChild(bundleData); form.appendChild(totalInput); form.appendChild(tableInput);
       document.body.appendChild(form); form.submit();
     }, 400);
   });

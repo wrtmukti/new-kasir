@@ -10,6 +10,7 @@
 </div>
 @endif
 
+<div class="guest-narrow">
 <div class="guest-page-head">
   <div>
     <h1 class="guest-page-title">Konfirmasi Pesanan</h1>
@@ -41,6 +42,27 @@
         @if($item['discount_amount'] > 0)
           <small class="guest-disc-text">-{{ 'Rp ' . number_format($item['discount_amount'], 0) }}</small>
         @endif
+      </div>
+    </div>
+  @endforeach
+
+  {{-- Bundle --}}
+  @foreach($bundleRows ?? [] as $b)
+    <div class="guest-review-item">
+      <div class="d-flex align-items-center gap-2 flex-grow-1">
+        <div class="guest-review-img guest-product-img-placeholder"><i class="bi bi-gift"></i></div>
+        <div>
+          <div class="fw-semibold"><span class="guest-bundle-tag">Paket</span>{{ $b['bundle_name'] }}</div>
+          <small class="text-muted-guest">@if($b['qty'] > 1){{ $b['qty'] }} x @endif{{ 'Rp ' . number_format($b['bundle_price'], 0) }}</small>
+          <div class="guest-cart-bundle-chips">
+            @foreach($b['items'] as $bi)
+              <span class="guest-cart-note">{{ $bi['product_name'] ?? 'Produk' }} x{{ $bi['quantity'] }}</span>
+            @endforeach
+          </div>
+        </div>
+      </div>
+      <div class="text-end">
+        <div class="fw-semibold">{{ 'Rp ' . number_format($b['subtotal'], 0) }}</div>
       </div>
     </div>
   @endforeach
@@ -84,6 +106,7 @@
   <input type="hidden" name="table_id" value="{{ $table->table_id }}">
   <input type="hidden" name="total_price" value="{{ $grandTotal }}">
   <input type="hidden" name="items" id="guestSubmitItems">
+  <input type="hidden" name="bundles" id="guestSubmitBundles">
   <input type="hidden" name="voucher_code" id="guestSubmitVoucher">
   <input type="hidden" name="order_remark" id="guestSubmitRemark">
 
@@ -95,12 +118,14 @@
 <p class="guest-hint text-center mt-3">
   <i class="bi bi-info-circle me-1"></i>Pesanan akan diterima oleh kasir terlebih dahulu sebelum dimasak.
 </p>
+</div>{{-- /.guest-narrow --}}
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const items = @json($itemsJson);
+  const bundles = @json($bundleRows ?? []);
 
   const grandTotal = {{ $grandTotal }};
   const voucherCodeEl = document.getElementById('guestVoucherInput');
@@ -158,6 +183,13 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mengirim...';
     document.getElementById('guestSubmitItems').value = JSON.stringify(items);
+    document.getElementById('guestSubmitBundles').value = JSON.stringify(bundles.map(b => ({
+      bundle_id: b.bundle_id,
+      bundle_name: b.bundle_name,
+      bundle_price: b.bundle_price,
+      qty: b.qty,
+      items: (b.items || []).map(i => ({ product_id: i.product_id, quantity: i.quantity })),
+    })));
     document.getElementById('guestSubmitVoucher').value = appliedVoucher ? appliedVoucher.code : '';
     document.getElementById('guestSubmitRemark').value = document.getElementById('guestOrderRemark').value.trim();
     // Total akhir (setelah voucher) — biar submit dapet nilai yang bener

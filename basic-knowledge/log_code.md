@@ -269,3 +269,10 @@
 | 2026-08-02 | UPDATE | DatabaseSeeder — register HistoryProductSeeder & HistoryVoucherSeeder | `database/seeders/DatabaseSeeder.php` |
 | 2026-08-02 | TEST | Riwayat product & voucher — index 200, data AJAX OK, show 200 (product_histories 36, voucher_histories 5) | curl + route:list |
 | 2026-08-02 | FIX | Guest submit 302 — validasi items.*.product_id `required|string` tolak int (itemsJson @json kirim number), ganti `required|alpha_num` | `app/Http/Controllers/Guest/OrderController.php` |
+| 2026-08-02 | UPDATE | Guest cart — FAB + offcanvas diganti cart bar (bottom pill, muncul dari bawah) + bottom sheet (naik dari bawah), ikut konsep bagaskara. Modal tambah item dipertahankan | `views/guest/index.blade.php`, `public/guest/css/guest.css` |
+| 2026-08-02 | TEST | Guest cart baru — menu 200, JS syntax OK (node), checkout→review 200 | curl + node |
+| 2026-08-02 | UPDATE | Guest menu — tambah bar status toko (Buka 10:00-22:00 WIB, hijau) + link Cek Status Pesanan ke guest.status, ikut bagaskara | `views/guest/index.blade.php`, `public/guest/css/guest.css` |
+| 2026-08-02 | UPDATE | Guest menu — tambah toggle view list/card produk (guest-list-view horizontal), persist di sessionStorage, ikut bagaskara | `views/guest/index.blade.php`, `public/guest/css/guest.css` |
+| 2026-08-02 | UPDATE | Guest desktop friendly — blok @media (min-width:992px): navbar/container 1200px, grid 4 kolom, hero 220px, review/status dibungkus .guest-narrow (max 720px). Mobile (<992px) gak tersentuh | `public/guest/css/guest.css`, `views/guest/review.blade.php`, `views/guest/status.blade.php` |
+| 2026-08-02 | UPDATE | Guest bundle — tab kategori 'Bundle', bundle card (partial _bundle_card), cart dukung type:bundle, checkout/review/submit handle bundle (order_bundle), item chip | `Guest/OrderController.php`, `views/guest/index.blade.php`, `views/guest/partials/_bundle_card.blade.php`, `views/guest/review.blade.php`, `public/guest/css/guest.css` |
+| 2026-08-02 | TEST | Guest bundle — menu tampil 8 bundle, submit bundle sukses (order #14 pending + order_bundle terisi), review render bundle | tinker |

@@ -66,9 +66,6 @@
         <li class="nav-item">
           <a href="#" class="nav-link"><i class="bi bi-people-fill"></i><span class="nav-label-text">Pelanggan</span></a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link"><i class="bi bi-receipt"></i><span class="nav-label-text">Transaksi</span></a>
-        </li>
       </ul>
 
       <div class="nav-section-title">Promo</div>
@@ -93,17 +90,17 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'history-stock') active @endif">
           <a href="{{ route('admin.history.stock.index') }}" class="nav-link"><i class="bi bi-archive"></i><span class="nav-label-text">Riwayat Stok</span></a>
         </li>
-        <li class="nav-item @if(($activeMenu ?? '') === 'history-discount') active @endif">
-          <a href="{{ route('admin.history.discount.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Riwayat Diskon</span></a>
-        </li>
-        <li class="nav-item @if(($activeMenu ?? '') === 'history-bundle') active @endif">
-          <a href="{{ route('admin.history.bundle.index') }}" class="nav-link"><i class="bi bi-gift"></i><span class="nav-label-text">Riwayat Bundle</span></a>
-        </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'history-product') active @endif">
           <a href="{{ route('admin.history.product.index') }}" class="nav-link"><i class="bi bi-cup-hot"></i><span class="nav-label-text">Riwayat Produk</span></a>
         </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'history-discount') active @endif">
+          <a href="{{ route('admin.history.discount.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Riwayat Diskon</span></a>
+        </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'history-voucher') active @endif">
           <a href="{{ route('admin.history.voucher.index') }}" class="nav-link"><i class="bi bi-ticket-perforated"></i><span class="nav-label-text">Riwayat Voucher</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'history-bundle') active @endif">
+          <a href="{{ route('admin.history.bundle.index') }}" class="nav-link"><i class="bi bi-gift"></i><span class="nav-label-text">Riwayat Bundle</span></a>
         </li>
       </ul>
     </nav>

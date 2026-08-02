@@ -15,6 +15,7 @@
 </div>
 @endif
 
+<div class="guest-narrow">
 <div class="guest-page-head">
   <div>
     <h1 class="guest-page-title">Status Pesanan</h1>
@@ -110,6 +111,7 @@
     </a>
   </div>
 @endif
+</div>{{-- /.guest-narrow --}}
 @endsection
 
 @push('scripts')

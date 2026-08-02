@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Bundle;
 use App\Models\Admin\Category;
 use App\Models\Admin\Customer;
 use App\Models\Admin\Order;
+use App\Models\Admin\OrderBundle;
 use App\Models\Admin\OrderVoucher;
 use App\Models\Admin\Product;
 use App\Models\Admin\Table;
@@ -47,7 +49,14 @@ class OrderController extends Controller
             ->orderBy('category_name')
             ->get();
 
-        return view('guest.index', compact('table', 'company', 'products', 'categories'));
+        // Bundle aktif (harga paket tetap)
+        $bundles = Bundle::where('delete_status', 0)
+            ->where('bundle_status', 1)
+            ->with('items.product')
+            ->latest()
+            ->get();
+
+        return view('guest.index', compact('table', 'company', 'products', 'categories', 'bundles'));
     }
 
     /**
@@ -57,6 +66,7 @@ class OrderController extends Controller
     public function checkout(Request $request)
     {
         $cart = json_decode($request->cart_data, true);
+        $bundles = json_decode($request->bundle_data, true);
         $totalPrice = (float) $request->total_price;
 
         $table = Table::where('table_id', $request->table_id)
@@ -68,14 +78,15 @@ class OrderController extends Controller
                 ->with('error', 'Meja tidak ditemukan.');
         }
 
-        if (empty($cart) || !is_array($cart)) {
+        if ((empty($cart) || !is_array($cart)) && (empty($bundles) || !is_array($bundles))) {
             return redirect()->route('guest.index', $request->table_id)
                 ->with('error', 'Keranjang masih kosong.');
         }
 
-        // Simpan cart + total ke session (PRG)
+        // Simpan cart + bundle + total ke session (PRG)
         session([
-            'guest_cart' => $cart,
+            'guest_cart' => $cart ?: [],
+            'guest_bundles' => $bundles ?: [],
             'guest_total' => $totalPrice,
             'guest_table' => $table->table_id,
         ]);
@@ -154,6 +165,29 @@ class OrderController extends Controller
                 ->with('error', 'Produk di keranjang tidak valid.');
         }
 
+        // ——— Bundle dari session ———
+        $bundleRows = [];
+        $guestBundles = session('guest_bundles', []);
+        foreach ($guestBundles as $b) {
+            $qty = max(1, (int) ($b['qty'] ?? 1));
+            $price = (float) ($b['bundle_price'] ?? 0);
+            $bSubtotal = $price * $qty;
+            $grandTotal += $bSubtotal;
+            $bundleRows[] = [
+                'bundle_id' => $b['bundle_id'] ?? null,
+                'bundle_name' => $b['bundle_name'] ?? 'Paket',
+                'bundle_price' => $price,
+                'qty' => $qty,
+                'subtotal' => $bSubtotal,
+                'items' => $b['items'] ?? [],
+            ];
+        }
+
+        if (empty($items) && empty($bundleRows)) {
+            return redirect()->route('guest.index', $table_id)
+                ->with('error', 'Keranjang masih kosong.');
+        }
+
         // Build JSON item buat JS submit (id, qty, note)
         $itemsJson = array_map(function ($i) {
             return [
@@ -165,7 +199,7 @@ class OrderController extends Controller
 
         $company = Company::where('delete_status', 0)->first();
 
-        return view('guest.review', compact('table', 'company', 'items', 'itemsJson', 'grandTotal', 'totalPrice'));
+        return view('guest.review', compact('table', 'company', 'items', 'bundleRows', 'itemsJson', 'grandTotal', 'totalPrice'));
     }
 
     /**
@@ -176,14 +210,26 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'table_id' => 'required|string',
-            'items' => 'required|array|min:1',
+            'items' => 'nullable|array',
             'items.*.product_id' => 'required|alpha_num',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:500',
+            'bundles' => 'nullable|array',
+            'bundles.*.bundle_id' => 'required|string',
+            'bundles.*.bundle_name' => 'required|string',
+            'bundles.*.bundle_price' => 'required|numeric|min:0',
+            'bundles.*.qty' => 'required|integer|min:1',
+            'bundles.*.items' => 'required|array|min:1',
+            'bundles.*.items.*.product_id' => 'required|string',
+            'bundles.*.items.*.quantity' => 'required|integer|min:1',
             'order_remark' => 'nullable|string|max:500',
             'voucher_code' => 'nullable|string|max:50',
             'total_price' => 'required|numeric|min:0',
         ]);
+
+        if (empty($validated['items'] ?? []) && empty($validated['bundles'] ?? [])) {
+            return back()->withInput()->with('error', 'Minimal satu item produk atau paket.');
+        }
 
         $table = Table::where('table_id', $validated['table_id'])
             ->where('delete_status', 0)
@@ -213,7 +259,7 @@ class OrderController extends Controller
         // ——— Hitung grand total (include diskon produk) ———
         $grandTotal = 0;
         $itemDetails = [];
-        foreach ($validated['items'] as $item) {
+        foreach ($validated['items'] ?? [] as $item) {
             $product = Product::with('activeDiscount')->find($item['product_id']);
             if (!$product) {
                 return back()->withInput()->with('error', 'Produk tidak ditemukan.');
@@ -245,6 +291,23 @@ class OrderController extends Controller
                 'price' => $price,
                 'discount_amount' => $discountAmount,
                 'subtotal' => $subtotal,
+            ];
+        }
+
+        // ——— Hitung bundle (harga paket tetap) ———
+        $bundleDetails = [];
+        foreach ($validated['bundles'] ?? [] as $b) {
+            $bSubtotal = (float) $b['bundle_price'] * (int) $b['qty'];
+            $grandTotal += $bSubtotal;
+            $bundleDetails[] = [
+                'bundle_id' => $b['bundle_id'],
+                'bundle_name' => $b['bundle_name'],
+                'bundle_price' => (float) $b['bundle_price'],
+                'qty' => (int) $b['qty'],
+                'items' => array_map(fn($i) => [
+                    'product_id' => $i['product_id'],
+                    'quantity' => (int) $i['quantity'],
+                ], $b['items']),
             ];
         }
 
@@ -288,7 +351,7 @@ class OrderController extends Controller
 
         $finalGrandTotal = $grandTotal - $voucherAmount;
 
-        DB::transaction(function () use ($validated, $companyId, $customer, $table, $finalGrandTotal, $itemDetails, $voucherData) {
+        DB::transaction(function () use ($validated, $companyId, $customer, $table, $finalGrandTotal, $itemDetails, $bundleDetails, $voucherData) {
             $order = Order::create([
                 'company_id' => $companyId,
                 'order_type' => 'dine_in',
@@ -313,6 +376,20 @@ class OrderController extends Controller
             }
             $order->products()->sync($syncData);
 
+            // Simpan bundle: 1 baris per bundle di order_bundle
+            foreach ($bundleDetails as $bd) {
+                OrderBundle::create([
+                    'company_id' => $companyId,
+                    'order_id' => $order->order_id,
+                    'bundle_id' => $bd['bundle_id'],
+                    'bundle_name' => $bd['bundle_name'],
+                    'bundle_price' => $bd['bundle_price'],
+                    'quantity' => $bd['qty'],
+                    'subtotal' => (float) $bd['bundle_price'] * $bd['qty'],
+                    'created_by' => 'guest',
+                ]);
+            }
+
             // Simpan voucher kalo ada
             if ($voucherData) {
                 $voucherData['order_id'] = $order->order_id;
@@ -321,7 +398,7 @@ class OrderController extends Controller
         });
 
         // Hapus cart dari session (udah jadi order)
-        session()->forget(['guest_cart', 'guest_total', 'guest_table']);
+        session()->forget(['guest_cart', 'guest_bundles', 'guest_total', 'guest_table']);
 
         return redirect()->route('guest.status', $table->table_id)
             ->with('success', 'Pesanan berhasil dikirim!');
