@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ignite &amp; Spice | Menu Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#ded9d8",
+                    "on-secondary-fixed": "#331200",
+                    "surface-tint": "#ba1a20",
+                    "primary": "#af101a",
+                    "outline-variant": "#e4beba",
+                    "surface-container-low": "#f8f2f1",
+                    "on-tertiary-container": "#f6f3f3",
+                    "secondary": "#9c4400",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "primary-fixed-dim": "#ffb3ac",
+                    "inverse-primary": "#ffb3ac",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "on-secondary-fixed-variant": "#773200",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#410003",
+                    "tertiary": "#575757",
+                    "on-primary-container": "#fff2f0",
+                    "secondary-container": "#fd7613",
+                    "background": "#fef8f7",
+                    "secondary-fixed-dim": "#ffb68f",
+                    "inverse-on-surface": "#f5efee",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "secondary-fixed": "#ffdbca",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#5b403d",
+                    "on-surface": "#1d1b1b",
+                    "surface": "#fef8f7",
+                    "inverse-surface": "#323030",
+                    "surface-bright": "#fef8f7",
+                    "on-background": "#1d1b1b",
+                    "tertiary-container": "#706f6f",
+                    "surface-container-high": "#ede7e6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e7e1e0",
+                    "outline": "#8f6f6c",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#d32f2f",
+                    "on-secondary-container": "#5b2500",
+                    "surface-container": "#f2edec",
+                    "surface-variant": "#e7e1e0",
+                    "primary-fixed": "#ffdad6",
+                    "on-primary-fixed-variant": "#930010"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fef8f7; /* Bone White base */
+            color: #1d1b1b;
+            -webkit-font-smoothing: antialiased;
+        }
+        .heat-gradient {
+            background: linear-gradient(135deg, #af101a 0%, #fd7613 100%);
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 12px rgba(33, 33, 33, 0.08);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface border-b border-outline-variant/10">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<button class="transition-all duration-200 active:scale-95 p-2 rounded-full hover:bg-primary-container/5">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tight text-primary">Ignite &amp; Spice</h1>
+</div>
+<button class="transition-all duration-200 active:scale-95 p-2 rounded-full hover:bg-primary-container/5 relative">
+<span class="material-symbols-outlined text-primary">shopping_bag</span>
+<span class="absolute top-1 right-1 w-4 h-4 bg-secondary text-[10px] text-white flex items-center justify-center rounded-full font-bold">2</span>
+</button>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="px-margin-mobile pt-8 pb-4 max-w-container-max mx-auto">
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-2">Feel the Heat</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Hand-picked spices, fire-grilled to perfection.</p>
+</section>
+<!-- Category Tabs -->
+<div class="px-margin-mobile mb-6 max-w-container-max mx-auto">
+<div class="flex gap-3 overflow-x-auto scrollbar-hide py-2">
+<button class="heat-gradient text-white px-5 py-2 rounded-full font-label-bold text-label-bold flex-shrink-0 transition-all active:scale-95">Hot Wings</button>
+<button class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant px-5 py-2 rounded-full font-label-bold text-label-bold flex-shrink-0 transition-all hover:border-primary active:scale-95">Spicy Noodles</button>
+<button class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant px-5 py-2 rounded-full font-label-bold text-label-bold flex-shrink-0 transition-all hover:border-primary active:scale-95">Fire Grills</button>
+<button class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant px-5 py-2 rounded-full font-label-bold text-label-bold flex-shrink-0 transition-all hover:border-primary active:scale-95">Coolers</button>
+</div>
+</div>
+<!-- Menu Grid -->
+<main class="px-margin-mobile max-w-container-max mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- Item 1 -->
+<div class="bg-white rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300">
+<div class="relative h-40 w-full overflow-hidden">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">Insane</span>
+</div>
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close up professional food photography of Ghost Pepper Wings, glistening with a vibrant red spicy glaze and flecks of dried chili, served in a minimalist white bowl. The lighting is dramatic and warm, highlighting the texture of the crispy skin. The background is a clean, neutral kitchen setting, focusing entirely on the fiery intensity of the dish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNDqX9OTZjIKw9XtuobycGwy44DXU8inf1lZr9aYa4B_ODMjqzAmFar6ocJ9GDt6TQNxniOhdeQ8btT-pq9DhHxpy1Sy6-nxMIiTS9Ie9lT-7__O_AyU-7-MVHt1QPhguOhX1Rmz_duGCfIiGy46d-NDJCFVkjtNzCzsPWtuorVZd2FSt26IQUqloNw94QEIEyRIitYyGkxMIjbS0guIiUGxKtTsQjbpCMBvzGv7YUv6anAuwyfuHsg"/>
+</div>
+<div class="p-4 flex-grow flex flex-col">
+<h3 class="font-headline-md text-[18px] text-on-surface mb-1">Ghost Pepper Wings</h3>
+<p class="font-label-bold text-primary mb-3">$12.00</p>
+<div class="mt-auto">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-2">Heat Level</p>
+<div class="flex gap-1 mb-4">
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 1)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 2)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-primary bg-primary text-white flex items-center justify-center" onclick="selectHeat(this, 3)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+</div>
+<button class="w-full py-2 bg-on-surface text-white rounded-lg font-label-bold text-label-bold transition-all active:scale-95 hover:bg-primary">ADD TO BAG</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-white rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300">
+<div class="relative h-40 w-full overflow-hidden">
+<div class="absolute top-2 left-2 z-10">
+<span class="bg-secondary text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">Hot</span>
+</div>
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Artistic overhead shot of a Volcano Ramen bowl with a deep red spicy broth, topped with perfectly soft-boiled eggs, green onions, and charred pork slices. Steam rises gently from the bowl, suggesting heat. The presentation is clean and professional on a dark stone surface, creating a high-contrast visual that emphasizes the rich, fiery colors of the ramen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHIM1h0Fyjcuj_RL0T_HkFyOfvQGO00nauCr_gIlmVBn0DFk4zU7JR5DSH8y1bfBYunDt7TlqZSxnR3WiTnM-8yJ7NyXns7YkzRSSOT3pggUFWa4RD5xtvu12Kr5kJ-uAkCUy9SD779Db9CQY5Wjou_X_wLIMLq2XwCdpOvhXkk3F6kfptzPJ909T_U5Ms4cRn0jI6d_tY5oo0YBSmZQHWr5bAKKVcdmRIIgo2s2NC5zA6SMckJ4ooLA"/>
+</div>
+<div class="p-4 flex-grow flex flex-col">
+<h3 class="font-headline-md text-[18px] text-on-surface mb-1">Volcano Ramen</h3>
+<p class="font-label-bold text-primary mb-3">$14.50</p>
+<div class="mt-auto">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-2">Heat Level</p>
+<div class="flex gap-1 mb-4">
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 1)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-secondary bg-secondary text-white flex items-center justify-center" onclick="selectHeat(this, 2)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 3)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+</div>
+<button class="w-full py-2 bg-on-surface text-white rounded-lg font-label-bold text-label-bold transition-all active:scale-95 hover:bg-primary">ADD TO BAG</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-white rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300">
+<div class="relative h-40 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Gourmet Fire-Charred Satay skewers arranged on a minimalist white rectangular plate. The chicken is perfectly charred with visible grill marks and glazed in a spicy orange-red peanut sauce. Garnished with fresh cilantro and thin chili slices. Bright, clean light-mode photography style with soft shadows, highlighting the culinary precision and high-intensity flavors of Ignite &amp; Spice." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcXy9Lga7sauEsCW0grb9OjrBIdb1P-xpjdUH1QbrJdbNcgIkekf9IJBfGXfM4qp2ZzK7M7n49upOHaHbMt4FDs6_GRnAjAN__BfLUFz1wELXPzogE1gNdO9UmfyTaPokylF9hP-w57IfVyNMxkEEEz0aKDgoSMCLlis1q7mUgqmCFhDqjUoofLmfS8XrxMwMmTE5_EF_Q5Vjugr4lCnL5i_VvKyr-Btwekqj5mDvZQd9wLlNK-fdZQw"/>
+</div>
+<div class="p-4 flex-grow flex flex-col">
+<h3 class="font-headline-md text-[18px] text-on-surface mb-1">Fire-Charred Satay</h3>
+<p class="font-label-bold text-primary mb-3">$9.00</p>
+<div class="mt-auto">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-2">Heat Level</p>
+<div class="flex gap-1 mb-4">
+<button class="w-6 h-6 rounded-full border border-secondary-container bg-secondary-container text-white flex items-center justify-center" onclick="selectHeat(this, 1)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 2)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 3)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+</div>
+<button class="w-full py-2 bg-on-surface text-white rounded-lg font-label-bold text-label-bold transition-all active:scale-95 hover:bg-primary">ADD TO BAG</button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="bg-white rounded-xl border border-outline-variant/10 overflow-hidden flex flex-col group hover:shadow-lg transition-all duration-300">
+<div class="relative h-40 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A tall, gourmet Blazing Burger with melted pepper jack cheese, jalapeños, and a signature red spicy aioli dripping down the side of a toasted brioche bun. Professional studio lighting emphasizes the juicy texture of the meat and the vibrant red accents of the sauce. Set against a minimalist bone-white background, capturing the bold and premium essence of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoPyrWiiXC__ZUtsXn0CdoPNF8LnrexQNFn4CjYhrfsOQJKWNSm5zlJ6_UN6A9JSRb0qwIoe2rbj8LPXC2_aa-oGD0HnoiSYgiY-2NmwUscu-FNXywT9cKeo7rbQmdyh7MaSzI9XXcZfh5j9dQzN4zCB1W19NIhORnCUXbfeDnzsFQ4CTl5vZwiRqXekHAtK9EUOadDFU4Nj-_UETAGwLo6RKFsgWMQLkv_ChZwxtLEn2YRIAMbdVgcA"/>
+</div>
+<div class="p-4 flex-grow flex flex-col">
+<h3 class="font-headline-md text-[18px] text-on-surface mb-1">Blazing Burger</h3>
+<p class="font-label-bold text-primary mb-3">$13.00</p>
+<div class="mt-auto">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-2">Heat Level</p>
+<div class="flex gap-1 mb-4">
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 1)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-secondary bg-secondary text-white flex items-center justify-center" onclick="selectHeat(this, 2)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+<button class="w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10" onclick="selectHeat(this, 3)"><span class="material-symbols-outlined text-sm">local_fire_department</span></button>
+</div>
+<button class="w-full py-2 bg-on-surface text-white rounded-lg font-label-bold text-label-bold transition-all active:scale-95 hover:bg-primary">ADD TO BAG</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest border-t border-outline-variant/10 shadow-md">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-bold text-[10px]">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90 hover:text-primary" href="#">
+<span class="material-symbols-outlined">local_fire_department</span>
+<span class="font-label-bold text-[10px]">Hot Deals</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90 hover:text-primary relative" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-bold text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90 hover:text-primary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-bold text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        function selectHeat(el, level) {
+            const parent = el.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            
+            buttons.forEach((btn, index) => {
+                const icon = btn.querySelector('span');
+                if (index + 1 === level) {
+                    btn.className = 'w-6 h-6 rounded-full border flex items-center justify-center transition-all';
+                    // Apply brand colors based on level
+                    if (level === 1) btn.classList.add('border-secondary-container', 'bg-secondary-container', 'text-white');
+                    if (level === 2) btn.classList.add('border-secondary', 'bg-secondary', 'text-white');
+                    if (level === 3) btn.classList.add('border-primary', 'bg-primary', 'text-white');
+                } else {
+                    btn.className = 'w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center transition-all hover:bg-secondary/10 text-on-surface-variant';
+                }
+            });
+
+            // Micro-interaction
+            el.style.transform = 'scale(0.8)';
+            setTimeout(() => el.style.transform = 'scale(1)', 100);
+        }
+    </script>
+</body></html>

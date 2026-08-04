@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Oat &amp; Matcha | Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#476344",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#f7fff1",
+                    "on-surface": "#201b15",
+                    "surface-variant": "#ebe1d6",
+                    "secondary-fixed": "#ffdad4",
+                    "surface-tint": "#496546",
+                    "surface-container-highest": "#ebe1d6",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-bright": "#fff8f3",
+                    "tertiary-fixed-dim": "#c9c6bf",
+                    "secondary": "#745853",
+                    "on-background": "#201b15",
+                    "surface-container-high": "#f1e6dc",
+                    "on-secondary-fixed-variant": "#5b403c",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#352f29",
+                    "on-error": "#ffffff",
+                    "outline": "#737970",
+                    "inverse-primary": "#afcfa9",
+                    "tertiary": "#5d5c56",
+                    "primary-fixed-dim": "#afcfa9",
+                    "primary-fixed": "#cbebc3",
+                    "background": "#fff8f3",
+                    "on-secondary-fixed": "#2b1613",
+                    "on-primary-fixed-variant": "#324d30",
+                    "inverse-on-surface": "#faefe4",
+                    "on-surface-variant": "#434840",
+                    "surface": "#fff8f3",
+                    "surface-dim": "#e3d8ce",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f7ece1",
+                    "secondary-fixed-dim": "#e3beb8",
+                    "tertiary-fixed": "#e6e2da",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#484741",
+                    "outline-variant": "#c3c8be",
+                    "on-secondary-container": "#795c57",
+                    "primary-container": "#5f7c5b",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#fed7d0",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#76746e",
+                    "surface-container-low": "#fdf2e7",
+                    "on-primary-fixed": "#062108",
+                    "on-tertiary-fixed": "#1c1c17",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "max-width": "1200px",
+                    "xl": "48px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f3;
+            color: #201b15;
+            -webkit-font-smoothing: antialiased;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scandi-card-shadow {
+            box-shadow: 0 4px 32px rgba(116, 88, 83, 0.05);
+        }
+        .active-pill {
+            position: relative;
+        }
+        .active-pill::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #476344;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top AppBar Navigation Shell -->
+<header class="w-full top-0 z-40 bg-surface/80 backdrop-blur-md sticky">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-md max-w-max-width mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[32px]">coffee_maker</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Oat &amp; Matcha</h1>
+</div>
+<!-- Store Status Pill -->
+<div class="flex items-center gap-xs bg-primary-container/20 px-3 py-1 rounded-full border border-primary/10">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Open</span>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex items-center gap-xl">
+<a class="text-primary font-label-md text-label-md hover:opacity-80 transition-opacity" href="#">Menu</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:opacity-80 transition-opacity" href="#">Orders</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:opacity-80 transition-opacity" href="#">Profile</a>
+</nav>
+<button class="material-symbols-outlined text-on-surface-variant md:hidden active:scale-95 transition-transform">shopping_bag</button>
+</div>
+</header>
+<main class="max-w-max-width mx-auto pb-32">
+<!-- Hero Section -->
+<section class="px-margin-mobile md:px-margin-desktop py-lg">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Morning Rituals</h2>
+<p class="text-on-surface-variant font-body-md text-body-md max-w-lg">Sustainably sourced beans, handcrafted with precision and organic oat milk.</p>
+</section>
+<!-- Category Slider -->
+<section class="mb-lg sticky top-[72px] z-30 bg-surface/80 backdrop-blur-sm py-4">
+<div class="flex items-center gap-md px-margin-mobile md:px-margin-desktop overflow-x-auto hide-scrollbar">
+<button class="whitespace-nowrap px-6 py-2 bg-primary text-on-primary rounded-full font-label-md text-label-md active:scale-95 transition-all shadow-sm">Seasonal</button>
+<button class="whitespace-nowrap px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-surface-variant/50 transition-all">Espresso</button>
+<button class="whitespace-nowrap px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-surface-variant/50 transition-all">Tea &amp; Latte</button>
+<button class="whitespace-nowrap px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-surface-variant/50 transition-all">Pastries</button>
+<button class="whitespace-nowrap px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-surface-variant/50 transition-all">Bottled</button>
+</div>
+</section>
+<!-- Menu Grid -->
+<section class="px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Iced Pistachio Latte -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A minimalist overhead photograph of an iced pistachio latte in a ribbed glass on a creamy light wood table. The latte has beautiful green pistachio cream swirling into espresso and oat milk, topped with crushed nuts. Soft natural morning light creates a peaceful Scandi-cafe aesthetic with warm earthy tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPyERSeNv7atqVdMFvhReaJhu75kikA1W5RqLk7JPh9xL4geppSenIgs9q9_w829u4jMAcZvvrz6RzJ1jL0P_YW6C5em3UOEenZt672_YnC3UZKQMA_cXdrW-3lq2LulYsVX8Jy-nY5IA936wYe9MNmFDFCfbZWdzviCTJWD-VnSpTzp7byqppTTxsJTpRtdwBeJ_3PC3x4ffbyTLE70P7ErNF7WZW8LSZEqwLk94LEeGO6Wyb_r25gA')">
+</div>
+<div class="absolute top-3 left-3 bg-primary/90 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="text-[10px] text-white font-bold uppercase tracking-widest">Seasonal</span>
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Pistachio Cloud Latte</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Double espresso with house-made pistachio cream.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$6.50</span>
+</div>
+<button class="mt-md w-full py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Card 2: Matcha Ceremonial -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A top-down view of a ceremonial grade matcha latte in a handcrafted ceramic bowl. The vibrant green matcha foam features a delicate leaf latte art. The setting is a clean minimalist workspace with a linen napkin and a small wooden tray. Bright, high-key lighting emphasizes the organic textures and the calm Scandi-Japanese fusion vibe." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYApdwvU1YL6tIwbaQJYCrHaAeDwdrZITYm7WFQYNjVbepLPLcX5UOjCR2o9YEVQ3mguG7OLadkQadMjWkdVZt1ga1n-lA9OEvGYm8SoGFDHuKeT-IVjEvlHC8nds8Nrf2NTC7dZUsUxf4gAKHVhQGuOtzbzxyQ_MM4i72fci-ArZZq_MWArZwMUW1szIL83iQW4hxgVy3-F3rEjaB5kCMtJ9eSU-2KnnI5tEyNqsrKC_VmtBzqoCtNA')">
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Stone-Ground Matcha</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Organic ceremonial grade matcha whisked with oat milk.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$5.75</span>
+</div>
+<button class="mt-md w-full py-3 bg-surface-container-high text-primary border border-primary/20 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-primary/5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Card 3: Flat White -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A close-up shot of a perfect flat white in a signature matte brown ceramic cup. The latte art is a detailed rosetta. Steam rises gently in a soft-focus background of a modern Scandi cafe with white walls and warm lighting. The image captures the rich texture of the microfoam and the deep crema of the espresso." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBXS3dQqGnZISjuQAP1KbY878rLIvsFUrj_WHjKoqWHgekSEJGOaHz3SiYurqUfo04Ifd2oo2ywwjN18HlRiwOQ7mFLSMFq0qRC7Njl4ycKFKOEIuXUEMLmjz4d2novLDUtxgFdlvuY4OZOQhpj5ZMKjMVxhfndkkq97hFQhVIiqGVsMsntvVqmwuAXwx2pskMaUbKXKq0GEd4Kdf_-QLQSN5axhsWrT9DgDeGODw0iC_ODlsGhIgiyFQ')">
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Oat Flat White</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Smooth micro-foam poured over a rich double ristretto.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$4.50</span>
+</div>
+<button class="mt-md w-full py-3 bg-surface-container-high text-primary border border-primary/20 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-primary/5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Card 4: Almond Croissant -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A golden-brown flaky almond croissant sitting on a white ceramic plate. Dusting of powdered sugar and toasted almond slivers on top. The background is a minimalist cafe setting with soft morning light filtering through a large window. High-end food photography style focusing on the crisp pastry layers and appetizing texture." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCr1lR5LIt0vowVgr6ei1Q6_t0Y3TeUX1a1N1DcGrLZVQh0K5GAC04hrOirgO8L9agbfFUvdCmFyK1fWRhHvPnzPsdgGnXbZiL8rKxABmxewXRU2HKStMzaVPZFCHjj00_HRHRDa-oEmpVW8E92kiCD_PcrkMVi9FbDvbawLiQYYQtY5F4WWAhs8nRdMY0BOUMtfRKJRT9HAEPdh3JKcDFV6rtJN0QDE2bbRYJznawlU1zYngFYzB-SLg')">
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Almond Croissant</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Twice-baked butter pastry with frangipane filling.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$5.25</span>
+</div>
+<button class="mt-md w-full py-3 bg-surface-container-high text-primary border border-primary/20 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-primary/5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Card 5: Lavender Earl Grey -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A delicate lavender-infused Earl Grey tea served in a clear glass mug. Tiny dried lavender buds float on the surface. The background features a blurred Scandinavian home interior with soft textiles and neutral tones. The lighting is ethereal and soft, emphasizing the floral and calming nature of the tea." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDp_WnZDwblg3VhbGCzbgYG85PdMHK7YrZF_vFL8enEb4An9PbpBfiI9PbqJqq-OqGqsLzBL4cJALr3crS1s_CsvDo1admA4L7fbk8lgzkZiX2iAKRd2PUmHNReSxFSSYPpi-2WQcaO230YlurX_SKWtB36DTW_a08pwFOPaWABIWuWR-h2u57-ZwcsxjK8by5myAW0xW524Eqo7KH0Sx2to02CI0_98vFYfpvJS_xGhP8zTb06HC-_JA')">
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Lavender Earl Grey</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Fragrant black tea infused with bergamot and lavender.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$4.00</span>
+</div>
+<button class="mt-md w-full py-3 bg-surface-container-high text-primary border border-primary/20 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-primary/5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+<!-- Card 6: Cold Brew Float -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden scandi-card-shadow border border-surface-variant/30 group hover:translate-y-[-4px] transition-all duration-300">
+<div class="aspect-[4/3] w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A tall glass of 24-hour cold brew coffee with a generous scoop of vanilla bean gelato melting into the dark coffee. Droplets of condensation on the glass. Set against a clean white brick wall background in a bright, airy coffee house. Professional product photography with a focus on high contrast between the coffee and ice cream." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD408LuNVDGGeBuPr9K4ar3qafHrjbHxEHTI6vgX_52QE0XxDJR3Rat0yK_JIbTWGsvvMHsOknWZQiWqe2obku21Y-IbWWIquR2SKnFHlvSQxD2rYbJAFxiCp7gioBETOaqXs72A2QH_4gGU_uOgEAF40OMlfIhfzsNGLOff4tslcbFWXOaxjHUWphp2TjgONp0jbLhduCyXUrIYGoh5JLhr1OXN_jeat2GDfCmfM5BR9aVWScuCHRoiw')">
+</div>
+<div class="absolute top-3 left-3 bg-secondary/90 backdrop-blur-md px-3 py-1 rounded-full">
+<span class="text-[10px] text-white font-bold uppercase tracking-widest">Limited</span>
+</div>
+</div>
+<div class="p-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Cold Brew Float</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">24hr steep cold brew with a scoop of vanilla gelato.</p>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$7.25</span>
+</div>
+<button class="mt-md w-full py-3 bg-surface-container-high text-primary border border-primary/20 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-primary/5">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add to Order
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-low/95 backdrop-blur-lg flex justify-around items-center py-sm px-lg shadow-[0_-4px_32px_rgba(116,88,83,0.05)] rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-sm text-label-sm mt-1">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        // Category pill selection logic
+        const categoryButtons = document.querySelectorAll('section button.whitespace-nowrap');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary');
+                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary', 'text-on-primary');
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+            });
+        });
+
+        // Simple "Add to Cart" notification simulation
+        const addButtons = document.querySelectorAll('button:has(.material-symbols-outlined)');
+        addButtons.forEach(btn => {
+            if(btn.innerText.includes('Add')) {
+                btn.addEventListener('click', () => {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Added';
+                    btn.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body></html>

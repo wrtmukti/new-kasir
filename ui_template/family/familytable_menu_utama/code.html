@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FamilyTable - Menu Rumah</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#ccebc7",
+                "on-background": "#211a16",
+                "on-primary-fixed": "#380d00",
+                "secondary": "#4a6549",
+                "surface-variant": "#ede0d9",
+                "surface-container-highest": "#ede0d9",
+                "on-error": "#ffffff",
+                "on-primary-container": "#752501",
+                "secondary-fixed-dim": "#b0cfad",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#56423c",
+                "on-primary-fixed-variant": "#7e2b07",
+                "primary-fixed": "#ffdbcf",
+                "on-tertiary-container": "#424037",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed-variant": "#334d33",
+                "inverse-surface": "#362f2b",
+                "on-primary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-error-container": "#93000a",
+                "tertiary-fixed": "#e8e2d6",
+                "surface-tint": "#9e421d",
+                "surface-container": "#f9ebe4",
+                "inverse-primary": "#ffb59b",
+                "primary-container": "#ff8c61",
+                "surface-bright": "#fff8f5",
+                "outline-variant": "#ddc1b7",
+                "outline": "#89726a",
+                "secondary-fixed": "#ccebc7",
+                "inverse-on-surface": "#fceee7",
+                "on-secondary-fixed": "#07200b",
+                "tertiary-fixed-dim": "#cbc6bb",
+                "primary-fixed-dim": "#ffb59b",
+                "error": "#ba1a1a",
+                "background": "#fff8f5",
+                "tertiary-container": "#b0aba0",
+                "primary": "#9e421d",
+                "on-secondary-container": "#506b4f",
+                "surface-dim": "#e5d7d1",
+                "on-tertiary-fixed": "#1d1c15",
+                "surface": "#fff8f5",
+                "tertiary": "#615e55",
+                "on-tertiary-fixed-variant": "#49473e",
+                "surface-container-low": "#fff1ea",
+                "surface-container-high": "#f3e5df",
+                "on-surface": "#211a16"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "section-gap": "64px",
+                "container-margin": "24px",
+                "gutter": "16px",
+                "unit": "8px",
+                "touch-target-min": "48px"
+            },
+            "fontFamily": {
+                "title-lg": ["Quicksand"],
+                "headline-md": ["Quicksand"],
+                "body-lg": ["Be Vietnam Pro"],
+                "display-lg-mobile": ["Quicksand"],
+                "body-md": ["Be Vietnam Pro"],
+                "display-lg": ["Quicksand"],
+                "label-md": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pill-shadow {
+            box-shadow: 0px 4px 16px rgba(92, 83, 78, 0.08);
+        }
+        .active-scale:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface pb-32">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-surface shadow-[0px_4px_16px_rgba(92,83,78,0.08)] px-container-margin py-unit h-touch-target-min flex justify-between items-center w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="text-headline-md-mobile font-headline-md text-primary">FamilyTable</span>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-variant/50 transition-colors duration-200 active-scale">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="max-w-4xl mx-auto px-container-margin pt-6">
+<!-- Welcome Section -->
+<section class="mb-8">
+<div class="flex justify-between items-end mb-4">
+<div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-background mb-1">Selamat Datang, Keluarga!</h1>
+<p class="font-body-md text-on-surface-variant">Waktunya makan enak bersama keluarga tercinta.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-full flex items-center gap-2 mb-2 active-scale cursor-default">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-md text-label-md">Toko Buka</span>
+</div>
+</div>
+</section>
+<!-- Kids Favorites (Grid 2x2) -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-md text-headline-md-mobile text-on-background">Favorit Anak-Anak</h2>
+<a class="font-label-md text-primary hover:underline" href="#">Lihat Semua</a>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Mac & Cheese -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden pill-shadow group cursor-pointer hover:translate-y-[-4px] transition-all duration-300">
+<div class="h-32 w-full bg-surface-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A warm, comforting bowl of creamy golden Macaroni and Cheese served in a ceramic kid-friendly bowl. The lighting is soft and sunny, emphasizing the smooth cheese texture. Set on a rustic wooden table with a bright, cheerful FamilyTable aesthetic using soft cream and orange tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLTEa13Q_3uNEXfxaadpX4B2NGGdSCK36HpZPX7Ra6gm-DSgUTAxeqrX6eJHBQIzbZqEVVej0sxhNfSLxfmw5h7-U4aDa-f1B5gxKXS_0bMAFnrZ3tjF3hBgqGnVt6QVgG5fRHbsJCLnqLiIc9V0I3Oh5oIdm4DnM8tvPKNdORx5ulIHl_6zOKQvfyWYul5kmyo6WhGigYHE5XpXRAwaH2mwk3RYa_czs-mLEr_It5eMjPmjPiK8yBUQ"/>
+</div>
+<div class="p-4">
+<h3 class="font-title-lg text-title-lg text-on-surface truncate">Mac &amp; Cheese</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-3">Sangat lembut &amp; keju melimpah.</p>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-primary">Rp 35rb</span>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active-scale transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Mini Sliders -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden pill-shadow group cursor-pointer hover:translate-y-[-4px] transition-all duration-300">
+<div class="h-32 w-full bg-surface-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Three cute mini beef sliders on tiny brioche buns, held together by colorful picks. Fresh lettuce and melted cheese peeking out. The image is bright and airy with a minimalist food photography style, featuring warm earthy backgrounds consistent with a friendly family restaurant vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvPk0wimJvuytlnPYakfLeLc7BA5S3tn3MN95o_rX90H-jH1QY-BW_UGgeoMkghJoqmqnPXBb9HXBh0j1BXXmPdYDIvJS-8XViU6JiLB2_jci59kDLP6zLioerIIoMVvhITOfJYGtQiPJchMH_n9kYzNkReJ3nQ3e4Ym1CZGL5tqVx2XRO9sHRHZwQi7UhZbFWezzAW9TJhwlAqQOQFFtTxc4cqaYULEIjXdgy1y2OHvZp-SL4ENqvyg"/>
+</div>
+<div class="p-4">
+<h3 class="font-title-lg text-title-lg text-on-surface truncate">Mini Sliders</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-3">3 burger kecil porsi si kecil.</p>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-primary">Rp 42rb</span>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active-scale transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Family Platters (Large Cards) -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-md text-headline-md-mobile text-on-background">Paket Besar Keluarga</h2>
+<a class="font-label-md text-primary hover:underline" href="#">Lihat Semua</a>
+</div>
+<div class="space-y-gutter">
+<!-- The Sunday Roast -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden pill-shadow group cursor-pointer hover:translate-y-[-2px] transition-all duration-300">
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="h-48 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A grand FamilyTable platter featuring a perfectly roasted whole chicken surrounded by golden potatoes and roasted carrots. The scene is lit with warm, domestic lighting as if sitting on a family dining table. The colors are rich and saturated with sunset oranges and deep browns, feeling extremely inviting and wholesome." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9qDx213326CxnfhAlNTGxJxiSo1dedrT6CIy1jns1DpPq12b87u2mfuejQsoPZT0MZanY_sSzlrNCL0fk5t-BDUCVj2hAX5IzKY_HPXQLuE1W1CTRyvrRSQ2jSwiSLI6BhxSWTTAKhmR2GrUYoifuDZo_DdUwtiqYhKIYc-AlsHBfjwKLoHca_YIRmBwx3m83PMpIQL-Azw7lxiGhALooXfQy9dkz6bnI18pbjY835VadzVka67TDsA"/>
+</div>
+<div class="p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md-mobile text-on-background">The Sunday Roast</h3>
+<span class="bg-secondary-container text-on-secondary-container text-[12px] px-2 py-0.5 rounded-full font-label-md">Untuk 4-5 Orang</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-6">Ayam panggang utuh dengan kentang krispi, sayuran musiman, dan saus spesial buatan rumah.</p>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<span class="block text-xs text-on-surface-variant font-label-md">Mulai dari</span>
+<span class="text-2xl font-bold text-primary">Rp 185.000</span>
+</div>
+<button class="h-14 px-8 rounded-full bg-primary text-white font-label-md flex items-center gap-2 shadow-lg active-scale transition-all hover:bg-primary/90">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+                                    Tambah Pesanan
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Indonesian Rijsttafel -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden pill-shadow group cursor-pointer hover:translate-y-[-2px] transition-all duration-300">
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="h-48 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An Indonesian traditional family platter called Nasi Tumpeng, featuring a cone of yellow rice surrounded by various side dishes like satay, fried chicken, and sambal. Bright daylight photography, clean minimalist presentation with Indonesian cultural touches. The color palette is vibrant with Sage greens and sunset oranges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxJbYUUH7LxCHgt9DOTrEVIySHyVLyg0trSPHkSogOcqPdt21Duvz8MNfPyo2K4hw2K6_lJXWCproMZhW8llYKXfxMKjSy3PcIoqaPrnYN3eokTR2zg-KzXNDznVWtvrNqxwZs7_zQVWksnMBsuy0LFj0rVzaig8gRxg4wF8nI7ci1WMHhgZ2guwdqz5kwEzKxltc-5-Ex6RDw-P39hL-iab02VVFrAk2Ip2Dgg4zoTDwbCijr6YLCuQ"/>
+</div>
+<div class="p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md-mobile text-on-background">Nasi Campur Nusantara</h3>
+<span class="bg-secondary-container text-on-secondary-container text-[12px] px-2 py-0.5 rounded-full font-label-md">Favorit Lokal</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-6">Perjamuan nasi kuning lengkap dengan sate ayam, rendang daging, tempe orek, dan sambal terasi.</p>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<span class="block text-xs text-on-surface-variant font-label-md">Mulai dari</span>
+<span class="text-2xl font-bold text-primary">Rp 150.000</span>
+</div>
+<button class="h-14 px-8 rounded-full bg-primary text-white font-label-md flex items-center gap-2 shadow-lg active-scale transition-all hover:bg-primary/90">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+                                    Tambah Pesanan
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 shadow-[0px_-4px_24px_rgba(92,83,78,0.08)] bg-surface-container-low rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 scale-110 transition-transform duration-200 ease-out">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-md text-label-md">Menu</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300 active-scale">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-label-md text-label-md">My Table</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300 active-scale">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300 active-scale">
+<span class="material-symbols-outlined" data-icon="redeem">redeem</span>
+<span class="font-label-md text-label-md">Rewards</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Subtle feedback logic could go here
+            });
+        });
+
+        // Interactive "Add" buttons animation
+        const addButtons = document.querySelectorAll('.bg-primary-container');
+        addButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const originalIcon = button.innerHTML;
+                button.innerHTML = '<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>';
+                button.classList.replace('bg-primary-container', 'bg-secondary-container');
+                setTimeout(() => {
+                    button.innerHTML = originalIcon;
+                    button.classList.replace('bg-secondary-container', 'bg-primary-container');
+                }, 1500);
+            });
+        });
+    </script>
+</body></html>

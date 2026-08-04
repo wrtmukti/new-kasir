@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Spot - Midnight Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#0c1324",
+                    "on-tertiary-fixed": "#100563",
+                    "surface-container-lowest": "#070d1f",
+                    "surface-tint": "#d2bbff",
+                    "on-secondary": "#00344d",
+                    "on-surface": "#dce1fb",
+                    "on-primary-container": "#ede0ff",
+                    "primary-fixed": "#eaddff",
+                    "background": "#0c1324",
+                    "on-surface-variant": "#ccc3d8",
+                    "surface-container": "#191f31",
+                    "secondary-fixed-dim": "#89ceff",
+                    "error-container": "#93000a",
+                    "surface-dim": "#0c1324",
+                    "on-secondary-container": "#00344e",
+                    "tertiary-fixed-dim": "#c3c0ff",
+                    "on-secondary-fixed": "#001e2f",
+                    "tertiary-container": "#5f5db1",
+                    "on-tertiary": "#272377",
+                    "surface-bright": "#33394c",
+                    "primary-container": "#7c3aed",
+                    "surface-container-low": "#151b2d",
+                    "on-primary": "#3f008e",
+                    "outline-variant": "#4a4455",
+                    "on-primary-fixed": "#25005a",
+                    "on-background": "#dce1fb",
+                    "secondary": "#89ceff",
+                    "tertiary-fixed": "#e2dfff",
+                    "on-error": "#690005",
+                    "primary-fixed-dim": "#d2bbff",
+                    "secondary-container": "#00a2e6",
+                    "inverse-primary": "#732ee4",
+                    "surface-container-high": "#23293c",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "inverse-surface": "#dce1fb",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "error": "#ffb4ab",
+                    "primary": "#d2bbff",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#3e3c8f",
+                    "inverse-on-surface": "#2a3043",
+                    "outline": "#958da1",
+                    "on-tertiary-container": "#e6e3ff",
+                    "surface-variant": "#2e3447",
+                    "surface-container-highest": "#2e3447",
+                    "secondary-fixed": "#c9e6ff",
+                    "tertiary": "#c3c0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "xl": "40px",
+                    "xs": "4px",
+                    "gutter": "16px",
+                    "container-margin": "20px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Sora"],
+                    "headline-md": ["Sora"],
+                    "headline-lg-mobile": ["Sora"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Sora"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #020617; /* Deep Obsidian as per Level 0 */
+            color: #dce1fb;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-card {
+            background: rgba(49, 46, 129, 0.4); /* Level 1: Semi-transparent Indigo */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(210, 187, 255, 0.4);
+            box-shadow: 0 0 20px rgba(210, 187, 255, 0.1);
+        }
+
+        .cyan-pulse {
+            border: 1px solid #89ceff;
+            box-shadow: 0 0 8px rgba(137, 206, 255, 0.3);
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0px rgba(137, 206, 255, 0.4); }
+            50% { box-shadow: 0 0 12px rgba(137, 206, 255, 0.6); }
+            100% { box-shadow: 0 0 0px rgba(137, 206, 255, 0.4); }
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #4ade80;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- Header / TopAppBar -->
+<header class="fixed top-0 w-full bg-surface/40 dark:bg-surface/40 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-container-margin h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">location_on</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Social Spot</h1>
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylish portrait of a trendy young adult in a moody urban lounge setting. The subject is wearing modern techwear and looking confidently toward the camera. The lighting features deep violet and electric blue highlights reflecting off glass surfaces, creating a high-contrast neon aesthetic consistent with a late-night social club atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs15Ic548h_9N36J7wfVgYQdnFNoX1BLnX1myoa7bZ97Czegxybeqfo7kSxcD8mFSeoS-rAG2tBgICMgooyJ8PYtrVx6b_C6VzPRgp9aAc7vK_3ZzlWsMZj3nAMTG-lOI0T-9-Pcvf1KgFcRp9vDJfRrerECD5YN6t06y6aCltMs50OHI6AO1I3M03O5u7w6pYSSD-CC4MS3L0Az2qNwabE2-f-Tz8gm0kIdQxn7ppFuluSnFDWtgkVA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="mt-20 px-container-margin">
+<!-- Title & Status Section -->
+<div class="mb-lg">
+<div class="flex items-baseline justify-between mb-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">Midnight Menu</h2>
+<div class="flex items-center bg-surface-container-low px-3 py-1 rounded-full border border-white/5">
+<span class="status-dot"></span>
+<span class="font-label-sm text-label-sm text-green-400">Open Now</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Chill vibes and neon nights start here.</p>
+</div>
+<!-- Category Horizontal Scroll -->
+<div class="flex gap-sm overflow-x-auto no-scrollbar mb-lg -mx-container-margin px-container-margin">
+<button class="flex-shrink-0 px-5 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-[0_0_12px_rgba(210,187,255,0.3)]">All</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full font-label-md text-label-md bg-surface-container border border-white/10 text-on-surface-variant hover:border-primary/50 transition-colors">Coffee</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full font-label-md text-label-md bg-surface-container border border-white/10 text-on-surface-variant hover:border-primary/50 transition-colors">Mocktails</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full font-label-md text-label-md bg-surface-container border border-white/10 text-on-surface-variant hover:border-primary/50 transition-colors">Snacks</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full font-label-md text-label-md bg-surface-container border border-white/10 text-on-surface-variant hover:border-primary/50 transition-colors">Platters</button>
+</div>
+<!-- 2-Column Bento/Grid Menu -->
+<div class="grid grid-cols-2 gap-gutter mb-xl">
+<!-- Item 1: Iced Midnight Latte -->
+<div class="glass-card rounded-xl overflow-hidden flex flex-col">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A close-up shot of a gourmet iced latte being poured into a tall textured glass. The drink features beautiful dark espresso swirls mixing with creamy white milk over crystal clear ice cubes. The background is a moody, dark obsidian cafe bar with subtle purple neon light reflections on the counter surface. Minimalist and elegant composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB3GxwcANCZTEScpQ7s8USgzwCr5ftPrfi-x6bF7lLgodr1JZoJjWF_KiEOFvrkNhf3b8jmwbaaQsylV77Wzl3Qu_MYhvMs9HYJXXRwT0NPdFIv2d4rFfyQMSBiB-7SoIw8XmOzZmA51lZiInSdc5MgTu6oLh-FMs45bDZsWJnKLw7cBurM5Y5eKjy7NQUlRKUybIMYUuVawsr_UAdadKPFuCrnn0ruknRYcbRW5cUlbNjvdkOsTwEcA"/>
+<div class="absolute top-2 right-2 bg-secondary/20 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-secondary uppercase border border-secondary/30">Popular</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Iced Midnight Latte</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4 flex-grow">Espresso, activated charcoal, vanilla.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-primary font-bold">Rp 38k</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2: Electric Blue Fizz -->
+<div class="glass-card rounded-xl overflow-hidden flex flex-col">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A vibrant blue mocktail served in a coupe glass with a glowing citrus garnish. Bubbles of carbonation are visible, catching the ambient cyan and purple neon lights of a high-end lounge. The liquid is a glowing translucent sapphire blue against a deep black background. High contrast, cinematic food photography with atmospheric Connectivity vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSwtVlhLYGddlIrEigVcvCeYS2nbcJ8CMP356FiSpLKmQbHF64evrONZk8IlMiQbhpIEz8kQigHJQkzPQim9PMRhgT96M87ksyhx5-Se9velhojSCenPGv0MHMDmlgcUiVbvzODQeTXz8Dbi_6GfoIgAuAfF46qjobGEBCH_uQBCW8Ka6rkmmgB_hBsqCiSkq2wG4vhBdIQvkjrppmTxBorQKYRf0EhPvmo0l_0r5YPuF4ChfPXAn-_w"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Electric Blue Fizz</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4 flex-grow">Blue curacao, lemon, sparkling soda.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-primary font-bold">Rp 42k</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3: Truffle Fries -->
+<div class="glass-card rounded-xl overflow-hidden flex flex-col">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Golden crispy truffle fries served in a stylish matte black bowl. Sprinkles of parmesan cheese and fresh herbs are visible on top. The scene is set in a dark, atmospheric social spot with soft bokeh lights in the distance. The lighting is warm yet moody, accentuating the texture of the fries against the deep obsidian shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqvr7wbzutI6s4OP0ccFVEVf37lIEyMgiBPmxscJXVxf1yshb5Ar9VwGK42mCyFZzqZa8nAzPS_7pdAn49ImsY21EPAX4bkwGLEWxv_fDX6m7boCGxOO8HA0Mh0aI6kK8NXQm9U7vrUJjzsK6B7K7RV7GlAExDuHUN21_XXPQggYu6j-KHYiNAMb_XezWDO_PmuAQujMjMm7pBvEOAOzA9_xw9mznlS7Crk0hSAxQyDp_YBgqKW5WYNg"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Truffle Fries</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4 flex-grow">White truffle oil, parmesan, parsley.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-primary font-bold">Rp 45k</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 4: Sharing Platter -->
+<div class="glass-card rounded-xl overflow-hidden flex flex-col">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A diverse sharing platter featuring wings, sliders, and nachos arranged artfully on a dark slate board. The food looks savory and inviting. The setting is an exclusive social lounge with purple atmospheric lighting and a blurred background of a trendy bar. Professional commercial photography with a late-night, premium social vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD6TuiS6WS0wrtOPpi7NMK9seofZ0nmM5GzEdxjzqnVXBUv8eewN7bia1WWB4dQUu8Cd2X9LtXPqUILsPsuhd5SuCEoaeMgtoxBPfOpdPGvUZ764C9vQ3HXAdphPM9HrtOTE905IUFmALw9gEZ0XW6s5OixX2-uNbwX4cgfreo2ehiXjgXUnbhtzBRda0RCI88nNPw8TSN3FJUeDD9FuD4iPayosZ87ebxabmSIZiZSpYUCL06rkdDIQ"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Sharing Platter</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4 flex-grow">Wings, sliders, and crispy nachos.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-primary font-bold">Rp 120k</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Banner: Live Music -->
+<section class="relative rounded-2xl overflow-hidden mb-lg cyan-pulse">
+<div class="h-40 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A dynamic shot of a live band performing on a small, intimate stage. A guitarist is in the foreground with beautiful blue and magenta stage lighting creating a lens flare effect. The room is filled with atmospheric haze and energy, representing an exclusive late-night social event. The style is cinematic, vibrant, and deeply moody." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnVYflKd0ufihyy0DnrLrJSJhCU8O9AHw4qht9FXxWl4S3Gvl37Fk_DSNOd2YFU0X5VY0O3WPDCCNXqhe8YgyYsf9-Q1Hg7-424ybCSvwYda2ieHPRfttB7wOW8KN7vFq6RJEwJ3f6HoMn43kkN0LYLxkngn3nlU2ot3kTxSqQ09P91wKkSbFrA7pxPH2159rv_f35cWLXwrLx1tPxBW28oSEZMQ_nBJ_oFjmOTC5Q8aPNMNaB2ePW3A"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface/90 to-transparent flex flex-col justify-center p-lg">
+<div class="inline-flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings: 'FILL' 1;">music_note</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Happening Now</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-white mb-1">Live Music Tonight</h3>
+<p class="font-body-md text-body-md text-white/80">Jazz &amp; Soul Session with The Midnights</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/40 dark:bg-surface/40 backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 py-2 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl p-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">layers</span>
+<span class="font-label-sm text-label-sm">My Spots</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">event_available</span>
+<span class="font-label-sm text-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', function() {
+                this.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', function() {
+                this.classList.remove('scale-95');
+            });
+        });
+        
+        // Category switching simulation
+        const categoryButtons = document.querySelectorAll('.flex-shrink-0');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary', 'shadow-[0_0_12px_rgba(210,187,255,0.3)]');
+                    b.classList.add('bg-surface-container', 'border', 'border-white/10', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary', 'text-on-primary', 'shadow-[0_0_12px_rgba(210,187,255,0.3)]');
+                btn.classList.remove('bg-surface-container', 'border', 'border-white/10', 'text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

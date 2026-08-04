@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#745853",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#f8ecea",
+                        "on-primary-container": "#2a1916",
+                        surface: "#fffbff",
+                        "surface-dim": "#e0d8d6",
+                        "surface-variant": "#f4e0dc",
+                        "on-surface": "#201a19",
+                        "on-surface-variant": "#534340",
+                        "surface-container-low": "#fef1ee",
+                        "surface-container-highest": "#f4e0dc",
+                        "outline": "#857370"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "display": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .order-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .order-card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(116, 88, 83, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-6 md:px-12 py-6 max-w-5xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="coffee_maker">coffee_maker</span>
+<h1 class="font-headline font-bold text-2xl tracking-tight text-primary">Oat &amp; Matcha</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform font-medium text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span>Back</span>
+</button>
+</div>
+</header>
+<main class="max-w-3xl mx-auto px-6 py-8">
+<div class="mb-10">
+<h2 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2">Review Your Order</h2>
+<p class="text-on-surface-variant font-medium">Items from Oat &amp; Matcha • Downtown Branch</p>
+</div>
+<!-- Order Items List -->
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="flex items-center gap-5 p-4 rounded-2xl bg-white order-card-hover border border-surface-variant/30">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional food photography shot of a tall iced oat milk latte with distinct layers of creamy oat milk and dark espresso, set on a minimalist wooden table in a sun-drenched modern cafe. The lighting is soft and natural, emphasizing the rich brown tones and the clean, high-end aesthetic of the brand. Minimalist background with hints of warm clay ceramics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW7HeO5SKne86Y2oy6RPI1zdOqBbrSuT5bhiXSRX4HDektAz9Z-WDYX3T8_ql65jot8Gs1KJY7HEFtqOrA3BbXtyTXmKB8aOZey90HVGEPXiGPNEOwHXq2-A5WYMwMNxg4vd_mDXdkTrZgQA2-k93hoemj-KnoR_ePXS9F4nJ723LUv4egihFzHDgj6N1Bp0ZXR27PfmP3XSnVDcZ6wYKlDRHrJ_u9Zma1RfK8tReff-ptQEtQLOdzNQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-bold text-lg text-on-surface">Iced Oat Latte</h3>
+<span class="font-bold text-primary">$6.50</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">Large, Extra Espresso Shot</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container-low rounded-full px-3 py-1 gap-4">
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="remove">remove</span>
+</button>
+<span class="font-bold text-sm">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-on-surface-variant/60 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-5 p-4 rounded-2xl bg-white order-card-hover border border-surface-variant/30">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A premium close-up of a vibrant green ceremonial grade matcha whisked to perfection with a light frothy top, served in a handmade ceramic bowl. The scene is bright and airy with a soft focus on a clean white linen background, reflecting a calm and sophisticated morning ritual. The color palette is dominated by lush greens and creamy whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsBLp99_jvAco5ojF976vCA3GsaNkqPOriB1d7e8zYmzfqvNs2suHH-6ECE4NQUhvkeFDaveE33BiJwkh1RL67-dqEQQhHmNj9GrKRyF7IjQlQF7NjPqrP6_aRyISrg52Enabl35kKghEy4EEfCE3Wb1pCK_rzmr_D34lBWlZSvi59k0zjqzzq9eOUwQxcOpRGHR0_UEHjunsADYm3_xINQvOdevfddRUGCKA2m2acySdaZBZVBATDQQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-bold text-lg text-on-surface">Ceremonial Matcha</h3>
+<span class="font-bold text-primary">$5.75</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">Hot, Oat Milk, Vanilla</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container-low rounded-full px-3 py-1 gap-4">
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="remove">remove</span>
+</button>
+<span class="font-bold text-sm">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-on-surface-variant/60 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-5 p-4 rounded-2xl bg-white order-card-hover border border-surface-variant/30">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A gourmet avocado toast with perfectly sliced ripe avocado, sprinkled with chili flakes and microgreens on a slice of toasted sourdough bread. The shot is overhead and modern, emphasizing texture and freshness. The background is a clean marble countertop with soft morning shadows, capturing a high-end brunch atmosphere with warm, earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3ldUX_dpAU-us36kZoUpgnIGAw0XmMXKy8X_gYF5Ejd9F3gwk8z77sIsA9h_kxrHhuK9S5gXEyekBEq8AdMiqM5gP_wsKmsHjl1sZ-Xz5W3nzjIg3IC6EASsFLylQrYifUUe0_sgsfvqGY__8JaY2p3cySwwzgF_4IXMo9CR-oNvZI0rWwEuhQWOLNdQviNzybDVrkQpQUyd1DmswaPLcVWeHovGMKr5I-1vlHZ7sobtftmOYGNMZrg"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-bold text-lg text-on-surface">Avocado Toast</h3>
+<span class="font-bold text-primary">$12.00</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">Sourdough, Chili Flakes</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container-low rounded-full px-3 py-1 gap-4">
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="remove">remove</span>
+</button>
+<span class="font-bold text-sm">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-on-surface-variant/60 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Section -->
+<div class="mt-12 p-8 rounded-3xl bg-surface-container-low space-y-4">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-medium">Subtotal</span>
+<span class="font-semibold">$24.25</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-medium">Delivery Fee</span>
+<span class="font-semibold">$2.50</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-medium">Tax</span>
+<span class="font-semibold">$1.95</span>
+</div>
+<div class="pt-4 border-t border-surface-variant/40 flex justify-between items-center">
+<span class="text-xl font-bold text-on-surface">Total</span>
+<span class="text-2xl font-extrabold text-primary">$28.70</span>
+</div>
+</div>
+<!-- Promo Code -->
+<div class="mt-6 flex gap-4">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50" data-icon="sell">sell</span>
+<input class="w-full bg-white border-none rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="Promo Code" type="text"/>
+</div>
+<button class="bg-surface-variant/30 text-on-surface-variant px-8 rounded-2xl font-bold hover:bg-surface-variant/50 transition-colors">Apply</button>
+</div>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full z-50 p-6 md:p-8 flex justify-center pointer-events-none">
+<div class="w-full max-w-3xl pointer-events-auto">
+<button class="w-full bg-primary text-on-primary py-5 rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+<span>Continue to Checkout</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar (Hidden on desktop as per Shell Visibility Rules, shown as transactional flow focus) -->
+<!-- Note: Following the "Destination Rule", we suppress standard nav for focus, but the task mentions it as a "Shared Component" in JSON. I'll include the mobile navigation shell as per platform requirement but focus it for the flow. -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-low flex justify-around items-center py-3 px-6 rounded-t-3xl shadow-[0_-4px_32px_rgba(116,88,83,0.05)] border-t border-surface-variant/10 hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined mb-1" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-sm text-xs">Menu</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-xs">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-xs">Profile</span>
+</div>
+</nav>
+<script>
+        // Simple micro-interaction for quantity buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(this.querySelector('[data-icon="add"]') || this.querySelector('[data-icon="remove"]')) {
+                    const span = this.parentElement.querySelector('span:not(.material-symbols-outlined)');
+                    let val = parseInt(span.innerText);
+                    if(this.querySelector('[data-icon="add"]')) val++;
+                    if(this.querySelector('[data-icon="remove"]') && val > 1) val--;
+                    span.innerText = val;
+                }
+            });
+        });
+    </script>
+</body></html>

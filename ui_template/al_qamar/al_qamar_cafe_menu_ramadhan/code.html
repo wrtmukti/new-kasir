@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Al-Qamar Cafe - Ramadhan Special</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e3e3de",
+                    "on-primary-fixed": "#002117",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#1b1c1a",
+                    "surface-container": "#1e201d",
+                    "primary-container": "#064e3b",
+                    "outline": "#89938d",
+                    "on-secondary-fixed": "#241a00",
+                    "tertiary-fixed": "#e4e2de",
+                    "surface-variant": "#333532",
+                    "on-surface-variant": "#bfc9c3",
+                    "surface-container-lowest": "#0d0f0c",
+                    "on-primary": "#003829",
+                    "secondary-fixed-dim": "#e9c349",
+                    "surface-container-low": "#1a1c19",
+                    "secondary": "#e9c349",
+                    "on-primary-container": "#80bea6",
+                    "outline-variant": "#404944",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "error-container": "#93000a",
+                    "inverse-surface": "#e3e3de",
+                    "on-secondary-container": "#342800",
+                    "primary-fixed": "#b0f0d6",
+                    "surface-bright": "#383a36",
+                    "background": "#121411",
+                    "on-tertiary-container": "#b2b1ae",
+                    "secondary-fixed": "#ffe088",
+                    "surface-container-highest": "#333532",
+                    "surface": "#121411",
+                    "on-error": "#690005",
+                    "surface-container-high": "#292b27",
+                    "tertiary-fixed-dim": "#c8c6c3",
+                    "primary-fixed-dim": "#95d3ba",
+                    "tertiary": "#c8c6c3",
+                    "on-tertiary": "#30312e",
+                    "primary": "#95d3ba",
+                    "on-secondary": "#3c2f00",
+                    "tertiary-container": "#444442",
+                    "secondary-container": "#af8d11",
+                    "on-tertiary-fixed-variant": "#474744",
+                    "surface-dim": "#121411",
+                    "surface-tint": "#95d3ba",
+                    "on-surface": "#e3e3de",
+                    "inverse-on-surface": "#2f312e",
+                    "on-secondary-fixed-variant": "#574500",
+                    "inverse-primary": "#2b6954",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "container-padding-desktop": "64px",
+                    "section-gap": "48px",
+                    "container-padding-mobile": "20px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "title-md": ["Manrope"],
+                    "label-caps": ["Manrope"],
+                    "body-sm": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #121411;
+            color: #e3e3de;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .arabesque-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0l10 30h30L55 50l10 30-25-20-25 20 10-30L0 30h30z' fill='%23d4af37' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .glass-card {
+            background: rgba(6, 78, 59, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .crescent-gold-gradient {
+            background: linear-gradient(135deg, #e9c349 0%, #af8d11 100%);
+        }
+
+        @keyframes subtle-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-animation {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="arabesque-pattern font-body-lg text-body-lg pb-24 md:pb-0">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-surface-container/40 backdrop-blur-xl shadow-sm shadow-primary/30 flex items-center justify-between px-container-padding-mobile h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-secondary">Al-Qamar Cafe</h1>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="font-label-caps text-label-caps text-secondary" href="#">Menu</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-secondary transition-colors" href="#">Iftar</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-secondary transition-colors" href="#">Orders</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-primary-container/30 px-3 py-1 rounded-full border border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="bedtime" style="font-variation-settings: 'FILL' 1;">bedtime</span>
+<span class="text-[12px] font-bold text-secondary uppercase tracking-wider">Toko Buka</span>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-secondary/30">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a cafe manager or user profile, softly lit with golden evening light, against a blurred emerald-toned background. The mood is welcoming and premium, matching the dark-mode aesthetic of the cafe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbJuTyTd_DaUt2szr13bFM-2SB4zie4dHYxnpjVaIdg9ZwuKFR9lpLwzl7kXgY8S0AhE7DREzhzklshr-YCuzxB2KEoXDkPL79FW3K3VAwSyMqUzKfH8C24EG8VZzMXXT3bTAzMIrRRq72-p0hP1cbVL6sG_wJA2TlRIzj3bxi6cyzMsFKVtGCoNIHAdWv1WoQfWRcbgvhoJ0Zcr7d5rGb2aw8h1-ybZkfLjTThAyt4IBMhg_IcozlBQ"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-container-padding-mobile max-w-7xl mx-auto space-y-12 mb-12">
+<!-- Hero Section -->
+<section class="relative rounded-3xl overflow-hidden aspect-[16/9] md:aspect-[21/9] shadow-2xl">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="An atmospheric high-end wide shot of a luxury cafe interior during twilight. Soft golden lanterns hang from the ceiling, casting a warm glow over emerald green velvet seating. The lighting is low and moody, emphasizing a serene Ramadhan evening atmosphere with subtle arabesque architectural details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr1AEo0KCZ6LDdPB4AEKlV2ueXJ082r2ZOVa-ZD-qFqxfnFtxjzq9OhXG6Fh0elJgGqlKDAFaTJ3K8phe7xUFzEvjEX5DY3tBOqaFLRLHYRDI0MWc9aZVGCjjklZPhYXF_2XAMpjQECWq4__xzoEAnKUExLzAePH_paQNeVLRL5U2GDkw8_8e8I_l-fFz9X-e15Brbd_Gu5dwAo2LQtP44oyPaftiqgYu-rrNZoj1TNX8T32XaIOOQqA"/>
+<div class="relative z-20 h-full flex flex-col justify-center px-8 md:px-16 space-y-4 max-w-2xl">
+<span class="font-label-caps text-label-caps text-secondary tracking-widest uppercase">Ramadhan Kareem</span>
+<h2 class="font-display-lg text-display-lg text-on-background leading-tight">Kehangatan Iftar di Al-Qamar</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Nikmati momen kebersamaan dengan hidangan premium yang dikurasi khusus untuk bulan suci.</p>
+<div class="pt-4 flex gap-4">
+<button class="crescent-gold-gradient text-on-secondary-container px-8 py-3 rounded-full font-bold transition-transform active:scale-95 shadow-lg shadow-secondary/20">Pesan Sekarang</button>
+<button class="border border-secondary text-secondary px-8 py-3 rounded-full font-bold hover:bg-secondary/10 transition-colors">Lihat Menu</button>
+</div>
+</div>
+</section>
+<!-- Category Pills -->
+<nav class="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 rounded-full whitespace-nowrap font-bold text-sm shadow-md">Semua Menu</button>
+<button class="bg-surface-container text-on-surface-variant px-6 py-2 rounded-full whitespace-nowrap font-bold text-sm hover:bg-primary-container/20 border border-outline-variant/10">Takjil</button>
+<button class="bg-surface-container text-on-surface-variant px-6 py-2 rounded-full whitespace-nowrap font-bold text-sm hover:bg-primary-container/20 border border-outline-variant/10">Main Course</button>
+<button class="bg-surface-container text-on-surface-variant px-6 py-2 rounded-full whitespace-nowrap font-bold text-sm hover:bg-primary-container/20 border border-outline-variant/10">Refreshing Drinks</button>
+<button class="bg-surface-container text-on-surface-variant px-6 py-2 rounded-full whitespace-nowrap font-bold text-sm hover:bg-primary-container/20 border border-outline-variant/10">Pastries</button>
+</nav>
+<!-- Iftar Special Feature (Bento Style) -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="space-y-1">
+<h3 class="font-headline-lg text-headline-lg text-on-background">Iftar Special</h3>
+<p class="text-on-surface-variant opacity-70">Pilihan terbaik untuk membatalkan puasa hari ini.</p>
+</div>
+<div class="flex items-center gap-2 text-secondary">
+<span class="font-label-caps text-label-caps">Lihat Semua</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Main Featured Card: Takjil Platter -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-[2rem] glass-card border border-outline-variant/10 p-1">
+<div class="relative h-[400px] rounded-[1.8rem] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A top-down premium food photography shot of a 'Takjil Platter' featuring organic Medjool dates, a steaming bowl of traditional Indonesian Kolak with coconut milk and palm sugar, and assorted bite-sized fritters and sweets. Set on a dark marble table with gold accents and a single sprig of mint. High-end, moody lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl7IQyLGqwf-vCSxj_bNupW1AJgI7XcBqHso1aKugUxpE5eP0Gag6lvp8Jk0zVlxLOU6J0dMOJIXS8kflpb5q5VCCclh_f0V5Rg6cYREa8T_1TmjjA59OCqBrByLLJg_GV6vzID6CNNxvQ9kcHXGbLQ40Y4K3TdRGTZBpGVU7FVGDahpeUi7uID6U_joDb7R9MZ3rgAojkY--Hl3gnhVy181Se67RnboSID-W02Z_nnrJQiBPy_273Dg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+<div class="space-y-2">
+<div class="flex gap-2">
+<span class="bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Best Seller</span>
+<span class="bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Halal Certified</span>
+</div>
+<h4 class="font-headline-lg text-headline-lg text-white">Al-Qamar Takjil Platter</h4>
+<p class="text-white/80 max-w-md">Kombinasi kurma pilihan, kolak pisang yang lembut, dan jajanan pasar tradisional yang autentik.</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-secondary text-2xl mb-2 font-display-lg">Rp 85.000</p>
+<button class="bg-white/10 backdrop-blur-md text-white p-4 rounded-full hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Cards Stack -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="flex-1 glass-card rounded-[2rem] p-6 border border-outline-variant/10 relative overflow-hidden group">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary" data-icon="timer" style="font-variation-settings: 'FILL' 1;">timer</span>
+<h5 class="font-title-md text-title-md mt-2">Iftar Countdown</h5>
+<p class="text-sm text-on-surface-variant">Maghrib Jabodetabek</p>
+</div>
+<div class="text-center py-4">
+<span class="text-5xl font-display-lg text-secondary" id="countdown">02:45:10</span>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mt-2">Menuju Berbuka</p>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container py-3 rounded-xl font-bold text-sm">Ingatkan Saya</button>
+</div>
+</div>
+<div class="flex-1 glass-card rounded-[2rem] p-6 border border-outline-variant/10 group cursor-pointer overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-30 transition-transform group-hover:scale-110" data-alt="A macro shot of a refreshing iced beverage with slices of citrus and fresh mint leaves, captured with vibrant colors and condensation on the glass. Emerald green and gold highlights reflecting the cafe's aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5eDljfn_2qZTQNZqYRUjcZzzvpo_YbVopVSBbOKpEeWcIBKN69RGZ-ooEqhoM95xwhdNwinltfAY9Me-L1WlQUJ0nrgc1bqyeVmOFa6CkoxVnYIKPjr6sL2Uj0cx3627E-EPE49vtsWCJdr-G83PK3FPDgimX287aS_UU5JlcP12v4XJk7ehM5nAyky5FQ68zj0Ou4KvP8rP844SoBix1Jkgqcy8CxIza8K7lGdOIVylWQMaJGeZxzA')"></div>
+<div class="relative z-10">
+<h5 class="font-title-md text-title-md">Refreshing Drinks</h5>
+<p class="text-sm text-on-surface-variant mt-1">Diskon 15% untuk pembelian setelah tarawih.</p>
+<div class="mt-4 flex items-center gap-2 text-secondary font-bold">
+<span>Lihat Katalog</span>
+<span class="material-symbols-outlined text-sm" data-icon="north_east">north_east</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Menu Grid -->
+<section class="space-y-6">
+<h3 class="font-headline-lg text-headline-lg text-on-background">Menu Berbuka</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<!-- Item 1 -->
+<div class="glass-card rounded-2xl overflow-hidden border border-outline-variant/10 group">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Close-up of premium Medjool dates on an ivory ceramic plate, accented with gold flakes. The scene is lit by soft, warm light emphasizing texture and quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASoJMmHAObiTbZO5RkdWzAjwxHcl39lvMfm7CngEVUyZAMyxvTLZAB-Xeea07g1aOyZuGHdbYnzIpJ8kvqsBy8cF499aPkxUcqC6pmpCIP2Fog8WgrTnpkkUWzE8IriErOrPh9voLWfhyv01iZcGKS-2beDHmGuCe7nmyJalnY8IafXlOAxQQPuEObfNLxxxxTlWpREJP9zThoiBvXGwkh0DaeT5-yGQO14GZCFAV4sECXTPAsbyKymQ"/>
+</div>
+<div class="p-4 space-y-2">
+<h6 class="font-bold text-sm">Medjool Gold Dates</h6>
+<p class="text-xs text-on-surface-variant">Kurma organik premium isi 5 pcs.</p>
+<div class="flex items-center justify-between pt-2">
+<span class="text-secondary font-bold">Rp 45.000</span>
+<span class="material-symbols-outlined text-primary-fixed text-lg" data-icon="add_circle">add_circle</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="glass-card rounded-2xl overflow-hidden border border-outline-variant/10 group">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="A bowl of hot Kolak Pisang with slices of jackfruit and sago pearls. Creamy coconut milk swirls in the dark palm sugar broth. Served in a minimalist emerald green bowl." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTaCkVkW89lxyHtry57Yk6g7yM-1LSd_mwgdu_XKrKSgR3VfqW4pXz9bzgs0b1UrFiEr1i_mb7CINDA9-ijD3M5rYZFI9iqgFpNjCZLq9WXL6OTIWYfG4XAy60x4vdiQPBpLIsJwFDJ4yaukLCUf_xJQ7UjqE_B21hMnTiMjlXulWbEpZr-uxcsd_NtJ-_9y_KFVwhGEp01Db0J8GdYKuJsraYts9aKeV5MYAzyNfulmya5ejQc5UGtQ"/>
+</div>
+<div class="p-4 space-y-2">
+<h6 class="font-bold text-sm">Kolak Al-Qamar</h6>
+<p class="text-xs text-on-surface-variant">Pisang kepok, nangka, dan kolang-kaling.</p>
+<div class="flex items-center justify-between pt-2">
+<span class="text-secondary font-bold">Rp 35.000</span>
+<span class="material-symbols-outlined text-primary-fixed text-lg" data-icon="add_circle">add_circle</span>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="glass-card rounded-2xl overflow-hidden border border-outline-variant/10 group">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Indonesian snack platter featuring Risoles, Pastel, and Tahu Isi on a bamboo weave plate. Garnish with fresh green chilies. Warm lighting, rustic feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuPHcbldTkJz0ZrzYtuiFp7fkRQMzYiO4NH3TMnY8cOoW5XL2NJ7Dgoo3I5Cz_ZOU84o5yHhabPPsnXPomai-gBeCKjECg6PN2DItzFOLLjE7nR8nR84cQaHUX0hxL5ruNz3j55QRW4K8g2tOpYPfzm63KhuI2rc-_lxY-Wq-vAS5PECQ-kBnF3egUZRuxskOlJ3t-ioZ40VqnJXNwXjJTj9WyV7FrOnSVROYhS1soC-nopU1LKElFgw"/>
+</div>
+<div class="p-4 space-y-2">
+<h6 class="font-bold text-sm">Gorengan Platter</h6>
+<p class="text-xs text-on-surface-variant">Paket 3 jenis camilan gurih hangat.</p>
+<div class="flex items-center justify-between pt-2">
+<span class="text-secondary font-bold">Rp 42.000</span>
+<span class="material-symbols-outlined text-primary-fixed text-lg" data-icon="add_circle">add_circle</span>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="glass-card rounded-2xl overflow-hidden border border-outline-variant/10 group">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Es Timun Suri with melon syrup and nata de coco in a tall crystal glass. Sprigs of mint and shaved ice reflecting light. Cooling and fresh atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxxNVcxHmkK3jyKw1OMdTEa8sB2I-GLYxCub0Kc-7PiC4Yeorm9rHzw18xubOTVab5tiRZs2X4AYJJjv57BPRmqNCzlPpn13on0DCzgT9JqItTKyAJ5vw9ghWjRyII3DtvLK9aYG-5VyOw2KXtr31NUvxJq5soqywS1nlWA3GVE3XIonzHYU5O6emquc_i9bDkn2R0gpQwcoHzR7RC7NX3BPd0BJ4Svl59eZfxzsOsxDlItCDN6BBpQQ"/>
+</div>
+<div class="p-4 space-y-2">
+<h6 class="font-bold text-sm">Es Timun Suri Melon</h6>
+<p class="text-xs text-on-surface-variant">Segar, manis, dan kaya hidrasi.</p>
+<div class="flex items-center justify-between pt-2">
+<span class="text-secondary font-bold">Rp 28.000</span>
+<span class="material-symbols-outlined text-primary-fixed text-lg" data-icon="add_circle">add_circle</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Community Section -->
+<section class="glass-card rounded-[2rem] p-10 border border-outline-variant/10 flex flex-col md:flex-row items-center gap-10">
+<div class="flex-1 space-y-4">
+<h3 class="font-display-lg text-headline-lg text-on-background">Reservasi Berbuka Bersama</h3>
+<p class="text-on-surface-variant">Ingin merayakan momen Iftar bersama teman dan keluarga? Booking tempat eksklusif Anda di area semi-outdoor kami.</p>
+<div class="flex gap-4 pt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="text-xs font-bold text-on-surface uppercase">Free Dates</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="text-xs font-bold text-on-surface uppercase">Musholla Access</span>
+</div>
+</div>
+</div>
+<div class="w-full md:w-auto">
+<button class="crescent-gold-gradient text-on-secondary-container px-10 py-4 rounded-2xl font-extrabold shadow-xl shadow-secondary/20 w-full md:w-auto">Hubungi WhatsApp</button>
+</div>
+</section>
+</main>
+<!-- Footer Space -->
+<footer class="pb-32 px-container-padding-mobile text-center text-on-surface-variant opacity-50 space-y-2">
+<p class="font-label-caps">© 2024 Al-Qamar Cafe. All Rights Reserved.</p>
+<p class="text-xs">Dibuat dengan cinta untuk bulan yang penuh berkah.</p>
+</footer>
+<!-- Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-3 pb-safe bg-surface-container-low/40 backdrop-blur-xl border-t border-outline-variant/10 rounded-t-xl z-50 shadow-[0_-4px_20px_rgba(6,78,59,0.3)]">
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary-container text-on-secondary-container dark:text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-caps text-[10px] mt-0.5">Menu</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="bedtime">bedtime</span>
+<span class="font-label-caps text-[10px] mt-0.5">Iftar</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-caps text-[10px] mt-0.5">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-[10px] mt-0.5">Profile</span>
+</div>
+</nav>
+<!-- Floating Action Button Contextual (Book Table) -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-14 h-14 crescent-gold-gradient rounded-full flex items-center justify-center shadow-2xl shadow-secondary/50 z-40 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl" data-icon="add">add</span>
+</button>
+<script>
+        // Simple countdown logic for atmospheric effect
+        function updateCountdown() {
+            const now = new Date();
+            // Simulating target time 18:15
+            const target = new Date();
+            target.setHours(18, 15, 0);
+
+            if (now > target) {
+                document.getElementById('countdown').innerText = "WAKTU BERBUKA";
+                return;
+            }
+
+            const diff = target - now;
+            const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+
+            document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Reveal animations on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(el => {
+            el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

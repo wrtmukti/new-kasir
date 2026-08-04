@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Noir &amp; Gold | The Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#b5b3ac",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#e9c349",
+                    "surface-container-low": "#1c1b1b",
+                    "on-error": "#690005",
+                    "on-primary-fixed": "#241a00",
+                    "on-primary-fixed-variant": "#574500",
+                    "secondary-container": "#474746",
+                    "secondary": "#c8c6c5",
+                    "primary-container": "#d4af37",
+                    "on-secondary-container": "#b7b5b4",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-tertiary-container": "#464540",
+                    "outline": "#99907c",
+                    "on-tertiary-fixed": "#1c1c17",
+                    "secondary-fixed": "#e5e2e1",
+                    "tertiary-fixed": "#e5e2db",
+                    "on-surface": "#e5e2e1",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-dim": "#131313",
+                    "surface-variant": "#353534",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-container": "#554300",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary": "#3c2f00",
+                    "surface-container": "#201f1f",
+                    "tertiary-fixed-dim": "#c9c6bf",
+                    "error-container": "#93000a",
+                    "outline-variant": "#4d4635",
+                    "primary-fixed": "#ffe088",
+                    "inverse-on-surface": "#313030",
+                    "background": "#131313",
+                    "inverse-primary": "#735c00",
+                    "on-secondary": "#313030",
+                    "surface-tint": "#e9c349",
+                    "surface-container-highest": "#353534",
+                    "on-background": "#e5e2e1",
+                    "on-tertiary-fixed-variant": "#474741",
+                    "on-tertiary": "#31312b",
+                    "primary": "#f2ca50",
+                    "tertiary": "#d1cec7",
+                    "on-surface-variant": "#d0c5af",
+                    "on-error-container": "#ffdad6",
+                    "surface-bright": "#3a3939",
+                    "surface": "#131313"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1200px",
+                    "unit": "8px",
+                    "margin-mobile": "24px",
+                    "margin-desktop": "80px",
+                    "gutter": "32px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Bodoni Moda"],
+                    "label-caps": ["Hanken Grotesk"],
+                    "headline-sm": ["Bodoni Moda"],
+                    "body-md": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "display-lg-mobile": ["Bodoni Moda"],
+                    "display-lg": ["Bodoni Moda"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0A;
+            color: #E5E2E1;
+            -webkit-font-smoothing: antialiased;
+        }
+        .gold-thread {
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #f2ca50, transparent);
+        }
+        .luxury-card-border {
+            border: 1px solid rgba(242, 202, 80, 0.15);
+            transition: border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .luxury-card-border:hover {
+            border-color: rgba(242, 202, 80, 0.6);
+        }
+        .glass-nav {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(20px);
+        }
+        .custom-underline {
+            position: relative;
+        }
+        .custom-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #f2ca50;
+            transition: width 0.3s ease;
+        }
+        .custom-underline:hover::after {
+            width: 100%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full glass-nav border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+<span class="font-headline-md text-headline-md-mobile md:text-headline-md text-primary tracking-widest">NOIR &amp; GOLD</span>
+</div>
+<div class="hidden md:flex gap-12">
+<a class="font-label-caps text-label-caps text-primary transition-colors duration-300" href="#">MENU</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">CONCIERGE</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">ESTATES</a>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A high-end editorial portrait of a sophisticated person in a dark, luxury setting. The lighting is dramatic and moody, highlighting sharp features and elegant dark clothing. The background is a soft-focus interior of a minimalist obsidian and gold lounge. Professional photography style, cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTY_CCDJiA4WxNhlqlLZkvvJT6ZIkTV7sTk1YeEKAMn1uK8qddNpxUzf0NdDRIfdEewIe-16LnzREHga7yxM732R9Z0tHsHWffBNswISlQjKx1M7OsrC3l7IFLSRI6WcsP-2gTg0xJ0_alhWoknCGrl8sokn8I8IthtfAEVY0JmNUDOxLOjM7AtM4oE-zog75alXzf_i3N1QTWWLxjiLWm9hPPlO_Z4gd1-do6YVP8-3kEu1O1E28J1A"/>
+</div>
+</nav>
+<main class="pt-32 pb-40 px-margin-mobile md:px-margin-desktop max-w-screen-2xl mx-auto">
+<!-- Header Section -->
+<header class="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="relative">
+<div class="gold-thread absolute -left-6 top-0 bottom-0"></div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface uppercase tracking-tighter">The Collection</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-4 max-w-xl">Curated rarities and signature blends for the discerning palate. Each selection represents the pinnacle of viticulture and craftsmanship.</p>
+</div>
+<div class="flex flex-col items-start md:items-end">
+<span class="font-label-caps text-label-caps text-primary mb-2">SINCE 1924</span>
+<div class="h-[1px] w-32 bg-primary/30"></div>
+</div>
+</header>
+<!-- Menu Section: Coffee & Reserve -->
+<div class="mb-12">
+<div class="flex items-center gap-6 mb-12">
+<h2 class="font-label-caps text-label-caps text-primary">01 / RESERVE SELECTIONS</h2>
+<div class="h-[0.5px] flex-grow bg-primary/20"></div>
+</div>
+<!-- 2-Column Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Item 1 -->
+<div class="luxury-card-border p-8 md:p-12 flex flex-col bg-surface-container-lowest group relative overflow-hidden">
+<div class="flex justify-between items-start mb-16">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant/60 block mb-2">ORIGIN: JAMAICA</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Blue Mountain Reserve</h3>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary">$45</span>
+</div>
+<div class="aspect-[4/3] w-full mb-12 overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" data-alt="A macro shot of a single, perfect crystal-handled coffee cup filled with rich, dark espresso. A wisp of steam rises elegantly. The setting is an obsidian stone table with subtle gold veins. Minimalist, luxury aesthetic, sharp focus on the coffee crema, golden hour lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4hirxqHdv3Ixsaae_WDlsxmi4eHnnNtrBDf3P6Kcfv4R3S1OBQWqt6jEFoSyjxjtQ7waUKPciaqAKm6Ujp9zq0JOx5C5KxNOdCBuCUKlIPq_I4qP7mts8oRBpKkLY2UoJt73vTuV1kB_Ifj1lW91oD94PBjDfuEKqEWkaO7HqYkrfuyAsQESyP_wLnBOLTCZytHrZ4EsN24Cgn4mLsM57H4YWOackAzSqSuFHPbcuXQSamVMXrVvwDQ"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-12 flex-grow">A meticulous cold-drip extraction of rare Blue Mountain beans, revealing notes of dark cocoa, toasted almond, and a velvet floral finish.</p>
+<button class="font-label-caps text-label-caps text-primary flex items-center gap-3 group-hover:translate-x-2 transition-transform">
+                        REQUEST SERVICE <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="luxury-card-border p-8 md:p-12 flex flex-col bg-surface-container-lowest group relative overflow-hidden">
+<div class="flex justify-between items-start mb-16">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant/60 block mb-2">ORIGIN: SUMATRA</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Kopi Luwak Signature</h3>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary">$85</span>
+</div>
+<div class="aspect-[4/3] w-full mb-12 overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" data-alt="A close-up of a sophisticated golden coffee siphon apparatus during operation. Amber liquid bubbles through glass tubes. The background is a dark, moody library with mahogany shelves and soft golden lamp light. High-end, artisanal laboratory feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMO0GHFUIt2Eyq_ZHrBD3PUF84GQL-mWmP3GNAwDvzkYApgHLlcEu_momfCHGCKnbs6dluQYbIjkUWN9OcBqTc_YB1MhZD3GTVfXyP_jorQTkMvhgogQFWJy0tafmUeMwZniA8QX-uiUThhWlL_OcK0HlHvWPZkvt68FPSLGr96zGxfSbQMB8RfFNidXjwsQvvV3LRK-jCRca7jdRad4KDIIHY-4sUPXACpXcGzqX741lso3nKLs9Fwg"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-12 flex-grow">The world's most exclusive coffee, ethically sourced and prepared via traditional siphon for unparalleled clarity and complex earthy undertones.</p>
+<button class="font-label-caps text-label-caps text-primary flex items-center gap-3 group-hover:translate-x-2 transition-transform">
+                        REQUEST SERVICE <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section: Signature Patisserie & Lattes -->
+<div class="mt-32">
+<div class="flex items-center gap-6 mb-12">
+<h2 class="font-label-caps text-label-caps text-primary">02 / THE SIGNATURES</h2>
+<div class="h-[0.5px] flex-grow bg-primary/20"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Item 3 -->
+<div class="flex gap-8 items-center p-8 luxury-card-border bg-surface-container-low group">
+<div class="w-1/3 aspect-square overflow-hidden bg-black">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A macro detail of a perfectly laminated croissant, its golden crust flaking to reveal paper-thin layers. A delicate, shimmering piece of edible 24k gold leaf rests on the peak. Set against a matte black ceramic plate. Luxurious, appetizing, high-contrast lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB97K6DGJkuD6EK44PCnmmsBPGeJYQfHTWIgA5YbTDmCtFXZ_IblLzOf2wyOvBjZDDjN1k3pPYxQ1QYt7dHRuIZuq1Kt0gu8N1h6oh-DrFZtnInb5x12ug4DBKZYPCw-SnanzOUul9e1IigC0BcIZPuKuYoZbOx4r_l1lzemkOP1-Mkd1ernn2TIABsk6Je2nSSwLTNkhtIrXzusgBKFO4yLciGcVjLbCV9_9ARKdVBPTZx_7CtH3W6HA"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Gold Leaf Croissant</h3>
+<span class="font-body-lg text-primary">$22</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Aged Isigny butter, 72-hour fermentation, finished with 24k gold leaf.</p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex gap-8 items-center p-8 luxury-card-border bg-surface-container-low group">
+<div class="w-1/3 aspect-square overflow-hidden bg-black">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="An elegant tall latte glass featuring distinct layers of milk, espresso, and creamy foam. A dark truffle oil swirl is visible on the surface, garnished with a tiny sprig of aromatic herb. The lighting is focused and warm, creating a glowing effect within the glass." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArStps_KB-ek_XPWUW-Jupo5svoSiWYuj8lHqMit6AvU_HyMS9lOB1zhtkCclWnn6_Sv5vwMBalNasZJEmMvPSL31b_MVzaR3wuhNb5-4ZUYL1sL6yJQ1WlWwSXHQyoYi_DFKJsk66N11IvYP_AArrYAs3oHlTS1VwFefOOOM6s99GdASZTUI2IhT1NlGu2pzdTuFj8VBxoqd_q17x4CWHRGcXqffs6W7_50jC4LTeRXb7iJ6QGCklaQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Truffle Infused Latte</h3>
+<span class="font-body-lg text-primary">$32</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Single-origin espresso steamed with black truffle essence and organic silk milk.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Promotional Banner -->
+<section class="mt-40 relative group cursor-pointer overflow-hidden h-[500px]">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 opacity-60" data-alt="An expansive, cinematic wide shot of a private tasting room. Long dark oak table, plush velvet chairs, and floor-to-ceiling windows overlooking a rain-swept metropolis at night. Minimalist gold lighting fixtures hang from the ceiling. Atmospheric, exclusive, and peaceful atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdYLIiELGLAuMfKxRg-QG15zqxKBJuEpaG1ULkb6ERBW8pifpQFCNp6Z5fv3omlbOBUk3kmfSOildXEjPVEXLw5ZZqY4Nkdnoi-wnevlqmqkncMLtvVPuTznx54c2YHK05hLOF0FpfKVPo3yRwUAenNlzGKvq8ULi6w-M_PyR6IR59FvZ9NXnNmDMa9vnUfQCC6oXXDrhRomFUjNVXLp85urWIlbKDwpsyQFiFTXBQcVGJPZyYphU2kw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</div>
+<div class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-margin-mobile">
+<span class="font-label-caps text-label-caps text-primary mb-6 tracking-[0.5em]">EXCLUSIVE ACCESS</span>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-8">Private Tasting Session</h2>
+<p class="font-body-lg text-body-lg text-on-surface max-w-2xl mb-12 opacity-80">Join our Master Sommelier for an intimate exploration of the world's most elusive beans and vintages. Limited to four guests per evening.</p>
+<button class="px-12 py-4 bg-[#E5E2E1] text-[#0A0A0A] font-label-caps text-label-caps hover:bg-primary transition-colors duration-300">
+                    ENQUIRE PRIVATELY
+                </button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-4 px-margin-mobile bg-surface/90 backdrop-blur-md border-t border-outline-variant/10 md:hidden">
+<div class="flex flex-col items-center justify-center text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-caps text-[10px] mt-1">MENU</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="concierge">concierge</span>
+<span class="font-label-caps text-[10px] mt-1">CONCIERGE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-[10px] mt-1">PROFILE</span>
+</div>
+</footer>
+<!-- Atmosphere Script -->
+<script>
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 20;
+            const y = (e.clientY / window.innerHeight) * 20;
+            const banners = document.querySelectorAll('.group img');
+            banners.forEach(img => {
+                img.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+            });
+        });
+    </script>
+</body></html>

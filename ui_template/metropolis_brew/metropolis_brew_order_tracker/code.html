@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Metropolis Brew - Track Order</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#68dba9",
+                        "on-tertiary-fixed": "#191c1d",
+                        "primary-fixed-dim": "#68dba9",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f0f3ff",
+                        "on-background": "#151c27",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#737576",
+                        "on-primary-container": "#f5fff7",
+                        "on-primary-fixed": "#002114",
+                        "surface-container": "#e7eefe",
+                        "tertiary-fixed": "#e1e3e4",
+                        "surface-dim": "#d3daea",
+                        "surface-container-highest": "#dce2f3",
+                        "primary-container": "#00855d",
+                        "outline-variant": "#bccac0",
+                        "secondary": "#575e70",
+                        "on-tertiary-fixed-variant": "#454748",
+                        "inverse-surface": "#2a313d",
+                        "surface-tint": "#006c4a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#85f8c4",
+                        "outline": "#6d7a72",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "tertiary": "#5a5c5d",
+                        "on-tertiary-container": "#fcfdfe",
+                        "on-surface-variant": "#3d4a42",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006948",
+                        "surface": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#404758",
+                        "surface-variant": "#dce2f3",
+                        "secondary-fixed": "#dce2f7",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-container-high": "#e2e8f8",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed-dim": "#c5c7c8",
+                        "on-secondary-container": "#5c6274",
+                        "on-primary-fixed-variant": "#005137",
+                        "secondary-container": "#d9dff5",
+                        "on-surface": "#151c27",
+                        "on-secondary-fixed": "#141b2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .track-line {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            bottom: 0;
+            width: 2px;
+            background-color: #E5E7EB;
+        }
+        .track-line-progress {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            height: 50%; /* Represents current progress */
+            width: 2px;
+            background-color: #006948;
+            z-index: 1;
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(to top, rgba(249, 249, 255, 1) 0%, rgba(249, 249, 255, 0) 20%);
+        }
+        /* Micro-interactions */
+        .active-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 105, 72, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 105, 72, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 105, 72, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-md py-xs bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-xs">
+<button class="p-xs hover:bg-surface-container-low transition-colors rounded-full active:opacity-80">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-[24px] md:text-display-lg text-primary tracking-tight">Metropolis Brew</h1>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary hover:text-primary transition-colors cursor-pointer">shopping_bag</span>
+</div>
+</header>
+<main class="pt-xl pb-xl min-h-screen max-w-container-max mx-auto px-sm md:px-lg flex flex-col lg:grid lg:grid-cols-12 gap-lg mt-md">
+<!-- Left Column: Map & Delivery Info -->
+<div class="lg:col-span-7 flex flex-col gap-md">
+<!-- Map Section -->
+<section class="relative w-full aspect-[4/3] md:aspect-video rounded-xl overflow-hidden border border-outline-variant bg-surface-container">
+<div class="absolute inset-0 w-full h-full grayscale opacity-80" data-alt="A minimalist, high-contrast urban map of a metropolitan district with clean slate gray and off-white tones. The map features precise architectural lines and simplified street grids. In the center, a vibrant City Emerald marker indicates the cafe location, while a soft blue marker shows a house icon for the delivery destination, connected by a subtle dotted line across the grid. The aesthetic is ultra-professional and architectural." data-location="New York City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHhDwQabxTxdMa3FHa6KztwMj8opE8Mh0GGKlC0wHji24YuRFXZN67AIl7MixX8mHFrvLLxz2Iuxf-ooeXQJmw07IpsxVp3_woJbtHjXoX3uWm8_GQQMNDcYWUEcx3T3xC2bcYaCoBakQcNjrmo1WFoAEuYJ_AvQIQT0pT1eYQq5-D7TstkRpFidUwhEOXNrsdQY8npGhACdk5rV-lu00_rJVFuKJRHbPSHXlJY4cOISOXDNGbrOds7Q')">
+</div>
+<!-- Delivery Path Overlay (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 800 450">
+<path d="M200,300 Q400,250 600,150" fill="none" stroke="#006948" stroke-dasharray="8 6" stroke-width="3"></path>
+<!-- Delivery Node: Cafe -->
+<circle class="active-pulse" cx="200" cy="300" fill="#006948" r="8"></circle>
+<!-- Delivery Node: Destination -->
+<circle cx="600" cy="150" fill="#575e70" r="8"></circle>
+</svg>
+<div class="map-gradient-overlay absolute inset-0"></div>
+<!-- Floating ETA Card -->
+<div class="absolute bottom-md left-md right-md md:left-md md:right-auto md:w-80 bg-surface-bright/95 backdrop-blur-sm border border-outline-variant p-md rounded-lg shadow-sm">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">speed</span>
+<p class="font-label-md text-label-md text-secondary uppercase tracking-widest">Estimated Arrival</p>
+</div>
+<p class="font-headline-lg text-headline-lg text-primary">12 Mins</p>
+<div class="mt-sm h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3 transition-all duration-1000 ease-in-out"></div>
+</div>
+</div>
+</section>
+<!-- Delivery Partner Info -->
+<section class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly delivery courier wearing a minimalist dark green uniform and a cap. The background is a clean, out-of-focus city street in soft daylight. High-quality portrait photography with sharp focus on the subject, reflecting a high-end corporate delivery service brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQxPdr6o56Kvn8uRFAH7sQhqZ3vEFLmEHScBhcbQg6k2YGG5hnSt4DM-M5U2q11gX1NJUtEDXJWuQoopO8SbVK6vJCIuTiTGBAV0yOfPPQbZTiPiuRDZBuRm8v5b44MwVnfN7eVWxQ0ePStmC9xOP8S4ERQYX6QjGwrqoBjKLOu-rsFF-gsR8hoYI3ZEhWSO8w85DQLjcjwd3hJIJBiWvsfhUTY9Czdt9nRe5To28VMZIhYVRE4XMpIQ"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Marcus Vance</p>
+<div class="flex items-center gap-xs text-secondary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-label-sm">4.9 • Delivery Partner</span>
+</div>
+</div>
+</div>
+<div class="flex gap-xs">
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant hover:bg-primary-container hover:text-white transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant hover:bg-primary-container hover:text-white transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Right Column: Status Timeline & Order Summary -->
+<div class="lg:col-span-5 flex flex-col gap-md">
+<!-- Tracking Timeline -->
+<section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-lg">Order Tracking</h3>
+<div class="relative space-y-xl">
+<!-- Status Item 1: Confirmed -->
+<div class="relative flex items-start gap-md">
+<div class="track-line"></div>
+<div class="track-line-progress" style="height: 100%;"></div>
+<div class="relative z-10 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Order Confirmed</p>
+<p class="font-label-sm text-label-sm text-secondary">10:45 AM • Received by cafe</p>
+</div>
+</div>
+<!-- Status Item 2: Brewing -->
+<div class="relative flex items-start gap-md">
+<div class="track-line"></div>
+<div class="track-line-progress" style="height: 50%;"></div>
+<div class="relative z-10 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full ring-4 ring-primary-container/20 active-pulse">
+<span class="material-symbols-outlined text-[14px]">local_cafe</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Brewing</p>
+<p class="font-label-sm text-label-sm text-secondary">10:52 AM • Preparing your roast</p>
+</div>
+</div>
+<!-- Status Item 3: On the Way -->
+<div class="relative flex items-start gap-md">
+<div class="track-line"></div>
+<div class="relative z-10 w-6 h-6 flex items-center justify-center bg-surface-container-highest text-outline rounded-full">
+<span class="material-symbols-outlined text-[14px]">delivery_dining</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-secondary">On the Way</p>
+<p class="font-label-sm text-label-sm text-secondary">Pending courier pickup</p>
+</div>
+</div>
+<!-- Status Item 4: Delivered -->
+<div class="relative flex items-start gap-md">
+<div class="relative z-10 w-6 h-6 flex items-center justify-center bg-surface-container-highest text-outline rounded-full">
+<span class="material-symbols-outlined text-[14px]">home</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-secondary">Delivered</p>
+<p class="font-label-sm text-label-sm text-secondary">Estimated 11:15 AM</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Mini Order Summary -->
+<section class="bg-surface-container-low p-md rounded-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-md">
+<p class="font-label-md text-label-md text-on-surface">Order #MB-8291</p>
+<a class="text-primary font-label-md hover:underline" href="#">View Receipt</a>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="text-label-md font-bold text-primary">1x</span>
+<span class="font-body-md text-body-md">Ethiopian Cold Brew</span>
+</div>
+<span class="font-body-md text-body-md">$6.50</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="text-label-md font-bold text-primary">1x</span>
+<span class="font-body-md text-body-md">Avocado Toast (Sourdough)</span>
+</div>
+<span class="font-body-md text-body-md">$12.00</span>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant flex justify-between">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$18.50</span>
+</div>
+</section>
+<button class="w-full py-md bg-secondary text-white font-label-md uppercase tracking-widest rounded-lg hover:bg-on-surface transition-all active:scale-95">
+                Support / Help
+            </button>
+</div>
+</main>
+<!-- BottomNavBar Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-sm py-xs bg-surface-bright border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-secondary font-label-sm" href="#">
+<span class="material-symbols-outlined">local_cafe</span>
+<span>Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold font-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-label-sm" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span>Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-label-sm" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Profile</span>
+</a>
+</nav>
+<!-- Minimal Toast notification for state changes (simulation) -->
+<div class="fixed bottom-lg left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-[100] font-label-md flex items-center gap-xs" id="toast">
+<span class="material-symbols-outlined text-[18px]">info</span>
+<span>Order status updated</span>
+</div>
+<script>
+        // Micro-interaction for status updates
+        document.addEventListener('DOMContentLoaded', () => {
+            const toast = document.getElementById('toast');
+            
+            // Simulate a status change after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                    toast.classList.remove('opacity-100');
+                }, 3000);
+            }, 5000);
+
+            // Adding hover effects dynamically for demonstration
+            const navItems = document.querySelectorAll('nav a');
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navItems.forEach(i => {
+                        i.classList.remove('text-primary', 'font-bold');
+                        i.classList.add('text-secondary');
+                        i.querySelector('span').style.fontVariationSettings = "'FILL' 0";
+                    });
+                    item.classList.add('text-primary', 'font-bold');
+                    item.classList.remove('text-secondary');
+                    item.querySelector('span').style.fontVariationSettings = "'FILL' 1";
+                });
+            });
+        });
+    </script>
+</body></html>

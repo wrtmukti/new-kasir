@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout | Metropolis Brew</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#68dba9",
+                        "on-tertiary-fixed": "#191c1d",
+                        "primary-fixed-dim": "#68dba9",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f0f3ff",
+                        "on-background": "#151c27",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#737576",
+                        "on-primary-container": "#f5fff7",
+                        "on-primary-fixed": "#002114",
+                        "surface-container": "#e7eefe",
+                        "tertiary-fixed": "#e1e3e4",
+                        "surface-dim": "#d3daea",
+                        "surface-container-highest": "#dce2f3",
+                        "primary-container": "#00855d",
+                        "outline-variant": "#bccac0",
+                        "secondary": "#575e70",
+                        "on-tertiary-fixed-variant": "#454748",
+                        "inverse-surface": "#2a313d",
+                        "surface-tint": "#006c4a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#85f8c4",
+                        "outline": "#6d7a72",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "tertiary": "#5a5c5d",
+                        "on-tertiary-container": "#fcfdfe",
+                        "on-surface-variant": "#3d4a42",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006948",
+                        "surface": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#404758",
+                        "surface-variant": "#dce2f3",
+                        "secondary-fixed": "#dce2f7",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-container-high": "#e2e8f8",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed-dim": "#c5c7c8",
+                        "on-secondary-container": "#5c6274",
+                        "on-primary-fixed-variant": "#005137",
+                        "secondary-container": "#d9dff5",
+                        "on-surface": "#151c27",
+                        "on-secondary-fixed": "#141b2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #f9f9ff;
+            color: #151c27;
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .method-card:hover {
+            border-color: #006948;
+        }
+        .method-card.active {
+            border-color: #006948;
+            background-color: #f5fff7;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col">
+<!-- TopAppBar Navigation Shell (Suppressed context check: This is a sub-page/transactional flow, but brand identity is required) -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-md py-xs bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-xs cursor-pointer" onclick="window.history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+<span class="font-label-md text-label-md text-primary">Back</span>
+</div>
+<div class="font-display-lg text-display-lg text-primary tracking-tight">Metropolis Brew</div>
+<div class="w-10"></div> <!-- Spacer for symmetry -->
+</nav>
+<!-- Main Content Canvas -->
+<main class="mt-xl pt-lg px-sm md:px-lg flex-grow flex flex-col items-center max-w-container-max mx-auto w-full">
+<!-- Total Amount Header -->
+<section class="w-full max-w-md text-center mb-lg">
+<p class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-xs">Checkout Total</p>
+<h1 class="font-display-lg text-display-lg text-on-background">$24.50</h1>
+<div class="mt-sm flex items-center justify-center gap-xs text-outline">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-sm text-label-sm">SSL Secure Payment</span>
+</div>
+</section>
+<!-- Payment Methods List -->
+<section class="w-full max-w-md space-y-sm">
+<h2 class="font-label-md text-label-md text-on-surface mb-md">Select Payment Method</h2>
+<!-- Metropolis Pay (Custom Premium Method) -->
+<label class="method-card group relative flex items-center justify-between p-md bg-surface-container-lowest border border-outline-variant rounded-lg cursor-pointer transition-all active:scale-[0.98]">
+<input checked="" class="hidden peer" name="payment_method" type="radio" value="metropolis_pay"/>
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<p class="font-headline-md text-body-lg font-bold text-on-surface">Metropolis Pay</p>
+<p class="font-label-sm text-label-sm text-secondary">Instant 5% rewards back</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+</label>
+<!-- Credit Card -->
+<label class="method-card group relative flex items-center justify-between p-md bg-surface-container-lowest border border-outline-variant rounded-lg cursor-pointer transition-all active:scale-[0.98]">
+<input class="hidden peer" name="payment_method" type="radio" value="credit_card"/>
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[28px]">credit_card</span>
+</div>
+<div>
+<p class="font-headline-md text-body-lg font-bold text-on-surface">Credit Card</p>
+<p class="font-label-sm text-label-sm text-secondary">Visa, Mastercard, Amex</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+</label>
+<!-- Apple Pay -->
+<label class="method-card group relative flex items-center justify-between p-md bg-surface-container-lowest border border-outline-variant rounded-lg cursor-pointer transition-all active:scale-[0.98]">
+<input class="hidden peer" name="payment_method" type="radio" value="apple_pay"/>
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#000000] flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">file_download</span>
+</div>
+<div>
+<p class="font-headline-md text-body-lg font-bold text-on-surface">Apple Pay</p>
+<p class="font-label-sm text-label-sm text-secondary">Fast &amp; Secure checkout</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<div class="absolute inset-0 rounded-lg border-2 border-transparent peer-checked:border-primary pointer-events-none"></div>
+</label>
+</section>
+<!-- Order Summary Detail -->
+<section class="w-full max-w-md mt-lg pt-md border-t border-outline-variant">
+<div class="flex justify-between mb-xs">
+<span class="font-body-md text-body-md text-secondary">Subtotal</span>
+<span class="font-body-md text-body-md text-on-surface">$22.00</span>
+</div>
+<div class="flex justify-between mb-md">
+<span class="font-body-md text-body-md text-secondary">Service Fee</span>
+<span class="font-body-md text-body-md text-on-surface">$2.50</span>
+</div>
+<!-- Pay Now CTA -->
+<button class="w-full py-md bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg shadow-sm transition-all active:scale-[0.97] flex items-center justify-center gap-sm">
+                Pay Now
+                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+<p class="mt-md text-center font-label-sm text-label-sm text-outline px-lg">
+                By tapping "Pay Now", you agree to Metropolis Brew's Terms of Service and Privacy Policy.
+            </p>
+</section>
+<!-- Trust Imagery Section (Bento Style) -->
+<section class="w-full max-w-container-max mt-xl mb-xl grid grid-cols-1 md:grid-cols-2 gap-md opacity-80">
+<div class="relative h-48 rounded-xl overflow-hidden group">
+<div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-all"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A high-contrast, professional close-up shot of a steaming cup of artisan espresso on a clean white marble countertop in a bright, modern architectural café. The lighting is crisp and natural, highlighting the rich crema of the coffee and the minimalist ceramic mug. The scene reflects a high-end corporate metropolis aesthetic with a focus on purity and quality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDYeHHqfevBsnBpUY9sqXu-nsuH9w1-Ws-0JeP8PrU6U6_xGT9a5KL8-MP_PRlxM17b_G-inwtH1DFbWZPIRitlNe5ct5V-TYltorZOis33R0T1WRGra0eQgd6XRL_PgntAOzposanAZwduiQJSu7Wcdq85a6b9427sW9Mvz_Vnw_bIgmb-jnGJNIGnE3_LRDxPa-lJbUCsAWAgQieL_kOwqqKI4aUrivUQrkcDJEj3e8w_IR0b12Q5TQ')"></div>
+<div class="absolute bottom-sm left-sm z-20">
+<p class="text-white font-label-md text-label-md">Freshly Brewed</p>
+</div>
+</div>
+<div class="relative h-48 rounded-xl overflow-hidden group">
+<div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-all"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A sleek, minimalist metropolitan business district exterior seen through glass at dusk. The scene is dominated by cool grays and glass reflections with a few warm interior lights. The architecture is sharp and modern, symbolizing efficiency and sophistication. The overall atmosphere is professional, quiet, and premium, echoing a high-end coffee brand for busy urban professionals." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiErJMY5V2kLHlwUVrCrTKXqN8nu_FxoGLzkqNLceNA2qHnCWT0EMnDdpgIWoRTUJWDc5Z2IWTbeOCWizetT39HNn4EX3-4PmDBhN_sNZ__Uz25gWdd_9wtWcCBgw_hwxkIlPhWCin6x_w_l-EpUD1I-7z8w9Z8LR3CcqcFkjq24CP3JWRPH0VgDHnyTW0XTta_ICamZL4WbMT7UeQpsLGXQuzb4rMS2N7Wg6pySTZGtXJXGoBDSRtmA')"></div>
+<div class="absolute bottom-sm left-sm z-20">
+<p class="text-white font-label-md text-label-md">City Sourced</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Success Feedback Overlay (Hidden by default) -->
+<div class="fixed inset-0 bg-surface-bright/90 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" id="processing-overlay">
+<div class="text-center">
+<div class="mb-lg inline-block p-xl bg-primary-container rounded-full text-on-primary-container animate-bounce">
+<span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-primary">Payment Successful</h2>
+<p class="font-body-lg text-body-lg text-secondary mt-sm">Your order is being prepared.</p>
+</div>
+</div>
+<script>
+        // Micro-interactions
+        const payButton = document.querySelector('button');
+        const overlay = document.getElementById('processing-overlay');
+        const radioInputs = document.querySelectorAll('input[type="radio"]');
+
+        payButton.addEventListener('click', () => {
+            // Simulate processing
+            payButton.innerHTML = '<span class="animate-spin material-symbols-outlined">progress_activity</span> Processing...';
+            payButton.disabled = true;
+            
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    window.location.reload(); // Reset for demo purposes
+                }, 3000);
+            }, 1500);
+        });
+
+        // Toggle visual active state for cards
+        radioInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                document.querySelectorAll('.method-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                if(input.checked) {
+                    input.closest('.method-card').classList.add('active');
+                }
+            });
+        });
+    </script>
+</body></html>

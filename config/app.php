@@ -30,6 +30,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Guest Template
+    |--------------------------------------------------------------------------
+    |
+    | Nama folder template guest UI. Ambil dari .env GUEST_TEMPLATE.
+    | Diresolve jadi resource view `guest.{template}.*`.
+    |
+    */
+
+    'guest_template' => env('GUEST_TEMPLATE', 'standard'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finalize Payment | Botanical Brew</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#4a4640",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3ee",
+                    "primary": "#163422",
+                    "inverse-surface": "#30312e",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#2f4d39",
+                    "tertiary": "#312e29",
+                    "on-tertiary-container": "#b7b1a9",
+                    "on-tertiary-fixed": "#1e1b16",
+                    "outline-variant": "#c2c8c0",
+                    "on-secondary-fixed": "#062010",
+                    "primary-fixed": "#c8ebd0",
+                    "inverse-primary": "#adcfb4",
+                    "surface-container-high": "#eae8e3",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#4e6953",
+                    "on-primary-fixed": "#022110",
+                    "surface-container-highest": "#e4e2dd",
+                    "tertiary-fixed-dim": "#ccc5be",
+                    "on-secondary-fixed-variant": "#334d38",
+                    "on-primary-container": "#99baa1",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "tertiary-container": "#48443e",
+                    "primary-container": "#2d4b37",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#727972",
+                    "inverse-on-surface": "#f2f1ec",
+                    "background": "#fbf9f4",
+                    "on-surface-variant": "#424843",
+                    "tertiary-fixed": "#e9e1d9",
+                    "surface-tint": "#466550",
+                    "secondary-fixed": "#cceacf",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#4a654f",
+                    "surface-bright": "#fbf9f4",
+                    "primary-fixed-dim": "#adcfb4",
+                    "surface": "#fbf9f4",
+                    "secondary-fixed-dim": "#b0ceb4",
+                    "surface-container": "#f0eee9",
+                    "secondary-container": "#c9e7cc",
+                    "on-surface": "#1b1c19",
+                    "surface-dim": "#dbdad5",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "section-gap": "80px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "body-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f4;
+            color: #1b1c19;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .botanical-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-5 0-10 5-10 10s5 10 10 10 10-5 10-10-5-10-10-10zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z' fill='%23163422' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden botanical-pattern">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-background/80 dark:bg-background/80 backdrop-blur-md shadow-[0_20px_40px_rgba(45,75,55,0.05)]">
+<div class="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 w-full">
+<button aria-label="Go back" class="active:scale-95 transition-transform duration-200 text-primary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary">Finalize Payment</h1>
+<div class="w-6 md:w-8"></div> <!-- Spacer for balance -->
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-2xl mx-auto min-h-screen">
+<!-- Summary Section -->
+<section class="mb-10 animate-fade-in">
+<div class="bg-surface-container-low rounded-xl p-6 shadow-[0_20px_40px_rgba(45,75,55,0.05)] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl" data-icon="eco">eco</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Order Summary</h2>
+<div class="flex justify-between items-center mb-2">
+<span class="text-on-surface-variant font-label-md">Items (3)</span>
+<span class="font-semibold text-primary">$24.50</span>
+</div>
+<div class="flex justify-between items-center mb-6">
+<span class="text-on-surface-variant font-label-md">Carbon Offset Fee</span>
+<span class="font-semibold text-primary">$1.20</span>
+</div>
+<div class="border-t border-outline-variant/30 pt-4 flex justify-between items-end">
+<div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant mb-1">Total</p>
+<p class="font-display-lg text-display-lg text-primary">$25.70</p>
+</div>
+<div class="text-right">
+<p class="text-label-sm text-secondary font-medium flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                            15-20 mins
+                        </p>
+<p class="text-on-surface-variant text-label-sm">Pickup Estimation</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Methods Section -->
+<section class="space-y-4">
+<h3 class="font-label-md text-on-surface-variant uppercase tracking-widest ml-1">Payment Method</h3>
+<!-- Digital Wallet -->
+<label class="group relative block cursor-pointer">
+<input checked="" class="peer sr-only" name="payment" type="radio"/>
+<div class="flex items-center justify-between p-5 rounded-xl bg-white border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary-fixed/10 transition-all duration-300 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-semibold text-primary">Digital Wallet</p>
+<p class="text-label-sm text-on-surface-variant">Apple Pay / Google Pay</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary relative flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full opacity-0 peer-checked:opacity-100"></div>
+</div>
+</div>
+</label>
+<!-- Credit Card -->
+<label class="group relative block cursor-pointer">
+<input class="peer sr-only" name="payment" type="radio"/>
+<div class="flex items-center justify-between p-5 rounded-xl bg-white border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary-fixed/10 transition-all duration-300 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<p class="font-semibold text-primary">Credit Card</p>
+<p class="text-label-sm text-on-surface-variant">Visa ending in 4242</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center"></div>
+</div>
+</label>
+<!-- Gift a Tree (Special Loyalty) -->
+<label class="group relative block cursor-pointer">
+<input class="peer sr-only" name="payment" type="radio"/>
+<div class="flex items-center justify-between p-5 rounded-xl bg-white border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary-fixed/10 transition-all duration-300 shadow-sm overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-[0.05] group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-9xl" data-icon="forest">forest</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="park">park</span>
+</div>
+<div>
+<p class="font-semibold text-primary">Gift a Tree</p>
+<p class="text-label-sm text-secondary">Pay with 500 Loyalty Sprouts</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center"></div>
+</div>
+</label>
+</section>
+<!-- Decorative Illustration Area -->
+<section class="mt-12 mb-8 h-48 rounded-2xl relative overflow-hidden shadow-inner">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center opacity-60" data-alt="A macro photograph of fresh dew drops resting on a vibrant green monstera leaf in a sunlit greenhouse. The lighting is soft and ethereal, capturing the texture of the leaf and the clarity of the water. The overall aesthetic is minimalist, organic, and serene, using the brand's primary forest green and cream palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzyKV-3g-ihiuuGT8QSTyoB6A_M26EM1gJq04-QpJ0vLucTTsK883dgw_I5F-QD3eLqlwKnigGo-qyf9OR9E3Rd-_PWQS0Nko-6W90vBe_KxVaxMfWTuhP7W21FugBGc7kmPycazYMlqUOl2VYDBKzl0iAtjgWs8ajl_H7p-ajB53pcMSDwXeLUtzUSpUGNq37lp-yKQkhfUsaDAAbmQF5kQgxrTAVNcQ5DpgGUFYpfpBDQE490xS2Cw')"></div>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="relative z-10 flex flex-col justify-end h-full p-6">
+<p class="text-primary font-medium text-body-md italic">"Every cup planted, every sip sustainable."</p>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-background/90 backdrop-blur-md px-margin-mobile py-6 z-50 border-t border-outline-variant/10">
+<div class="max-w-2xl mx-auto flex flex-col gap-4">
+<button class="w-full bg-primary text-on-primary py-4 rounded-full font-semibold text-body-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/20" onclick="handlePayment()">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+                Pay $25.70 Securely
+            </button>
+<p class="text-center text-label-sm text-on-surface-variant flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+                Encrypted &amp; Sustainable Checkout
+            </p>
+</div>
+</div>
+<!-- Success Modal Overlay (Hidden) -->
+<div class="fixed inset-0 z-[100] hidden flex items-center justify-center px-margin-mobile" id="success-modal">
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-sm"></div>
+<div class="relative bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl animate-in fade-in zoom-in duration-300">
+<div class="w-20 h-20 bg-secondary-container text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-4xl" data-icon="check_circle">check_circle</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Payment Successful!</h2>
+<p class="text-on-surface-variant mb-8">Your order is being prepared with care in our botanical kitchen.</p>
+<button class="w-full bg-primary text-on-primary py-3 rounded-full font-semibold hover:opacity-90 transition-opacity" onclick="location.reload()">
+                Track My Brew
+            </button>
+</div>
+</div>
+<script>
+        function handlePayment() {
+            const btn = document.querySelector('button[onclick="handlePayment()"]');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Processing...';
+            btn.disabled = true;
+            
+            // Artificial delay to simulate processing
+            setTimeout(() => {
+                document.getElementById('success-modal').classList.remove('hidden');
+                document.getElementById('success-modal').classList.add('flex');
+            }, 1800);
+        }
+
+        // Add scroll animation reveal
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Your Cart | Bumblebee Cafe</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#474747",
+                    "on-background": "#1a1c1c",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#544600",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-secondary-container": "#656464",
+                    "primary": "#705d00",
+                    "tertiary-fixed-dim": "#00dbe8",
+                    "surface-variant": "#e2e2e2",
+                    "primary-fixed-dim": "#e9c400",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#e9c400",
+                    "secondary": "#5f5e5e",
+                    "on-primary-fixed": "#221b00",
+                    "surface-container": "#eeeeee",
+                    "surface-dim": "#dadada",
+                    "on-tertiary-container": "#006a70",
+                    "on-surface": "#1a1c1c",
+                    "surface": "#f9f9f9",
+                    "secondary-container": "#e4e2e1",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "secondary-fixed-dim": "#c8c6c6",
+                    "background": "#f9f9f9",
+                    "surface-container-low": "#f3f3f4",
+                    "on-tertiary-fixed": "#002022",
+                    "surface-tint": "#705d00",
+                    "primary-fixed": "#ffe16d",
+                    "inverse-surface": "#2f3131",
+                    "secondary-fixed": "#e4e2e1",
+                    "surface-container-high": "#e8e8e8",
+                    "on-primary-container": "#705e00",
+                    "tertiary": "#00696f",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d0c6ab",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#79f5ff",
+                    "on-surface-variant": "#4d4732",
+                    "on-primary": "#ffffff",
+                    "outline": "#7e775f",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "primary-container": "#ffd700",
+                    "tertiary-container": "#00f1ff",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "margin-mobile": "20px",
+                    "xl": "64px",
+                    "sm": "12px",
+                    "lg": "40px",
+                    "gutter": "16px",
+                    "margin-desktop": "auto"
+            },
+            "fontFamily": {
+                    "headline-md": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f9f9f9;
+            color: #1a1c1c; /* Charcoal / On-Surface */
+        }
+        /* Custom hide scrollbar for clean aesthetic */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- Top App Bar (Mandatory Shell) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+<div class="flex items-center gap-base">
+<button class="active:scale-95 transition-transform text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Bumblebee Cafe</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional, high-resolution portrait of a smiling young urban professional with short hair, wearing a stylish minimalist grey sweater. The background is a brightly lit, modern cafe with yellow accents and soft bokeh, perfectly matching the Bumblebee Cafe's energetic and hospitable brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANb77Je0BF4l8Kfvf_SjKOyDJoyJ6apF-t1awWl3UiTi1cOU0Ta0fDceVHLdNxis-agnMy3BpB1HYFBVBdCAbhYHMjzjS3Lx_WBQXKJWDHxoXtdUhzZpfhN7sjyV2I_TkN5-bBofFH7ifbEgaMrH7dk6zYIRC8tZNhe2mj5fjX6zEz1HAYE4LfJZsBOnA_FbrRGUuZfwy2iC838YmBM1-yoAv8p6rvkIN1Aq93ommid1_yfTHt8LMdCA"/>
+</div>
+</header>
+<main class="pt-16 pb-32 min-h-screen max-w-2xl mx-auto px-margin-mobile">
+<!-- Header Section -->
+<section class="py-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-background">Your Cart</h2>
+<p class="text-on-surface-variant font-body-md">Review your selections for the perfect morning</p>
+</section>
+<!-- Cart Items List -->
+<div class="space-y-sm">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest p-sm rounded-xl flex gap-md shadow-[0_4px_16px_rgba(51,51,51,0.05)] hover:shadow-[0_8px_24px_rgba(51,51,51,0.08)] transition-all">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A gourmet honey-infused latte in a clean white ceramic mug, topped with artistic bee-themed latte art. The image is set against a bright, sunlit minimalist background with soft yellow warm tones. The drink is vibrant and inviting, capturing the essence of a modern corporate cafe experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN8BnXVHE2SyvArwg7FOOK-Wr7INIjdII4DgoFvhny2__nE4ZqmzoO7XaP_HbQQQKiMZknzijZiM58h3EUAXRim8oBZ65Elz8Ot8LyzJurls6Oe3PUyZ2okVZOhZBMrQnclUgt-dGNOMAUP5RJ1OigN7PSyrtKD3OUESbVG12tQoCc4tkmYTKSF1lvGo6sYLdlSCbGWoGuJp8Kd2tiUZ4R2767bo16JTGGWjaouznaNYGWdJH7-IvSmA"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background">Honey Bloom Latte</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$6.50</span>
+</div>
+<p class="text-label-sm text-on-secondary-container">Oat Milk, Extra Hot</p>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container rounded-full p-1 gap-4">
+<button class="w-8 h-8 flex items-center justify-center bg-surface-container-lowest rounded-full shadow-sm active:scale-90 transition-transform text-on-background">
+<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
+</button>
+<span class="font-label-md text-label-md w-4 text-center">1</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary-container text-on-primary-container rounded-full shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-error active:opacity-60 transition-opacity">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest p-sm rounded-xl flex gap-md shadow-[0_4px_16px_rgba(51,51,51,0.05)] hover:shadow-[0_8px_24px_rgba(51,51,51,0.08)] transition-all">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A flaky, golden-brown artisanal croissant served on a minimalist white plate. The lighting is high-key and crisp, highlighting the delicate layers of the pastry. Set in a bright, modern interior with subtle Bumblebee yellow color pops, emphasizing quality and freshness in a professional urban setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChldaBhxqdjRvOuc3wmJqiOyauR2oRfP3JGo_5JpsbdDCb7koLLdoHqQ1xO-zkCIbqWcm-uEa5OOcIHJphE-8su3t9YVCimPERS1O8TpCrLP4k0_4VlR_KbdIT246uU7uEGSd8iviWfQ-m-VjntPXhJUwh-xPIa4Pr5FQGq8JXe5TL8G3T-6c1X-Iv6cUhZJASQ6jI7yptJtQhCp4VEr64jvM7aTMrpAtnIZ_9kMttOX3rx4yWCSkH2A"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background">Artisan Croissant</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$4.25</span>
+</div>
+<p class="text-label-sm text-on-secondary-container">Butter Original</p>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container rounded-full p-1 gap-4">
+<button class="w-8 h-8 flex items-center justify-center bg-surface-container-lowest rounded-full shadow-sm active:scale-90 transition-transform text-on-background">
+<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
+</button>
+<span class="font-label-md text-label-md w-4 text-center">2</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary-container text-on-primary-container rounded-full shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-error active:opacity-60 transition-opacity">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-lowest p-sm rounded-xl flex gap-md shadow-[0_4px_16px_rgba(51,51,51,0.05)] hover:shadow-[0_8px_24px_rgba(51,51,51,0.08)] transition-all">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="An avocado toast with poached egg on sourdough bread, garnished with microgreens and a sprinkle of chili flakes. The composition is clean and top-down, presented on a light grey textured background. The image feels fresh and healthy, embodying the Bumblebee Cafe's focus on efficient, high-quality urban meals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG0Re5L92PXEQG7yxIk5dLPufdKFxEUbHTOvAJpSZYj_MVj8cNiebJHSFjNzxQatjpRuXYjhd7SagbqpKPAi5ag2VdAc-yx3c8n6jYJvsqNx3E7T_3glG93hGNKDEp8fEvfJEf1DSt8834I8yPMThu-LZ6AR1R-FDCqr6gzlTCFNmWVk62SrMoTO0yZsS7EctJeTUKYP_b8L4y8e83BLmfHpScPJP_hU0sPE39oCB159thmOSC1CixIw"/>
+</div>
+<div class="flex-grow flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background">Avocado Sourdough</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$12.00</span>
+</div>
+<p class="text-label-sm text-on-secondary-container">Gluten Free Option</p>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center bg-surface-container rounded-full p-1 gap-4">
+<button class="w-8 h-8 flex items-center justify-center bg-surface-container-lowest rounded-full shadow-sm active:scale-90 transition-transform text-on-background">
+<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
+</button>
+<span class="font-label-md text-label-md w-4 text-center">1</span>
+<button class="w-8 h-8 flex items-center justify-center bg-primary-container text-on-primary-container rounded-full shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+</button>
+</div>
+<button class="text-error active:opacity-60 transition-opacity">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Summary Card -->
+<section class="mt-lg p-md bg-surface-container-low rounded-xl space-y-base">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md">Subtotal</span>
+<span class="font-body-md font-semibold text-on-background">$27.00</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md">Delivery Fee</span>
+<span class="font-body-md font-semibold text-on-background">$2.50</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md">Tax</span>
+<span class="font-body-md font-semibold text-on-background">$1.80</span>
+</div>
+<div class="pt-base border-t border-outline-variant flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-on-background">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$31.30</span>
+</div>
+</section>
+<!-- Upsell Recommendation (Bento Style) -->
+<section class="mt-lg">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-sm">WOULD YOU LIKE TO ADD?</h4>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container p-sm rounded-xl flex items-center gap-base active:scale-95 transition-transform cursor-pointer">
+<div class="w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a fresh chocolate chip cookie with melting chocolate bits. High contrast, minimalist studio lighting on a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUqU6k8MSZFJn_vjHw9pxWY5hPpKcbq9aRkzbF3tM8eph4FLASaUznN9Z6i4A51W0H9TpP-PYkcTkT0h9ZL2oaxI2RgSOE0QnLlkXccAJUFnnjK-Mv4rTESfujeGoYBXb_F6ITBnyD-mF66LvSOmSPsYmmhGko7VW9rnf8D-S-fYdh3e7s33dsO3Xk2jdDoLE2VXiVSQXiIBV4LvKbQmw5VO-Pg72JP6NVa49AguUrjiZzDR2YLszRIQ"/>
+</div>
+<div>
+<p class="font-label-md text-on-background">Cookie</p>
+<p class="text-[10px] text-primary">+$2.00</p>
+</div>
+</div>
+<div class="bg-surface-container p-sm rounded-xl flex items-center gap-base active:scale-95 transition-transform cursor-pointer">
+<div class="w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A small, clear glass bottle of cold-pressed orange juice. Bright, vibrant citrus color against a clean white and yellow background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVzlKzVYksLb9rOa-Zr-H4AS-S-J3PVMQsndplmpAIvMljt1JSVpfAmcJjVQ6ilsap5nZ6Z7vTFILIuzsW22DcLcdeYTo2-jA8c0EY-T8WKw_mtofHF7oGDtsPww5ye51RciPgcoaYAID8oYmuLOEI1EuBzHR2hOMQ5ub2LnWp6h2c_3_tHfpjH7d8jchNBq8ooiK8JMTq27Sl8jMUZerkuq2NRjUZpiSTNrCOe1lEVk4N_aI7xFT4ZQ"/>
+</div>
+<div>
+<p class="font-label-md text-on-background">OJ Shot</p>
+<p class="text-[10px] text-primary">+$3.50</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar / Nav -->
+<div class="fixed bottom-0 w-full z-50 bg-surface/90 backdrop-blur-xl border-t border-surface-container-highest">
+<div class="max-w-2xl mx-auto px-margin-mobile py-4 flex flex-col gap-base">
+<!-- Checkout Button (Prominent) -->
+<button class="w-full bg-primary-container text-on-primary-container h-14 rounded-xl font-headline-md text-headline-md shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-base">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                Checkout ($31.30)
+            </button>
+<!-- Bottom Navigation Shell (Labels exactly as JSON) -->
+<nav class="flex justify-around items-center h-16 pb-2">
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Spot | Order Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes pulse-neon {
+            0%, 100% { box-shadow: 0 0 5px rgba(210, 187, 255, 0.5), 0 0 10px rgba(210, 187, 255, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(210, 187, 255, 0.8), 0 0 25px rgba(210, 187, 255, 0.5); }
+        }
+        .neon-pulse { animation: pulse-neon 2s infinite; }
+        
+        @keyframes flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: flow 3s ease infinite;
+        }
+
+        .glass-panel {
+            background: rgba(49, 46, 129, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#0c1324",
+                        "on-tertiary-fixed": "#100563",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-tint": "#d2bbff",
+                        "on-secondary": "#00344d",
+                        "on-surface": "#dce1fb",
+                        "on-primary-container": "#ede0ff",
+                        "primary-fixed": "#eaddff",
+                        "background": "#0c1324",
+                        "on-surface-variant": "#ccc3d8",
+                        "surface-container": "#191f31",
+                        "secondary-fixed-dim": "#89ceff",
+                        "error-container": "#93000a",
+                        "surface-dim": "#0c1324",
+                        "on-secondary-container": "#00344e",
+                        "tertiary-fixed-dim": "#c3c0ff",
+                        "on-secondary-fixed": "#001e2f",
+                        "tertiary-container": "#5f5db1",
+                        "on-tertiary": "#272377",
+                        "surface-bright": "#33394c",
+                        "primary-container": "#7c3aed",
+                        "surface-container-low": "#151b2d",
+                        "on-primary": "#3f008e",
+                        "outline-variant": "#4a4455",
+                        "on-primary-fixed": "#25005a",
+                        "on-background": "#dce1fb",
+                        "secondary": "#89ceff",
+                        "tertiary-fixed": "#e2dfff",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#d2bbff",
+                        "secondary-container": "#00a2e6",
+                        "inverse-primary": "#732ee4",
+                        "surface-container-high": "#23293c",
+                        "on-secondary-fixed-variant": "#004c6e",
+                        "inverse-surface": "#dce1fb",
+                        "on-primary-fixed-variant": "#5a00c6",
+                        "error": "#ffb4ab",
+                        "primary": "#d2bbff",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#3e3c8f",
+                        "inverse-on-surface": "#2a3043",
+                        "outline": "#958da1",
+                        "on-tertiary-container": "#e6e3ff",
+                        "surface-variant": "#2e3447",
+                        "surface-container-highest": "#2e3447",
+                        "secondary-fixed": "#c9e6ff",
+                        "tertiary": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary/30 min-h-screen">
+<!-- Background Atmospheric Image -->
+<div class="fixed inset-0 z-0 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-surface/80 via-surface/40 to-surface"></div>
+<div class="w-full h-full bg-cover bg-center opacity-40 scale-110" data-alt="A cinematic, blurry wide shot of a modern urban cafe lounge at night. Deep obsidian surfaces reflect vibrant neon signs in electric purple and cyan. The atmosphere is moody and sophisticated, with soft bokeh lights from distant street traffic and glowing bar shelves, creating a feeling of atmospheric connectivity and high-end nightlife." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCR8T_2_pFt-Fs_4GMbVJfEoozjIiZfz-PXplChiVjzjbLLQYGxLkiyuCayElI4o2mkzIOn9U_jxLXCxvk0C9VwRMzp0Pup5434coHu-7nuHj7yZHdXikhsjqb5KrZ2NvcqNlCVq6ob0nVNDHFdQhGSW6wA4HPOvdz8OeWKz64USI5VelKPbqt6KE1vh4fRTUtYBmW5uaRldnA_7gWDSvX_SxQKSC3ZyLonY6yd3F40MelG1VPIeumkVQ')"></div>
+</div>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-container-margin h-16 bg-surface/40 dark:bg-surface/40 backdrop-blur-md border-b border-white/10">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">Social Spot</span>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden hover:opacity-80 transition-opacity cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A stylish, close-up professional headshot of a young urbanite with cool, cinematic lighting. The portrait uses deep blue and purple rim lighting to match the atmospheric lounge aesthetic. The person looks modern and relaxed, fitting the exclusive social circle vibe of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9hAqbk6iRLvVrK9wuNsuw1knBloETobSz3U4d72m36yYKsz6h_k-FLyaJ7TNEulW2MLrbfrndi7Fn9BO0b85vadCRhnrD81VUXhUi99KQFtLd8pHwvEoJ47ez-XUe4YlAKV9HJCsUiiG9V8ficVG6Ax9m2TYqjyQiZocO6FpWGQXQ7tLhajnWfiEBwnHCfQRGJMD7vk5O8leGAdwZrXPjOFIT4cmjHs9RgeQArCfALQzvxHDWENxaKA"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-24 pb-32 px-container-margin max-w-lg mx-auto">
+<!-- Order Identity Section -->
+<section class="mb-lg">
+<div class="flex items-end justify-between mb-sm">
+<div>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-xs">In Progress</p>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">Order #7742</h1>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Est. Time</p>
+<p class="font-headline-md text-headline-md text-secondary font-bold">8-12m</p>
+</div>
+</div>
+</section>
+<!-- Status Bento Grid -->
+<section class="grid grid-cols-1 gap-md mb-lg">
+<!-- Hero Status Card -->
+<div class="glass-panel rounded-xl p-lg flex flex-col gap-md">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Preparing Your Drink</h2>
+<p class="font-body-md text-on-surface-variant">Our mixologist is crafting your selection at the Main Bar.</p>
+</div>
+<div class="w-12 h-12 flex items-center justify-center bg-primary/20 text-primary rounded-full neon-pulse">
+<span class="material-symbols-outlined" data-icon="local_bar" style="font-variation-settings: 'FILL' 1;">local_bar</span>
+</div>
+</div>
+<!-- Custom Neon Progress Bar -->
+<div class="relative w-full h-4 bg-surface-container-highest rounded-full overflow-hidden border border-white/5">
+<div class="absolute left-0 top-0 h-full w-[65%] rounded-full animate-gradient bg-gradient-to-r from-primary-container via-primary to-secondary shadow-[0_0_15px_rgba(124,58,237,0.5)]"></div>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm text-on-surface-variant px-1">
+<span class="text-primary font-bold">Order Placed</span>
+<span class="text-primary font-bold">Preparation</span>
+<span class="opacity-40">Ready for Pickup</span>
+</div>
+</div>
+<!-- Items List Card -->
+<div class="glass-panel rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-white/5 bg-white/5 flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Your Selection</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 Items</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up, high-contrast photo of a luxury artisan cocktail with a neon purple glow. The drink is served in a crystal glass with ice spheres and a dried orange slice garnish. Moody, dark background with subtle light flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-DUKVmaWQxWdewVwMP4JyNSd9Mo1PQOspoaR-EtCCo_TzPNRde09CDwfquSMzLCToiwTWKO9RcSxsQcy023N2ABmdMDLpeC9qenxvAp684l1hNr7HTkCxoT4jPpXiEX9SleuV_wutfWYd2_cmNgg2mM_w-gHWGKvxxO2oIn8s8qO5AfIfuMFvOx9e87tRUcZK1hs4t-HzVtBcUnZ7SSyk3-_YSwpwyl7p8P5dOAzmpUmurDck7RqCpQ"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Midnight Lychee Martini</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Extra ice, low sugar</p>
+</div>
+</div>
+<span class="font-label-md text-label-md text-primary">x1</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Gourmet social snacks on a dark ceramic plate. Crispy calamari rings with a side of neon-lit dipping sauce. High-end food photography style with atmospheric purple and blue lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_hyH-TbHnV7yE06FNHQfRg4K1gGPcXy-lkscO8DhQJ9WAcaFApOKwLjJt9UM2Q4f3iJsq8o3ZJmfW53S2JOQuZnS15fGxtld9wENt-3OobUxJgTo7uaQL303Itz6drvr9l_B-hMT22vMOYjJ06zpmZIYP5fnTsoSVM2Dvbmx8Ep3rIhOy4GoLHUSt7HH1AAJUDKyuisgII_MeTJBTROLrbCM_RqoNkN-mPTBAIMXFXoVUVsjlPThlsA"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Neon Crispy Calamari</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Spicy aioli dip</p>
+</div>
+</div>
+<span class="font-label-md text-label-md text-primary">x1</span>
+</div>
+</div>
+</div>
+<!-- Action Grid -->
+<div class="grid grid-cols-2 gap-md">
+<button class="glass-panel rounded-xl p-md flex flex-col items-center justify-center gap-sm active:scale-95 transition-transform hover:bg-white/10 group">
+<span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform" data-icon="room_service">room_service</span>
+<span class="font-label-sm text-label-sm text-on-surface">Call Waiter</span>
+</button>
+<button class="glass-panel rounded-xl p-md flex flex-col items-center justify-center gap-sm active:scale-95 transition-transform hover:bg-white/10 group">
+<span class="material-symbols-outlined text-error group-hover:scale-110 transition-transform" data-icon="help_outline">help_outline</span>
+<span class="font-label-sm text-label-sm text-on-surface">Get Help</span>
+</button>
+</div>
+</section>
+<!-- Social Activity Footer -->
+<section class="glass-panel rounded-xl p-md flex items-center gap-md border-primary/20 bg-primary/5">
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Avatar of a stylish person in a neon-lit lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKZ3AvLg2iIwR54UL2dSTOuvQzyv1kfilgFt21djFQpy_Se86DvCOZGLlrquLPv6tjgtxdtwZuZwWl01sCeulj_W7RcuV9ylkxBfkHyHrRwDhJyCq3F2s4zTUUPr7YrmGS56MMUCsUei0Rz9EhBJ5fkIP0pyOo3AcQXMI-tMUGQQF9ZkBr1XYB8RaAbwbqg19k_rsNdSg2sNNMyeGKAV97WhF9vbbnZ49U0aBO2nF2P02iJWi6e_ydeQ"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Avatar of a stylish person in a moody bar setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD2HVmeEEe80D7a4tJVXyj-GXImDKkwJ8hT9a1d0eLzEeZmbtuH-IDr67Ytu7-ybLsTqdaYAK6a7P590E6nmKN--uGk6RE0s7TPLUw5B6QXGRpyVmHfxaX4bal9L0ms1jQKxwPGLu-b9THpbQa-q0--JmpXwmcr6jaV6lnAmbi02FAwVieFRbNRwnK2x2GFsw72W1xTWLiZMBaRGLzYsrpotU8REVP7ok1bqMEu5v_vzKNEDwjKNQ3CA"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-primary-container flex items-center justify-center text-[10px] font-bold">
+                    +12
+                </div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">
+<span class="text-primary font-bold">Live:</span> 14 people just ordered from the Main Bar.
+            </p>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface/40 dark:bg-surface/40 backdrop-blur-xl border-t border-white/10 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-sm text-label-sm">My Spots</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl p-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="event_available" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-sm text-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple pulsing interaction for the progress bar to simulate "Live" updates
+        const progressBar = document.querySelector('.animate-gradient');
+        let progress = 65;
+        
+        setInterval(() => {
+            if (progress < 95) {
+                progress += Math.random() * 0.5;
+                progressBar.style.width = `${progress}%`;
+            }
+        }, 5000);
+
+        // Feedback for button clicks
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const icon = btn.querySelector('.material-symbols-outlined');
+                icon.style.transform = 'scale(1.4)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body></html>

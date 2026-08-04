@@ -20,6 +20,15 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     /**
+     * Resolve nama view guest berdasarkan template yg di-set di .env (GUEST_TEMPLATE).
+     * Format: guest.{template}.{view}
+     */
+    protected function guestView(string $view): string
+    {
+        $template = config('app.guest_template', 'standard');
+        return "guest.{$template}.{$view}";
+    }
+    /**
      * Halaman menu (QR scan meja).
      * Menampilkan produk aktif + kategori + diskon aktif + info meja.
      */
@@ -56,7 +65,7 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
-        return view('guest.index', compact('table', 'company', 'products', 'categories', 'bundles'));
+        return view($this->guestView('index'), compact('table', 'company', 'products', 'categories', 'bundles'));
     }
 
     /**
@@ -199,7 +208,7 @@ class OrderController extends Controller
 
         $company = Company::where('delete_status', 0)->first();
 
-        return view('guest.review', compact('table', 'company', 'items', 'bundleRows', 'itemsJson', 'grandTotal', 'totalPrice'));
+        return view($this->guestView('review'), compact('table', 'company', 'items', 'bundleRows', 'itemsJson', 'grandTotal', 'totalPrice'));
     }
 
     /**
@@ -208,19 +217,28 @@ class OrderController extends Controller
      */
     public function submit(Request $request)
     {
+        // Guest form sends items & bundles as JSON strings in hidden inputs.
+        // Decode them into arrays before validation (admin form sends as PHP arrays natively).
+        if (is_string($request->items)) {
+            $request->merge(['items' => json_decode($request->items, true) ?: []]);
+        }
+        if (is_string($request->bundles)) {
+            $request->merge(['bundles' => json_decode($request->bundles, true) ?: []]);
+        }
+
         $validated = $request->validate([
             'table_id' => 'required|string',
             'items' => 'nullable|array',
-            'items.*.product_id' => 'required|alpha_num',
+            'items.*.product_id' => 'required',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.note' => 'nullable|string|max:500',
             'bundles' => 'nullable|array',
-            'bundles.*.bundle_id' => 'required|string',
+            'bundles.*.bundle_id' => 'required',
             'bundles.*.bundle_name' => 'required|string',
             'bundles.*.bundle_price' => 'required|numeric|min:0',
             'bundles.*.qty' => 'required|integer|min:1',
             'bundles.*.items' => 'required|array|min:1',
-            'bundles.*.items.*.product_id' => 'required|string',
+            'bundles.*.items.*.product_id' => 'required',
             'bundles.*.items.*.quantity' => 'required|integer|min:1',
             'order_remark' => 'nullable|string|max:500',
             'voucher_code' => 'nullable|string|max:50',
@@ -425,7 +443,7 @@ class OrderController extends Controller
 
         $company = Company::where('delete_status', 0)->first();
 
-        return view('guest.status', compact('table', 'company', 'orders'));
+        return view($this->guestView('status'), compact('table', 'company', 'orders'));
     }
 
     /**

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Spicy Bites - Review Your Order</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Montserrat & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#1b1c1c",
+                        "inverse-primary": "#ffb3ac",
+                        "tertiary": "#005f7b",
+                        "secondary-container": "#fdc003",
+                        "tertiary-fixed": "#bee9ff",
+                        "background": "#fcf9f8",
+                        "primary-fixed-dim": "#ffb3ac",
+                        "surface-container-high": "#eae7e7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-tertiary-container": "#e9f7ff",
+                        "on-secondary-container": "#6c5000",
+                        "surface-bright": "#fcf9f8",
+                        "on-primary-container": "#fff2f0",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f6f6c",
+                        "on-secondary-fixed": "#261a00",
+                        "surface": "#fcf9f8",
+                        "on-surface-variant": "#5b403d",
+                        "secondary": "#785900",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#ba1a20",
+                        "tertiary-container": "#00799c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#af101a",
+                        "on-primary-fixed": "#410003",
+                        "primary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5b4300",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#7bd1f8",
+                        "inverse-surface": "#303030",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-tertiary-fixed-variant": "#004d65",
+                        "on-primary-fixed-variant": "#930010",
+                        "surface-container": "#f0eded",
+                        "secondary-fixed-dim": "#fabd00",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdf9e",
+                        "on-tertiary-fixed": "#001f2a",
+                        "outline-variant": "#e4beba",
+                        "surface-container-low": "#f6f3f2",
+                        "primary-container": "#d32f2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1200px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        .flame-gradient {
+            background: linear-gradient(135deg, #af101a 0%, #fdc003 100%);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopAppBar Mapping -->
+<header class="bg-background border-b border-surface-variant shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center px-4 h-16 w-full max-w-7xl mx-auto">
+<button class="text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-black text-primary uppercase tracking-tighter">Review Your Order</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-4 py-8 mb-32">
+<!-- Cart Items Section -->
+<section class="mb-8">
+<h2 class="text-label-bold font-label-bold text-on-surface-variant uppercase mb-4 tracking-widest">Your Spicy Selection</h2>
+<div class="space-y-4">
+<!-- Item 1: Volcano Wings -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-surface-variant flex gap-4 items-center">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional studio food photograph of crispy chicken wings coated in a vibrant, glossy deep red spicy sauce, garnished with fresh green scallions. The lighting is dramatic and warm, emphasizing the texture and heat of the wings. The background is a clean, minimalist off-white surface, following the Spicy Bites brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo8y_e1txJmfjXIn08LiL44eDXBc0bBhuq0P6rHAx6dJtaQM7MWH_24o1wKdo-oenn_G1Zg6ULhKnwah9FDgX-ATu6-bN9ansGYO_YGR7vFfr8LxBQjGX3LWc_tyBAzdu_d2jEMQ-KPLorBPE_AKXhF4Uxm3JfuR5y_kg18Oxf24tYQ9uNZqpWmyA7fRcVjd4hnBVJjykX9yn-Gqc4Mv5TxYE7wiTt2CJkO7LDQ0TuKVu0lN9nN9BwuQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-body-lg text-on-background">Volcano Wings</h3>
+<p class="text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[14px] filled-icon">local_fire_department</span>
+                                    Extreme Heat Level
+                                </p>
+</div>
+<span class="font-label-bold text-primary text-lg">$14.50</span>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center bg-surface-container rounded-full px-2 py-1 border border-outline-variant">
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary-fixed rounded-full transition-all">-</button>
+<span class="px-4 font-label-bold text-on-background">1</span>
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary-fixed rounded-full transition-all">+</button>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2: Habanero Beef Taco -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-surface-variant flex gap-4 items-center">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up macro shot of two gourmet beef tacos topped with vibrant orange habanero salsa, fresh cilantro, and crumbled white cheese. The beef is perfectly seared and juicy. The shot is high-contrast with punchy colors of red and orange against a soft-focus bright background, capturing an energetic and appetizing culinary vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxpgapyocIupE0JvhTw09jpY7iuzCin0cztx-ukk86DQVPQ8e9CVY5QARLbZD7RFZEqDCRMoSP_kr9yLzsAWkDjUB_GAN_7u-Y8e3u6XW-rcuSXmxNtg5-8sitSzpzy7TrpI_nU9SqYm4UB61LrlIs_AxkQb4ROA7UQmzp6puSUTr571_UGkprPRbR7iXe4gnZmDtPJ0h--PPWtLQya6h_4hhqamlLB8gqeEZYTlSM2xCTww4UhX7npA"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-body-lg text-on-background">Habanero Beef Taco</h3>
+<p class="text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[14px] filled-icon">local_fire_department</span>
+                                    Serious Kick
+                                </p>
+</div>
+<span class="font-label-bold text-primary text-lg">$12.00</span>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center bg-surface-container rounded-full px-2 py-1 border border-outline-variant">
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary-fixed rounded-full transition-all">-</button>
+<span class="px-4 font-label-bold text-on-background">2</span>
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary-fixed rounded-full transition-all">+</button>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Promo Code -->
+<section class="mb-8 bg-surface-container-low p-6 rounded-2xl border border-dashed border-outline">
+<h2 class="text-label-bold font-label-bold text-on-surface-variant mb-3">Got a Flame Code?</h2>
+<div class="flex gap-2">
+<input class="flex-grow bg-white border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter Promo Code" type="text"/>
+<button class="bg-secondary-container text-on-secondary-container font-label-bold px-6 py-3 rounded-xl hover:scale-105 transition-transform active:scale-95">Apply</button>
+</div>
+</section>
+<!-- Summary -->
+<section class="bg-surface-container-highest p-6 rounded-2xl shadow-lg border border-surface-variant">
+<div class="space-y-3">
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Subtotal</span>
+<span>$26.50</span>
+</div>
+<div class="flex justify-between text-body-md text-on-surface-variant">
+<span>Delivery Fee</span>
+<span>$2.50</span>
+</div>
+<div class="flex justify-between text-body-md text-primary font-bold">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] filled-icon">local_fire_department</span>
+                        Spicy Surcharge
+                    </span>
+<span>$1.00</span>
+</div>
+<div class="border-t border-outline-variant my-4 pt-4 flex justify-between">
+<span class="text-headline-md font-headline-md text-on-background">Total</span>
+<span class="text-headline-md font-headline-md text-primary">$30.00</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Button (As per request) -->
+<footer class="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md p-4 border-t border-surface-variant z-[60]">
+<div class="max-w-4xl mx-auto">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-5 rounded-2xl shadow-xl hover:shadow-primary/20 hover:scale-[1.02] transition-all active:scale-95 uppercase flex items-center justify-center gap-3">
+                Checkout
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- BottomNavBar (Suppressed as per rules for Transactional/Focused screen, but referenced for global logic) -->
+<!-- Usually wouldn't render here, but maintaining system awareness -->
+<script>
+        // Micro-interaction for quantity buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-90');
+                setTimeout(() => this.classList.remove('scale-90'), 150);
+            });
+        });
+
+        // Simple visibility check for mobile view (not needed for static generation but good for demo)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth < 768) {
+                // Mobile layout adjustments if needed
+            }
+        });
+    </script>
+</body></html>

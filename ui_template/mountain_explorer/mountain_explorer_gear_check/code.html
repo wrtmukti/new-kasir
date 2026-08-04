@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gear Check - Mountain Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Manrope:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#b3b1b1",
+                    "on-background": "#1a1c1c",
+                    "on-primary-fixed-variant": "#2f4d39",
+                    "on-primary-container": "#99baa1",
+                    "primary-fixed-dim": "#adcfb4",
+                    "error-container": "#ffdad6",
+                    "secondary": "#725a39",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f1f1f1",
+                    "secondary-container": "#fbdbb0",
+                    "on-tertiary-fixed-variant": "#474747",
+                    "on-secondary-container": "#765f3d",
+                    "surface-dim": "#dadada",
+                    "surface-container-highest": "#e2e2e2",
+                    "outline-variant": "#c2c8c0",
+                    "surface-bright": "#f9f9f9",
+                    "surface": "#f9f9f9",
+                    "inverse-primary": "#adcfb4",
+                    "surface-container-low": "#f3f3f3",
+                    "surface-container": "#eeeeee",
+                    "tertiary-fixed": "#e4e2e1",
+                    "on-surface": "#1a1c1c",
+                    "outline": "#727972",
+                    "on-secondary-fixed-variant": "#584324",
+                    "primary-fixed": "#c8ebd0",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "on-surface-variant": "#424843",
+                    "background": "#f9f9f9",
+                    "primary": "#163422",
+                    "surface-container-high": "#e8e8e8",
+                    "inverse-surface": "#2f3131",
+                    "tertiary": "#2e2e2e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#281801",
+                    "tertiary-fixed-dim": "#c8c6c6",
+                    "primary-container": "#2d4b37",
+                    "surface-tint": "#466550",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#feddb3",
+                    "tertiary-container": "#444444",
+                    "on-primary-fixed": "#022110",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#e1c299"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "stack-md": "24px",
+                    "stack-sm": "12px",
+                    "stack-lg": "48px",
+                    "margin-mobile": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Manrope"],
+                    "headline-xl": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-bold": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tactile-card {
+            box-shadow: 0 4px 0 0 rgba(22, 52, 34, 0.1);
+        }
+        .btn-primary-tactile {
+            box-shadow: 0 3px 0 0 #163422;
+        }
+        .topographic-pattern {
+            background-image: url('https://www.transparenttextures.com/patterns/topographic.png');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container shadow-sm border-b-2 border-primary-container dark:border-primary">
+<div class="topographic-pattern bg-opacity-10">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-primary" data-icon="landscape">landscape</span>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-on-primary">Mountain Explorer</h1>
+</div>
+<button class="hover:opacity-90 transition-opacity active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-stack-md">
+<!-- Title Section -->
+<section class="mb-stack-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-bold text-label-bold text-primary uppercase tracking-widest">Gear Check</span>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Cek Perlengkapan Kamu</h2>
+</section>
+<!-- Cart Items List -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-stack-md">
+<div class="md:col-span-8 flex flex-col gap-4">
+<!-- Item 1: Everest Espresso -->
+<div class="tactile-card bg-surface-container-lowest border-2 border-outline-variant rounded-xl overflow-hidden flex h-32 relative group">
+<div class="w-32 h-full flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A professional close-up of a rich, dark espresso shot in a rugged ceramic mug on a weathered wooden table. The lighting is warm and golden, suggesting a cozy mountain cabin atmosphere. The aesthetic is tactile and earthy, featuring natural textures like wood grain and ceramic glazes in the signature Mountain Explorer green and tan palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqrAbuUksK1i37NTru-Ui9F5ITrfjwI-McIC1ZQfgMe1GBXd_Wi4U6ZLh85bovT7P4t1HpyKtPSYqLgFdJmtiey4I3gi_t4sd4ffd9mZ2JaXvhcMtAUkM491Dh4iYmqve-zyLKj1FKEUPw9zIwNVc5cLNdbn-3pILcj6CQVbmh3ApNM5QWID2UDdZlPcgn5rdaJjQ6iQg_Xv8aKBAR3hKnY6K0jo06J9ZEUl5nOnmI7p7Lzb1MAj-z5Q')">
+</div>
+</div>
+<div class="flex-grow p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-body-lg font-bold text-primary">Everest Espresso (x2)</h3>
+<button class="text-error hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<p class="font-body-md text-on-surface-variant text-label-sm">Double shot Arabica, roasted for altitude.</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-label-bold text-secondary">Rp 84.000</span>
+<div class="flex items-center gap-3 bg-surface-container rounded-lg p-1 border border-outline-variant">
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span></button>
+<span class="font-label-bold">2</span>
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="add">add</span></button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-1 right-1 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-4xl" data-icon="coffee">coffee</span>
+</div>
+</div>
+<!-- Item 2: Summit Sandwich -->
+<div class="tactile-card bg-surface-container-lowest border-2 border-outline-variant rounded-xl overflow-hidden flex h-32 relative group">
+<div class="w-32 h-full flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A gourmet artisan sandwich with fresh greens, rustic sourdough bread, and savory fillings, presented on a stone slab. The background shows a soft-focus mountain landscape at dawn. The colors are muted and organic, aligning with a high-end outdoor lifestyle aesthetic. Textures of the crusty bread and crisp vegetables are emphasized under natural morning light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHrUeBByDbMWiksyPbmMjrCuNEPLu0FxJtJvIh00VmydtUBUUL3Zcw_LOR3BIKSCgWkcpfM9YHL4PA8Dqk9HjbUyu3WGlLf-IFpdeEBwPA5b-ma-DqMnwv1aTY90TJO3DUiXrk9EGAuwSyxSBby3UnerfQjl9DOeWwezeAqbL5oaet4xQuHp0Q6mp74tVnOsfnfsuKJ7Rf3BDSOct_rQHP_v-coplqpgDNhlKE7CwZBYbLV74UccQtMA')">
+</div>
+</div>
+<div class="flex-grow p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-body-lg font-bold text-primary">Summit Sandwich</h3>
+<button class="text-error hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<p class="font-body-md text-on-surface-variant text-label-sm">Smoked turkey, avocado, and alpine cheese.</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-bold text-label-bold text-secondary">Rp 65.000</span>
+<div class="flex items-center gap-3 bg-surface-container rounded-lg p-1 border border-outline-variant">
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span></button>
+<span class="font-label-bold">1</span>
+<button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="add">add</span></button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-1 right-1 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-4xl" data-icon="lunch_dining">lunch_dining</span>
+</div>
+</div>
+<!-- Empty State Suggestion (Micro-interaction anchor) -->
+<div class="mt-4 p-6 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center text-center opacity-70">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-2" data-icon="add_shopping_cart">add_shopping_cart</span>
+<p class="font-label-bold text-label-bold">Ingin tambah perlengkapan?</p>
+<a class="text-primary font-bold hover:underline" href="#">Jelajahi Menu</a>
+</div>
+</div>
+<!-- Summary Section -->
+<div class="md:col-span-4">
+<div class="bg-secondary-container rounded-xl p-6 tactile-card border-2 border-secondary sticky top-24">
+<h3 class="font-headline-md text-on-secondary-container mb-4">Ringkasan Pesanan</h3>
+<div class="space-y-4 mb-6">
+<div class="flex justify-between text-on-secondary-container opacity-80">
+<span class="font-body-md">Subtotal</span>
+<span class="font-label-bold">Rp 149.000</span>
+</div>
+<div class="flex justify-between text-on-secondary-container opacity-80">
+<span class="font-body-md">Biaya Layanan</span>
+<span class="font-label-bold">Rp 5.000</span>
+</div>
+<hr class="border-on-secondary-container border-opacity-20"/>
+<div class="flex justify-between text-on-secondary-container">
+<span class="font-headline-md text-body-lg">Total</span>
+<span class="font-headline-md text-body-lg font-bold">Rp 154.000</span>
+</div>
+</div>
+<!-- Promo Code -->
+<div class="relative mb-6">
+<input class="w-full bg-surface-container-lowest border-2 border-outline-variant rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="Kode Promo" type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-primary font-bold text-label-sm">PAKAI</button>
+</div>
+<button class="btn-primary-tactile w-full bg-primary text-on-primary py-4 rounded-lg font-label-bold text-label-bold flex items-center justify-center gap-2 hover:opacity-95 transition-all active:translate-y-0.5 active:shadow-none">
+                        Lanjut ke Summit
+                        <span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+<p class="mt-4 text-center text-label-sm text-on-secondary-container opacity-60">Pajak sudah termasuk dalam total harga.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on desktop as per rules) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface border-t-2 border-secondary-container shadow-[0_-4px_12px_rgba(22,52,34,0.1)]">
+<div class="flex justify-around items-center w-full px-2 py-3 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Basecamp</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm-mobile">Trail</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1.5 border-b-2 border-primary transform scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-sm text-label-sm-mobile">Gear</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Peak</span>
+</a>
+</div>
+</nav>
+<script>
+        // Simple micro-interaction for item quantity
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            if (icon.textContent === 'add' || icon.textContent === 'remove') {
+                icon.parentElement.addEventListener('click', (e) => {
+                    const parent = e.target.closest('div');
+                    const span = parent.querySelector('span:not(.material-symbols-outlined)');
+                    let val = parseInt(span.textContent);
+                    if (icon.textContent === 'add') {
+                        span.textContent = val + 1;
+                    } else if (val > 1) {
+                        span.textContent = val - 1;
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

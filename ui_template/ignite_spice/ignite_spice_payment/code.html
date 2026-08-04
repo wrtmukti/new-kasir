@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ignite &amp; Spice - Final Step</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Design System Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#ded9d8",
+                    "on-secondary-fixed": "#331200",
+                    "surface-tint": "#ba1a20",
+                    "primary": "#af101a",
+                    "outline-variant": "#e4beba",
+                    "surface-container-low": "#f8f2f1",
+                    "on-tertiary-container": "#f6f3f3",
+                    "secondary": "#9c4400",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "primary-fixed-dim": "#ffb3ac",
+                    "inverse-primary": "#ffb3ac",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "on-secondary-fixed-variant": "#773200",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#410003",
+                    "tertiary": "#575757",
+                    "on-primary-container": "#fff2f0",
+                    "secondary-container": "#fd7613",
+                    "background": "#fef8f7",
+                    "secondary-fixed-dim": "#ffb68f",
+                    "inverse-on-surface": "#f5efee",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "secondary-fixed": "#ffdbca",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#5b403d",
+                    "on-surface": "#1d1b1b",
+                    "surface": "#fef8f7",
+                    "inverse-surface": "#323030",
+                    "surface-bright": "#fef8f7",
+                    "on-background": "#1d1b1b",
+                    "tertiary-container": "#706f6f",
+                    "surface-container-high": "#ede7e6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e7e1e0",
+                    "outline": "#8f6f6c",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#d32f2f",
+                    "on-secondary-container": "#5b2500",
+                    "surface-container": "#f2edec",
+                    "surface-variant": "#e7e1e0",
+                    "primary-fixed": "#ffdad6",
+                    "on-primary-fixed-variant": "#930010"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .smoke-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 80%),
+                        linear-gradient(135deg, #fef8f7 0%, #f2edec 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .smoke-texture {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+            pointer-events: none;
+            opacity: 0.4;
+            animation: drift 60s linear infinite;
+        }
+
+        @keyframes drift {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-ignite {
+            background: linear-gradient(135deg, #af101a 0%, #fd7613 100%);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        }
+
+        .btn-ignite:active {
+            transform: scale(0.96);
+        }
+
+        .card-selection {
+            transition: all 0.2s ease;
+            border: 1px solid rgba(91, 64, 61, 0.1);
+        }
+
+        .card-selection.active {
+            border-color: #af101a;
+            background-color: white;
+            box-shadow: 0px 4px 12px rgba(33, 33, 33, 0.08);
+        }
+
+        /* Hide TopAppBar on scroll logic via JS */
+        .header-scrolled {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background-color: rgba(254, 248, 247, 0.95) !important;
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md smoke-bg min-h-screen">
+<div class="smoke-texture"></div>
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface border-b border-outline-variant/10 transition-all duration-300" id="topAppBar">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<button aria-label="Back" class="p-2 text-primary hover:bg-primary-container/5 rounded-full transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tight text-primary">Ignite &amp; Spice</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-32">
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Payment Selection Column -->
+<div class="flex-1 space-y-8">
+<div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-2">Final Step</h1>
+<p class="text-on-surface-variant font-body-md">Choose your preferred way to ignite your meal.</p>
+</div>
+<!-- Bento Payment Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Ignite Pay - Featured -->
+<div class="card-selection active relative col-span-1 md:col-span-2 p-6 rounded-xl cursor-pointer bg-surface-container-lowest" id="pay-ignite" onclick="selectPayment('ignite')">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-3xl" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Ignite Pay</h3>
+<span class="inline-block px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase tracking-wider">5% cashback</span>
+</div>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant">The fastest, most rewarding way to pay. Integrated directly with your culinary profile.</p>
+</div>
+<!-- Credit Card -->
+<div class="card-selection p-6 rounded-xl cursor-pointer bg-surface-container-lowest" id="pay-card" onclick="selectPayment('card')">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border border-outline-variant/30 rounded-lg flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Credit Card</h3>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<div class="indicator-inner w-3 h-3 rounded-full hidden"></div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant">Visa, Mastercard, or Amex</p>
+</div>
+<!-- Digital Wallet -->
+<div class="card-selection p-6 rounded-xl cursor-pointer bg-surface-container-lowest" id="pay-wallet" onclick="selectPayment('wallet')">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border border-outline-variant/30 rounded-lg flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Digital Wallet</h3>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<div class="indicator-inner w-3 h-3 rounded-full hidden"></div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant">Apple Pay or Google Pay</p>
+</div>
+</div>
+<!-- Order Details (Mobile Only - will be redundant with sidebar on desktop) -->
+<div class="lg:hidden p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-outline-variant/10 space-y-4">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span>Order Subtotal</span>
+<span>$29.00</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span>Processing Fee</span>
+<span>$3.50</span>
+</div>
+<div class="h-px bg-outline-variant/10 w-full"></div>
+<div class="flex justify-between items-center text-on-surface font-bold">
+<span class="text-headline-md">Total</span>
+<span class="text-headline-md">$32.50</span>
+</div>
+</div>
+</div>
+<!-- Summary Sidebar (Desktop) -->
+<aside class="hidden lg:block w-96">
+<div class="sticky top-24 p-8 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 shadow-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Order Summary</h2>
+<div class="space-y-4 mb-8">
+<div class="flex gap-4">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A close-up, high-end food photograph of a spicy grilled chicken dish with vibrant red peppers and charcoal-grilled textures. The lighting is dramatic and warm, emphasizing the steam and the glistening sauce. The composition is minimalist, shot against a dark stone background with high contrast between the fiery red food and the shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDavcOaDK9J-R04ihQfWjFU8jP5gLHghIXUCWmp8Zn-mYbDRnwZx_ewipy-ltD92bakaN4vNNzATYWB1pL-aNVYsjWmCUjQBFvc-ByXeiXFPde3VoYuOiqGcAHYmR9NQT1_zodXHW_X1c0xGN9_Qp18pZnrMbw1QelbLP51XENGv79GqW_q2tjngcjU4E-8QdLis3TzNIWFkAwG-o7XaG5lgxRhxmM4aEASVPL2edtIfzhnSUQx2EPa8A"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Volcano Wings (x2)</p>
+<p class="text-body-sm text-on-surface-variant">Extra Spicy, Dip: Garlic</p>
+<p class="text-primary font-bold mt-1">$22.00</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A professional beverage photograph of a vibrant citrus iced tea with floating orange slices and mint leaves. The glass is frosted with condensation, illuminated by bright, clear lighting to create a refreshing light-mode aesthetic. The colors are predominantly Burnt Orange and Bone White, emphasizing purity and freshness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqHubM8rI5K0oP2eDyM5si9q-DARBEo7CmVYJi4vD1Ihe0LWh7YQtvBwNLoibVR94IFLMc1xE-x2vOr8jqMfTqZni-HY8uWEaJqGUH64Kn28__L_lrHLtYzMATVKykeuHLWCqEz9RgQkY4JJ6DC5IrznDlPeVBuzDkWXhUMTUgKAbInpMbVeeWUhrYhv_kINw4wEL4LBfYLXxwTatkfUPT7qx5Myx4sFve9XRa-UCzKFHfwcIyPWI2dQ"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Ignite Citrus Cooler</p>
+<p class="text-body-sm text-on-surface-variant">Regular Size</p>
+<p class="text-primary font-bold mt-1">$7.00</p>
+</div>
+</div>
+</div>
+<div class="space-y-3 py-6 border-t border-b border-outline-variant/10">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md">Subtotal</span>
+<span class="font-body-md">$29.00</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md">Processing Fee</span>
+<span class="font-body-md">$3.50</span>
+</div>
+</div>
+<div class="flex justify-between items-center py-6">
+<span class="font-headline-md text-headline-md">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$32.50</span>
+</div>
+<button class="btn-ignite w-full py-4 rounded-xl text-white font-headline-md text-headline-md shadow-lg flex items-center justify-center gap-2 group">
+<span>Pay Now &amp; Ignite</span>
+<span class="material-symbols-outlined transition-transform group-hover:translate-x-1" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+<p class="mt-4 text-center text-[10px] text-on-surface-variant uppercase tracking-widest flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified_user">verified_user</span>
+                        SECURE ENCRYPTED TRANSACTION
+                    </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Mobile Bottom Action -->
+<div class="lg:hidden fixed bottom-0 left-0 w-full p-margin-mobile bg-surface-container-lowest border-t border-outline-variant/10 z-50">
+<button class="btn-ignite w-full py-4 rounded-xl text-white font-headline-md text-headline-md shadow-lg flex items-center justify-center gap-2">
+<span>Pay $32.50 &amp; Ignite</span>
+<span class="material-symbols-outlined" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</button>
+</div>
+<script>
+        function selectPayment(method) {
+            // Reset all
+            document.querySelectorAll('.card-selection').forEach(card => {
+                card.classList.remove('active');
+                card.querySelector('.radio-indicator').classList.remove('border-primary');
+                card.querySelector('.radio-indicator').classList.add('border-outline-variant');
+                const inner = card.querySelector('.indicator-inner');
+                if (inner) inner.classList.add('hidden');
+                
+                // Special case for Ignite Pay center circle
+                if (card.id === 'pay-ignite') {
+                    card.querySelector('.radio-indicator div').classList.add('hidden');
+                }
+            });
+
+            // Set active
+            const activeCard = document.getElementById(`pay-${method}`);
+            activeCard.classList.add('active');
+            activeCard.querySelector('.radio-indicator').classList.remove('border-outline-variant');
+            activeCard.querySelector('.radio-indicator').classList.add('border-primary');
+            
+            if (method === 'ignite') {
+                activeCard.querySelector('.radio-indicator div').classList.remove('hidden');
+            } else {
+                activeCard.querySelector('.indicator-inner').classList.remove('hidden');
+                activeCard.querySelector('.indicator-inner').classList.add('bg-primary');
+            }
+        }
+
+        // Scroll shadow for header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('topAppBar');
+            if (window.scrollY > 10) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                // Subtle pulse or hover logic here if needed
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu Basecamp - Mountain Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Manrope:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .inner-shadow-durable {
+            box-shadow: inset 0 -2px 0 0 #163422;
+        }
+        .topo-pattern {
+            background-image: url('https://www.transparenttextures.com/patterns/topographic.png');
+            background-repeat: repeat;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        @keyframes sway {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-sway {
+            animation: sway 3s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#b3b1b1",
+                        "on-background": "#1a1c1c",
+                        "on-primary-fixed-variant": "#2f4d39",
+                        "on-primary-container": "#99baa1",
+                        "primary-fixed-dim": "#adcfb4",
+                        "error-container": "#ffdad6",
+                        "secondary": "#725a39",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f1f1f1",
+                        "secondary-container": "#fbdbb0",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-secondary-container": "#765f3d",
+                        "surface-dim": "#dadada",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline-variant": "#c2c8c0",
+                        "surface-bright": "#f9f9f9",
+                        "surface": "#f9f9f9",
+                        "inverse-primary": "#adcfb4",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-container": "#eeeeee",
+                        "tertiary-fixed": "#e4e2e1",
+                        "on-surface": "#1a1c1c",
+                        "outline": "#727972",
+                        "on-secondary-fixed-variant": "#584324",
+                        "primary-fixed": "#c8ebd0",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "on-surface-variant": "#424843",
+                        "background": "#f9f9f9",
+                        "primary": "#163422",
+                        "surface-container-high": "#e8e8e8",
+                        "inverse-surface": "#2f3131",
+                        "tertiary": "#2e2e2e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#281801",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "primary-container": "#2d4b37",
+                        "surface-tint": "#466550",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#feddb3",
+                        "tertiary-container": "#444444",
+                        "on-primary-fixed": "#022110",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#e1c299"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px",
+                        "stack-lg": "48px",
+                        "margin-mobile": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Manrope"],
+                        "headline-xl": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "label-bold": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "headline-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-50 bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container shadow-sm border-b-2 border-primary-container dark:border-primary topo-pattern bg-opacity-10">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full max-w-[1200px] mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-primary" data-icon="landscape">landscape</span>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight">Mountain Explorer</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6 font-label-bold text-label-bold">
+<span class="text-on-primary cursor-pointer hover:opacity-90">Basecamp</span>
+<span class="text-on-primary-fixed-variant cursor-pointer hover:opacity-90">Trail</span>
+<span class="text-on-primary-fixed-variant cursor-pointer hover:opacity-90">Gear</span>
+</div>
+<span class="material-symbols-outlined cursor-pointer hover:opacity-90 active:scale-95 duration-100" data-icon="explore">explore</span>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Weather Widget & Status -->
+<section class="mt-stack-md flex flex-col md:flex-row gap-4 items-stretch">
+<div class="flex-1 bg-secondary-container rounded-xl p-6 flex items-center justify-between shadow-sm border-b-2 border-secondary overflow-hidden relative">
+<div class="relative z-10">
+<h2 class="font-label-bold text-label-bold text-on-secondary-container uppercase mb-1">Kondisi Pendakian</h2>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-secondary animate-sway" data-icon="partly_cloudy_day">partly_cloudy_day</span>
+<div>
+<p class="font-headline-md text-headline-md leading-none">12°C</p>
+<p class="font-label-sm text-label-sm">Cerah Berawan • Gn. Gede</p>
+</div>
+</div>
+</div>
+<div class="bg-primary px-3 py-1 rounded-full text-on-primary flex items-center gap-1 font-label-bold text-label-sm relative z-10">
+<span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    Toko Buka
+                </div>
+<!-- Subtle Topo Background for Widget -->
+<div class="absolute inset-0 topo-pattern opacity-5 pointer-events-none"></div>
+</div>
+</section>
+<!-- Hero Section -->
+<section class="mt-stack-md rounded-2xl overflow-hidden relative h-[300px] md:h-[400px] shadow-lg border-2 border-primary">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A sweeping cinematic view of a misty pine forest in the Indonesian highlands at sunrise. The lighting is soft and golden, filtering through dense branches. The style is rugged and adventurous, with deep forest greens and earthy wood tones. A slight topographic map overlay adds a layer of technical craftsmanship to the serene mountain landscape." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8Vq4mpa7v3z5jkSMZkUcwVvCM-6U0Sy58aM-EnmYo6gNdHmcxOuSjwDMpNwUVaP5tbxVow4Jj-5uQihSK4fGb7_ILh_C5QZOYFfHqvqU4vvWcJBiszYdbGIRmc4C9vMwLk18ZW8_xPhqnWcNfI7OIfk7eEDvlWRemCtICm8fgu51Iv8PHDSvSbdV_vO4PRdsS6H6IL2p9IIvcusiQE6Jl70X63joLeASKr0igblOVkhVxfqGzUfzymw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<h2 class="font-headline-xl text-headline-lg-mobile md:text-headline-xl text-on-primary mb-2">Menu Basecamp</h2>
+<p class="text-on-primary-container font-body-lg max-w-lg">Nutrisi esensial untuk para penjelajah rimba. Siapkan diri sebelum pendakian panjang.</p>
+</div>
+</section>
+<!-- Categories Navigation (Chips) -->
+<nav class="mt-stack-lg flex gap-3 overflow-x-auto pb-4 no-scrollbar">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container border-2 border-primary font-label-bold text-label-bold shadow-sm">Hot Brews</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface border border-primary text-primary font-label-bold text-label-bold hover:bg-surface-container transition-colors">Trail Snacks</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface border border-primary text-primary font-label-bold text-label-bold hover:bg-surface-container transition-colors">Survival Gear</button>
+</nav>
+<!-- Menu Grid -->
+<section class="mt-stack-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Item 1: Everest Espresso -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant flex flex-col group hover:shadow-md transition-shadow">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional close-up of a rich espresso in a matte black ceramic mug sitting on a rough-hewn oak table. Wisps of steam rise gracefully in front of a blurred background of a cozy mountain cabin. The lighting is warm and directional, highlighting the crema of the coffee. The aesthetic is tactile, rustic, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfVWwIfqtE8_o1tuXfkYqiPzbnK1T-1T79CJuH45reKiij4D9N7d8o3g2kP339z1lmapZvML_4uWM8KSD9n47anpvfTTzX-6RQV9JLgJ5gFIsfxG01BZMTcDZnQ78ItIWYmQmX0lcEodenQ6VsnsSDtDvN2Qqrdpd1Qln-8I83NDvKFhc9AA5bJeVlbCsDilBq_6ovsQKhcXpNF4Q6MFZbIMrX_fpig0nuKVmB3OP3IWEFruieaU2ztA"/>
+<span class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 rounded-full font-label-bold text-label-sm">Populer</span>
+</div>
+<div class="p-6 flex flex-col flex-1 relative">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Everest Espresso</h3>
+<p class="text-on-surface-variant font-body-md mb-6 line-clamp-2">Kopi giling kasar dari ketinggian 1500m, memberikan energi instan untuk tanjakan terjal.</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-secondary">Rp 35k</span>
+<button class="bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold px-6 py-2 rounded-lg inner-shadow-durable active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+<!-- Watermark -->
+<div class="absolute bottom-2 right-2 topo-pattern w-12 h-12 opacity-10 pointer-events-none"></div>
+</div>
+</div>
+<!-- Item 2: Highline Granola -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant flex flex-col group hover:shadow-md transition-shadow">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A top-down view of an artisanal bowl of granola filled with dried berries, clusters of toasted oats, and mountain nuts. The bowl is made of speckled stoneware and rests on a weathered map spread across a wooden surface. Natural, bright forest lighting illuminates the textures of the grains. The style is wholesome, organic, and grounded in nature." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5p-ZYCHNNCS-1Ww1ZvRpEq3A8tYY_LuAhluiaUEParuqEQrGRPA8l3lKtyx0ZMVuLftezJszNFTe4c6Yb_OLPleeSa56rNo24Pj8vSyxsjet99qqPRcjZnYh4f3gzMBYshGVaETOHVgefO3UEb5derqRvRG0bukVnjsEopDITc3v4pt0nWRYu-haX290Fuq0qIB96H3PJYtzLQJYO7yiPfpIZWzVKb6l2JRX9_yHro8U0S1DaTb_iug"/>
+</div>
+<div class="p-6 flex flex-col flex-1 relative">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Highline Granola</h3>
+<p class="text-on-surface-variant font-body-md mb-6 line-clamp-2">Campuran gandum panggang, kacang hutan, dan buah kering untuk stamina tanpa batas.</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-secondary">Rp 48k</span>
+<button class="bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold px-6 py-2 rounded-lg inner-shadow-durable active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+<div class="absolute bottom-2 right-2 topo-pattern w-12 h-12 opacity-10 pointer-events-none"></div>
+</div>
+</div>
+<!-- Item 3: Summit Sandwich -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant flex flex-col group hover:shadow-md transition-shadow">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A thick, multi-layered sandwich wrapped in brown butcher paper, tied with a simple twine. It features toasted artisanal bread, fresh greens, and thick slices of smoked protein. The sandwich is placed on a rustic grey slate plate outdoors, with a backdrop of soft mountain mist. The lighting is diffused and natural, emphasizing the freshness and hearty nature of the meal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACZth6Ug9HPcx48z_wk89FYYPy8DhcuboGWFX7z1O3HKcdKr7qc-3fXjQXKO02KmlFb6fl_slt9snDDTFVUJ6HM46AwMd7JyanlLEY8bpsGHiFv_qLRFdBi2mQ-kk5KJ2S-s2mzhomRYwEDRfjsgXP4K702Dvtv_jjce_XNS33Yn7WtzF5PTQYOCBou3i1m8eTPfoiDtO-hlfH0LexrdUKvxntEkdqr-ENeExYW60HPQtLtlGfu72hoA"/>
+</div>
+<div class="p-6 flex flex-col flex-1 relative">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Summit Sandwich</h3>
+<p class="text-on-surface-variant font-body-md mb-6 line-clamp-2">Roti sourdough panggang dengan protein asap dan sayuran segar. Puncak kenikmatan sejati.</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-secondary">Rp 65k</span>
+<button class="bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold px-6 py-2 rounded-lg inner-shadow-durable active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+<div class="absolute bottom-2 right-2 topo-pattern w-12 h-12 opacity-10 pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- Secondary Section: Gear Highlight -->
+<section class="mt-stack-lg mb-stack-lg p-8 rounded-2xl bg-primary text-on-primary relative overflow-hidden">
+<div class="absolute inset-0 topo-pattern opacity-10 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+<div class="flex-1">
+<h2 class="font-headline-lg text-headline-lg mb-4">Butuh Perlengkapan Tambahan?</h2>
+<p class="font-body-lg text-on-primary-container mb-6">Kami juga menyediakan peralatan darurat, peta fisik, dan pakaian tahan cuaca untuk ekspedisi Anda.</p>
+<button class="bg-secondary-container text-on-secondary-container font-label-bold text-label-bold px-8 py-3 rounded-lg shadow-lg hover:brightness-110 transition-all">Lihat Katalog Gear</button>
+</div>
+<div class="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden border-4 border-primary-container shadow-2xl rotate-3">
+<img class="w-full h-full object-cover" data-alt="A curated collection of rugged survival gear including a vintage brass compass, a folded topographic map, a classic steel water bottle, and a heavy-duty camping knife arranged on a dark green canvas surface. The lighting is dramatic with deep shadows, emphasizing the durability and reliability of the equipment. The overall tone is professional, adventurous, and high-quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAdKRwbfeng3c3-RtPgI7X8-_x891dQ9tlVFHC7Y3FLeXyMkOssCbuDuxlsiKoUvHvRZLjx26m4sbmKL_tEiPqW6DwvJno2JrGdfF8-70tdAP6l7cLQm1RRKE4u0WtMfIjOivQeU_X6tKl3mp1OrNnqeaCK6qWs2SlVKjSZ4qUqBh7W6OJERcK8EINME1uK-neZOKWWiBQyItAWhuXYe_-WsoJYswxdBuxaGd7D5HMKB9VeF6pzOSibA"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface border-t-2 border-secondary-container shadow-[0_-4px_12px_rgba(22,52,34,0.1)] flex justify-around items-center px-2 py-3 pb-safe">
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1.5 border-b-2 border-primary transform scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Basecamp</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm">Trail</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-sm text-label-sm">Gear</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Peak</span>
+</div>
+</nav>
+<!-- Desktop Floating Action (Optional contextually) -->
+<div class="hidden md:flex fixed bottom-8 right-8 z-40">
+<button class="w-16 h-16 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="shopping_cart">shopping_cart</span>
+<div class="absolute -top-1 -right-1 bg-secondary w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center border-2 border-primary">2</div>
+</button>
+</div>
+<script>
+        // Simple Interaction for Menu Buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                if(this.innerText.includes('Pesan Sekarang')) {
+                    const itemName = this.closest('div.p-6').querySelector('h3').innerText;
+                    alert(`Menambahkan ${itemName} ke tas belanja Anda!`);
+                }
+            });
+        });
+
+        // Theme Switcher Logic (Simple Implementation)
+        const toggleTheme = () => {
+            document.documentElement.classList.toggle('dark');
+        };
+    </script>
+</body></html>

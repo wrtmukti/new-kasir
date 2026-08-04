@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#796048",
+                    "on-surface-variant": "#56423e",
+                    "on-primary-fixed": "#3d0700",
+                    "outline": "#89726d",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#cbebc3",
+                    "background": "#fcf9f2",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#9c432d",
+                    "error": "#ba1a1a",
+                    "secondary": "#725a42",
+                    "inverse-on-surface": "#f3f0ea",
+                    "primary-fixed": "#ffdad2",
+                    "on-secondary-fixed-variant": "#59422c",
+                    "on-tertiary-fixed-variant": "#324d30",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#ffb4a3",
+                    "on-tertiary-fixed": "#062108",
+                    "surface-container-low": "#f6f3ec",
+                    "on-secondary-fixed": "#291806",
+                    "surface-bright": "#fcf9f2",
+                    "surface-dim": "#dcdad3",
+                    "tertiary-container": "#5b7857",
+                    "tertiary-fixed-dim": "#afcfa9",
+                    "on-background": "#1c1c18",
+                    "surface-variant": "#e5e2db",
+                    "on-primary": "#ffffff",
+                    "surface": "#fcf9f2",
+                    "primary": "#943d28",
+                    "secondary-container": "#fedcbe",
+                    "on-primary-fixed-variant": "#7d2c18",
+                    "secondary-fixed": "#fedcbe",
+                    "on-primary-container": "#fff3f0",
+                    "on-surface": "#1c1c18",
+                    "primary-container": "#b3543d",
+                    "inverse-surface": "#31312c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#dfffd7",
+                    "surface-container-highest": "#e5e2db",
+                    "secondary-fixed-dim": "#e1c1a4",
+                    "tertiary": "#435f40",
+                    "inverse-primary": "#ffb4a3",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#dcc1ba",
+                    "surface-container-high": "#ebe8e1",
+                    "surface-container": "#f0eee7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xl": "40px",
+                    "md": "16px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "64px",
+                    "gutter": "16px",
+                    "base": "8px",
+                    "lg": "24px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-xl": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "headline-xl-mobile": ["Playfair Display"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "label-md": ["Manrope"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-xl-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .gedhek-pattern {
+            background-image: radial-gradient(#4b3621 0.5px, transparent 0.5px), radial-gradient(#4b3621 0.5px, #fcf9f2 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.03;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- Woven Pattern Overlay -->
+<div class="fixed inset-0 gedhek-pattern pointer-events-none z-0"></div>
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-margin-mobile md:px-margin-desktop h-16 flex items-center justify-between">
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-primary hover:bg-secondary-container/20 p-2 rounded-full transition-colors active:scale-95 duration-150">menu</button>
+<h1 class="font-headline-md text-headline-md-mobile md:text-headline-md text-primary font-bold">Warung Kampung</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/20 p-0.5 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A portrait of a smiling Indonesian user wearing a traditional batik scarf, set against a warm, sun-drenched wooden pavilion background. The lighting is soft and natural, emphasizing a welcoming and communal 'Kampung' atmosphere. The image uses a warm color palette with earthy tones and soft golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOMbIB9Yqu0CgHmr2PVaxIVTJki5vsHADYWhPiaXAtMNyREYLcKq2BIkWfCeasBbmD6oJP8-MD0Y01-xDFpXBj7zgWdit1luUN-zXUMPaWaU-VrTkSgGIiNRMORBzL5y34Aw6REsKhHp4cfKtYFRXJMu9ej7QV0MngtToY7cV39Cph2I9J0YMvxMq_Jw0KDyOg82uQYaZN5Pcvicf43Bv9887niOG9oeFYTu_L-GwW5EKO0F6MpRZP2Q"/>
+</div>
+</header>
+<main class="relative z-10 pt-24 pb-32 max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Hero Section -->
+<section class="mb-xl">
+<h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary mb-xs">Sugeng Rawuh</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Selamat datang di pendopo kami. Silakan nikmati hidangan khas desa yang dibuat dengan penuh rasa dan kehangatan tradisi.</p>
+</section>
+<!-- Special Banner -->
+<section class="mb-xl">
+<div class="relative w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-lg group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A breathtaking view of a traditional Indonesian Javanese village at sunrise. Lush green rice paddies surround antique teak wood Joglo houses. Golden morning mist rolls over the fields, with smoke rising from a kitchen chimney. The scene is peaceful, nostalgic, and bathed in warm orange and green tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLKB490iR3ZVxPUE9WUV6s-8TzUGr_puz7t02hpKKIUKssp9rbRGOvo5MXxoOmLqTRgAWGaQJUlhP3kK9jWv7SBQfX-m0FZMwBaCAlulUAsrbo36llSoM9o4Rp-4sWBuvcF575FOO3GrO2VSvQhdByWZEixATzFZfvGKjoSYiigIpYI51ncPEZ3Ai5gMnIGqd98KaCncdgVp55mfXkUf6tbzjplh3dBrsQ75MFvYd1_kFL1uSVUADYNg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-lg text-white">
+<span class="inline-block px-3 py-1 bg-primary text-white font-label-md text-label-md rounded-full mb-md">Spesial Hari Ini</span>
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-xs">Nasi Tumpeng Mini Selamatan</h3>
+<p class="font-body-md text-body-md text-white/90">Rayakan syukur hari ini dengan porsi spesial nasi kuning legendaris.</p>
+</div>
+</div>
+</section>
+<!-- Category Scroller -->
+<section class="mb-lg overflow-x-auto hide-scrollbar -mx-margin-mobile px-margin-mobile flex gap-md">
+<button class="flex-shrink-0 px-lg py-sm bg-primary text-on-primary rounded-full font-label-md text-label-md shadow-md active:scale-95 transition-transform">Semua</button>
+<button class="flex-shrink-0 px-lg py-sm bg-white border border-outline-variant/30 text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-secondary-container/20 active:scale-95 transition-transform">Makanan</button>
+<button class="flex-shrink-0 px-lg py-sm bg-white border border-outline-variant/30 text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-secondary-container/20 active:scale-95 transition-transform">Minuman</button>
+<button class="flex-shrink-0 px-lg py-sm bg-white border border-outline-variant/30 text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-secondary-container/20 active:scale-95 transition-transform">Cemilan</button>
+<button class="flex-shrink-0 px-lg py-sm bg-white border border-outline-variant/30 text-on-surface-variant rounded-full font-label-md text-label-md hover:bg-secondary-container/20 active:scale-95 transition-transform">Oleh-oleh</button>
+</section>
+<!-- Menu Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Dish 1 -->
+<div class="bg-white rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A close-up high-angle shot of Nasi Liwet Solo served on a traditional clay plate lined with a vibrant green banana leaf. The rice is aromatic and topped with shredded chicken, chayote squash, and a creamy coconut 'kumut' sauce. The lighting is soft and rustic, highlighting the textures of the food and the dark wooden table." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWJf83m9cWEDvjaj9_HGe0SxI0vzMZiT9BTVVa4rPpfgHm4nuxTCBwJkADNsz5JrU5bjnLXgqlHkIN4GI0aFMRBtzVlCUG_DBogmKFTheIFqpCykwtMUosodUZgG1M4MFl2dGtAaftvCIy49mhwlVHjQKSjYLVSgASefANIIhd1WcVXM_NQwoDaLadM_25EviyVDgvlcLA9znoBqiVHgZktUmZ0LzP_-MDDO-I7A4Aln0kYZ5mDyIpXw"/>
+<div class="absolute top-sm right-sm px-2 py-1 bg-tertiary text-on-tertiary rounded-lg font-label-sm text-label-sm">Favorit</div>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-sm">
+<h4 class="font-headline-md text-headline-md text-primary">Nasi Liwet Solo</h4>
+<span class="font-label-md text-label-md text-secondary">Rp 35.000</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Nasi gurih kelapa disajikan dengan opor ayam suwir, sayur labu siam, dan areh santan kental.</p>
+<button class="w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+</div>
+<!-- Dish 2 -->
+<div class="bg-white rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A delicious Ayam Betutu Bali presented on a rustic hand-carved wooden platter. The chicken is deeply marinated in aromatic Balinese spices, appearing succulent and golden-brown. It is garnished with roasted peanuts and fresh chili. The background shows a blurry glimpse of a Balinese garden with stone carvings and tropical ferns." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgobFFyl4EfdRDCH_Spyb2t28muqKdFF6gjRJVXzI0SFtjxVdazkTTsgZfUda7XHGLC8iUlNjY1jtq_0ODye_w7hjzjW3mZrS-RLb_fwDLiIvqr581YcR7wwzr4WUtJFopkC_f_m_Z-2qmJ3hhc2bKXQKtUubOZcSh3EWg83d3opuMWTjFLl9LTpRY_xeU4qTLr5yeaZ0YnbHanU1bERw0_zjVB3mLZ4N0XIl2J3zHAsjtyhFCjMmGog"/>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-sm">
+<h4 class="font-headline-md text-headline-md text-primary">Ayam Betutu</h4>
+<span class="font-label-md text-label-md text-secondary">Rp 48.000</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Ayam bumbu rempah genep Bali yang dimasak perlahan hingga meresap dan empuk sempurna.</p>
+<button class="w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+</div>
+<!-- Dish 3 -->
+<div class="bg-white rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A refreshing Es Cendol Nangka in a tall glass, showing distinct layers of green pandan rice flour droplets, thick brown palm sugar syrup, and creamy white coconut milk. Large chunks of yellow jackfruit are visible at the top. The glass sits on a teak wood coaster next to a small orchid flower in a rustic kampung setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChxFXtEzt9-B4tb1T1RnbHSKrefg-BvPhSJ0GHNk48127_iGD-drk3trO5aT_HljTuDSLkttDN51ze2J_ZscB6nCUmsaIHh9vj6n_9r_6mRfYWWWnJKWRpyKXhI8fRjGYoaDSyteu36vlDRruXMYxxgUZrX2wA1vgpzonFXAru9Awcq_itRw6Ast4YG-oO9SI0KZBachNekGcSmnrg2cIRFeXNHW3efI2qQZjs-h0nxTASomK6E-NM4g"/>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-sm">
+<h4 class="font-headline-md text-headline-md text-primary">Es Cendol Nangka</h4>
+<span class="font-label-md text-label-md text-secondary">Rp 18.000</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Cendol pandan asli dengan kuah santan gurih, gula merah kental, dan potongan nangka manis.</p>
+<button class="w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+</div>
+<!-- Dish 4 -->
+<div class="bg-white rounded-xl overflow-hidden border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A plate of traditional Indonesian snacks called 'Jajan Pasar'. It includes colorful Klepon coated in shredded coconut, green Kue Lapis, and brown Getuk. They are artistically arranged on a flat woven bamboo tray. The colors are earthy and natural, suggesting a handmade, organic quality from a traditional village kitchen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaVlJBDxb8vpYHQ63jhcYlDvPpocclnsxJdjnumy44-g_UCqBETIrmysJwCfLOy0_LW19n2XwYz0WYBbkoIvheWWtVws0nZXFQ-7OPDwJOn-v6mrHkKSX2QjRAYU48VM-69j3sN76OoiPTWpH4t98vU1CfzVjbdsc10Z-qe0tqtPK5i-Fk0FpBsB9G3MI6mjT8CpFYwsMbHJcTPu1CYXZD09-nt7t4AZrtjPw4s5n_YkzHt1S1oiNHKg"/>
+</div>
+<div class="p-lg">
+<div class="flex justify-between items-start mb-sm">
+<h4 class="font-headline-md text-headline-md text-primary">Cemilan Sore</h4>
+<span class="font-label-md text-label-md text-secondary">Rp 22.000</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Aneka jajan pasar tradisional: Klepon, Kue Lapis, dan Getuk yang manis dan legit.</p>
+<button class="w-full py-3 bg-primary text-on-primary font-label-md text-label-md rounded-lg active:scale-95 transition-all">Pesan Sekarang</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-low border-t border-outline-variant/10 shadow-[0_-4px_10px_rgba(75,54,33,0.05)] h-20 px-4 pb-safe flex justify-around items-center rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<span class="font-label-md text-label-md">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Pesanan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profil</span>
+</a>
+</nav>
+<!-- Floating Action Button for Reservation -->
+<button class="fixed bottom-24 right-margin-mobile z-40 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">event_seat</span>
+</button>
+<script>
+        // Micro-interaction for category buttons
+        const categoryButtons = document.querySelectorAll('section:nth-of-type(3) button');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary', 'shadow-md');
+                    b.classList.add('bg-white', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
+                });
+                btn.classList.remove('bg-white', 'border', 'border-outline-variant/30', 'text-on-surface-variant');
+                btn.classList.add('bg-primary', 'text-on-primary', 'shadow-md');
+            });
+        });
+    </script>
+</body></html>

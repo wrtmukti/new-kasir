@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FamilyTable - Review Pesanan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #fff8f5; /* Soft Cream */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pill-shadow {
+            box-shadow: 0px 4px 16px rgba(92, 83, 78, 0.08);
+        }
+        .bento-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bento-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#ccebc7",
+                "on-background": "#211a16",
+                "on-primary-fixed": "#380d00",
+                "secondary": "#4a6549",
+                "surface-variant": "#ede0d9",
+                "surface-container-highest": "#ede0d9",
+                "on-error": "#ffffff",
+                "on-primary-container": "#752501",
+                "secondary-fixed-dim": "#b0cfad",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#56423c",
+                "on-primary-fixed-variant": "#7e2b07",
+                "primary-fixed": "#ffdbcf",
+                "on-tertiary-container": "#424037",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed-variant": "#334d33",
+                "inverse-surface": "#362f2b",
+                "on-primary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-error-container": "#93000a",
+                "tertiary-fixed": "#e8e2d6",
+                "surface-tint": "#9e421d",
+                "surface-container": "#f9ebe4",
+                "inverse-primary": "#ffb59b",
+                "primary-container": "#ff8c61",
+                "surface-bright": "#fff8f5",
+                "outline-variant": "#ddc1b7",
+                "outline": "#89726a",
+                "secondary-fixed": "#ccebc7",
+                "inverse-on-surface": "#fceee7",
+                "on-secondary-fixed": "#07200b",
+                "tertiary-fixed-dim": "#cbc6bb",
+                "primary-fixed-dim": "#ffb59b",
+                "error": "#ba1a1a",
+                "background": "#fff8f5",
+                "tertiary-container": "#b0aba0",
+                "primary": "#9e421d",
+                "on-secondary-container": "#506b4f",
+                "surface-dim": "#e5d7d1",
+                "on-tertiary-fixed": "#1d1c15",
+                "surface": "#fff8f5",
+                "tertiary": "#615e55",
+                "on-tertiary-fixed-variant": "#49473e",
+                "surface-container-low": "#fff1ea",
+                "surface-container-high": "#f3e5df",
+                "on-surface": "#211a16"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "2xl": "1rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "section-gap": "64px",
+                "container-margin": "24px",
+                "gutter": "16px",
+                "unit": "8px",
+                "touch-target-min": "48px"
+            },
+            "fontFamily": {
+                "title-lg": ["Quicksand"],
+                "headline-md": ["Quicksand"],
+                "body-lg": ["Be Vietnam Pro"],
+                "display-lg-mobile": ["Quicksand"],
+                "body-md": ["Be Vietnam Pro"],
+                "display-lg": ["Quicksand"],
+                "label-md": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-md-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-body-md text-on-surface min-h-screen pb-40">
+<!-- Top Navigation -->
+<header class="bg-surface sticky top-0 z-50 shadow-[0px_4px_16px_rgba(92,83,78,0.08)] flex justify-between items-center w-full px-container-margin py-unit h-touch-target-min">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center hover:bg-surface-variant/50 transition-colors duration-200 rounded-full active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="text-headline-md-mobile font-headline-md text-primary">FamilyTable</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">location_on</span>
+<span class="font-label-md text-label-md text-on-surface-variant hidden md:block">Meja No. 12</span>
+<span class="material-symbols-outlined text-primary">notifications</span>
+</div>
+</header>
+<main class="max-w-3xl mx-auto px-container-margin mt-gutter space-y-6">
+<!-- Order Identity Header -->
+<div class="flex flex-col gap-1 py-4">
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Review Pesanan</h2>
+<p class="font-body-md text-on-surface-variant">Pastikan semua item sudah sesuai dengan selera Anda.</p>
+</div>
+<!-- Order Items List (Asymmetric/Modern Layout) -->
+<div class="grid grid-cols-1 gap-4">
+<!-- Item 1: Paket Ayam Keluarga -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex gap-4 bento-card shadow-[0px_8px_24px_rgba(92,83,78,0.06)] border border-surface-variant/30">
+<div class="w-24 h-24 rounded-xl flex-shrink-0 overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A warm, golden-brown crispy fried chicken family platter served on a rustic wooden table. The lighting is soft and natural, emphasizing the crunchy texture of the chicken. Surrounded by small bowls of spicy sambal and fresh lime slices, the scene evokes a cozy family dinner atmosphere with earthy tones and soft cream backgrounds consistent with the FamilyTable brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmaG_plLejirbzwTk73OfOoQVd0dQVV502H4Vf7ySPwBpEgIHV0CVUlfIQQ6haBAIvEiSYbHufnubzBwpXgklNHKZCMWd5ckdM8rH3BkdTMlCB8Q458L56QexMVB7-QuqnXfKRYdGNJHb7P7yZj5IXD76_29sL0wIUl9xLegx6K2a3JR2XPWF0andse26LrGwCK4scDV2qu7xP2bp5JeDId2sIhxAubKQWI8hOFDmp_ffD1ld8WWew3A"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-title-lg text-title-lg text-on-surface">Paket Ayam Keluarga</h3>
+<span class="font-label-md text-label-md text-primary">Rp 125.000</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm mt-1">8 Potong Ayam, 4 Nasi, 4 Sambal</p>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex items-center gap-3 bg-surface-container rounded-full px-3 py-1">
+<button class="material-symbols-outlined text-primary text-lg active:scale-90 transition-transform">remove_circle</button>
+<span class="font-label-md text-label-md w-4 text-center">1</span>
+<button class="material-symbols-outlined text-primary text-lg active:scale-90 transition-transform">add_circle</button>
+</div>
+<button class="text-error font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">delete</span> Hapus
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 2: Es Teh Manis -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex gap-4 bento-card shadow-[0px_8px_24px_rgba(92,83,78,0.06)] border border-surface-variant/30">
+<div class="w-24 h-24 rounded-xl flex-shrink-0 overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A refreshing glass of iced tea with condensation droplets on the outside, garnished with a sprig of fresh mint and a slice of lemon. The tea has a rich amber color, captured in bright, airy morning light. The background is a soft, warm cream color with a subtle blur, creating a clean and inviting visual consistent with the high-legibility, modern minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9suZEzHb1DK6yBvu9X3l5wRk7LK_qVuU60l7u36IIaViw33HToilLSUUd5vbdARaMcSOsccQAvcPbnvZThuguAonXHL-q3SIVYVo637WdaP9l1Mvrj1UuUnAtKIkr1lgGqvdkc8b4IeA8X1M6Y84x3Rirru3B3s3k6SBDQaNwJvH7xoYGzD9ordUIpy0UQgRFk003xoGEU8ZlQZOKCrcFnl-RZNgJ1mEBRvjLMu-QF_2ZhOJDfacuJQ"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-title-lg text-title-lg text-on-surface">Es Teh Manis</h3>
+<span class="font-label-md text-label-md text-primary">Rp 40.000</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm mt-1">4 Gelas, Kurangi Es Batu</p>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex items-center gap-3 bg-surface-container rounded-full px-3 py-1">
+<button class="material-symbols-outlined text-primary text-lg active:scale-90 transition-transform">remove_circle</button>
+<span class="font-label-md text-label-md w-4 text-center">4</span>
+<button class="material-symbols-outlined text-primary text-lg active:scale-90 transition-transform">add_circle</button>
+</div>
+<button class="text-error font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">delete</span> Hapus
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Add More Button -->
+<button class="w-full py-4 border-2 border-dashed border-outline-variant rounded-2xl flex items-center justify-center gap-2 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">Tambah menu lain</span>
+</button>
+<!-- Summary Section -->
+<div class="bg-secondary-container/20 p-6 rounded-2xl space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant">Subtotal</span>
+<span class="font-label-md text-label-md text-on-surface">Rp 165.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant">Pajak Restoran (10%)</span>
+<span class="font-label-md text-label-md text-on-surface">Rp 16.500</span>
+</div>
+<div class="h-px bg-outline-variant/30 w-full"></div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md-mobile text-on-surface">Total</span>
+<span class="font-headline-md text-headline-md-mobile text-primary">Rp 181.500</span>
+</div>
+</div>
+<!-- Note to Chef -->
+<div class="bg-surface-container p-4 rounded-2xl">
+<label class="font-label-md text-label-md text-on-surface-variant mb-2 block">Catatan untuk Dapur (Opsional)</label>
+<textarea class="w-full bg-surface-container-lowest border-2 border-outline-variant focus:border-primary focus:ring-0 rounded-xl font-body-md p-3 min-h-[100px] transition-colors" placeholder="Contoh: Sambal dipisah, tidak pakai daun bawang..."></textarea>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 p-container-margin bg-surface shadow-[0px_-4px_24px_rgba(92,83,78,0.08)] z-50 flex flex-col md:flex-row gap-4 items-center justify-center">
+<div class="w-full max-w-3xl flex items-center justify-between gap-4">
+<div class="hidden md:block">
+<p class="font-label-md text-label-md text-on-surface-variant">Total Pembayaran</p>
+<p class="font-headline-md text-headline-md-mobile text-primary">Rp 181.500</p>
+</div>
+<button class="w-full md:w-auto bg-primary-container text-on-primary-container px-12 py-4 rounded-2xl font-title-lg text-title-lg hover:brightness-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+                Pesan Sekarang
+            </button>
+</div>
+</div>
+<!-- Background Decoration (Light Organic Pattern) -->
+<div class="fixed top-0 right-0 -z-10 opacity-10 pointer-events-none">
+<svg fill="none" height="400" viewbox="0 0 400 400" width="400" xmlns="http://www.w3.org/2000/svg">
+<circle cx="350" cy="50" fill="#9e421d" r="150"></circle>
+<circle cx="50" cy="350" fill="#4a6549" r="100"></circle>
+</svg>
+</div>
+<script>
+        // Simple Interaction Logic
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Haptic feedback simulation or ripple could go here
+                console.log('Action triggered:', this.innerText || this.querySelector('span')?.innerText);
+            });
+        });
+
+        // Dynamic Total Update Simulation (Visual Only)
+        let quantities = {
+            item1: 1,
+            item2: 4
+        };
+
+        function updateUI() {
+            // This is a placeholder for actual state management
+            // In a real app, we would re-calculate totals here
+        }
+    </script>
+</body></html>

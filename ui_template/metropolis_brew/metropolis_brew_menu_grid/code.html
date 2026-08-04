@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Metropolis Brew - Main Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f9f9ff",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#68dba9",
+                    "on-tertiary-fixed": "#191c1d",
+                    "primary-fixed-dim": "#68dba9",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f0f3ff",
+                    "on-background": "#151c27",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#737576",
+                    "on-primary-container": "#f5fff7",
+                    "on-primary-fixed": "#002114",
+                    "surface-container": "#e7eefe",
+                    "tertiary-fixed": "#e1e3e4",
+                    "surface-dim": "#d3daea",
+                    "surface-container-highest": "#dce2f3",
+                    "primary-container": "#00855d",
+                    "outline-variant": "#bccac0",
+                    "secondary": "#575e70",
+                    "on-tertiary-fixed-variant": "#454748",
+                    "inverse-surface": "#2a313d",
+                    "surface-tint": "#006c4a",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#85f8c4",
+                    "outline": "#6d7a72",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "tertiary": "#5a5c5d",
+                    "on-tertiary-container": "#fcfdfe",
+                    "on-surface-variant": "#3d4a42",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#006948",
+                    "surface": "#f9f9ff",
+                    "on-secondary-fixed-variant": "#404758",
+                    "surface-variant": "#dce2f3",
+                    "secondary-fixed": "#dce2f7",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#ebf1ff",
+                    "surface-container-high": "#e2e8f8",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed-dim": "#c5c7c8",
+                    "on-secondary-container": "#5c6274",
+                    "on-primary-fixed-variant": "#005137",
+                    "secondary-container": "#d9dff5",
+                    "on-surface": "#151c27",
+                    "on-secondary-fixed": "#141b2b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "8px",
+                    "md": "24px",
+                    "gutter": "24px",
+                    "sm": "16px",
+                    "lg": "40px",
+                    "container-max": "1280px",
+                    "xl": "64px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "headline-md": ["Manrope"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #f9f9ff;
+        -webkit-font-smoothing: antialiased;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .product-card {
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+      }
+      .product-card:active {
+        transform: scale(0.98);
+      }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-md py-xs bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-xs">
+<button class="p-base text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight leading-none scale-75 origin-left md:scale-100">Metropolis Brew</h1>
+</div>
+<div class="flex items-center gap-sm">
+<div class="hidden md:flex items-center gap-xs px-sm py-xs bg-surface-container rounded-full">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+<span class="font-label-md text-label-md text-primary">STORE OPEN</span>
+</div>
+<button class="p-base text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-[80px] pb-[100px] max-w-container-max mx-auto px-sm md:px-lg">
+<!-- Mobile Status Indicator (Visible only on mobile) -->
+<div class="md:hidden flex items-center justify-between mb-md py-xs">
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+<span class="font-label-md text-label-md text-primary">Store Open: 8th Avenue District</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Est. 12 mins</span>
+</div>
+<!-- Horizontal Scroll Categories -->
+<nav class="sticky top-[60px] bg-surface-bright z-40 py-md mb-sm -mx-sm px-sm overflow-x-auto hide-scrollbar flex gap-sm border-b border-outline-variant/30">
+<button class="flex-shrink-0 px-md py-xs bg-primary text-on-primary rounded-full font-label-md text-label-md transition-all">Signature Brews</button>
+<button class="flex-shrink-0 px-md py-xs bg-surface-container text-secondary hover:text-primary rounded-full font-label-md text-label-md transition-all">Artisan Pastries</button>
+<button class="flex-shrink-0 px-md py-xs bg-surface-container text-secondary hover:text-primary rounded-full font-label-md text-label-md transition-all">Urban Bowls</button>
+<button class="flex-shrink-0 px-md py-xs bg-surface-container text-secondary hover:text-primary rounded-full font-label-md text-label-md transition-all">Cold Pressed</button>
+<button class="flex-shrink-0 px-md py-xs bg-surface-container text-secondary hover:text-primary rounded-full font-label-md text-label-md transition-all">Roastery Goods</button>
+</nav>
+<!-- Section Title -->
+<div class="mb-lg">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">Signature Brews</h2>
+<p class="font-body-md text-body-md text-secondary max-w-2xl">Precision roasted beans sourced from high-altitude estates, prepared with metropolitan efficiency and artisan care.</p>
+</div>
+<!-- 2-Column Product Grid -->
+<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<!-- Product 1 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full hover:scale-105 transition-transform duration-500" data-alt="A professional studio photograph of a minimalist ceramic cup filled with a rich, dark espresso featuring a perfect golden crema. The setting is a clean, bright white marble surface with soft, high-key lighting. The style is ultra-modern and premium, focusing on the texture of the liquid and the elegant simplicity of the tableware in a high-end corporate cafe aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEQYOOZHxf-pYl4fDZu5Dutu_uP4nSXnqXz_KFoR_tsCVgYMgPz5BypcljdasD8JT_pHCVS7egFLD9wHjt9VNiyMfRPfvcQupWx8ksBLpcgLEz90NZYWLnObAL096HeT0zf4j1oFByo02Nsx4vvleBc4f4QaQsc6HnuIgs6J3h_UKyIdc3n90PWbGpIhfaaPweEQwIUfKvaclKu8AUndcrpdplCf2fhgd-6mU7FsJU8CGihY04-tMRGA"/>
+<div class="absolute top-xs right-xs bg-surface-bright/90 px-xs py-1 rounded-sm border border-outline-variant">
+<span class="font-label-sm text-label-sm text-primary">NEW</span>
+</div>
+</div>
+<div class="p-sm flex flex-col flex-grow justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-background mb-base">Metropolitan Roast</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate">Single Origin Ethiopia</p>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$4.50</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full hover:scale-105 transition-transform duration-500" data-alt="A crisp, high-contrast photograph of a tall glass of cold brew coffee with swirling oat milk patterns. The glass is sweating with condensation in a bright, minimalist environment. The background is a soft-focus urban coffee shop with pale woods and glass. The lighting is natural and sophisticated, emphasizing the deep amber tones of the coffee and the creamy texture of the milk." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL5RPCYVPHOhr9q0t7y51wFPCMGTuPyLlB9vZ1t2-PXvEDFfQEuBEFZ5aYJ_0Z1vl4mOAweDhvEse2ZhBNN5jCHO5B7ZLLEuck7xTF51uSzeftSAiys-ZnT3Bbkm-d09tzbPRMxJAW6LM7srTnqXgQ5ucuU3-8fczg0Z9OQfWYjCn9uQMUADTnrJ10ZLf68hzijJoSd8c0zpbc_IP4F02GdnKbn_f25aOxMi7iQSHrLdh1JaFrvYC7jg"/>
+</div>
+<div class="p-sm flex flex-col flex-grow justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-background mb-base">Velvet Cold Brew</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate">18-Hour Steep</p>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$5.25</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full hover:scale-105 transition-transform duration-500" data-alt="A top-down shot of a perfectly poured flat white in a grey stoneware cup. The latte art is a precise, clean heart shape. The surface is a dark, slate-colored wood with subtle reflections of bright overhead lighting. The mood is calm, professional, and meticulously clean, reflecting a high-end metropolitan coffee experience with a focus on artisan craft." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfGeuGI-TnUobsQkaPhUob2HjmPOg-qXREI5uaa5ewrkHBqkwZOrInSfQywTkXyPcuWUSAMq0ctInK5TICTiTzT5J1sfXH-K2Gtya0CO6OcsJ25UjGNFxyDEPhnWiI_QE_IsSbOzDl5MnoWHJJvh1awnrqg7QYBt5ljJW7mSRTK3zeAzenQUO1ZEflhjOzXGKKw9zt-W7jxh7qmFGeiCjctwYAxnKCommCpaORjJaI3U8xrcX7Hpjoag"/>
+</div>
+<div class="p-sm flex flex-col flex-grow justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-background mb-base">The Flat Urban</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate">Micro-foam Precision</p>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$4.75</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full hover:scale-105 transition-transform duration-500" data-alt="A high-contrast photo of a matcha latte with a vibrant emerald green color, served in a minimalist glass cup. The drink has clear layers between the green tea and the white frothed milk. The setting is a clean, sun-drenched cafe with a high-end corporate vibe. The focus is on the rich color and the architectural layers of the beverage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM7vsljoVFQJIBrz6wfNx0k1wN_v5_oHFnJgRoEjxsDT8LOMGOhfv09EdpHCAyi2fl9sOTc9vSbQ1ZqwT5obv_VOxW8hL7oWtm-ZXznNyI3Y1IucsNsXkJX_nHgS_o2F5hiZ8elluLBCxdokiKtZTHU7T3hXLGhfgzEH2eI_oMPMvg7ByUi1e2NS_QbuPt-ob8b95t6wA8Z7SIDYA3S-kYmmSeuT2NZZ2Ye8AWyAr50yyfOlxVHirJkg"/>
+</div>
+<div class="p-sm flex flex-col flex-grow justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-background mb-base">Zenith Matcha</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate">Ceremonial Grade</p>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$5.50</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Banner / Promo -->
+<div class="relative w-full h-48 md:h-64 mb-xl overflow-hidden rounded-lg group">
+<div class="absolute inset-0 bg-primary/20 z-10 group-hover:bg-primary/10 transition-colors"></div>
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A wide-angle landscape shot of a modern, high-end coffee shop interior in a metropolitan district. Large glass windows reveal a blurred city street. Inside, clean white surfaces, dark green accents, and minimalist black furniture create a sophisticated atmosphere. Muted, high-key lighting illuminates the space, conveying a sense of calm efficiency and premium quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACWkCmaUDQel9VMekVWNA1XiORnP2jKGp7lQjBWsNf-WU52F2yIDSjbgvbHQW7rArT0GAoUI1NNPeL3CnpCwj1y68FBMWZ0_vXNUcSIUgvx-8qR2e3SNiS9CnOpvLbdnTlAGNu3SasAE0q5Rm1r3yIacTuG5IJLNVDE3h_wNQ8bfz2_t1HvVEkVHGgsSd18Wj3FmFp_m9HV_a6zps7R7BXDBzvugvSKxgc6JSoWoZeTTf-NDl0DFszLg"/>
+<div class="relative z-20 h-full flex flex-col justify-center px-md md:px-xl">
+<h3 class="font-headline-lg text-headline-lg text-on-primary-fixed mb-xs">Morning Subscription</h3>
+<p class="font-body-md text-body-md text-on-primary-fixed-variant mb-md max-w-md">Get your daily precision brew delivered to your desk. Starting at $39/mo.</p>
+<button class="w-fit px-md py-sm bg-primary text-on-primary font-label-md text-label-md rounded-sm hover:opacity-90 transition-opacity">Learn More</button>
+</div>
+</div>
+<!-- Secondary Section: Artisan Pastries -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-background">Artisan Pastries</h2>
+<p class="font-label-sm text-label-sm text-secondary">Baked fresh at 4:00 AM daily.</p>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<!-- Pastry 1 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full" data-alt="A close-up shot of a flaky, golden-brown croissant on a minimalist white ceramic plate. The lighting is bright and clear, highlighting the intricate layers of the pastry. The background is a clean, neutral surface, typical of a high-end urban bakery. The mood is fresh and appetizing, with a focus on textures and artisanal quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe7bG0oj4uP2ClV7bdFRbq7g5l3RPm9vhm4mFNoKp4ZAFIrKYAbIiSDcP3nWUJYYhOVyC4qep0gZ11lkQFl-uI-TWlSe-Q1nZOGj-VJfWZmQOfjGIJ4XnhSThNqOV1waaZ_57BSypFlLGpfKuK4pTTCkluXYtDwR9vEe4S0DM1SDoxdybgHq7yAaGg7JlnuPPDbgsdg6nTd4BR8XkYOSmKw8pk4pKJZzI3cz6pga0zBCuhErhKxjU8GA"/>
+</div>
+<div class="p-sm">
+<h3 class="font-label-md text-label-md text-on-background mb-base">Butter Croissant</h3>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$3.95</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pastry 2 -->
+<div class="product-card flex flex-col bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="object-cover w-full h-full" data-alt="A decadent dark chocolate tart with a sprinkle of sea salt on top, presented on a minimalist grey plate. The chocolate is glossy and rich, with a crisp, dark crust. The setting is a clean, modern cafe environment with sophisticated lighting that emphasizes the dessert's elegant finish and deep tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4XNc9I9YJzJ7xxj9TVLqyfaP0S23nnrkJiTZM-b7MjRrGfWHixntv_CsXOwzG8fkKB27Vm0bynlVRF3Y1Pw97QFGf993rGzR-w6cNe00c0mSoizI4U6v_hwwGASRU_P9UOpY8disOvjwIu8YvKp_4SffFR9mxrv-ZYLa1elEhBDCJvuJWX7qqlTy34XI9iC3_L-L0pFik6pBx70yj6BiVD5BQEozJL8FZXKLTMlf_3rXC0TWd9hXIog"/>
+</div>
+<div class="p-sm">
+<h3 class="font-label-md text-label-md text-on-background mb-base">Midnight Ganache</h3>
+<div class="flex items-center justify-between mt-sm">
+<span class="font-headline-md text-headline-md text-primary">$6.50</span>
+<button class="w-8 h-8 flex items-center justify-center bg-inverse-surface text-inverse-on-surface rounded-full">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-sm py-xs bg-surface-bright border-t border-outline-variant md:hidden">
+<button class="flex flex-col items-center justify-center text-primary font-bold scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_cafe</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Cart</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<!-- Desktop Navigation Side Note: TopAppBar already handles top links via menu, but for high-end feel we add a subtle desktop footer -->
+<footer class="hidden md:block bg-surface-container-low py-xl px-lg border-t border-outline-variant">
+<div class="max-w-container-max mx-auto flex justify-between items-start">
+<div class="max-w-xs">
+<h4 class="font-display-lg text-headline-md text-primary mb-md">Metropolis Brew</h4>
+<p class="font-body-md text-body-md text-secondary">Providing precision caffeine solutions for the modern metropolitan landscape since 2018.</p>
+</div>
+<div class="grid grid-cols-2 gap-xl">
+<div>
+<h5 class="font-label-md text-label-md text-on-background mb-sm">SITEMAP</h5>
+<ul class="space-y-xs font-label-sm text-label-sm text-secondary">
+<li class="hover:text-primary cursor-pointer transition-colors">Find a Store</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Our Beans</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Careers</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Contact</li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-background mb-sm">LEGAL</h5>
+<ul class="space-y-xs font-label-sm text-label-sm text-secondary">
+<li class="hover:text-primary cursor-pointer transition-colors">Privacy</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Terms</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Accessibility</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-xl pt-md border-t border-outline-variant/30 flex justify-between items-center text-label-sm text-tertiary">
+<span>© 2024 Metropolis Brew Co.</span>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-[18px] cursor-pointer">language</span>
+<span class="material-symbols-outlined text-[18px] cursor-pointer">share</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.boxShadow = '0 4px 20px -5px rgba(0, 105, 72, 0.1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.boxShadow = 'none';
+            });
+        });
+
+        // Category scroll snap (simulated)
+        const catNav = document.querySelector('nav');
+        catNav.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                catNav.querySelectorAll('button').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary');
+                    b.classList.add('bg-surface-container', 'text-secondary');
+                });
+                btn.classList.add('bg-primary', 'text-on-primary');
+                btn.classList.remove('bg-surface-container', 'text-secondary');
+            });
+        });
+    </script>
+</body></html>

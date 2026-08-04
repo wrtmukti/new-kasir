@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PRECISION COFFEE | Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#0b513d",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "tertiary-container": "#a2a3a3",
+                    "outline-variant": "#3c4a42",
+                    "on-primary-fixed-variant": "#005236",
+                    "primary": "#4edea3",
+                    "surface-container": "#201f1f",
+                    "background": "#131313",
+                    "primary-container": "#10b981",
+                    "surface-variant": "#353534",
+                    "on-tertiary": "#2f3131",
+                    "on-tertiary-container": "#37393a",
+                    "on-primary-fixed": "#002113",
+                    "secondary-fixed": "#b0f0d6",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#bbcabf",
+                    "primary-fixed": "#6ffbbe",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "inverse-surface": "#e5e2e1",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-surface": "#e5e2e1",
+                    "secondary": "#95d3ba",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-tint": "#4edea3",
+                    "inverse-on-surface": "#313030",
+                    "outline": "#86948a",
+                    "on-secondary-fixed": "#002117",
+                    "error": "#ffb4ab",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-secondary-container": "#83c2a9",
+                    "surface": "#131313",
+                    "surface-bright": "#3a3939",
+                    "on-primary": "#003824",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-secondary": "#003829",
+                    "surface-container-highest": "#353534",
+                    "tertiary": "#c6c6c7",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-fixed-dim": "#95d3ba",
+                    "inverse-primary": "#006c49",
+                    "on-primary-container": "#00422b",
+                    "surface-dim": "#131313",
+                    "on-background": "#e5e2e1",
+                    "on-error": "#690005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "sm": "1rem",
+                    "unit": "4px",
+                    "xl": "8rem",
+                    "gutter": "24px",
+                    "xs": "0.5rem",
+                    "margin-desktop": "64px",
+                    "lg": "4rem",
+                    "md": "2rem"
+            },
+            "fontFamily": {
+                    "label-caps": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Sora"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Sora"],
+                    "headline-lg-mobile": ["Sora"],
+                    "label-mono": ["JetBrains Mono"],
+                    "display-lg": ["Sora"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(78, 222, 163, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(78, 222, 163, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(78, 222, 163, 0.4);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary/30 selection:text-primary min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-2xl border-b border-white/10 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a professional barista wearing a dark linen apron in a high-end, minimalist coffee laboratory. The lighting is cinematic and moody, with soft highlights on their face and hands. The background is a blurred obsidian setting with hints of high-tech brewing equipment and glass reflections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq58v3-ET54FsBzW20doxjgnLFtV1veh4X526nq6wcmuMAOsVjwg_WFj-Drk-8nTxP6lb3agQf84qWqBI9TpNpE3GOJQ25mP-x_n9QB_KyMJT04l8d-QtXaiO_gUfsOPyISYOvhnTHOSQ6t3S-EF_oI6D7DdJG7Ux_80VISRG3qLAMJxXmlDdI4Ab6_33iHmkRsQwRikX62yhmivMqh4ONeM8KTe66oyupsU4vgS6YWEm_dTBlGUssqw"/>
+</div>
+<span class="font-headline-md text-headline-md font-bold tracking-tighter text-primary">PRECISION COFFEE</span>
+</div>
+<button class="bg-surface-container-high px-4 py-2 rounded-full font-label-caps text-label-caps text-primary border border-primary/20 hover:border-primary/50 transition-all active:scale-95">
+            1,250 PTS
+        </button>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop mt-8">
+<!-- Hero Search Section -->
+<section class="mb-12">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6">
+                Engineered <span class="text-primary italic">Flavor</span>
+</h1>
+<div class="relative max-w-2xl">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest border-b border-white/10 border-t-0 border-l-0 border-r-0 focus:border-primary focus:ring-0 text-body-md py-4 pl-12 transition-all duration-300 placeholder:text-on-surface-variant/30" placeholder="Search extraction profiles..." type="text"/>
+</div>
+</section>
+<!-- Category Horizontal Chips -->
+<nav class="flex gap-4 overflow-x-auto no-scrollbar pb-8 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0 sticky top-[73px] bg-background/40 backdrop-blur-md z-40 py-4">
+<button class="flex-none px-6 py-2 rounded-full bg-primary text-on-primary font-label-caps text-label-caps active:scale-95 transition-transform">
+                Specialty Brews
+            </button>
+<button class="flex-none px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors active:scale-95">
+                Artisan Pastries
+            </button>
+<button class="flex-none px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors active:scale-95">
+                Cold Extractions
+            </button>
+<button class="flex-none px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors active:scale-95">
+                Lab Equipment
+            </button>
+<button class="flex-none px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors active:scale-95">
+                The Origin
+            </button>
+</nav>
+<!-- Menu Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mt-4">
+<!-- Item 1: Nitro Cold Brew -->
+<div class="glass-card rounded-xl group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A macro shot of a Nitro Cold Brew coffee in a crystal-clear tall glass, showing the cascading creamy velvet texture of nitrogen bubbles. The setting is a dark, luxury cafe with obsidian surfaces and subtle emerald green accent lighting reflecting on the glass. Sharp focus on the micro-foam on top, editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW34jOTRRWwtgHa4RJ7h3NeDNQra3JjDO3HeI7ikcWVFMDlN5-w1ah75qnYk8LUK8R7JUHaGyZFuATFyAJADMChFV5df2Bq_eG2SQzGzjzni4ttxnlqh3dsygrm1x8IxAKkKomp4Qr477LXKbra075h1w0AP69fA9LYzDMlMd04St_swp9xM4fGR41ACMGsnklLROod0AduAN3nSLBA-DJacbaIGRIzZlIG6GgbRbvdx4Zl1B_6Wx4VQ"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary px-3 py-1 rounded-full text-on-primary font-label-caps text-[10px] tracking-widest">LIMITED BATCH</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Nitro Obsidian</h3>
+<p class="font-body-md text-on-surface-variant text-sm line-clamp-2">24-hour slow extraction, infused with food-grade nitrogen for a creamy, stout-like finish.</p>
+</div>
+<span class="font-label-mono text-primary">$8.50</span>
+</div>
+<!-- Tech Specs -->
+<div class="grid grid-cols-3 gap-2 py-4 border-t border-b border-white/5 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">thermostat</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">4°C TEMP</span>
+</div>
+<div class="flex flex-col items-center border-x border-white/5">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">timer</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">24H EXT</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">air</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">N2 PSI</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2 neon-glow hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        INITIALIZE ORDER
+                    </button>
+</div>
+</div>
+<!-- Item 2: Geometric Croissant -->
+<div class="glass-card rounded-xl group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A perfect geometric-shaped croissant with dark charcoal and neon emerald lamination layers, presented on a matte black ceramic plate. A soft ray of morning light hits the golden crisp edges against a dark, moody luxury cafe background. High-resolution culinary photography, minimalist and expensive aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCVksoDKDxMGABBTP-x7ZBkD-_mpnpn4poH794hctE9qA9nFngDaXwvUgqXXIkw_bHE2w1pxTNnnsKGD7Y8zLRj8I2L7TgCfZZp2LAMwFUJULufUCWVFVN774WACUhfWCKZcMTjDvgT5r-PnbcDTAx5olnepGMYu_mmlPAMZG2wwNTyYSM7MpveXQRck72hyniJk5IyJb6hiKeZyXUO5G8SI6OUu_NpsUOSkRiGZH2V3FTuxTVsTilxQ"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Laminated Carbon</h3>
+<p class="font-body-md text-on-surface-variant text-sm">81 layers of fermented butter pastry with activated charcoal and matcha infusion.</p>
+</div>
+<span class="font-label-mono text-primary">$12.00</span>
+</div>
+<div class="grid grid-cols-3 gap-2 py-4 border-t border-b border-white/5 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">layers</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">81 LAYERS</span>
+</div>
+<div class="flex flex-col items-center border-x border-white/5">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">oven_gen</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">375°F HEAT</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">eco</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">ORGANIC</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2 neon-glow hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        INITIALIZE ORDER
+                    </button>
+</div>
+</div>
+<!-- Item 3: Geisha V60 -->
+<div class="glass-card rounded-xl group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Close-up of a pour-over coffee extraction using a glass V60 dripper. The coffee bloom is vibrant and full of bubbles, with steam rising gracefully. The background shows a high-end laboratory-style coffee station with stainless steel and glass elements. Lighting is focused on the coffee stream, moody emerald and black theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD58bx8AKjG6M6-nPvK-w3u7qB3YSv5VtzvBxQ-T4Ut0E5rmBJdOvsW7oZ4c7l-fcm_RRYozNxnAQgL1GYmw4GSamNV8IXKIg4oQxcsVjBGqcpntO95FYfOyB1iGw4dKQRDlPtbju1gsHVs6eQtdsWXnAcvceIe5nvmIeyoSeD5cFEtdzouv2XacYt_Tsn8n0iTQGoSzpTQ1kKgm7MtGMCs0zslIk8jbGCGW4F1qeA6f5SYOXNpCtQU4g"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Geisha Reserve</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Panamanian Geisha beans, hand-poured via precision V60. Notes of jasmine and bergamot.</p>
+</div>
+<span class="font-label-mono text-primary">$18.00</span>
+</div>
+<div class="grid grid-cols-3 gap-2 py-4 border-t border-b border-white/5 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">science</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">V60 RATIO</span>
+</div>
+<div class="flex flex-col items-center border-x border-white/5">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">water_drop</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">TDS 1.35%</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">public</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">ORIGIN: PAN</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2 neon-glow hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        INITIALIZE ORDER
+                    </button>
+</div>
+</div>
+<!-- Item 4: Espresso Tonic -->
+<div class="glass-card rounded-xl group md:hidden lg:block">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A refreshing Espresso Tonic in a faceted glass with a sprig of rosemary and a dehydrated orange slice. Bubbles from the tonic water rising through the dark espresso layers. High-contrast lighting with neon green highlights on the rim. The background is a dark obsidian bar counter with glass reflections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVXZSkGeCX96Sd9NR3_3K3iXbnvEnhs4G8p69DgI9M49s-u_0Zu6pyObiiM2IPdXsWxxFiHdzpp19YVo_fMsYzHywi47ZxhBB9uuNwU0TNSiWefETO1IpH8t0pYEeWhEE4ouMCt19njXSN0kPNPsW1AmeIHDx4PUgel7N7ERJV7g9arSyoN61LjoqNeJcNGNecIJ45GdcLItIxBvlTdhwyWCQHsjg_k5MfcUlXj0e74jBZ5PbP2EeseA"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Electronic Tonic</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Triple-shot espresso over botanical tonic with molecular citrus foam.</p>
+</div>
+<span class="font-label-mono text-primary">$9.50</span>
+</div>
+<div class="grid grid-cols-3 gap-2 py-4 border-t border-b border-white/5 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">bolt</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">3.0 SHOTS</span>
+</div>
+<div class="flex flex-col items-center border-x border-white/5">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">bubble_chart</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">HIGH CARBON</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[18px] mb-1">ac_unit</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant/60">CRYO ICE</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label-caps text-label-caps flex items-center justify-center gap-2 neon-glow hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        INITIALIZE ORDER
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container/10 backdrop-blur-3xl border-t border-white/5 h-20 px-margin-mobile flex justify-around items-center pb-safe">
+<div class="flex flex-col items-center justify-center text-primary scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="restaurant_menu" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<span class="font-label-caps text-[10px] mt-1">Menu</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-caps text-[10px] mt-1">My Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-label-caps text-[10px] mt-1">Vouchers</span>
+</div>
+</nav>
+<!-- Floating Lab Monitor (Decorative Micro-interaction) -->
+<div class="fixed bottom-24 right-6 z-40">
+<div class="glass-card rounded-full p-4 flex flex-col items-center gap-2 border-primary/20 neon-glow">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="font-label-mono text-[8px] text-primary tracking-tighter">LAB ONLINE</span>
+</div>
+</div>
+<script>
+        // Micro-interaction for add buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined');
+                if (icon && icon.textContent === 'add') {
+                    icon.textContent = 'check';
+                    this.classList.replace('bg-primary', 'bg-secondary-container');
+                    setTimeout(() => {
+                        icon.textContent = 'add';
+                        this.classList.replace('bg-secondary-container', 'bg-primary');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body></html>

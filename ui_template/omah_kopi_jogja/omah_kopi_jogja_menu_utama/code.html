@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu - Omah Kopi Jogja</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#59422c",
+                    "on-tertiary-fixed-variant": "#293ca0",
+                    "secondary-fixed-dim": "#e1c1a4",
+                    "secondary-fixed": "#fedcbe",
+                    "surface-container-low": "#f7f3ee",
+                    "on-tertiary-fixed": "#00105c",
+                    "surface-container-high": "#ebe8e3",
+                    "tertiary-container": "#5668cd",
+                    "tertiary-fixed": "#dee0ff",
+                    "surface-tint": "#9c432d",
+                    "on-error": "#ffffff",
+                    "background": "#fdf9f4",
+                    "surface-container": "#f1ede8",
+                    "primary-fixed": "#ffdad2",
+                    "on-primary-container": "#fff3f0",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#796048",
+                    "outline": "#89726d",
+                    "inverse-primary": "#ffb4a3",
+                    "tertiary": "#3c4fb2",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#7d2c18",
+                    "surface-container-highest": "#e6e2dd",
+                    "on-surface-variant": "#56423e",
+                    "primary": "#943d28",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1c1c19",
+                    "inverse-on-surface": "#f4f0eb",
+                    "on-secondary-fixed": "#291806",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#31302d",
+                    "surface-dim": "#ddd9d5",
+                    "on-primary-fixed": "#3d0700",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#fedcbe",
+                    "error": "#ba1a1a",
+                    "surface": "#fdf9f4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1c1c19",
+                    "primary-container": "#b3543d",
+                    "primary-fixed-dim": "#ffb4a3",
+                    "surface-variant": "#e6e2dd",
+                    "on-tertiary-container": "#f6f4ff",
+                    "surface-bright": "#fdf9f4",
+                    "outline-variant": "#dcc1ba",
+                    "tertiary-fixed-dim": "#bac3ff",
+                    "secondary": "#725a42"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "section-gap": "80px",
+                    "unit": "8px",
+                    "container-max": "1200px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "caption": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "display-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fdf9f4;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 30-15 30-15-30z' fill='%23943d28' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .batik-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #89726d 50%, transparent);
+            position: relative;
+        }
+        .batik-divider::after {
+            content: "◆";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fdf9f4;
+            padding: 0 10px;
+            color: #943d28;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background selection:bg-primary-fixed">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-background border-b border-outline-variant/30 flex justify-between items-center px-margin-mobile py-4">
+<div class="flex items-center gap-3">
+<img alt="Omah Kopi Jogja logo" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj1rinbvKwXnzIoKB8p1nun9PbOQraCYqLfbRklqyiqswPkZsr_mZcyCTUCrkyWLS6BVVJSs28reR9rhQinttaefX_qvYPdQ5Qah_xnLXkU2nBXqC1HXe48KxT4SKY6cVnZv-sDXcZ7b-OALbeE5q59VGx_-Vn9pFzO0r5P2LY8SLMoUTCU_VBUQ7kydqr-3AW3J6zK41nbx5fMsqE_Utg-Wtlj3irTazva_bQd_nuFQ-8fwCFsU9UZg"/>
+<h1 class="font-headline-md text-headline-md text-primary">Omah Kopi Jogja</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="shopping_bag">shopping_bag</button>
+</div>
+</header>
+<main class="max-w-container-max mx-auto pb-32">
+<!-- Hero & Status Section -->
+<section class="px-margin-mobile mt-6 mb-8">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:text-display-lg md:font-display-lg text-on-background">Sugeng Rawuh</h2>
+<p class="text-on-surface-variant font-body-lg">Casual hangout spots in the heart of Jogja.</p>
+</div>
+<div class="flex items-center gap-2 bg-secondary-container px-3 py-1 rounded-full text-on-secondary-container">
+<span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+<span class="font-label-md text-label-md">Buka</span>
+</div>
+</div>
+</section>
+<!-- Category Scroll -->
+<section class="mb-10">
+<div class="flex gap-4 overflow-x-auto px-margin-mobile hide-scrollbar pb-2">
+<button class="whitespace-nowrap bg-primary text-on-primary px-6 py-2 rounded-xl font-label-md text-label-md active:scale-95 transition-transform">Kopi Tubruk</button>
+<button class="whitespace-nowrap bg-surface-container-high text-secondary px-6 py-2 rounded-xl font-label-md text-label-md hover:bg-secondary-container active:scale-95 transition-transform">Wedangan</button>
+<button class="whitespace-nowrap bg-surface-container-high text-secondary px-6 py-2 rounded-xl font-label-md text-label-md hover:bg-secondary-container active:scale-95 transition-transform">Cemilan</button>
+<button class="whitespace-nowrap bg-surface-container-high text-secondary px-6 py-2 rounded-xl font-label-md text-label-md hover:bg-secondary-container active:scale-95 transition-transform">Makanan Berat</button>
+</div>
+</section>
+<div class="px-margin-mobile mb-10">
+<div class="batik-divider"></div>
+</div>
+<!-- Menu Grid -->
+<section class="px-margin-mobile grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-gutter">
+<!-- Item 1: Kopi Susu Gula Aren -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden flex flex-col md:flex-row shadow-[0_4px_20px_rgba(75,54,33,0.03)] hover:shadow-[0_8px_30px_rgba(75,54,33,0.08)] transition-shadow">
+<div class="w-full md:w-48 h-48 flex-shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A macro photography shot of an iced Kopi Susu Gula Aren in a clear glass, showing the beautiful marble effect of dark brown palm sugar swirling into creamy white milk and espresso. The scene is set on a rustic teak wood table in a sun-drenched Jogja cafe, with soft shadows and warm terracotta tones highlighting the chilled condensation on the glass. The atmosphere is artisanal and tranquil." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjeF3qI_GSrkV8mBF-BDALDKxOPSt2oC26vzOnom80gZ__8F9Bpm1-p9zI6aQJl1ZU35HuguEMEK2gOcblerVYTILV3D4tlTRWUUv-LZtXMSHwleEhi4jhp3BfUCFeHlLV4XozhBCfoERGZm_Nu0VVrMivWv9N40CBUgE9DSWEQBsTGiWGgo5XzF5D1RDTBGvVyrtQkvEJW1ev9crL0sPKXbCQjpzB_lNnUbW3RRhJ0KLyc6UiaSE8JQ')"></div>
+</div>
+<div class="p-6 flex flex-col justify-between flex-grow">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Kopi Susu Gula Aren</h3>
+<span class="text-primary font-headline-sm text-headline-sm">$2.50</span>
+</div>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Our signature traditional Javanese latte crafted with single-origin beans and authentic palm sugar from Kulon Progo.</p>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="bg-secondary-fixed text-on-secondary-fixed text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Best Seller</span>
+<button class="material-symbols-outlined bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center active:scale-90 transition-transform" data-icon="add">add</button>
+</div>
+</div>
+</div>
+<!-- Item 2: Wedang Jahe -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden flex flex-col md:flex-row shadow-[0_4px_20px_rgba(75,54,33,0.03)] hover:shadow-[0_8px_30px_rgba(75,54,33,0.08)] transition-shadow">
+<div class="w-full md:w-48 h-48 flex-shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A steaming clay cup of traditional Wedang Jahe sitting on a woven bamboo coaster. Visible slices of fresh ginger and a cinnamon stick poke through the amber-colored liquid. The background features a blurred, warm heritage building interior with soft morning light, emphasizing a comforting and rustic Javanese breakfast mood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAdArobxDxBYU3l1vsLRsiS0wLmRPPZP18LtDECdSH3gZeIBwmBTmZzUkKJznY1IINPAal1pfDfY_r5ul1xorhRRY8N4iYgiQiXTDC0bHIwRCAl2oKKCEq5hjn7HaXtothjCCOOgdbWoy_5M3wcXrZX5Ptk-iBck2odWvZx0KK-jn_VGJg1jskZ1xOOxEn6D8pJdsFFpDtoVsGlGCYW413Mh2R64HNar_QdDtoPAw7JhBO2Hk59Os4Dw')"></div>
+</div>
+<div class="p-6 flex flex-col justify-between flex-grow">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Wedang Jahe</h3>
+<span class="text-primary font-headline-sm text-headline-sm">$1.80</span>
+</div>
+<p class="text-on-surface-variant font-body-md line-clamp-2">A warm, invigorating ginger brew slow-cooked with lemongrass and rock sugar to soothe your soul.</p>
+</div>
+<div class="mt-4 flex items-center justify-end">
+<button class="material-symbols-outlined bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center active:scale-90 transition-transform" data-icon="add">add</button>
+</div>
+</div>
+</div>
+<!-- Item 3: Bakpia Pathok -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden flex flex-col md:flex-row shadow-[0_4px_20px_rgba(75,54,33,0.03)] hover:shadow-[0_8px_30px_rgba(75,54,33,0.08)] transition-shadow">
+<div class="w-full md:w-48 h-48 flex-shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A stack of golden-brown, flaky Bakpia Pathok pastries arranged on a simple white ceramic plate. The filling of sweet mung bean is slightly visible from a halved pastry in the foreground. The aesthetic is clean and minimalist, with a warm terracotta background and soft directional lighting that highlights the delicate texture of the pastry crust." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZdHulOb7FLx-3QZAILPmIadFEAeWYGuryETFJoLvWopuZ6bLYbQxRsWw6kpzhjw04VJIEeuCak5psq_e7NwHeWACNc_iZbp4XBJ84-TKYbgrk0EFHMiyiRJ2e2kYNs1KZBEV2A79LjeUJBGDl74em5FtIwkqhqCvphSh5cOpNdP1vjj9lg8bM-CzD8ACfMKKVOTw_e7krpZoki0usNtqvluUxOvywjYSlOgTTfeQrplg-Se_DMMSVtg')"></div>
+</div>
+<div class="p-6 flex flex-col justify-between flex-grow">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Bakpia Pathok</h3>
+<span class="text-primary font-headline-sm text-headline-sm">$3.00</span>
+</div>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Iconic Jogja sweet mung bean pastries, served warm and flaky. Perfect companion for your afternoon coffee.</p>
+</div>
+<div class="mt-4 flex items-center justify-end">
+<button class="material-symbols-outlined bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center active:scale-90 transition-transform" data-icon="add">add</button>
+</div>
+</div>
+</div>
+<!-- Item 4: Nasi Kucing -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden flex flex-col md:flex-row shadow-[0_4px_20px_rgba(75,54,33,0.03)] hover:shadow-[0_8px_30px_rgba(75,54,33,0.08)] transition-shadow">
+<div class="w-full md:w-48 h-48 flex-shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A small, traditional portion of Nasi Kucing wrapped in a vibrant green banana leaf. Inside, the rice is topped with a tiny spoonful of spicy sambal teri and a piece of tempeh. The presentation is rustic and humble, placed on a dark teak wood surface with a soft batik fabric partially visible in the blurred background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTunwmUxzRqI6fF0uFq7-GxciSlJzF8wu-mwFDjYN_3YT3adWCMPs-w94eUWhNe7XjuYl6xDBwM6Ro3ghQZuJdVK4GAHfO6kcfyqd2AW65iLT039qPQx_Tp-YblG9JJR_H_18ImuuabJc-ON2mzb7TfBT5QUVMaQDtsI4eyvc6LG2cxFfygRLQOe2BWnK71t4snPPgNZZlci6YP5LsOviDxvUp-lJdupZCU1O-WtDgibiEfFS5Xd4_FQ')"></div>
+</div>
+<div class="p-6 flex flex-col justify-between flex-grow">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Nasi Kucing</h3>
+<span class="text-primary font-headline-sm text-headline-sm">$1.50</span>
+</div>
+<p class="text-on-surface-variant font-body-md line-clamp-2">The legendary small-portion rice wrapped in banana leaf, served with sambal teri and savory side dishes.</p>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-on-surface-variant font-label-md text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department">local_fire_department</span> Authentic
+                        </span>
+<button class="material-symbols-outlined bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center active:scale-90 transition-transform" data-icon="add">add</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommended / Special Banner -->
+<section class="px-margin-mobile mt-section-gap">
+<div class="relative overflow-hidden rounded-2xl bg-on-secondary-fixed-variant p-8 text-secondary-fixed shadow-xl">
+<div class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-1/4 -translate-y-1/4">
+<svg height="200" viewbox="0 0 100 100" width="200">
+<path d="M50 0 L100 50 L50 100 L0 50 Z" fill="currentColor"></path>
+</svg>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Spesial Hari Ini</h3>
+<p class="font-body-lg mb-6 max-w-md">Nikmati perpaduan unik Kopi Tubruk Merapi dengan camilan Jadah Tempe khas Kaliurang.</p>
+<button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-label-md text-label-md hover:opacity-90 transition-opacity">Pesan Sekarang</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant/20 z-50 rounded-t-xl shadow-[0_-2px_10px_rgba(75,54,33,0.05)]">
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed-dim rounded-xl px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="coffee">coffee</span>
+<span class="font-label-md text-label-md">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim/60 px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90 hover:text-primary dark:hover:text-primary-fixed-dim" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Pesenan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim/60 px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90 hover:text-primary dark:hover:text-primary-fixed-dim" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profil</span>
+</a>
+</nav>
+<script>
+        // Simple Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

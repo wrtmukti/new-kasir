@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Status - Spicy Bites</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Load Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-background": "#1b1c1c",
+                "inverse-primary": "#ffb3ac",
+                "tertiary": "#005f7b",
+                "secondary-container": "#fdc003",
+                "tertiary-fixed": "#bee9ff",
+                "background": "#fcf9f8",
+                "primary-fixed-dim": "#ffb3ac",
+                "surface-container-high": "#eae7e7",
+                "surface-container-lowest": "#ffffff",
+                "on-surface": "#1b1c1c",
+                "surface-variant": "#e5e2e1",
+                "surface-container-highest": "#e5e2e1",
+                "on-tertiary-container": "#e9f7ff",
+                "on-secondary-container": "#6c5000",
+                "surface-bright": "#fcf9f8",
+                "on-primary-container": "#fff2f0",
+                "error": "#ba1a1a",
+                "on-primary": "#ffffff",
+                "surface-dim": "#dcd9d9",
+                "on-error-container": "#93000a",
+                "outline": "#8f6f6c",
+                "on-secondary-fixed": "#261a00",
+                "surface": "#fcf9f8",
+                "on-surface-variant": "#5b403d",
+                "secondary": "#785900",
+                "on-error": "#ffffff",
+                "surface-tint": "#ba1a20",
+                "tertiary-container": "#00799c",
+                "on-tertiary": "#ffffff",
+                "primary": "#af101a",
+                "on-primary-fixed": "#410003",
+                "primary-fixed": "#ffdad6",
+                "on-secondary-fixed-variant": "#5b4300",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed-dim": "#7bd1f8",
+                "inverse-surface": "#303030",
+                "inverse-on-surface": "#f3f0ef",
+                "on-tertiary-fixed-variant": "#004d65",
+                "on-primary-fixed-variant": "#930010",
+                "surface-container": "#f0eded",
+                "secondary-fixed-dim": "#fabd00",
+                "error-container": "#ffdad6",
+                "secondary-fixed": "#ffdf9e",
+                "on-tertiary-fixed": "#001f2a",
+                "outline-variant": "#e4beba",
+                "surface-container-low": "#f6f3f2",
+                "primary-container": "#d32f2f"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "container-max-width": "1200px",
+                "margin-desktop": "32px",
+                "margin-mobile": "16px",
+                "gutter": "16px",
+                "unit": "8px"
+            },
+            "fontFamily": {
+                "label-bold": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-lg": ["Montserrat"],
+                "body-lg": ["Inter"],
+                "headline-xl": ["Montserrat"],
+                "label-sm": ["Inter"],
+                "headline-lg-mobile": ["Montserrat"],
+                "headline-md": ["Montserrat"]
+            },
+            "fontSize": {
+                "label-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .pulse-flame {
+            animation: flame-pulse 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes flame-pulse {
+            from { transform: scale(1); filter: drop-shadow(0 0 5px rgba(175, 16, 26, 0.4)); }
+            to { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(253, 192, 3, 0.6)); }
+        }
+
+        .map-gradient {
+            background: linear-gradient(180deg, rgba(252,249,248,0) 0%, rgba(252,249,248,1) 100%);
+        }
+
+        .bento-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .bento-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .status-active {
+            position: relative;
+        }
+        
+        .status-active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: -12px;
+            background: #af101a;
+            border-radius: 99px;
+            animation: slide-in 0.5s ease-out forwards;
+        }
+
+        @keyframes slide-in {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-on-background border-b border-surface-variant dark:border-outline-variant shadow-sm dark:shadow-none docked full-width top-0 z-50">
+<div class="flex justify-between items-center px-4 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="p-2 text-primary hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-black text-primary dark:text-primary-fixed-dim uppercase tracking-tighter">Spicy Bites</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-primary hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 md:px-margin-desktop py-8">
+<!-- Headline Section -->
+<div class="flex items-center gap-4 mb-8">
+<div class="bg-primary-container p-4 rounded-full pulse-flame">
+<span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div>
+<h2 class="font-headline-xl text-headline-lg-mobile md:text-headline-xl text-primary leading-tight">Spicing it up!</h2>
+<p class="text-on-surface-variant font-label-bold">Order #1234 • Estimated arrival: 12:45 PM</p>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Tracking Timeline - Vertical on Mobile, Horizontal on Desktop -->
+<div class="md:col-span-12 bg-white p-6 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant bento-card">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-4 relative">
+<!-- Progress Bar Line (Desktop Only) -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-surface-container-high -translate-y-4"></div>
+<!-- Step 1: Done -->
+<div class="flex items-center md:flex-col gap-4 md:gap-2 z-10 w-full md:w-auto">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center border-4 border-white shadow-md">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-bold text-on-surface">Order Received</p>
+<p class="text-label-sm text-on-surface-variant">12:10 PM</p>
+</div>
+</div>
+<!-- Step 2: Done -->
+<div class="flex items-center md:flex-col gap-4 md:gap-2 z-10 w-full md:w-auto">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center border-4 border-white shadow-md">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="restaurant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-bold text-on-surface">In the Kitchen</p>
+<p class="text-label-sm text-on-surface-variant">12:15 PM</p>
+</div>
+</div>
+<!-- Step 3: Active -->
+<div class="flex items-center md:flex-col gap-4 md:gap-2 z-10 w-full md:w-auto">
+<div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center border-4 border-white shadow-lg pulse-flame">
+<span class="material-symbols-outlined text-on-primary" data-icon="delivery_dining" style="font-variation-settings: 'FILL' 1;">delivery_dining</span>
+</div>
+<div class="text-left md:text-center status-active">
+<p class="font-label-bold text-primary">Out for Delivery</p>
+<p class="text-label-sm text-primary-fixed-variant">Rider is 1.2 miles away</p>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div class="flex items-center md:flex-col gap-4 md:gap-2 z-10 w-full md:w-auto opacity-50">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border-4 border-white">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="home">home</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-bold text-on-surface-variant">Delivered</p>
+<p class="text-label-sm text-on-surface-variant">Arriving soon</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Map View -->
+<div class="md:col-span-8 bg-surface-variant rounded-2xl overflow-hidden shadow-lg relative min-h-[400px] bento-card">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A stylized minimalist vector map of a vibrant urban neighborhood with high-contrast roads in charcoal and blocks in off-white. A glowing red GPS icon marks a delivery route. The overall aesthetic is clean, modern, and high-energy with a primary red and orange color palette reflecting a spicy food delivery service." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZEMb0r7o9BGjtdEdtyScko34DONTKVBYQf1cXIrT3WlfGwsE2UveCl9yySYVUvZnzlFUhmOyZ5rHO1_M1D6vQ32Gnz1DzGbWONKazcOIUVOtiNUrIvd_D_t660idLp9X0rITRdEy2JqNRkxQFC4yWIkwkqb1Q4YuChcrx0Q6UZqSrfkKK7mn1hGsB2jMu8G9ejtEBJrzBgjhDpQ3Xu-yBolv0G_frbsLc2a4BCdgIkq_lAHiazPsJHQ')"></div>
+<!-- Map Overlay Elements -->
+<div class="absolute inset-0 map-gradient"></div>
+<!-- Rider Marker (Animated Placeholder) -->
+<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-primary p-2 rounded-full shadow-xl border-2 border-white animate-bounce">
+<span class="material-symbols-outlined text-white" data-icon="delivery_dining" style="font-variation-settings: 'FILL' 1;">delivery_dining</span>
+</div>
+<div class="bg-white px-3 py-1 rounded-full shadow-md mt-2">
+<p class="text-label-sm font-label-bold text-on-background">Driver: Marco</p>
+</div>
+</div>
+<!-- Destination Marker -->
+<div class="absolute bottom-1/4 right-1/4 flex flex-col items-center">
+<div class="bg-secondary-container p-2 rounded-full shadow-xl border-2 border-white">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="person_pin_circle" style="font-variation-settings: 'FILL' 1;">person_pin_circle</span>
+</div>
+</div>
+<!-- Live Updates Overlay -->
+<div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-xl flex justify-between items-center border border-white/50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A friendly close-up headshot of a delivery person wearing a vibrant red polo shirt, smiling warmly. The lighting is natural and bright, conveying reliability and high-quality customer service within the spicy food brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdL3I5ybo_0bAFSy9N8PctsIXgGDneUeeOzHoailzYoLGbElGMD_0N92FdTR82V7F1rWe4U5UEHxHK8KWQXOpsHMoZfksbZLMLe6L662ibmvP6moqWwPMrOojv-xGWoc5F_KMFGlun2MwJC9ZbP0rVJepTep0zHFMnTbHjREXPP5qZOWSOLokuWF7bwmksKdDLK6oltt1bwX6YXOxq4IBzDgpK4H-8w3sO4Q6s006jknEmNpmj7SOpzA"/>
+</div>
+<div>
+<p class="font-label-bold text-on-surface">Marco P.</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant">4.9 (2k+ orders)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-secondary-container text-on-secondary-container p-3 rounded-xl hover:bg-secondary-fixed transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+</button>
+<button class="bg-white border border-outline p-3 rounded-xl hover:bg-surface-container-low transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Order Details & Help -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Order Summary Card -->
+<div class="bg-white p-6 rounded-2xl shadow-md border border-surface-variant bento-card flex-1">
+<h3 class="font-headline-md text-on-surface mb-4">Order Details</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded font-label-bold text-xs">2x</span>
+<p class="text-on-surface font-body-md">Atomic Wings (12pc)</p>
+</div>
+<p class="font-label-bold">$24.00</p>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded font-label-bold text-xs">1x</span>
+<p class="text-on-surface font-body-md">Ghost Pepper Burger</p>
+</div>
+<p class="font-label-bold">$14.50</p>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded font-label-bold text-xs">1x</span>
+<p class="text-on-surface font-body-md">Habanero Fries</p>
+</div>
+<p class="font-label-bold">$5.99</p>
+</div>
+<hr class="border-surface-variant"/>
+<div class="flex justify-between items-center text-on-surface">
+<p class="font-label-bold">Total (incl. tax)</p>
+<p class="text-headline-md text-primary">$48.64</p>
+</div>
+</div>
+</div>
+<!-- Quick Actions Card -->
+<div class="bg-on-background text-white p-6 rounded-2xl shadow-xl bento-card">
+<h3 class="font-headline-md mb-4 text-primary-fixed">Need Help?</h3>
+<div class="space-y-3">
+<button class="w-full bg-white text-on-background font-label-bold py-4 px-4 rounded-xl flex items-center justify-between hover:bg-surface-bright transition-all active:scale-95 group">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="help_center">help_center</span>
+                                Support Center
+                            </span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full border border-outline-variant text-white font-label-bold py-4 px-4 rounded-xl flex items-center justify-between hover:bg-white/10 transition-all active:scale-95">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+                                Cancel Order
+                            </span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hot Recommendation / Upsell (Optional Aesthetic Touch) -->
+<div class="mt-12 bg-secondary-container/20 border-2 border-dashed border-secondary rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden shrink-0 border-4 border-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A professional food photograph of a refreshing, icy tropical fruit drink with mint leaves, shot in high contrast with droplets of condensation on the glass. The background is a soft yellow, reflecting the spicy bites brand palette and suggesting a cool relief from high heat." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDSlZKmbn4Q8uESH0pm8fZF5PnwWx6WJ0qTxHuYqkiAl6tmJv0rKh896pbyvXJSbMefgxIYBUdFTXu072cvbsgsdKnyo-TGhuIGaY4cjF0qZGBqiW4aBajuCbNBAeGXhYVEe4RAsaHGUREp95payB_RDKANVwFD6HE6e2HgqubRWzYH_4nnEwgh-8uGQSqIIadQdk7lVyvDz-ysstDm8OKgRQ050WajbPCytYcWEw4N5xueukChnsYMg"/>
+</div>
+<div class="flex-1 text-center md:text-left">
+<p class="text-primary font-headline-md">Too hot to handle?</p>
+<p class="text-on-surface-variant font-body-md">Add a "Cool Down" Mango Lassi to your next order for free with code: <span class="font-label-bold text-on-background">ICEOFF</span></p>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded-full font-label-bold hover:shadow-lg transition-all active:scale-95">
+                Redeem Now
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-on-background flex justify-around items-center px-4 pb-4 pt-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:bg-surface-container-lowest">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="text-label-sm font-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="text-label-sm font-label-sm">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-4 py-1.5 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="text-label-sm font-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for map markers or tracking simulation
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Spicy Bites Order Tracker Loaded');
+            // Logic for real-time simulation could go here
+        });
+    </script>
+</body></html>

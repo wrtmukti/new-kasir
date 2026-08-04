@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ignite &amp; Spice - Order Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#ded9d8",
+                        "on-secondary-fixed": "#331200",
+                        "surface-tint": "#ba1a20",
+                        "primary": "#af101a",
+                        "outline-variant": "#e4beba",
+                        "surface-container-low": "#f8f2f1",
+                        "on-tertiary-container": "#f6f3f3",
+                        "secondary": "#9c4400",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "primary-fixed-dim": "#ffb3ac",
+                        "inverse-primary": "#ffb3ac",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-secondary-fixed-variant": "#773200",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#410003",
+                        "tertiary": "#575757",
+                        "on-primary-container": "#fff2f0",
+                        "secondary-container": "#fd7613",
+                        "background": "#fef8f7",
+                        "secondary-fixed-dim": "#ffb68f",
+                        "inverse-on-surface": "#f5efee",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "secondary-fixed": "#ffdbca",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#5b403d",
+                        "on-surface": "#1d1b1b",
+                        "surface": "#fef8f7",
+                        "inverse-surface": "#323030",
+                        "surface-bright": "#fef8f7",
+                        "on-background": "#1d1b1b",
+                        "tertiary-container": "#706f6f",
+                        "surface-container-high": "#ede7e6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e7e1e0",
+                        "outline": "#8f6f6c",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-container": "#d32f2f",
+                        "on-secondary-container": "#5b2500",
+                        "surface-container": "#f2edec",
+                        "surface-variant": "#e7e1e0",
+                        "primary-fixed": "#ffdad6",
+                        "on-primary-fixed-variant": "#930010"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-desktop": "40px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .heat-gradient {
+            background: linear-gradient(90deg, #af101a 0%, #fd7613 100%);
+        }
+        .chili-shadow {
+            box-shadow: 0px 4px 12px rgba(33, 33, 33, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- Top Navigation Anchor -->
+<header class="bg-surface w-full top-0 sticky z-40 border-b border-outline-variant/10">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tight text-primary">Ignite &amp; Spice</h1>
+</div>
+<button class="transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile pt-6">
+<!-- Heat Warning Banner -->
+<div class="mb-8 overflow-hidden rounded-xl bg-error-container p-4 flex items-center gap-4 animate-pulse">
+<span class="material-symbols-outlined text-error text-3xl" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<div>
+<p class="font-label-bold text-label-bold text-on-error-container uppercase">Heat Warning</p>
+<p class="font-body-sm text-body-sm text-on-error-container">Your Ghost Pepper Wings are rated 1,000,000+ SHU. Prepare for extreme intensity.</p>
+</div>
+</div>
+<section class="mb-8">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-6">Your Spices</h2>
+<!-- Bento Layout for Order Items -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Items List -->
+<div class="md:col-span-8 space-y-4">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-4 flex gap-4 transition-transform hover:scale-[1.01]">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up professional food photography of Ghost Pepper chicken wings glazed in a bright, glossy red chili sauce. The wings are garnished with fresh green scallions and sitting on a minimalist white ceramic plate. The lighting is dramatic, high-contrast with deep shadows, emphasizing the texture of the crispy skin and the intensity of the red sauce." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdW0ugPpGBWAnOoUwTv9vCaLIH1UgojITKAdodHwBs6nrGWNvq8GtuRKzWFKwpfOC3mVgqPi4x2pINM7uTd3gmUH-TF3bS-x5OSezCUGeiTyaTFHYrqiMb87CgDMN7xkt-IZHQZpQjA4IW6UP3X3QOVDtk9f-UnFgJLCiIX8pxqzDFm5fiOrpl4uNIKtwBkBzQ4FDX6v9OXiF8HseEYvC4KTDtVw-L5z20V8isI1fEw5GB3pthCt6TTw"/>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Ghost Pepper Wings</h3>
+<p class="font-body-lg text-body-lg font-bold text-primary">$12.00</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="bg-primary text-on-primary px-2 py-0.5 rounded-full font-label-bold text-[10px] uppercase">1x Quantity</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-label-bold text-[10px] uppercase">Extra Hot</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-4 flex gap-4 transition-transform hover:scale-[1.01]">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional top-down view of two skewers of fire-charred satay, featuring succulent pieces of marinated meat with visible grill marks and a charred exterior. Beside the skewers is a small bowl of thick, textured peanut sauce. The presentation is minimalist on a light gray stone surface, following the design system's high-contrast and bold aesthetic with warm orange lighting accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw4ss9wn-UkWCJDvaUBVA7y-et5N613BFEjW7PWluGtuWVg-u6UPaQbs145mQ7MjRRLkmBDP4Gl8OABMWV6XNhbOXrP1xvX7VNgSHTkD0xg_p-N-3DW2PVR6Cut-2HPoqljCewP6VoqvWg5HI1GRgAx136gdUw_Ufj88v91EyHLy-_dW69fGv_WMMhKyjvFGS02RyllEdnKHvOAkcY9uNG0oUOiF1-hcL0WvAmWczkjfWUpBt3mHbHGw"/>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Fire-Charred Satay</h3>
+<p class="font-body-lg text-body-lg font-bold text-primary">$18.00</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="bg-primary text-on-primary px-2 py-0.5 rounded-full font-label-bold text-[10px] uppercase">2x Quantity</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full font-label-bold text-[10px] uppercase">Smoky Spice</span>
+</div>
+</div>
+</div>
+<!-- Special Instructions -->
+<div class="p-6 rounded-xl border-2 border-dashed border-outline-variant/30 bg-surface-container-low mt-8">
+<label class="font-label-bold text-label-bold text-on-surface-variant block mb-2 uppercase">Special Instructions</label>
+<p class="font-body-md text-body-md text-on-surface italic italic">"Extra chili sauce on the side please."</p>
+</div>
+</div>
+<!-- Order Summary Sidebar -->
+<div class="md:col-span-4">
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 sticky top-24 chili-shadow">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-outline-variant/10 pb-4">Order Summary</h4>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Subtotal</span>
+<span>$30.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Delivery Fee</span>
+<span class="text-secondary font-bold">FREE</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Spicy Tax</span>
+<span>$0.00</span>
+</div>
+<div class="pt-4 border-t border-outline-variant/10 flex justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$30.00</span>
+</div>
+</div>
+<button class="w-full py-4 heat-gradient rounded-xl text-on-primary font-headline-md text-headline-md uppercase tracking-wider shadow-lg transition-all duration-300 hover:brightness-110 active:scale-95 flex items-center justify-center gap-2 group">
+                            Checkout
+                            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<div class="mt-6 flex flex-col items-center gap-2 opacity-50">
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+<p class="font-label-bold text-[10px] text-on-surface-variant uppercase">Secure Checkout Powered by Ignite</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Anchor -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest border-t border-outline-variant/10 shadow-md md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-bold text-label-bold">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined">local_fire_department</span>
+<span class="font-label-bold text-label-bold">Hot Deals</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-bold text-label-bold">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-bold text-label-bold">Profile</span>
+</a>
+</nav>
+<!-- Visual Atmosphere: Interactive Sparkles -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" id="atmosphere"></div>
+<script>
+        // Simple micro-interaction for floating sparks
+        function createSpark() {
+            const container = document.getElementById('atmosphere');
+            const spark = document.createElement('div');
+            const size = Math.random() * 4 + 2;
+            const duration = Math.random() * 3 + 2;
+            const colors = ['#af101a', '#fd7613', '#9c4400'];
+            
+            spark.style.width = `${size}px`;
+            spark.style.height = `${size}px`;
+            spark.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            spark.style.position = 'absolute';
+            spark.style.left = `${Math.random() * 100}vw`;
+            spark.style.top = '105vh';
+            spark.style.borderRadius = '50%';
+            spark.style.opacity = '0.3';
+            spark.style.filter = 'blur(1px)';
+            
+            container.appendChild(spark);
+            
+            spark.animate([
+                { transform: 'translateY(0) translateX(0)', opacity: 0.6 },
+                { transform: `translateY(-110vh) translateX(${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                easing: 'ease-out'
+            }).onfinish = () => spark.remove();
+        }
+
+        setInterval(createSpark, 800);
+    </script>
+</body></html>

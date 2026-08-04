@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Status | Botanical Brew</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#4a4640",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3ee",
+                    "primary": "#163422",
+                    "inverse-surface": "#30312e",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#2f4d39",
+                    "tertiary": "#312e29",
+                    "on-tertiary-container": "#b7b1a9",
+                    "on-tertiary-fixed": "#1e1b16",
+                    "outline-variant": "#c2c8c0",
+                    "on-secondary-fixed": "#062010",
+                    "primary-fixed": "#c8ebd0",
+                    "inverse-primary": "#adcfb4",
+                    "surface-container-high": "#eae8e3",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#4e6953",
+                    "on-primary-fixed": "#022110",
+                    "surface-container-highest": "#e4e2dd",
+                    "tertiary-fixed-dim": "#ccc5be",
+                    "on-secondary-fixed-variant": "#334d38",
+                    "on-primary-container": "#99baa1",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "tertiary-container": "#48443e",
+                    "primary-container": "#2d4b37",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#727972",
+                    "inverse-on-surface": "#f2f1ec",
+                    "background": "#fbf9f4",
+                    "on-surface-variant": "#424843",
+                    "tertiary-fixed": "#e9e1d9",
+                    "surface-tint": "#466550",
+                    "secondary-fixed": "#cceacf",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#4a654f",
+                    "surface-bright": "#fbf9f4",
+                    "primary-fixed-dim": "#adcfb4",
+                    "surface": "#fbf9f4",
+                    "secondary-fixed-dim": "#b0ceb4",
+                    "surface-container": "#f0eee9",
+                    "secondary-container": "#c9e7cc",
+                    "on-surface": "#1b1c19",
+                    "surface-dim": "#dbdad5",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "section-gap": "80px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "body-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .growth-line-animate {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: dash 3s ease-out forwards;
+      }
+      @keyframes dash {
+        to { stroke-dashoffset: 0; }
+      }
+      .leaf-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5C35 15 45 20 55 20C45 25 35 30 30 50C25 30 15 25 5 20C15 20 25 15 30 5Z' fill='%23163422' fill-opacity='0.03'/%3E%3C/svg%3E");
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 dark:bg-background/80 backdrop-blur-md shadow-[0_20px_40px_rgba(45,75,55,0.05)] flex items-center justify-between px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed-dim active:scale-95 transition-transform duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="park">park</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim">Botanical Brew</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+</button>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-margin-mobile max-w-container-max mx-auto leaf-pattern">
+<!-- Hero Order Status -->
+<header class="text-center mb-12">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Sprouting Your Order</h1>
+<p class="text-on-surface-variant font-label-md">Order #BB-8829 • Placed at 10:42 AM</p>
+</header>
+<!-- Dynamic Timeline (Growth Themed) -->
+<section class="mb-16 relative">
+<div class="bg-surface-container-low rounded-xl p-8 shadow-[0_20px_40px_rgba(45,75,55,0.05)] border border-surface-container-high relative overflow-hidden">
+<div class="flex justify-between items-start relative z-10">
+<!-- Step 1: Seed -->
+<div class="flex flex-col items-center gap-3 w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined" data-icon="radio_button_checked">radio_button_checked</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-primary">Seed</p>
+<p class="text-[10px] text-on-surface-variant hidden md:block">Order Received</p>
+</div>
+</div>
+<!-- Step 2: Sprouting -->
+<div class="flex flex-col items-center gap-3 w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg animate-pulse">
+<span class="material-symbols-outlined" data-icon="eco">eco</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-primary font-bold">Sprouting</p>
+<p class="text-[10px] text-on-surface-variant hidden md:block">Preparing Brew</p>
+</div>
+</div>
+<!-- Step 3: Blooming -->
+<div class="flex flex-col items-center gap-3 w-1/4 opacity-40">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="local_florist">local_florist</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-on-surface-variant">Blooming</p>
+<p class="text-[10px] text-on-surface-variant hidden md:block">Quality Check</p>
+</div>
+</div>
+<!-- Step 4: Ready -->
+<div class="flex flex-col items-center gap-3 w-1/4 opacity-40">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="store">store</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-on-surface-variant">Ready</p>
+<p class="text-[10px] text-on-surface-variant hidden md:block">Pickup at Counter</p>
+</div>
+</div>
+</div>
+<!-- Animated Connector Line -->
+<div class="absolute top-[48px] left-[12.5%] right-[12.5%] h-[2px] bg-surface-container-high -z-0">
+<div class="h-full bg-primary transition-all duration-[3000ms] ease-out w-[33%]"></div>
+</div>
+<!-- Estimate Box -->
+<div class="mt-12 bg-white/50 backdrop-blur-sm rounded-lg p-6 flex flex-col md:flex-row items-center justify-between gap-6 border border-white/40">
+<div class="flex items-center gap-4">
+<div class="bg-primary-container p-3 rounded-full">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-widest">Estimated Time</p>
+<h3 class="font-headline-md text-headline-md text-primary">6-8 Minutes</h3>
+</div>
+</div>
+<div class="h-10 w-px bg-surface-container-high hidden md:block"></div>
+<div class="flex items-center gap-4">
+<div class="bg-secondary-container p-3 rounded-full">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-widest">Order Mode</p>
+<h3 class="font-headline-md text-headline-md text-primary">In-Store Pickup</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Information -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+<!-- Map Card -->
+<div class="md:col-span-2 bg-white rounded-xl shadow-[0_20px_40px_rgba(45,75,55,0.05)] overflow-hidden flex flex-col">
+<div class="p-6 border-b border-surface-container">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+                            Our Greenhouse
+                        </h2>
+<span class="text-label-md text-on-surface-variant">0.4 miles away</span>
+</div>
+</div>
+<div class="flex-grow min-h-[300px] relative">
+<img class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700" data-alt="A lush aerial map view of a modern cafe called Botanical Brew located in a dense urban garden setting. The cafe is visible as a glass-walled greenhouse surrounded by vibrant oak trees, ferns, and manicured walking paths. The map style is minimal, using a soft cream and sage green color palette that reflects the brand identity. Soft sunlight filters through the trees, casting gentle dappled shadows across the landscape." data-location="Portland, Oregon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoPa2KihqoNItXBmwpdfKg39klxHkrikjInWrQPxF7C9qOjqXE6zNCCVlTLtyw5DHiWBJXSXsOH2M2Nyd7w0rpBZMGcoVa9LVqDTJnPCj1bh_V5HtNo0I7Lrj8amU5KbhxYoLCUrIprO28RswaZY2ge1CFawkWkXyQDIzirT-K2s1nrymNii2qsn3rSml_DFJsR_y5O4RdeW35zJ1__QWzQfbwkzJxYzXJRS-6V3KbZ7lyP2_cbG2RgQ"/>
+<div class="absolute inset-0 pointer-events-none border-[12px] border-white/10 ring-1 ring-primary/5"></div>
+<!-- Map Pin -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<div class="relative">
+<div class="w-8 h-8 bg-primary rounded-full animate-ping absolute inset-0 opacity-50"></div>
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center border-2 border-white relative z-10 shadow-lg">
+<span class="material-symbols-outlined text-white text-[16px]" data-icon="park">park</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low flex items-center justify-between">
+<p class="font-body-md text-on-surface">122 Garden Way, Portland, OR</p>
+<button class="bg-primary text-white px-6 py-2 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all">Directions</button>
+</div>
+</div>
+<!-- Support & Order Summary -->
+<div class="flex flex-col gap-8">
+<!-- Support Card -->
+<div class="bg-primary text-white rounded-xl p-8 flex flex-col justify-between h-full relative overflow-hidden group">
+
+<div class="relative z-10">
+<h3 class="font-headline-md text-headline-md mb-2">Need Help?</h3>
+<p class="text-primary-fixed opacity-90 mb-6">Our plant-loving team is ready to assist you with your brew.</p>
+<button class="w-full bg-white text-primary font-label-md py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-secondary-container transition-colors active:scale-95 group-hover:shadow-lg">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                            Chat with a Gardener
+                        </button>
+</div>
+<div class="mt-8 flex items-center gap-3 relative z-10">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="Close up portrait of a friendly female barista wearing a sage green apron and a small botanical leaf earring, soft warm greenhouse lighting, professional headshot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXY-WGYQXDtaAAtXeVnMBSdDui3bcXCqrIuSIWZbpHK7t4DTB1zhlEUZiEfxEykLGjEhK6bPdplLFpNdCm4kGt3IQoFaiZmxRlTt0k--9N4-IjgFh3EoqFc4BbQO4j9IF6BL3rC6TZUwE1D-qK3-jZWNbfhrHjTfaRM399zbYwvT7fMXUj_Bg92tG5y3TB9SgQSWvEiilEFXE8D3LFG-8AMHdUzo15kKCThSGxzBj409CBTNZZ9y5Drw"/>
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="Close up portrait of a smiling male gardener with short dark hair and a canvas apron, natural sunlight lighting, outdoor garden background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7LSicPNAE1ASeEG_Sse3f30qU5iUqSYlufkn9WFniJdxTLcKW9zVZaI9HhdDmVzpElfqk9p1VuSWN1dzQiw6KhYFOboN7lvQnzkgkwEDTSC679nyY7SylCZKxDEUCfLqZgAGPu5n-aYhnGNwXYwzrKw7Lw1pvnznntLCWW3kZTqvfiQK36lRZWbfd0Cq2vLbTPW7BAoKMncupJVANAnUxsRnFDHV2f00VbUGuabm61sCKSU4VxVNQfQ"/>
+</div>
+<p class="text-xs text-primary-fixed-dim">Average response: 2 mins</p>
+</div>
+</div>
+<!-- Order Details Card -->
+<div class="bg-surface-container-high rounded-xl p-8 flex flex-col">
+<h3 class="font-label-md text-on-surface-variant uppercase tracking-widest mb-4">Your Selection</h3>
+<ul class="space-y-4 mb-6">
+<li class="flex justify-between items-center">
+<span class="font-body-md text-on-surface">Lavender Oat Milk Latte</span>
+<span class="font-label-md text-primary">$6.50</span>
+</li>
+<li class="flex justify-between items-center">
+<span class="font-body-md text-on-surface">Rosemary Focaccia</span>
+<span class="font-label-md text-primary">$4.25</span>
+</li>
+</ul>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$10.75</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-background/90 dark:bg-background/90 backdrop-blur-md shadow-[0_-10px_30px_rgba(45,75,55,0.08)] flex justify-around items-center px-4 pb-4 pt-2 rounded-t-xl md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-90 duration-300 px-5 py-1">
+<span class="material-symbols-outlined" data-icon="local_florist">local_florist</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 active:scale-90 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-90 duration-300 px-5 py-1">
+<span class="material-symbols-outlined" data-icon="person_2">person_2</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<!-- Desktop Sidebar/Nav (Hidden on Mobile) -->
+<div class="fixed left-0 top-0 h-full w-20 hidden md:flex flex-col items-center py-24 bg-background border-r border-surface-container-high z-40">
+<div class="flex flex-col gap-12">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="local_florist">local_florist</span>
+<div class="relative group">
+<span class="material-symbols-outlined text-primary" data-icon="receipt_long">receipt_long</span>
+<div class="absolute left-full ml-4 top-0 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Current Order</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="person_2">person_2</span>
+</div>
+</div>
+<script>
+        // Micro-interaction for the growth line
+        window.addEventListener('DOMContentLoaded', () => {
+            const progressLine = document.querySelector('.growth-line-animate');
+            if (progressLine) {
+                // In a real app, this would be updated based on API status
+                console.log('Order status updated: Sprouting');
+            }
+        });
+    </script>
+</body></html>

@@ -1,4 +1,4 @@
-@extends('guest.layouts.app')
+@extends('guest.standard.layouts.app')
 
 @section('title', 'Menu')
 
@@ -61,14 +61,14 @@
 {{-- Bundle --}}
 <div class="guest-products" id="guestBundles" style="display:none;">
   @foreach($bundles as $bundle)
-    @include('guest.partials._bundle_card', ['bundle' => $bundle])
+    @include('guest.standard.partials._bundle_card', ['bundle' => $bundle])
   @endforeach
 </div>
 
 {{-- Produk --}}
 <div class="guest-products" id="guestProducts">
   @foreach($products as $product)
-    @include('guest.partials._product_card', ['product' => $product])
+    @include('guest.standard.partials._product_card', ['product' => $product])
   @endforeach
 </div>
 

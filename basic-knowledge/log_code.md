@@ -207,6 +207,8 @@
 | 2026-08-02 | FIX | Guest PRG — checkout POST simpan session + redirect ke review GET (refresh-safe, fix "GET method not supported"), submit balikin redirect (browser pindah halaman) | `Guest/OrderController.php`, `routes/web.php` |
 | 2026-08-02 | UPDATE | Guest review — total_price hidden field di-set JS ke nilai final (setelah voucher) | `views/guest/review.blade.php` |
 | 2026-08-02 | FIX | Guest review & status error `Undefined variable $company` — layout guest butuh $company (navbar/hero), kirim dari controller | `Guest/OrderController.php` |
+| 2026-08-04 | MOVE | Guest views pindah ke `resources/views/guest/standard/` — base template (prep multi-template). View path `guest.X` → `guest.standard.X`, route name `guest.*` tetap | `resources/views/guest/standard/*`, `app/Http/Controllers/Guest/OrderController.php` |
+| 2026-08-04 | FEAT | Guest template dinamis via `.env GUEST_TEMPLATE` — helper `guestView()` resolve `guest.{template}.{view}`; config key `app.guest_template`. Verified resolve standard + semua view ada | `.env`, `.env.example`, `config/app.php`, `app/Http/Controllers/Guest/OrderController.php` |
 | 2026-08-02 | FIX | Guest checkout 302 — root cause ParseError `Unclosed '['` di review.blade.php (sudah fix jam 19:39) + clear view cache | `php artisan view:clear` |
 | 2026-08-02 | TEST | Review & status guest render OK (tinker, status 200) setelah fix $company | tinker |
 | 2026-07-30 | UPDATE | Views — ganti semua $product->product_discount_* → activeDiscount() (5 file) | `views/admin/product/_card.blade.php`, `_data.blade.php`, `views/admin/order/_card.blade.php`, `_data.blade.php`, `show.blade.php` |
@@ -276,3 +278,6 @@
 | 2026-08-02 | UPDATE | Guest desktop friendly — blok @media (min-width:992px): navbar/container 1200px, grid 4 kolom, hero 220px, review/status dibungkus .guest-narrow (max 720px). Mobile (<992px) gak tersentuh | `public/guest/css/guest.css`, `views/guest/review.blade.php`, `views/guest/status.blade.php` |
 | 2026-08-02 | UPDATE | Guest bundle — tab kategori 'Bundle', bundle card (partial _bundle_card), cart dukung type:bundle, checkout/review/submit handle bundle (order_bundle), item chip | `Guest/OrderController.php`, `views/guest/index.blade.php`, `views/guest/partials/_bundle_card.blade.php`, `views/guest/review.blade.php`, `public/guest/css/guest.css` |
 | 2026-08-02 | TEST | Guest bundle — menu tampil 8 bundle, submit bundle sukses (order #14 pending + order_bundle terisi), review render bundle | tinker |
+
+| 2026-08-04 | FIX | Guest submit 302 — root cause: form kirim items & bundles sebagai JSON string di hidden input, tapi controller validasi expect PHP array. Tambah `json_decode` sebelum validasi + relax validasi product_id/bundle_id dari `alpha_num`/`string` ke `required` (JSON decode hasilin integer, bukan string) | `app/Http/Controllers/Guest/OrderController.php` |
+

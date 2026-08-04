@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pembayaran - Omah Kopi Jogja</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#59422c",
+                    "on-tertiary-fixed-variant": "#293ca0",
+                    "secondary-fixed-dim": "#e1c1a4",
+                    "secondary-fixed": "#fedcbe",
+                    "surface-container-low": "#f7f3ee",
+                    "on-tertiary-fixed": "#00105c",
+                    "surface-container-high": "#ebe8e3",
+                    "tertiary-container": "#5668cd",
+                    "tertiary-fixed": "#dee0ff",
+                    "surface-tint": "#9c432d",
+                    "on-error": "#ffffff",
+                    "background": "#fdf9f4",
+                    "surface-container": "#f1ede8",
+                    "primary-fixed": "#ffdad2",
+                    "on-primary-container": "#fff3f0",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#796048",
+                    "outline": "#89726d",
+                    "inverse-primary": "#ffb4a3",
+                    "tertiary": "#3c4fb2",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#7d2c18",
+                    "surface-container-highest": "#e6e2dd",
+                    "on-surface-variant": "#56423e",
+                    "primary": "#943d28",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1c1c19",
+                    "inverse-on-surface": "#f4f0eb",
+                    "on-secondary-fixed": "#291806",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#31302d",
+                    "surface-dim": "#ddd9d5",
+                    "on-primary-fixed": "#3d0700",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#fedcbe",
+                    "error": "#ba1a1a",
+                    "surface": "#fdf9f4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1c1c19",
+                    "primary-container": "#b3543d",
+                    "primary-fixed-dim": "#ffb4a3",
+                    "surface-variant": "#e6e2dd",
+                    "on-tertiary-container": "#f6f4ff",
+                    "surface-bright": "#fdf9f4",
+                    "outline-variant": "#dcc1ba",
+                    "tertiary-fixed-dim": "#bac3ff",
+                    "secondary": "#725a42"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "section-gap": "80px",
+                    "unit": "8px",
+                    "container-max": "1200px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "caption": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "display-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fdf9f4;
+            color: #1c1c19;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .batik-overlay {
+            background-image: radial-gradient(#89726d 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.05;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for minimalist feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #fdf9f4; }
+        ::-webkit-scrollbar-thumb { background: #dcc1ba; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md bg-background min-h-screen pb-32">
+<!-- Batik Decorative Background Layer -->
+<div class="fixed inset-0 batik-overlay pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-background border-b border-outline-variant/30 flex justify-between items-center px-margin-mobile py-4 backdrop-blur-md">
+<div class="flex items-center gap-3 cursor-pointer active:scale-95 duration-200 transition-opacity hover:opacity-80">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-secondary-container flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A vintage-inspired artisanal logo for Omah Kopi Jogja, featuring a stylized Javanese Joglo house roof and a coffee bean icon. The style is minimalist line art in deep teak wood brown on a soft cream background, reflecting the heritage and rustic charm of Yogyakarta cafe culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx82M11ek1zuWqQGbvI43LkkITyo1QVADgDs84QKQWwK5YnMOfSFTbvR8xVT3TyycZ2UglNPbEFIDKVcX-jpWfRTDy7TYvNKCckjmQWrb0YpnIugCFpoxI-SC5ktbEC0Dz15OZpF7Qm_y528dalLTsjlBbIo7kNhSy-6wY5HSPmwzwd56lcscfOf0hE9PHYNRaTGNo_McTZIjAdAY-KTLSFmC98xqBZljqeFXg2P3gji-XjE9kLvDYPw"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary">Omah Kopi Jogja</h1>
+</div>
+<div class="cursor-pointer active:scale-95 duration-200 transition-opacity hover:opacity-80">
+<span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+</div>
+</header>
+<main class="max-w-[600px] mx-auto px-margin-mobile mt-8 relative">
+<!-- Breadcrumb / Header -->
+<div class="mb-8">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Pembayaran</h2>
+<p class="font-body-md text-on-surface-variant">Selesaikan pesananmu dan nikmati kopi otentik kami.</p>
+</div>
+<!-- Order Summary Card -->
+<section class="mb-8 p-6 bg-surface-container rounded-xl border border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ringkasan Pesanan</h3>
+<span class="font-label-md text-label-md bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full">#OKJ-8821</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between font-body-md">
+<span>1x Kopi Susu Gula Aren</span>
+<span class="font-semibold text-secondary">Rp 22.000</span>
+</div>
+<div class="flex justify-between font-body-md">
+<span>1x Bakwan Jagung (3pcs)</span>
+<span class="font-semibold text-secondary">Rp 15.000</span>
+</div>
+<div class="pt-3 mt-3 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-body-lg text-body-lg text-on-surface">Total Pembayaran</span>
+<span class="font-headline-sm text-headline-sm text-primary">Rp 37.000</span>
+</div>
+</div>
+</section>
+<!-- Payment Method Selection -->
+<section class="mb-8">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Pilih Metode Pembayaran</h3>
+<div class="space-y-4">
+<!-- QRIS (Digital Wallet) -->
+<label class="block cursor-pointer group">
+<input checked="" class="hidden peer" name="payment_method" type="radio" value="qris"/>
+<div class="flex items-center justify-between p-5 bg-white border border-outline-variant/40 rounded-xl peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl">qr_code_2</span>
+</div>
+<div>
+<p class="font-body-lg font-semibold text-on-surface">Digital Wallet (QRIS)</p>
+<p class="font-caption text-on-surface-variant">GoPay, OVO, Dana, LinkAja</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+</div>
+</label>
+<!-- GoPay Direct -->
+<label class="block cursor-pointer group">
+<input class="hidden peer" name="payment_method" type="radio" value="gopay"/>
+<div class="flex items-center justify-between p-5 bg-white border border-outline-variant/40 rounded-xl peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg overflow-hidden p-2">
+<img class="w-full h-full object-contain" data-alt="The GoPay logo in a minimalist flat style, featuring the recognizable white 'G' on a clean blue circular background. The icon is rendered with crisp edges to match a modern mobile application UI, surrounded by a light cream frame to maintain the artisanal cafe aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5xNtqTSKke89zSeIXMtz_Txrpmt_uEYqcAwlhniD9hc73PKLUM7r2zpw8zrftHoPywF44E6bpjIpw50yS05hx9PyjnUgx7z8764B-IHZpJWavUANzSiqCehTNK08gUr6wYvKXwVfmebo9ErsO-WYc2YVQ93c94aDj5I8eqZXdvIgnOcZFmD3rBXiT_WSsx1BTQt_j424wyjSh4q2o0N5TkD6-iMtTFws2ESZZIy4jUa1FikJQV8hYKA"/>
+</div>
+<div>
+<p class="font-body-lg font-semibold text-on-surface">GoPay</p>
+<p class="font-caption text-on-surface-variant">Bayar langsung via aplikasi Gojek</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+</div>
+</div>
+</label>
+<!-- Cash at Counter -->
+<label class="block cursor-pointer group">
+<input class="hidden peer" name="payment_method" type="radio" value="cash"/>
+<div class="flex items-center justify-between p-5 bg-white border border-outline-variant/40 rounded-xl peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl">payments</span>
+</div>
+<div>
+<p class="font-body-lg font-semibold text-on-surface">Bayar di Kasir</p>
+<p class="font-caption text-on-surface-variant">Gunakan uang tunai atau kartu di outlet</p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+</div>
+</div>
+</label>
+</div>
+</section>
+<!-- Batik Divider -->
+<div class="flex items-center justify-center my-12">
+<div class="h-[1px] bg-outline-variant/30 flex-grow"></div>
+<div class="px-4 opacity-40">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">texture</span>
+</div>
+<div class="h-[1px] bg-outline-variant/30 flex-grow"></div>
+</div>
+<!-- Secure Badge Section -->
+<div class="flex flex-col items-center justify-center gap-3 text-on-surface-variant opacity-70 mb-12">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">verified_user</span>
+<span class="font-label-md text-label-md">Pembayaran Aman &amp; Terenkripsi</span>
+</div>
+<p class="font-caption text-center px-8">Data Anda dilindungi dengan standar keamanan tingkat tinggi untuk memastikan setiap transaksi berjalan lancar.</p>
+</div>
+</main>
+<!-- Sticky Bottom Confirmation Bar -->
+<div class="fixed bottom-[84px] left-0 w-full px-margin-mobile pb-4 bg-transparent pointer-events-none">
+<div class="max-w-[600px] mx-auto pointer-events-auto">
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline-sm text-headline-sm shadow-lg hover:opacity-90 active:scale-95 transition-all duration-200 flex items-center justify-center gap-3">
+                Konfirmasi Bayar
+                <span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-low border-t border-outline-variant/20 shadow-[0_-2px_10px_rgba(75,54,33,0.05)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90 hover:text-primary" href="#">
+<span class="material-symbols-outlined">coffee</span>
+<span class="font-label-md text-label-md">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-md text-label-md">Pesenan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1.5 transition-all duration-300 ease-in-out active:scale-90 hover:text-primary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profil</span>
+</a>
+</nav>
+<script>
+        // Simple Interaction Logic
+        document.querySelectorAll('input[name="payment_method"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                // Remove visual selection from all containers
+                document.querySelectorAll('label > div').forEach(div => {
+                    div.classList.remove('border-primary', 'ring-1', 'ring-primary');
+                    const circle = div.querySelector('.w-6.h-6');
+                    circle.classList.remove('border-primary', 'bg-primary');
+                    circle.querySelector('.w-2.h-2').classList.add('opacity-0');
+                });
+
+                // Add visual selection to the target container
+                if (e.target.checked) {
+                    const container = e.target.nextElementSibling;
+                    container.classList.add('border-primary', 'ring-1', 'ring-primary');
+                    const circle = container.querySelector('.w-6.h-6');
+                    circle.classList.add('border-primary', 'bg-primary');
+                    circle.querySelector('.w-2.h-2').classList.remove('opacity-0');
+                }
+            });
+        });
+
+        // Initialize first selection correctly on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const checkedInput = document.querySelector('input[name="payment_method"]:checked');
+            if (checkedInput) {
+                const container = checkedInput.nextElementSibling;
+                container.classList.add('border-primary', 'ring-1', 'ring-primary');
+                const circle = container.querySelector('.w-6.h-6');
+                circle.classList.add('border-primary', 'bg-primary');
+                circle.querySelector('.w-2.h-2').classList.remove('opacity-0');
+            }
+        });
+    </script>
+</body></html>

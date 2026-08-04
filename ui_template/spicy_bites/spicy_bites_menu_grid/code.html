@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Spicy Bites | Red Hot &amp; Bold Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#1b1c1c",
+                        "inverse-primary": "#ffb3ac",
+                        "tertiary": "#005f7b",
+                        "secondary-container": "#fdc003",
+                        "tertiary-fixed": "#bee9ff",
+                        "background": "#fcf9f8",
+                        "primary-fixed-dim": "#ffb3ac",
+                        "surface-container-high": "#eae7e7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-tertiary-container": "#e9f7ff",
+                        "on-secondary-container": "#6c5000",
+                        "surface-bright": "#fcf9f8",
+                        "on-primary-container": "#fff2f0",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f6f6c",
+                        "on-secondary-fixed": "#261a00",
+                        "surface": "#fcf9f8",
+                        "on-surface-variant": "#5b403d",
+                        "secondary": "#785900",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#ba1a20",
+                        "tertiary-container": "#00799c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#af101a",
+                        "on-primary-fixed": "#410003",
+                        "primary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5b4300",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#7bd1f8",
+                        "inverse-surface": "#303030",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-tertiary-fixed-variant": "#004d65",
+                        "on-primary-fixed-variant": "#930010",
+                        "surface-container": "#f0eded",
+                        "secondary-fixed-dim": "#fabd00",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdf9e",
+                        "on-tertiary-fixed": "#001f2a",
+                        "outline-variant": "#e4beba",
+                        "surface-container-low": "#f6f3f2",
+                        "primary-container": "#d32f2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1200px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "800"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .active-pill {
+            background-color: #af101a;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background border-b border-surface-variant shadow-sm w-full">
+<div class="flex justify-between items-center px-4 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<button class="text-primary hover:bg-surface-container-high p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1lATrNRIzHwAJyb6tUmkikLLBeUE4_To918bPWZ7Iu997h-o8dgFz8ySFApdvnAvuunxb8H0Ezji77uBZ-v9EEkTgYwANIpaqIIZaBl3Kn7vq4Ny4LC3geaufKa1knPiL6aCV8aGpgJJuPS2uK6B2o04sUqMmyAFIu0ZzvNHIRdtj4yw_WqtA0WI_P_pPbq54V0PLjAovvgWgAVHtvR4rZsnxcRdEBa6LGddD6KS31RJluw3dUdVuxQ"/>
+<h1 class="text-headline-md font-black text-primary uppercase tracking-tighter">Spicy Bites</h1>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-secondary-container rounded-full text-on-secondary-container text-label-bold">
+<span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+                    OPEN
+                </div>
+<button class="text-primary hover:bg-surface-container-high p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 mt-6">
+<!-- Hero Title -->
+<section class="mb-8">
+<h2 class="font-headline-xl text-headline-xl md:text-headline-xl text-on-background leading-tight">
+                Fuel Your <br/><span class="text-primary">Fire.</span>
+</h2>
+<p class="text-on-surface-variant font-body-lg max-w-md mt-2">Aggressive flavors for the culinary daredevil. Are you ready for the heat?</p>
+</section>
+<!-- Categories Slider -->
+<section class="mb-8 -mx-4 px-4 overflow-hidden">
+<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+<button class="flex-shrink-0 px-6 py-3 rounded-full bg-primary text-white font-label-bold transition-transform active:scale-95">Flame Grilled</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full border-2 border-outline-variant text-on-surface-variant font-label-bold hover:bg-surface-container transition-all active:scale-95">Extra Spicy</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full border-2 border-outline-variant text-on-surface-variant font-label-bold hover:bg-surface-container transition-all active:scale-95">Wings</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full border-2 border-outline-variant text-on-surface-variant font-label-bold hover:bg-surface-container transition-all active:scale-95">Tacos</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full border-2 border-outline-variant text-on-surface-variant font-label-bold hover:bg-surface-container transition-all active:scale-95">Dips</button>
+</div>
+</section>
+<!-- Food List Grid -->
+<section class="bento-grid">
+<!-- Item 1: Volcano Wings -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-surface-variant group">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Close up high-impact photograph of crispy chicken wings drenched in a vibrant, glossy deep red spicy sauce. Garnished with fresh green scallions and chili flakes, the lighting is dramatic and moody, emphasizing the hot glaze. Part of a bold restaurant menu for Spicy Bites with a high-contrast charcoal and chili red color palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUWCXttZEUtBuNl4MB-rvopmtPuS2QryWXJCzJNZCQ8QzKNO48EAUwjF9mr85xJJPZHGWnPRr0PGKx4_vNMvkmpi2lsZj946O_rcMzrNBxReRWdHBhVOH_zmNliGIhfTL2Txh5h5ZWh3MOtE9ie-4w5a71_XuHS38UMEaxSM1pUL6I4kiiexgzp_5_V3nuxm6hieH_EG_TUAWYxuabC6sw8dt2OKwr_z5GcImpUVUsxzWIg89OVBf8aA')">
+</div>
+<div class="absolute top-3 right-3 bg-on-background/90 text-white px-3 py-1 rounded-full text-label-bold">
+                        $12.50
+                    </div>
+<div class="absolute bottom-3 left-3 flex gap-0.5">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-surface-variant">local_fire_department</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="font-headline-md text-on-background truncate">Volcano Wings</h3>
+<p class="text-label-sm text-on-surface-variant mt-1">12 pc bone-in classic heat</p>
+<button class="mt-4 w-full bg-primary hover:bg-primary-container text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors font-label-bold active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        ADD TO CART
+                    </button>
+</div>
+</div>
+<!-- Item 2: Habanero Beef Taco -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-surface-variant group">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A macro shot of a street-style beef taco with vibrant orange habanero salsa dripping from the edges. The taco shell is slightly charred, and the shredded beef looks tender and juicy. The background is a clean, modern restaurant setting with high contrast lighting. Part of a professional food menu design for Spicy Bites." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAe-RmPJFME064MzmYN7Xd8HMROQpcSpYb3RpDuEtOwQwU4Das4GctW7wKxjSOH-sd0v3_CmMBt5l7kg0LePR5g_M9Ew2KBhmn9MLt_CDdAcURjy23ba1ESuGdG1jYaX75NK8oyrhsyVES0m1q6AVPsZU6Avrd2U-EpQV96QRoXrRxAm839lwhtnwWPxu3Cc5Rt0qSgfKbqy54WR1sOJGm8vlILicXyXhODf9G4agUo1GinuA2F-m5NLA')">
+</div>
+<div class="absolute top-3 right-3 bg-on-background/90 text-white px-3 py-1 rounded-full text-label-bold">
+                        $4.95
+                    </div>
+<div class="absolute bottom-3 left-3 flex gap-0.5">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="font-headline-md text-on-background truncate">Habanero Beef Taco</h3>
+<p class="text-label-sm text-on-surface-variant mt-1">Double shell, extra kick</p>
+<button class="mt-4 w-full bg-primary hover:bg-primary-container text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors font-label-bold active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        ADD TO CART
+                    </button>
+</div>
+</div>
+<!-- Item 3: Ghost Pepper Fries -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-surface-variant group">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A bowl of golden, crispy french fries dusted with intense red ghost pepper spice and drizzled with a creamy, pale yellow garlic sauce. The image is bright and appetizing, with sharp focus on the spice textures. The lighting is commercial-grade, emphasizing the vibrant red and orange tones in a bold modern UI context." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4oZkYr22JzW4JHtFzpo2f30CnJQtSkrSCbYScbKPv3uaur7JJUQwfgOfKjPaDfpQ5knaLWidsDQ4qcId5hhllyfJIG1drVDTwBzhHW2x0ApZG3mBQpmP3s5NEOm_SARna8EjDj8s2oGxudjtOuIOabbm3-jheDRGl7pTb9H9qNf_25VQoCY08dIDUZT2WaucbuOzm4-UcIOBsHqQpJmlc0aTs58JGH-OqQTm0JoQQN8zABkao_PnF3w')">
+</div>
+<div class="absolute top-3 right-3 bg-on-background/90 text-white px-3 py-1 rounded-full text-label-bold">
+                        $6.25
+                    </div>
+<div class="absolute bottom-3 left-3 flex gap-0.5">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-surface-variant">local_fire_department</span>
+<span class="material-symbols-outlined text-surface-variant">local_fire_department</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="font-headline-md text-on-background truncate">Ghost Pepper Fries</h3>
+<p class="text-label-sm text-on-surface-variant mt-1">Dusting of insanity</p>
+<button class="mt-4 w-full bg-primary hover:bg-primary-container text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors font-label-bold active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        ADD TO CART
+                    </button>
+</div>
+</div>
+<!-- Item 4: Sriracha Glazed Ribs -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-surface-variant group">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A half-rack of smoked ribs coated in a thick, sticky, and reflective red sriracha glaze. Sesame seeds are sprinkled on top. The ribs sit on a dark charcoal plate, making the fiery red glaze pop against the background. The lighting is warm and invites appetite, fitting for the Spicy Bites high-energy food app." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4dovXnBt1E6F0_muR5jX_P_MYqzrCj9gCwNhZZfoyJOcg734stdELCWJ6_yNTPTmsxV17zMSVumlWPBD2AlQvixzvBMc0xkpUSazz-HQ9mwT20OLYCWEARtT0MLZ9Qwq_4rPYmdfPqkvZgPHg7Vc0bP69KY3Tmd6fY4CFv9PHiPF5vLGx23ZIIhPwVscfJ4zrAA3Fh1sGenhtNqELwtEz-HDnQYG9kL8L_Wz2lWAAp-AlWAC8c-pptg')">
+</div>
+<div class="absolute top-3 right-3 bg-on-background/90 text-white px-3 py-1 rounded-full text-label-bold">
+                        $15.95
+                    </div>
+<div class="absolute bottom-3 left-3 flex gap-0.5">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+</div>
+<div class="p-4">
+<h3 class="font-headline-md text-on-background truncate">Sriracha Glazed Ribs</h3>
+<p class="text-label-sm text-on-surface-variant mt-1">Slow-smoked &amp; tangy</p>
+<button class="mt-4 w-full bg-primary hover:bg-primary-container text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors font-label-bold active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        ADD TO CART
+                    </button>
+</div>
+</div>
+</section>
+<!-- "Spicy Deals" Banner -->
+<section class="my-10 bg-secondary-container rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="relative z-10 text-center md:text-left">
+<span class="text-label-bold uppercase tracking-wider text-on-secondary-fixed-variant">Limited Time</span>
+<h3 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-secondary-container mt-1">Free Delivery on Heat!</h3>
+<p class="text-on-secondary-container font-body-md">Orders over $30 get the 'Insanity Sauce' for free.</p>
+</div>
+<div class="relative z-10">
+<button class="bg-on-background text-white px-8 py-3 rounded-full font-label-bold hover:scale-105 transition-transform">Claim Now</button>
+</div>
+<!-- Decorative Fire -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[180px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<span class="text-label-sm font-label-sm">Menu</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-label-sm font-label-sm">Cart</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">local_fire_department</span>
+<span class="text-label-sm font-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</button>
+</nav>
+<!-- Contextual FAB (Hidden on scroll or specific screens, but included per instructions for home-like screen) -->
+<div class="fixed bottom-24 right-4 z-[45] md:hidden">
+<button class="bg-secondary-container text-on-secondary-container w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+<script>
+        // Micro-interaction for add buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const label = btn.innerText;
+                if(label.includes('ADD TO CART')) {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span> ADDED';
+                    btn.classList.replace('bg-primary', 'bg-green-700');
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.replace('bg-green-700', 'bg-primary');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body></html>

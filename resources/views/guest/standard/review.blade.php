@@ -1,4 +1,4 @@
-@extends('guest.layouts.app')
+@extends('guest.standard.layouts.app')
 
 @section('title', 'Konfirmasi Pesanan')
 

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Status | Ignite &amp; Spice</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#ded9d8",
+                    "on-secondary-fixed": "#331200",
+                    "surface-tint": "#ba1a20",
+                    "primary": "#af101a",
+                    "outline-variant": "#e4beba",
+                    "surface-container-low": "#f8f2f1",
+                    "on-tertiary-container": "#f6f3f3",
+                    "secondary": "#9c4400",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "primary-fixed-dim": "#ffb3ac",
+                    "inverse-primary": "#ffb3ac",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "on-secondary-fixed-variant": "#773200",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#410003",
+                    "tertiary": "#575757",
+                    "on-primary-container": "#fff2f0",
+                    "secondary-container": "#fd7613",
+                    "background": "#fef8f7",
+                    "secondary-fixed-dim": "#ffb68f",
+                    "inverse-on-surface": "#f5efee",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "secondary-fixed": "#ffdbca",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#5b403d",
+                    "on-surface": "#1d1b1b",
+                    "surface": "#fef8f7",
+                    "inverse-surface": "#323030",
+                    "surface-bright": "#fef8f7",
+                    "on-background": "#1d1b1b",
+                    "tertiary-container": "#706f6f",
+                    "surface-container-high": "#ede7e6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e7e1e0",
+                    "outline": "#8f6f6c",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#d32f2f",
+                    "on-secondary-container": "#5b2500",
+                    "surface-container": "#f2edec",
+                    "surface-variant": "#e7e1e0",
+                    "primary-fixed": "#ffdad6",
+                    "on-primary-fixed-variant": "#930010"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fef8f7;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-red {
+            filter: drop-shadow(0 0 8px rgba(175, 16, 26, 0.6));
+        }
+        .pulse-flame {
+            animation: flame-pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes flame-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full top-0 sticky z-40 border-b border-outline-variant/10">
+<div class="flex items-center justify-between px-margin-mobile h-16 w-full max-w-container-max mx-auto">
+<button class="transition-all duration-200 active:scale-95 hover:bg-primary-container/5 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">restaurant_menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tight text-primary dark:text-primary-fixed-dim">
+                Ignite &amp; Spice
+            </h1>
+<button class="transition-all duration-200 active:scale-95 hover:bg-primary-container/5 p-2 rounded-full relative">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">shopping_bag</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile pt-6 pb-24 md:pb-8">
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Tracking & Status (Left Column) -->
+<div class="lg:col-span-5 space-y-6">
+<div class="space-y-2">
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">
+                        The Heat is Coming
+                    </h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Estimated Arrival: <span class="font-bold text-secondary">8 Mins</span>
+</p>
+</div>
+<!-- Tracker Component -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 shadow-sm">
+<div class="space-y-8 relative">
+<!-- Connecting Line -->
+<div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-outline-variant/20"></div>
+<div class="absolute left-[19px] top-4 h-2/3 w-0.5 bg-gradient-to-b from-primary via-secondary to-transparent"></div>
+<!-- Step 1: Completed -->
+<div class="flex items-start gap-4 relative">
+<div class="z-10 bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold uppercase text-primary">Order Fired Up</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Confirmed at 12:45 PM</p>
+</div>
+</div>
+<!-- Step 2: Active -->
+<div class="flex items-start gap-4 relative">
+<div class="z-10 bg-secondary-container text-on-secondary-container rounded-full w-10 h-10 flex items-center justify-center shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined text-[20px] pulse-flame">local_fire_department</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold uppercase text-on-surface">Sizzling in the Pan</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Our chefs are mastering the flames.</p>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex items-start gap-4 relative opacity-40">
+<div class="z-10 bg-surface-container-high text-on-surface-variant rounded-full w-10 h-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">delivery_dining</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold uppercase text-on-surface">Out for Delivery</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Almost on its way to you.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Courier Card -->
+<div class="bg-inverse-surface text-inverse-on-surface rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant overflow-hidden border-2 border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A close-up professional portrait of a delivery courier named Raka, wearing a sleek black and red athletic jacket with a subtle Ignite and Spice logo. The lighting is dramatic and warm, with a blurred urban night background filled with warm street lights. The style is modern, cinematic, and high-contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKd8rT-8HPeb9yZjlfbo5rFgFUvwQw0CVzeZ0T5TkhLpWeCX5y0dZ4urLWR5vt7qpIDBcbeOiMC0Tn8DUwi1FDffCI0dbH0JZbNc-BGaDn5giSykIs-ry0lykIutExGPztJ2h4_OZy0MCG8sdcu5mHA6J7gbXwiMZq7CfkJIvn_9cJNPnSFbJZskORzcY7ft2043jvigQRHOP9q5erOHo6mz9BixXrj-ridS4h_qvTV1et8msXnBjnaA"/>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-secondary-fixed">COURIER</p>
+<h4 class="font-headline-md text-headline-md text-white">Raka (The Runner)</h4>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary/20 hover:bg-primary/40 text-primary-fixed-dim w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="bg-primary hover:bg-primary-container text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-md">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Map Visualization (Right Column) -->
+<div class="lg:col-span-7 h-[400px] lg:h-auto min-h-[400px] relative rounded-2xl overflow-hidden border border-outline-variant/10 shadow-xl">
+<div class="absolute inset-0 bg-inverse-surface z-0" data-location="Chicago" style="">
+<div class="absolute inset-0 opacity-40 grayscale contrast-125" data-alt="A highly detailed, stylized dark city map layout viewed from an isometric top-down perspective. The streets are defined by glowing charcoal smoke lines on a deep black background. A prominent, vibrant glowing red delivery path winds through the city blocks, leading towards a destination marked with a subtle pulse. The aesthetic is tech-noir and high-intensity." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFLTSkiRuJtcslQx7xh0LydGAtJ0wuxlhqgQ-op5wXhVW_7yJm0dLiiqUpnp8Z9Pe7-iYVhPHdUj63ZvdzNt2hTJVjhDBoO9HNNrhsV_IPgOhOAvZZVrocmtoM4HSLYdt16zlabeXP-uPScGcEslmXXWX3QB_3NdsfsK_476Hgn6QPkv8fHavachr488O1JEAtcLtYMmkbTj9mw7WoNDW8jm6zTbGBpBGGeM9FYYuvviTqvb27E8cLlg')"></div>
+</div>
+<!-- Map UI Elements Overlay -->
+<div class="absolute inset-0 z-10 pointer-events-none">
+<!-- Delivery Path SVG (Simulated) -->
+<svg class="w-full h-full" viewbox="0 0 800 600">
+<path class="glow-red" d="M100,500 L250,450 L400,480 L550,300 L650,320" fill="none" stroke="#af101a" stroke-dasharray="8 4" stroke-width="4"></path>
+<!-- Courier Icon (Flame) -->
+<g transform="translate(400,480)">
+<circle class="pulse-flame" fill="rgba(175, 16, 26, 0.2)" r="24"></circle>
+<circle fill="#af101a" r="12"></circle>
+<text fill="white" font-family="Material Symbols Outlined" font-size="24" x="-12" y="8">local_fire_department</text>
+</g>
+<!-- Destination -->
+<g transform="translate(650,320)">
+<circle fill="white" r="15"></circle>
+<circle fill="#af101a" r="5"></circle>
+</g>
+</svg>
+<!-- Float Info -->
+<div class="absolute top-6 right-6 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/10 pointer-events-auto shadow-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-bold text-label-bold">TO: 742 EVERGREEN TERRACE</span>
+</div>
+</div>
+</div>
+<!-- Zoom Controls -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-2 z-20">
+<button class="bg-white text-on-surface w-10 h-10 rounded-lg flex items-center justify-center shadow-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="bg-white text-on-surface w-10 h-10 rounded-lg flex items-center justify-center shadow-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Order Summary Section -->
+<section class="mt-12">
+<h3 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">receipt_long</span>
+                Order Details
+            </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Items Card -->
+<div class="bg-white border border-outline-variant/10 rounded-xl p-5 hover:shadow-md transition-shadow">
+<ul class="space-y-4">
+<li class="flex justify-between items-center pb-4 border-b border-outline-variant/5">
+<div class="flex items-center gap-3">
+<span class="font-bold text-primary">1x</span>
+<span class="font-body-md">Ghost Pepper Wings (12pc)</span>
+</div>
+<span class="font-label-bold">$18.50</span>
+</li>
+<li class="flex justify-between items-center pb-4 border-b border-outline-variant/5">
+<div class="flex items-center gap-3">
+<span class="font-bold text-primary">2x</span>
+<span class="font-body-md">Volcano Fries</span>
+</div>
+<span class="font-label-bold">$14.00</span>
+</li>
+<li class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="font-bold text-primary">1x</span>
+<span class="font-body-md">Spiced Mango Lassi</span>
+</div>
+<span class="font-label-bold">$5.50</span>
+</li>
+</ul>
+</div>
+<!-- Totals Card -->
+<div class="bg-surface-container-low rounded-xl p-5 space-y-3">
+<div class="flex justify-between font-body-sm text-on-surface-variant">
+<span>Subtotal</span>
+<span>$38.00</span>
+</div>
+<div class="flex justify-between font-body-sm text-on-surface-variant">
+<span>Delivery Fee</span>
+<span>$2.50</span>
+</div>
+<div class="flex justify-between font-body-sm text-on-surface-variant">
+<span>Taxes</span>
+<span>$3.42</span>
+</div>
+<div class="pt-3 border-t border-outline-variant/20 flex justify-between font-headline-md text-primary">
+<span>Total</span>
+<span>$43.92</span>
+</div>
+</div>
+<!-- Need Help Card -->
+<div class="bg-white border-2 border-dashed border-outline-variant/30 rounded-xl p-5 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-[40px] text-on-surface-variant mb-2">help_center</span>
+<h4 class="font-label-bold text-label-bold mb-1">ANY ISSUES?</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Our support team is on standby 24/7.</p>
+<button class="text-primary font-label-bold hover:underline">Contact Support</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest dark:bg-inverse-surface shadow-md border-t border-outline-variant/10">
+<button class="transition-transform duration-300 ease-in-out active:scale-90 flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-fixed-variant px-4 py-1">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-bold text-label-bold">Menu</span>
+</button>
+<button class="transition-transform duration-300 ease-in-out active:scale-90 flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-fixed-variant px-4 py-1">
+<span class="material-symbols-outlined">local_fire_department</span>
+<span class="font-label-bold text-label-bold">Hot Deals</span>
+</button>
+<button class="transition-transform duration-300 ease-in-out active:scale-90 flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-bold text-label-bold">Orders</span>
+</button>
+<button class="transition-transform duration-300 ease-in-out active:scale-90 flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-fixed-variant px-4 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-bold text-label-bold">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for the flame icon
+        const flameIcon = document.querySelector('.pulse-flame');
+        if (flameIcon) {
+            flameIcon.addEventListener('click', () => {
+                alert("Raka is pushing through traffic to get your heat delivered!");
+            });
+        }
+
+        // Simulating the delivery progress with a tiny bit of movement
+        let courierPos = { x: 400, y: 480 };
+        function animateCourier() {
+            courierPos.x += (Math.random() - 0.5) * 0.5;
+            courierPos.y += (Math.random() - 0.5) * 0.5;
+            const courierElement = document.querySelector('g[transform^="translate(400"]');
+            if (courierElement) {
+                courierElement.setAttribute('transform', `translate(${courierPos.x}, ${courierPos.y})`);
+            }
+            requestAnimationFrame(animateCourier);
+        }
+        // Disabled for static preview stability, but could be enabled for extra polish:
+        // animateCourier();
+    </script>
+</body></html>

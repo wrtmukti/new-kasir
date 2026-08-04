@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Status | Oat & Matcha</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#476344",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#f7fff1",
+                    "on-surface": "#201b15",
+                    "surface-variant": "#ebe1d6",
+                    "secondary-fixed": "#ffdad4",
+                    "surface-tint": "#496546",
+                    "surface-container-highest": "#ebe1d6",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-bright": "#fff8f3",
+                    "tertiary-fixed-dim": "#c9c6bf",
+                    "secondary": "#745853",
+                    "on-background": "#201b15",
+                    "surface-container-high": "#f1e6dc",
+                    "on-secondary-fixed-variant": "#5b403c",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#352f29",
+                    "on-error": "#ffffff",
+                    "outline": "#737970",
+                    "inverse-primary": "#afcfa9",
+                    "tertiary": "#5d5c56",
+                    "primary-fixed-dim": "#afcfa9",
+                    "primary-fixed": "#cbebc3",
+                    "background": "#fff8f3",
+                    "on-secondary-fixed": "#2b1613",
+                    "on-primary-fixed-variant": "#324d30",
+                    "inverse-on-surface": "#faefe4",
+                    "on-surface-variant": "#434840",
+                    "surface": "#fff8f3",
+                    "surface-dim": "#e3d8ce",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f7ece1",
+                    "secondary-fixed-dim": "#e3beb8",
+                    "tertiary-fixed": "#e6e2da",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#484741",
+                    "outline-variant": "#c3c8be",
+                    "on-secondary-container": "#795c57",
+                    "primary-container": "#5f7c5b",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#fed7d0",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#76746e",
+                    "surface-container-low": "#fdf2e7",
+                    "on-primary-fixed": "#062108",
+                    "on-tertiary-fixed": "#1c1c17",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "max-width": "1200px",
+                    "xl": "48px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scandi-shadow {
+            box-shadow: 0 32px 64px -12px rgba(116, 88, 83, 0.08);
+        }
+        .stepper-active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            border: 2px solid #476344;
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-40 bg-surface/80 backdrop-blur-md">
+<nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-md max-w-max-width mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary font-bold">coffee_maker</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Oat & Matcha</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform text-on-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+</nav>
+</header>
+<main class="max-w-[600px] mx-auto px-margin-mobile pt-xl">
+<!-- Hero Order Status -->
+<section class="text-center mb-xl">
+<div class="relative inline-block mb-lg">
+<div class="w-32 h-32 rounded-full bg-primary-fixed flex items-center justify-center mx-auto mb-md overflow-hidden">
+<img class="w-full h-full object-cover opacity-90" data-alt="A macro lifestyle photograph of a barista expertly steaming milk in a high-end Scandi-cafe. The lighting is soft and natural, emphasizing the creamy texture of the milk and the warm wooden accents of the coffee shop. The aesthetic is minimalist and cozy, with soft greens and earthy browns consistent with a premium brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLK_VyocyhOenLA9sNmIlVdw1KJpXTzrNxy-a2ihnIpVh4mX_---3qn1LjeVylF1ggtRyhgMF7VcvQft0YoFKmR_I8Mj1ETychUyb0hXLBYqdwkWuVkwl2l7fGaHKK2BhGUoC2c5OUkHp_99XwC14S39dwDzuV6n6OxmLqS1XaxipwJ5f4YWagMWgY5N2TcugpNTilSq-72QDC67tKiZvF4uw1buJRo5YZOcTtx0UtQ1HoCBzy4PNYqg"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-secondary text-on-secondary rounded-full p-2 scandi-shadow">
+<span class="material-symbols-outlined text-[20px]">local_cafe</span>
+</div>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Almost ready, Jamie!</h2>
+<p class="text-on-surface-variant font-body-md max-w-[320px] mx-auto">Your morning ritual is currently being handcrafted with care.</p>
+</section>
+<!-- Progress Indicator -->
+<section class="bg-surface-container-low rounded-xl p-lg mb-lg scandi-shadow">
+<div class="flex items-center justify-between mb-xl px-4">
+<!-- Preparing -->
+<div class="flex flex-col items-center gap-3 relative">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<span class="font-label-sm text-primary">Preparing</span>
+<!-- Connector -->
+<div class="absolute top-5 left-10 w-[calc(100vw/5)] max-w-[120px] h-1 bg-primary"></div>
+</div>
+<!-- Brewing -->
+<div class="flex flex-col items-center gap-3 relative">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center z-10 stepper-active">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">coffee</span>
+</div>
+<span class="font-label-sm text-primary">Brewing</span>
+<!-- Connector -->
+<div class="absolute top-5 left-10 w-[calc(100vw/5)] max-w-[120px] h-1 bg-surface-variant"></div>
+</div>
+<!-- Ready -->
+<div class="flex flex-col items-center gap-3 relative">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Ready</span>
+</div>
+</div>
+<!-- Estimated Time -->
+<div class="flex items-center justify-between pt-lg border-t border-outline-variant/30">
+<div class="flex flex-col">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Estimated Time</span>
+<span class="font-headline-md text-primary">4-6 mins</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Order No.</span>
+<span class="font-headline-md text-on-surface">#4921</span>
+</div>
+</div>
+</section>
+<!-- Order Summary Card -->
+<section class="bg-surface rounded-xl border border-surface-variant overflow-hidden">
+<div class="p-md bg-surface-container flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">receipt_long</span>
+<h3 class="font-label-md text-on-surface">Order Details</h3>
+</div>
+<div class="p-lg space-y-lg">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-lg bg-surface-container-high flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A top-down view of a beautifully prepared matcha latte in a ceramic mug, resting on a light oak wooden table. The drink features intricate latte art and is surrounded by soft, warm shadows and a minimalist Scandi-cafe vibe. The color palette is dominated by soft matcha green and warm cream tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNeBUrP7oQw1iEI9vqDhWRld2uCxJOjiCNZRGHaCOBPiLtcnpGRG0E-Uugart1o6GuzChpF-Ew6wJXLtJq7rqW4H81dsRtDi-eYWFASNDC0rHkigMg8af-FTscT6_vkJT1iSyaX0-Iim2gFZ3I3_gvQnIzkGk2DlT2tEKAPPkUih96qUKl3nCcu2pFftN9xh02wSocIV2Ij62gSqp4tNKhi6X2D_fSdJJvu-gQ0baGfrw4GGpPX8C9ZQ"/>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-semibold">Iced Oat Matcha Latte</p>
+<p class="text-body-sm text-on-surface-variant">Medium, Sugar-free Vanilla</p>
+</div>
+</div>
+<span class="font-label-md text-on-surface">$6.50</span>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-lg bg-surface-container-high flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A fresh, golden-brown flaky croissant served on a simple white ceramic plate. The scene is bright and airy, reflecting a modern minimalist aesthetic with soft natural light. The background is a clean, textured surface in a warm creamy oat color, consistent with high-end cafe branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALTOqBy3OH-kiz92paoSoLwGPJkYXhtvZXTOmZ0qd3K5lYJzhimn1X6ytTg1dVc_ET0aMAE4pzyGWx_E-jlqS6Ua1Qvsbabo6pP6TjrZMIEnfGZsn_c3SMMiQxIqv1X6dSoqidp8SaYpUwMropweVGQdK1SrqSJk6fueNJUCpT2z5FH_ya7GK38WKDRbt25eNfMPdFWuU5RoRK8JhspGZfaekMqiO87zqyHHIwyltBSNmL970KYwOnDw"/>
+</div>
+<div>
+<p class="font-body-lg text-on-surface font-semibold">Almond Croissant</p>
+<p class="text-body-sm text-on-surface-variant">Warmed</p>
+</div>
+</div>
+<span class="font-label-md text-on-surface">$4.25</span>
+</div>
+</div>
+<div class="p-lg pt-0 border-t border-surface-variant/50 mt-2">
+<div class="flex justify-between items-center pt-md">
+<span class="font-body-md text-on-surface-variant">Total with tax</span>
+<span class="font-headline-md text-primary">$11.62</span>
+</div>
+</div>
+</section>
+<!-- Help/Support -->
+<div class="mt-lg flex justify-center gap-4">
+<button class="flex items-center gap-2 px-lg py-sm rounded-full border border-secondary text-secondary font-label-md hover:bg-secondary/5 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+                Need Help?
+            </button>
+<button class="flex items-center gap-2 px-lg py-sm rounded-full bg-surface-container-high text-on-surface-variant font-label-md hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                Share Progress
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mandatory Shell) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-sm px-lg bg-surface-container-low dark:bg-surface-container-highest shadow-[0_-4px_32px_rgba(116,88,83,0.05)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for the progress bar
+        document.addEventListener('DOMContentLoaded', () => {
+            const timeElement = document.querySelector('.text-primary.font-headline-md');
+            let time = 5;
+            
+            // Subtle countdown effect for immersion
+            const interval = setInterval(() => {
+                if (Math.random() > 0.9) {
+                    timeElement.classList.add('opacity-50');
+                    setTimeout(() => {
+                        timeElement.classList.remove('opacity-50');
+                    }, 500);
+                }
+            }, 5000);
+        });
+    </script>
+</body></html>

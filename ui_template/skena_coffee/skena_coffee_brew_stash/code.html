@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SKENA COFFEE - Digital Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&amp;family=Syne:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sticker-rotate {
+            transform: rotate(-3deg);
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+        }
+        .neo-shadow-lg {
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+        }
+        .active-tab-shadow {
+            box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+        }
+        /* Custom scrollbar for neo-brutalist look */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fcf8f9;
+            border-left: 2px solid #1b1b1c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #006e2f;
+            border: 2px solid #1b1b1c;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#005321",
+                      "surface-dim": "#dcd9da",
+                      "surface-container-high": "#eae7e8",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#004395",
+                      "surface-container": "#f0edee",
+                      "on-error-container": "#93000a",
+                      "primary": "#006e2f",
+                      "on-surface-variant": "#3d4a3d",
+                      "on-background": "#1b1b1c",
+                      "background": "#fcf8f9",
+                      "surface-container-highest": "#e5e2e3",
+                      "tertiary-container": "#ff8e4d",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "surface-variant": "#e5e2e3",
+                      "secondary-container": "#2170e4",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f6f3f4",
+                      "error-container": "#ffdad6",
+                      "inverse-primary": "#4ae176",
+                      "surface": "#fcf8f9",
+                      "primary-fixed-dim": "#4ae176",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#6bff8f",
+                      "on-tertiary-container": "#6d2d00",
+                      "on-secondary-container": "#fefcff",
+                      "outline-variant": "#bccbb9",
+                      "primary-container": "#22c55e",
+                      "surface-tint": "#006e2f",
+                      "on-primary-container": "#004b1e",
+                      "on-primary-fixed": "#002109",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#0058be",
+                      "on-secondary-fixed": "#001a42",
+                      "tertiary": "#9d4300",
+                      "inverse-surface": "#303031",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdbca",
+                      "secondary-fixed": "#d8e2ff",
+                      "on-tertiary-fixed": "#341100",
+                      "on-tertiary-fixed-variant": "#783200",
+                      "inverse-on-surface": "#f3f0f1",
+                      "surface-bright": "#fcf8f9",
+                      "outline": "#6d7b6c",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb690",
+                      "on-surface": "#1b1b1c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "24px",
+                      "xs": "8px",
+                      "xl": "64px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "48px",
+                      "sm": "16px",
+                      "lg": "40px",
+                      "gutter": "20px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Space Grotesk"],
+                      "label-bold": ["Space Grotesk"],
+                      "body-md": ["Space Grotesk"],
+                      "display-xl": ["Syne"],
+                      "headline-md": ["Syne"],
+                      "headline-lg-mobile": ["Syne"],
+                      "headline-lg": ["Syne"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                      "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden pb-32">
+<!-- Top Navigation -->
+<header class="w-full top-0 sticky z-[100] bg-background dark:bg-on-background border-b-2 border-on-background dark:border-background shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex justify-between items-center px-margin-mobile py-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+</div>
+<h1 class="font-headline-md text-headline-md tracking-tighter text-on-background dark:text-background uppercase">SKENA COFFEE</h1>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="shopping_bag">shopping_bag</span>
+</div>
+</header>
+<main class="px-margin-mobile pt-lg max-w-5xl mx-auto">
+<!-- Hero Section & Status -->
+<section class="mb-lg relative">
+<div class="flex justify-between items-start mb-xs">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile leading-none uppercase">Brew of <br/>the Day</h2>
+<p class="font-body-lg text-body-lg mt-xs text-on-surface-variant">Skena pick: V60 Flores Bajawa</p>
+</div>
+<div class="bg-primary-container text-on-primary-container border-2 border-on-background sticker-rotate px-4 py-2 font-label-bold text-label-bold uppercase neo-shadow">
+                    STORE OPEN
+                </div>
+</div>
+</section>
+<!-- Category Chips -->
+<nav class="flex gap-3 mb-md overflow-x-auto pb-4 no-scrollbar">
+<button class="bg-primary text-on-primary border-2 border-on-background px-6 py-2 font-label-bold text-label-bold uppercase active-tab-shadow">BREW</button>
+<button class="bg-background text-on-background border-2 border-on-background px-6 py-2 font-label-bold text-label-bold uppercase hover:bg-secondary-container transition-colors">BITES</button>
+<button class="bg-background text-on-background border-2 border-on-background px-6 py-2 font-label-bold text-label-bold uppercase hover:bg-secondary-container transition-colors">VIBES</button>
+<button class="bg-background text-on-background border-2 border-on-background px-6 py-2 font-label-bold text-label-bold uppercase hover:bg-secondary-container transition-colors">STASH</button>
+</nav>
+<!-- Menu Grid -->
+<div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface border-2 border-on-background flex flex-col neo-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group">
+<div class="h-40 overflow-hidden border-b-2 border-on-background relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A cinematic, high-contrast close-up of a perfectly poured cafe latte with intricate heart art in a matte black ceramic cup. The lighting is dramatic, coming from a single warm window source against a dark, moody wooden table in a trendy Indonesian coffee shop. The aesthetic is clean, professional, and captures the third-wave coffee culture with vibrant, saturated tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO6htL8PmaNNFpr4kk31ISiOsIRbWzAOupjrGvGK74KFmOYl366WR5AkDMHKnm4i49_jPPh8AJ54RUGZrMuCBRgPnp1C5L_sJmhDqEMlRjcsDZwnice0Y_ab3GJvpEgTrh1Kkhu2assuMbb5pII35G0qBdSdCKhj36MCudRZayMUjeSNlhaqVx-KaLXD_O3e7dL0fsGpA9oM2L5S3c-eJCfDIOUQnxuLPD2QF86hMxk8ohG3mlFF94_g"/>
+<div class="absolute top-2 right-2 bg-tertiary-container text-on-tertiary-container border-2 border-on-background px-2 py-1 font-label-bold text-xs uppercase">LEGEND</div>
+</div>
+<div class="p-3">
+<h3 class="font-headline-md text-headline-md leading-tight mb-1 uppercase text-lg">Dirty Chai</h3>
+<p class="font-label-bold text-label-bold text-primary mb-2">RP 35K</p>
+<p class="text-xs font-body-md text-on-surface-variant">Bold espresso meet spiced aromatic tea. Goks.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface border-2 border-on-background flex flex-col neo-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group">
+<div class="h-40 overflow-hidden border-b-2 border-on-background relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A modern-vintage top-down shot of an iced coffee with thick, creamy layers and melting ice cubes in a tall ribbed glass. Beside the glass lies a pair of trendy oversized sunglasses on a raw concrete surface. The scene is bright and airy, reflecting a morning urban vibe in Jakarta. The high-contrast edit emphasizes sharp shadows and rich coffee colors against neutral backgrounds." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdqMQm71wUgPEwH1nt1OaZ2dDgLIxC6sEmlNKIbLUZ5UMZ9jPrd-sMifhnfzxXWrOUlfo2jXG1dEPR2NcBu3sbsk5y9mXiXcJczf1_BEBwX7E1_8nBDLcIzZnwbYe5FWIqmPBnxcQLYvPU0oElJpdSlAaQYr_SieunheSefykayOQGYKuwjmd2AL2yrOfxQP3acyhNsItEpQ3oJrOsQ1sq-teZvJnVdvzngRWQi3grK75ZOv4JbNPoJg"/>
+<div class="absolute top-2 left-2 bg-secondary-container text-on-secondary-container border-2 border-on-background px-2 py-1 font-label-bold text-xs uppercase">COLD</div>
+</div>
+<div class="p-3">
+<h3 class="font-headline-md text-headline-md leading-tight mb-1 uppercase text-lg">Es Kopi Aren</h3>
+<p class="font-label-bold text-label-bold text-primary mb-2">RP 28K</p>
+<p class="text-xs font-body-md text-on-surface-variant">Classic. Legit aren from local farm. No tipu-tipu.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface border-2 border-on-background flex flex-col neo-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group">
+<div class="h-40 overflow-hidden border-b-2 border-on-background relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A vibrant and appetizing food photograph of a crispy croissant chicken sandwich dripping with melting cheese and fresh greens. The lighting is warm and golden, highlighting the flaky texture of the pastry. Set against a bold, solid green background typical of modern-vintage graphic design. The mood is energetic and ready for a creative lunch break in an indie cafe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlJT4Qvz-0HgHCbVuYEN8uD__vxgnGB6ryKLljEGoBM_anK3DoRGeSfs8iu532vzanazzL88N7B9YCDxXzARMGNkoWlJ_g-pP4MnWcSfs1g_0L3OzgsHpplWOCZXQkYIC6SdypDN8QkaWUSXXsZo6H504ilk5rjcahvkig-9sj4_LskIVz2Po1HEFWuW9VYQyCUU-nkQP4zQv-A2HA26N4G1ARjDOyqKmgCAd5ypsIrGlQhbkm5HE-mw"/>
+</div>
+<div class="p-3">
+<h3 class="font-headline-md text-headline-md leading-tight mb-1 uppercase text-lg">Skena Sandwich</h3>
+<p class="font-label-bold text-label-bold text-primary mb-2">RP 45K</p>
+<p class="text-xs font-body-md text-on-surface-variant">Sourdough toast, smoked beef, egg, rahasia sauce.</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface border-2 border-on-background flex flex-col neo-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group">
+<div class="h-40 overflow-hidden border-b-2 border-on-background relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A stylish lifestyle photograph of an artisanal matcha latte in a ceramic bowl with a whisk nearby. The scene is minimal and zen, but with high-energy lighting that creates sharp, hard shadows. The color palette is dominated by vibrant green matcha and off-white ceramics. The background is a textured light grey wall, giving a tactile, urban feel to the beverage presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk_XiRuBAyps1kwCtTLjhjTbyINXbtJzyu1FX4_Fji9tAYvFhPNwJ3IFADHSIOCdJ5sejKvEuCVw529YF2eoSZwSKAAC5-Etx-h6mSa5pTMys9aIeXC6GVNzEsO7c2Y2u0MJ-jTEylozQSL0s0FnIZl6QMzH_VLaiJxX7gppxGWhAur118rrzeZG-YaEEA8Fdpl51KV4gdwBWE4TiDGHQqbvOYUeTGMDwKKD6YyBqZhVfp_QbReeccuA"/>
+<div class="absolute bottom-2 right-2 bg-primary-container text-on-primary-container border-2 border-on-background px-2 py-1 font-label-bold text-xs uppercase">NEW</div>
+</div>
+<div class="p-3">
+<h3 class="font-headline-md text-headline-md leading-tight mb-1 uppercase text-lg">Kyoto Matcha</h3>
+<p class="font-label-bold text-label-bold text-primary mb-2">RP 40K</p>
+<p class="text-xs font-body-md text-on-surface-variant">Pure ceremonial grade. Berasa di Jepang, beneran.</p>
+</div>
+</div>
+</div>
+<!-- Sticky Sticker Component -->
+<div class="mt-lg flex justify-center">
+<div class="bg-on-background text-background p-6 border-2 border-on-background sticker-rotate neo-shadow max-w-xs text-center">
+<h4 class="font-headline-md text-headline-md uppercase mb-2">JOIN THE CREW</h4>
+<p class="font-body-md text-body-md mb-4 text-surface-dim">Get 20% off for your first brew by joining our membership stash.</p>
+<button class="w-full bg-primary text-on-primary border-2 border-background py-2 font-label-bold text-label-bold uppercase active:scale-95 transition-transform">Sikat Sekarang!</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface dark:bg-inverse-surface border-t-2 border-on-background dark:border-background flex justify-around items-center h-16 px-2 pb-safe">
+<a class="flex flex-col items-center justify-center bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container border-2 border-on-background dark:border-background shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] py-1 px-4 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="coffee">coffee</span>
+<span class="font-label-bold text-[10px] uppercase mt-1">BREW</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant py-1 px-4 hover:bg-secondary-container transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="local_activity">local_activity</span>
+<span class="font-label-bold text-[10px] uppercase mt-1">VIBES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant py-1 px-4 hover:bg-secondary-container transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+<span class="font-label-bold text-[10px] uppercase mt-1">STASH</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant py-1 px-4 hover:bg-secondary-container transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-bold text-[10px] uppercase mt-1">CREW</span>
+</a>
+</nav>
+<script>
+        // Simple Micro-interaction for stickers and hover states
+        document.querySelectorAll('.neo-shadow').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'translate(2px, 2px)';
+                card.style.boxShadow = '2px 2px 0px 0px rgba(0,0,0,1)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'translate(0, 0)';
+                card.style.boxShadow = '4px 4px 0px 0px rgba(0,0,0,1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translate(0, 0)';
+                card.style.boxShadow = '4px 4px 0px 0px rgba(0,0,0,1)';
+            });
+        });
+
+        // Toggle category chips
+        const chips = document.querySelectorAll('nav button');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-primary', 'text-on-primary', 'active-tab-shadow');
+                    c.classList.add('bg-background', 'text-on-background');
+                });
+                chip.classList.add('bg-primary', 'text-on-primary', 'active-tab-shadow');
+                chip.classList.remove('bg-background', 'text-on-background');
+            });
+        });
+    </script>
+</body></html>

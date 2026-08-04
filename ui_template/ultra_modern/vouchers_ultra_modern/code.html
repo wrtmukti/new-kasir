@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precision Coffee | My Vouchers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Sora:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#0b513d",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "tertiary-container": "#a2a3a3",
+                    "outline-variant": "#3c4a42",
+                    "on-primary-fixed-variant": "#005236",
+                    "primary": "#4edea3",
+                    "surface-container": "#201f1f",
+                    "background": "#131313",
+                    "primary-container": "#10b981",
+                    "surface-variant": "#353534",
+                    "on-tertiary": "#2f3131",
+                    "on-tertiary-container": "#37393a",
+                    "on-primary-fixed": "#002113",
+                    "secondary-fixed": "#b0f0d6",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#bbcabf",
+                    "primary-fixed": "#6ffbbe",
+                    "on-secondary-fixed-variant": "#0b513d",
+                    "inverse-surface": "#e5e2e1",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-surface": "#e5e2e1",
+                    "secondary": "#95d3ba",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-tint": "#4edea3",
+                    "inverse-on-surface": "#313030",
+                    "outline": "#86948a",
+                    "on-secondary-fixed": "#002117",
+                    "error": "#ffb4ab",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-secondary-container": "#83c2a9",
+                    "surface": "#131313",
+                    "surface-bright": "#3a3939",
+                    "on-primary": "#003824",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-secondary": "#003829",
+                    "surface-container-highest": "#353534",
+                    "tertiary": "#c6c6c7",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-fixed-dim": "#95d3ba",
+                    "inverse-primary": "#006c49",
+                    "on-primary-container": "#00422b",
+                    "surface-dim": "#131313",
+                    "on-background": "#e5e2e1",
+                    "on-error": "#690005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "sm": "1rem",
+                    "unit": "4px",
+                    "xl": "8rem",
+                    "gutter": "24px",
+                    "xs": "0.5rem",
+                    "margin-desktop": "64px",
+                    "lg": "4rem",
+                    "md": "2rem"
+            },
+            "fontFamily": {
+                    "label-caps": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Sora"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Sora"],
+                    "headline-lg-mobile": ["Sora"],
+                    "label-mono": ["JetBrains Mono"],
+                    "display-lg": ["Sora"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["400x", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(78, 222, 163, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .voucher-active {
+            border-color: rgba(78, 222, 163, 0.3);
+        }
+        .voucher-used {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scan-effect {
+            animation: scanline 3s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-2xl border-b border-white/10 flex justify-between items-center px-margin-mobile py-4 md:px-margin-desktop">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A futuristic professional portrait of a tech-savvy user in a dark, atmospheric coffee lounge. The lighting is cinematic, with emerald neon highlights reflecting off architectural glass surfaces. The style is high-end editorial, with a deep obsidian void background and sharp focus on clean, minimalist details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtibdrawjoh2WOU4WpctFSn9hgVpsSS9GxfM65cccIl1Rqw7kmaYAtS3L5yH_AVRIM4DyRDJk0VFELtIgPuDj040MKIraGvJYC-wKj2IfkfE_eQirS5tmlgbLqxjV2i9jldQ9sVaV82Qny7JjgkxzNZnzenRaJ22jl83LEbVWPx6jC8mwtY82KCATgfKBCnk6mGpB1guxUnA_4jptESHtVKLQTzA0oUcgcVR5Cq0INw4kwkAq2awUZsw"/>
+</div>
+<span class="font-headline-md text-headline-md font-bold tracking-tighter text-primary">PRECISION COFFEE</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<nav class="flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Menu</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">My Orders</a>
+<a class="font-label-caps text-label-caps text-primary transition-colors" href="#">Vouchers</a>
+</nav>
+<div class="px-4 py-2 bg-primary/10 rounded-full border border-primary/20 text-primary font-label-caps text-label-caps">
+                1,250 PTS
+            </div>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-12">
+<!-- Header Section -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps text-primary tracking-widest">ASSET REPOSITORY</span>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">My Vouchers</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+                    High-frequency rewards and extraction protocols. Present these digital identifiers at any terminal to redeem.
+                </p>
+</div>
+<!-- Generate New Button -->
+<button class="group relative px-8 py-4 bg-primary text-on-primary font-label-caps text-label-caps overflow-hidden active:scale-95 transition-all duration-200">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+<div class="relative flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+                    GENERATE NEW VOUCHER
+                </div>
+</button>
+</section>
+<!-- Vouchers Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Active Voucher 1 -->
+<div class="glass-card voucher-active p-6 rounded-xl group transition-all duration-500 hover:border-primary/60">
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="font-label-caps text-[10px] text-primary mb-1">AUTH_CODE: PRE-0921</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">Signature Brew</h3>
+</div>
+<span class="bg-primary/20 text-primary px-2 py-1 rounded text-[10px] font-label-mono border border-primary/30">ACTIVE</span>
+</div>
+<div class="relative bg-white/5 p-4 rounded-lg mb-8 flex justify-center items-center group-hover:bg-white/10 transition-colors">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/20 scan-effect"></div>
+<img class="w-32 h-32 opacity-80 mix-blend-screen grayscale brightness-200" data-alt="A clean, minimalist high-tech QR code displayed on a backlit digital screen. The background features subtle laboratory aesthetics with emerald green laser lines and microscopic grid patterns. The composition is centered and symmetrical, radiating a sense of digital security and premium precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrow2GCAocbxsKxTwxqMGHl7wuRIrES4P4taMRcJK-SsxXLAi8nTflRhbqfuWsi80fixuIpNuUv-QZReKAAgnsRWCxKON-CygS-Gq9DoYiK59lZ5aBZamvS5HnkiBOJVPYVuinuLPrY1-OzC7Udk2b5kFUmHTTkhhmmRCTJ7YZS51o2mb6wLe_1w2MzJekZXSHYlB4x65GB4Bg3N6ZxHDItttooiqJFExeVa_RS0zBjqtsji5lI-Zdcg"/>
+</div>
+<div class="flex justify-between items-end border-t border-white/10 pt-4">
+<div class="space-y-1">
+<p class="font-label-caps text-[10px] text-on-surface-variant">EXPIRY_DATE</p>
+<p class="font-label-mono text-label-mono text-on-surface">OCT 24, 2024</p>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">qr_code_2</span>
+</div>
+</div>
+</div>
+<!-- Active Voucher 2 -->
+<div class="glass-card voucher-active p-6 rounded-xl group transition-all duration-500 hover:border-primary/60">
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="font-label-caps text-[10px] text-primary mb-1">AUTH_CODE: PRE-8832</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">Laboratory Sample</h3>
+</div>
+<span class="bg-primary/20 text-primary px-2 py-1 rounded text-[10px] font-label-mono border border-primary/30">ACTIVE</span>
+</div>
+<div class="relative bg-white/5 p-4 rounded-lg mb-8 flex flex-col justify-center items-center group-hover:bg-white/10 transition-colors overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/20 scan-effect"></div>
+<div class="w-full flex justify-around gap-1 h-16 items-center">
+<!-- Barcode Simulation -->
+<div class="h-full w-1 bg-on-surface-variant"></div>
+<div class="h-full w-2 bg-on-surface-variant"></div>
+<div class="h-full w-0.5 bg-on-surface-variant"></div>
+<div class="h-full w-3 bg-on-surface-variant"></div>
+<div class="h-full w-1 bg-on-surface-variant"></div>
+<div class="h-full w-2 bg-on-surface-variant"></div>
+<div class="h-full w-0.5 bg-on-surface-variant"></div>
+<div class="h-full w-1 bg-on-surface-variant"></div>
+<div class="h-full w-3 bg-on-surface-variant"></div>
+<div class="h-full w-1 bg-on-surface-variant"></div>
+<div class="h-full w-2 bg-on-surface-variant"></div>
+</div>
+<p class="mt-4 font-label-mono text-[10px] text-on-surface-variant tracking-[0.5em]">001102 938475</p>
+</div>
+<div class="flex justify-between items-end border-t border-white/10 pt-4">
+<div class="space-y-1">
+<p class="font-label-caps text-[10px] text-on-surface-variant">REDEEM_TYPE</p>
+<p class="font-label-mono text-label-mono text-on-surface">COMPLIMENTARY</p>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">barcode_scanner</span>
+</div>
+</div>
+</div>
+<!-- Used Voucher -->
+<div class="glass-card voucher-used p-6 rounded-xl border-white/5">
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="font-label-caps text-[10px] text-tertiary-container mb-1">AUTH_CODE: PRE-0012</p>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">Artisan Pastry</h3>
+</div>
+<span class="bg-white/10 text-on-surface-variant px-2 py-1 rounded text-[10px] font-label-mono border border-white/10">USED</span>
+</div>
+<div class="relative bg-white/5 p-4 rounded-lg mb-8 flex justify-center items-center opacity-30 grayscale">
+<img class="w-32 h-32" data-alt="A high-tech digital barcode pattern on a dark background, partially obscured by 'VOID' text stamp. The lighting is low-key, with cold blue and grey tones. The aesthetic is industrial and laboratory-like, showing a used or expired digital credential in a high-end tech ecosystem." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmW__1dIthQtXjljo2o4yR6_kFRLWDaXiQU9wzrl_CKqLZX7BxlyoehXhlUkZ61sV7SajvnyW_eaP7bcDaKqL1TRigeoD9bFYdMsliKUpzOCUy3GdR7IuYQq7T2qzoK5zVSKjG6OwWCJKzmUeP2toEwFiAJcqgLwO07XPFboFlbJaDik9DkXCgKicAUScBHR6Aj_ONhuHwP6bgmSvFD9nkpur_TFgHuBJvEbVzjI04Q37JNe6wke80xA"/>
+</div>
+<div class="flex justify-between items-end border-t border-white/5 pt-4">
+<div class="space-y-1">
+<p class="font-label-caps text-[10px] text-tertiary-container">REDEEMED_ON</p>
+<p class="font-label-mono text-label-mono text-tertiary-container">AUG 12, 2024</p>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-on-surface-variant">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Active Voucher 3 -->
+<div class="glass-card voucher-active p-6 rounded-xl group transition-all duration-500 hover:border-primary/60">
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="font-label-caps text-[10px] text-primary mb-1">AUTH_CODE: PRE-1442</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">Nitro Upgrade</h3>
+</div>
+<span class="bg-primary/20 text-primary px-2 py-1 rounded text-[10px] font-label-mono border border-primary/30">ACTIVE</span>
+</div>
+<div class="relative bg-white/5 p-4 rounded-lg mb-8 flex justify-center items-center group-hover:bg-white/10 transition-colors">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/20 scan-effect"></div>
+<img class="w-32 h-32 opacity-80 mix-blend-screen grayscale brightness-200" data-alt="A clean, minimalist high-tech QR code displayed on a backlit digital screen. The background features subtle laboratory aesthetics with emerald green laser lines and microscopic grid patterns. The composition is centered and symmetrical, radiating a sense of digital security and premium precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs67PYLCzS2rbcXqIlIGxdrfxu2z8YNzZsKH81WQagmpHf2v5drAdYEEVRo_cBvwfh3k0HSBX81gluUCntBHgZ0CpM1GNxkA9CQJBuLpQTvYt3PE8XP9xsjX0DMNJZesp7fcSu2EscFKLW0_TKUPzqDF8J5lH5k7mr8DMhl1w1S9oo1-JhvUopo8aaRA8Ip9soI1ZxejrVuJmicavCSyaBp1lu8uedVR07b-nlwziLgmhBcK8_2tGuLg"/>
+</div>
+<div class="flex justify-between items-end border-t border-white/10 pt-4">
+<div class="space-y-1">
+<p class="font-label-caps text-[10px] text-on-surface-variant">EXPIRY_DATE</p>
+<p class="font-label-mono text-label-mono text-on-surface">NOV 01, 2024</p>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Redemption Protocols info -->
+<section class="mt-20 glass-card p-12 rounded-2xl border-white/5 flex flex-col md:flex-row gap-12 items-center">
+<div class="md:w-1/3">
+<div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-[48px]">security_update_good</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4">Security Protocol</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Vouchers are cryptographically signed. Attempting to clone or modify identifiers will result in immediate asset forfeiture.</p>
+</div>
+<div class="md:w-2/3 grid grid-cols-2 gap-8">
+<div class="space-y-4">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined">network_check</span>
+<span class="font-label-caps text-label-caps">REAL-TIME VALIDATION</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm">All scanners communicate directly with our ledger for instant balance adjustment.</p>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-caps text-label-caps">PERMANENT RECORD</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm">Used vouchers remain in your archive for extraction analysis for 90 cycles.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-full bg-surface-container/10 backdrop-blur-3xl border-t border-white/5 flex justify-around items-center h-20 px-margin-mobile pb-safe md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-caps text-label-caps mt-1">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-caps text-label-caps mt-1">My Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-label-caps text-label-caps mt-1">Vouchers</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for buttons and cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple button interaction
+        const generateBtn = document.querySelector('button');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                const text = generateBtn.querySelector('.relative');
+                text.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> GENERATING...';
+                setTimeout(() => {
+                    text.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span> VOUCHER GENERATED';
+                    setTimeout(() => {
+                        text.innerHTML = '<span class="material-symbols-outlined text-[20px]">add_circle</span> GENERATE NEW VOUCHER';
+                    }, 2000);
+                }, 1500);
+            });
+        }
+    </script>
+</body></html>

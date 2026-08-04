@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Secure Payment - Spicy Bites</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#1b1c1c",
+                        "inverse-primary": "#ffb3ac",
+                        "tertiary": "#005f7b",
+                        "secondary-container": "#fdc003",
+                        "tertiary-fixed": "#bee9ff",
+                        "background": "#fcf9f8",
+                        "primary-fixed-dim": "#ffb3ac",
+                        "surface-container-high": "#eae7e7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-tertiary-container": "#e9f7ff",
+                        "on-secondary-container": "#6c5000",
+                        "surface-bright": "#fcf9f8",
+                        "on-primary-container": "#fff2f0",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "on-error-container": "#93000a",
+                        "outline": "#8f6f6c",
+                        "on-secondary-fixed": "#261a00",
+                        "surface": "#fcf9f8",
+                        "on-surface-variant": "#5b403d",
+                        "secondary": "#785900",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#ba1a20",
+                        "tertiary-container": "#00799c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#af101a",
+                        "on-primary-fixed": "#410003",
+                        "primary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5b4300",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#7bd1f8",
+                        "inverse-surface": "#303030",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-tertiary-fixed-variant": "#004d65",
+                        "on-primary-fixed-variant": "#930010",
+                        "surface-container": "#f0eded",
+                        "secondary-fixed-dim": "#fabd00",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdf9e",
+                        "on-tertiary-fixed": "#001f2a",
+                        "outline-variant": "#e4beba",
+                        "surface-container-low": "#f6f3f2",
+                        "primary-container": "#d32f2f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1200px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", {"lineHeight": "20px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "800"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            border-bottom: 3px solid #af101a;
+            color: #af101a;
+        }
+        .bg-mesh {
+            background-color: #fcf9f8;
+            background-image: radial-gradient(at 0% 0%, rgba(175, 16, 26, 0.05) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(253, 192, 3, 0.05) 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col overflow-x-hidden bg-mesh">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-on-background border-b border-surface-variant dark:border-outline-variant shadow-sm dark:shadow-none docked full-width top-0 z-50 sticky">
+<div class="flex justify-between items-center px-4 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-black text-primary dark:text-primary-fixed-dim uppercase tracking-tighter">SPICY BITES</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="shopping_cart">shopping_cart</span>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-4xl mx-auto px-4 py-8 md:py-12">
+<div class="flex flex-col gap-8">
+<!-- Page Title -->
+<div class="text-center md:text-left">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-background mb-2">Secure Payment</h2>
+<p class="text-on-surface-variant font-body-md">Complete your order for the ultimate heat experience.</p>
+</div>
+<!-- Bento Grid Layout for Payment -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<!-- Payment Form Section (Left/Top) -->
+<section class="md:col-span-7 bg-surface-container-lowest rounded-xl border border-surface-variant p-6 shadow-sm">
+<!-- Tabs -->
+<nav class="flex border-b border-surface-variant mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<button class="flex-1 py-3 px-4 font-label-bold text-label-bold transition-all active-tab flex items-center justify-center gap-2" id="tab-credit" onclick="switchTab('credit')">
+<span class="material-symbols-outlined text-[20px]" data-icon="credit_card">credit_card</span>
+                            Credit Card
+                        </button>
+<button class="flex-1 py-3 px-4 font-label-bold text-label-bold transition-all text-on-surface-variant hover:text-primary flex items-center justify-center gap-2" id="tab-wallet" onclick="switchTab('wallet')">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+                            Digital Wallet
+                        </button>
+<button class="flex-1 py-3 px-4 font-label-bold text-label-bold transition-all text-on-surface-variant hover:text-primary flex items-center justify-center gap-2" id="tab-cash" onclick="switchTab('cash')">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+                            Cash on Delivery
+                        </button>
+</nav>
+<!-- Form Content -->
+<div class="space-y-6" id="payment-content">
+<!-- Card Entry Fields -->
+<div class="grid grid-cols-1 gap-4">
+<div>
+<label class="block text-label-bold font-label-bold mb-2 text-on-surface">Cardholder Name</label>
+<input class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="John Spicy" type="text"/>
+</div>
+<div>
+<label class="block text-label-bold font-label-bold mb-2 text-on-surface">Card Number</label>
+<div class="relative">
+<input class="w-full bg-white border border-outline rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="**** **** **** 1234" type="text"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-label-bold font-label-bold mb-2 text-on-surface">Expiry Date</label>
+<input class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="block text-label-bold font-label-bold mb-2 text-on-surface">CVV</label>
+<div class="relative">
+<input class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="***" type="password"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant material-symbols-outlined" data-icon="help">help</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Encryption Badge -->
+<div class="flex items-center gap-3 bg-surface-container-low p-4 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-tertiary" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<div>
+<p class="text-label-bold font-label-bold text-on-surface">AES-256 Bit Encryption Secure</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Bank-Level Security</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Order Summary Section (Right/Bottom) -->
+<aside class="md:col-span-5 flex flex-col gap-6">
+<div class="bg-on-background text-white p-8 rounded-xl shadow-xl transform transition-transform hover:scale-[1.02]">
+<h3 class="text-label-bold font-label-bold uppercase tracking-widest text-primary-fixed-dim mb-6">Order Summary</h3>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center opacity-80">
+<span class="font-body-md text-body-md">Ghost Pepper Wings (x10)</span>
+<span class="font-label-bold text-label-bold">$18.50</span>
+</div>
+<div class="flex justify-between items-center opacity-80">
+<span class="font-body-md text-body-md">Carolina Reaper Sauce</span>
+<span class="font-label-bold text-label-bold">$4.20</span>
+</div>
+<div class="flex justify-between items-center opacity-80">
+<span class="font-body-md text-body-md">Delivery Fee</span>
+<span class="font-label-bold text-label-bold">$2.00</span>
+</div>
+<div class="h-px bg-white/20 my-4"></div>
+<div class="flex justify-between items-end">
+<span class="font-body-lg text-body-lg text-secondary-container font-bold">Total to Pay</span>
+<span class="font-headline-md text-headline-md text-white">$24.70</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-white font-headline-md text-headline-md py-4 rounded-xl flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg">
+<span class="material-symbols-outlined" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                            Pay Now
+                        </button>
+</div>
+<!-- Spice Level Card (Visual Flair) -->
+<div class="bg-secondary-container p-6 rounded-xl border border-secondary flex items-center gap-4">
+<div class="bg-primary text-white p-3 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-on-secondary-container">Heat Warning: Insane</p>
+<div class="flex gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer Trust Section -->
+<footer class="w-full max-w-7xl mx-auto px-4 py-8 mt-12 border-t border-surface-variant flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-6">
+<div class="w-48 h-8 bg-contain bg-no-repeat bg-left opacity-50 grayscale hover:grayscale-0 transition-all" data-alt="A collage of official payment processor logos including Visa, Mastercard, American Express, and PayPal, presented in a clean, monochromatic charcoal style to match a professional fintech UI." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRK5yMRHVpMN3qTJT6Mj7ElzZ537zjRrGk1u_JwWbXA9MXlEYvfR4uW8xDlKDcq3q_0_ItSHYqcRjEnzrtMD9voQU73SlJsA1avhslusknuMFas5ko2L2f4zYDekIk89CXARuouUCJr7GI4D7IiayJqPfzkD-xe_Ll1D80JzGtFoI3Ud2U5pgRO1K-t838DSpLo_6GUsj_0kqYeUR4Kf08DapQuK1ej7HLVRyRDknQRyk8uPOxUeeitQ')"></div>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant text-center md:text-right">
+            Your payment info is encrypted and never stored on our servers.<br/>
+            © 2024 Spicy Bites Delivery. All rights reserved.
+        </p>
+</footer>
+<script>
+        function switchTab(method) {
+            const tabs = ['credit', 'wallet', 'cash'];
+            const content = document.getElementById('payment-content');
+            
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === method) {
+                    el.classList.add('active-tab');
+                    el.classList.remove('text-on-surface-variant');
+                } else {
+                    el.classList.remove('active-tab');
+                    el.classList.add('text-on-surface-variant');
+                }
+            });
+
+            // Dynamic content swap simulation
+            if (method === 'credit') {
+                content.innerHTML = `
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-label-bold font-label-bold mb-2 text-on-surface">Cardholder Name</label>
+                            <input type="text" placeholder="John Spicy" class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-label-bold font-label-bold mb-2 text-on-surface">Card Number</label>
+                            <div class="relative">
+                                <input type="text" placeholder="**** **** **** 1234" class="w-full bg-white border border-outline rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant material-symbols-outlined" data-icon="credit_card">credit_card</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-label-bold font-label-bold mb-2 text-on-surface">Expiry Date</label>
+                                <input type="text" placeholder="MM/YY" class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-label-bold font-label-bold mb-2 text-on-surface">CVV</label>
+                                <input type="password" placeholder="***" class="w-full bg-white border border-outline rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-surface-container-low p-4 rounded-lg border border-outline-variant">
+                        <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;" data-icon="verified_user">verified_user</span>
+                        <div>
+                            <p class="text-label-bold font-label-bold text-on-surface">AES-256 Bit Encryption Secure</p>
+                            <p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Bank-Level Security</p>
+                        </div>
+                    </div>
+                `;
+            } else if (method === 'wallet') {
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 space-y-6">
+                        <div class="flex gap-4">
+                            <button class="p-6 border-2 border-primary rounded-2xl bg-primary/5 flex flex-col items-center gap-2">
+                                <span class="material-symbols-outlined text-[48px] text-primary" data-icon="account_balance">account_balance</span>
+                                <span class="font-label-bold text-label-bold">Apple Pay</span>
+                            </button>
+                            <button class="p-6 border-2 border-outline rounded-2xl hover:border-primary transition-all flex flex-col items-center gap-2">
+                                <span class="material-symbols-outlined text-[48px] text-on-surface-variant" data-icon="google_pay">contactless</span>
+                                <span class="font-label-bold text-label-bold">Google Pay</span>
+                            </button>
+                        </div>
+                        <p class="text-on-surface-variant text-center max-w-xs">Select your preferred wallet. You will be redirected to authenticate the transaction.</p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="bg-surface-container-high p-8 rounded-xl text-center space-y-4">
+                        <span class="material-symbols-outlined text-[64px] text-secondary" data-icon="local_shipping">local_shipping</span>
+                        <h4 class="font-headline-md text-headline-md text-on-surface">Pay at Your Doorstep</h4>
+                        <p class="text-on-surface-variant">Please have the exact change of <span class="font-bold text-on-surface">$24.70</span> ready for our delivery champion. We also accept card on delivery in select areas.</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body></html>

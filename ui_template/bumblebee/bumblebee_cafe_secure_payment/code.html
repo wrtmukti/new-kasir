@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#474747",
+                      "on-background": "#1a1c1c",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#544600",
+                      "inverse-on-surface": "#f0f1f1",
+                      "on-secondary-container": "#656464",
+                      "primary": "#705d00",
+                      "tertiary-fixed-dim": "#00dbe8",
+                      "surface-variant": "#e2e2e2",
+                      "primary-fixed-dim": "#e9c400",
+                      "error-container": "#ffdad6",
+                      "inverse-primary": "#e9c400",
+                      "secondary": "#5f5e5e",
+                      "on-primary-fixed": "#221b00",
+                      "surface-container": "#eeeeee",
+                      "surface-dim": "#dadada",
+                      "on-tertiary-container": "#006a70",
+                      "on-surface": "#1a1c1c",
+                      "surface": "#f9f9f9",
+                      "secondary-container": "#e4e2e1",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "secondary-fixed-dim": "#c8c6c6",
+                      "background": "#f9f9f9",
+                      "surface-container-low": "#f3f3f4",
+                      "on-tertiary-fixed": "#002022",
+                      "surface-tint": "#705d00",
+                      "primary-fixed": "#ffe16d",
+                      "inverse-surface": "#2f3131",
+                      "secondary-fixed": "#e4e2e1",
+                      "surface-container-high": "#e8e8e8",
+                      "on-primary-container": "#705e00",
+                      "tertiary": "#00696f",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#d0c6ab",
+                      "surface-bright": "#f9f9f9",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#79f5ff",
+                      "on-surface-variant": "#4d4732",
+                      "on-primary": "#ffffff",
+                      "outline": "#7e775f",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "primary-container": "#ffd700",
+                      "tertiary-container": "#00f1ff",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "24px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "margin-mobile": "20px",
+                      "xl": "64px",
+                      "sm": "12px",
+                      "lg": "40px",
+                      "gutter": "16px",
+                      "margin-desktop": "auto"
+              },
+              "fontFamily": {
+                      "headline-md": ["Montserrat"],
+                      "headline-lg-mobile": ["Montserrat"],
+                      "headline-lg": ["Montserrat"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Montserrat"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-payment-card {
+            border: 2px solid #705d00;
+            background-color: #ffd700;
+        }
+        .method-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- Top App Bar (As specified in JSON) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-margin-mobile h-16">
+<button class="text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Secure Payment</h1>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, professional headshot of a friendly barista or regular customer at Bumblebee Cafe, shot in high-key morning light with a soft focus background of the minimalist yellow and white cafe interior. The person is smiling warmly, embodying the hospitable and efficient spirit of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg1ADVB1b4jjtTkuX9_f1vgH6RmzxBnlRAy0p1hUQIYuGOsiJ6oK00Lb5s2j7tz3xtyi21xvjEzkTrOtjOwSHnzQ1I2nSeYSe5euqP8WjOyaq1eq4Qvx-i5SWz-DTPr5DNHnFxdL18wzUQ8AlQLEL7aPNVHZ0w5NsEqzKdTQnJLpnL7bsPKW9FY6vOrSeS-mEawFSL3tkuDrfbdsEt_PpU--zh-WM-jUjXHN25Klzhqz11eOZqU8Z8Ow"/>
+</div>
+</header>
+<main class="flex-1 mt-16 pb-24 px-margin-mobile max-w-lg mx-auto w-full flex flex-col gap-lg">
+<!-- Summary Section -->
+<section class="mt-lg p-md bg-surface-container-low rounded-xl shadow-[0_4px_16px_rgba(51,51,51,0.05)] border border-surface-container-highest">
+<div class="flex justify-between items-center mb-base">
+<span class="font-label-md text-secondary">Total Amount</span>
+<span class="font-headline-lg text-primary">$24.50</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm">
+<span class="material-symbols-outlined text-[18px]">shopping_basket</span>
+<span>2 Items in Cart</span>
+</div>
+</section>
+<!-- Payment Methods Grid (Bento Style) -->
+<section>
+<h2 class="font-headline-md text-on-surface mb-md">Payment Method</h2>
+<div class="grid grid-cols-1 gap-base" id="payment-methods">
+<!-- Digital Wallet -->
+<button class="method-card active-payment-card flex items-center justify-between p-md rounded-xl w-full text-left" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary scale-125">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Digital Wallet</p>
+<p class="font-label-sm text-on-primary-container/70">Apple Pay, Google Pay</p>
+</div>
+</div>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+<!-- Credit Card -->
+<button class="method-card bg-surface-container-low border border-transparent flex items-center justify-between p-md rounded-xl w-full text-left hover:border-outline-variant" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary scale-125">credit_card</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Credit Card</p>
+<p class="font-label-sm text-on-secondary-container">Visa, Mastercard, Amex</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-transparent">check_circle</span>
+</button>
+<!-- Cash -->
+<button class="method-card bg-surface-container-low border border-transparent flex items-center justify-between p-md rounded-xl w-full text-left hover:border-outline-variant" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary scale-125">payments</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Cash</p>
+<p class="font-label-sm text-on-secondary-container">Pay at counter</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-transparent">check_circle</span>
+</button>
+</div>
+</section>
+<!-- Security Badge -->
+<div class="flex flex-col items-center gap-base mt-auto">
+<div class="flex items-center gap-xs px-md py-base bg-secondary-container rounded-full">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified_user</span>
+<span class="font-label-sm text-secondary uppercase tracking-widest">SSL Secure Checkout</span>
+</div>
+<p class="text-label-sm text-on-surface-variant text-center max-w-[280px]">
+                Your transaction is protected by bank-level encryption. We do not store your full card details.
+            </p>
+</div>
+</main>
+<!-- Bottom Action Button -->
+<footer class="fixed bottom-0 w-full bg-surface/90 backdrop-blur-xl p-margin-mobile z-50">
+<div class="max-w-lg mx-auto">
+<button class="w-full bg-primary-container text-primary font-headline-md py-md rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-base">
+                Pay Now
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Micro-interaction Script -->
+<script>
+        function selectPayment(element) {
+            // Remove active classes from all cards
+            const cards = document.querySelectorAll('.method-card');
+            cards.forEach(card => {
+                card.classList.remove('active-payment-card');
+                card.classList.add('bg-surface-container-low', 'border-transparent');
+                
+                // Reset Icon Colors
+                const icon = card.querySelector('.material-symbols-outlined:first-of-type');
+                icon.classList.replace('text-primary', 'text-secondary');
+                
+                // Hide checkmark
+                const check = card.querySelector('.material-symbols-outlined:last-of-type');
+                check.classList.add('text-transparent');
+            });
+
+            // Add active classes to selected card
+            element.classList.add('active-payment-card');
+            element.classList.remove('bg-surface-container-low', 'border-transparent');
+            
+            // Set Active Icon Color
+            const activeIcon = element.querySelector('.material-symbols-outlined:first-of-type');
+            activeIcon.classList.replace('text-secondary', 'text-primary');
+
+            // Show checkmark
+            const activeCheck = element.querySelector('.material-symbols-outlined:last-of-type');
+            activeCheck.classList.remove('text-transparent');
+            activeCheck.classList.add('text-primary');
+        }
+    </script>
+</body></html>

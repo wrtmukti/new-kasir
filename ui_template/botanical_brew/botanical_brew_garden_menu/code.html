@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Botanical Brew - Menu</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#4a4640",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3ee",
+                    "primary": "#163422",
+                    "inverse-surface": "#30312e",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#2f4d39",
+                    "tertiary": "#312e29",
+                    "on-tertiary-container": "#b7b1a9",
+                    "on-tertiary-fixed": "#1e1b16",
+                    "outline-variant": "#c2c8c0",
+                    "on-secondary-fixed": "#062010",
+                    "primary-fixed": "#c8ebd0",
+                    "inverse-primary": "#adcfb4",
+                    "surface-container-high": "#eae8e3",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#4e6953",
+                    "on-primary-fixed": "#022110",
+                    "surface-container-highest": "#e4e2dd",
+                    "tertiary-fixed-dim": "#ccc5be",
+                    "on-secondary-fixed-variant": "#334d38",
+                    "on-primary-container": "#99baa1",
+                    "on-background": "#1b1c19",
+                    "surface-variant": "#e4e2dd",
+                    "tertiary-container": "#48443e",
+                    "primary-container": "#2d4b37",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#727972",
+                    "inverse-on-surface": "#f2f1ec",
+                    "background": "#fbf9f4",
+                    "on-surface-variant": "#424843",
+                    "tertiary-fixed": "#e9e1d9",
+                    "surface-tint": "#466550",
+                    "secondary-fixed": "#cceacf",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#4a654f",
+                    "surface-bright": "#fbf9f4",
+                    "primary-fixed-dim": "#adcfb4",
+                    "surface": "#fbf9f4",
+                    "secondary-fixed-dim": "#b0ceb4",
+                    "surface-container": "#f0eee9",
+                    "secondary-container": "#c9e7cc",
+                    "on-surface": "#1b1c19",
+                    "surface-dim": "#dbdad5",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "section-gap": "80px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "body-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f4;
+            color: #1b1c19;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .leaf-pattern {
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-5 10-10 15-10 25s5 15 10 25c5-10 10-15 10-25S35 15 30 5z' fill='%23163422' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 dark:bg-background/80 backdrop-blur-md shadow-[0_20px_40px_rgba(45,75,55,0.05)]">
+<div class="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="park">park</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary">Botanical Brew</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full animate-pulse">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+<span class="font-label-md text-label-md">Garden Status: Open</span>
+</div>
+<button class="active:scale-95 transition-transform duration-200 text-primary">
+<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative">
+<!-- Background Decoration -->
+<div class="fixed inset-0 leaf-pattern pointer-events-none -z-10"></div>
+<!-- Hero Section -->
+<section class="mb-section-gap text-center max-w-2xl mx-auto">
+<span class="inline-block px-4 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md mb-4 tracking-widest uppercase">Seasonal Selection</span>
+<h2 class="font-display-lg text-display-lg text-primary mb-6">Fresh from the Garden</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Explore our seasonal botanical blends and organic treats, crafted with ingredients sourced directly from our greenhouse.</p>
+</section>
+<!-- Category Filters -->
+<section class="mb-12 flex flex-wrap justify-center gap-3">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-md transition-all hover:opacity-90 shadow-md">All Blends</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md hover:bg-secondary-container hover:text-on-secondary-container transition-all">Signature Sips</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md hover:bg-secondary-container hover:text-on-secondary-container transition-all">Herbal Teas</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-md hover:bg-secondary-container hover:text-on-secondary-container transition-all">Wild Pastries</button>
+</section>
+<!-- Menu Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Item 1: Rosewater Matcha Latte -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(45,75,55,0.08)] transition-all duration-500">
+<div class="flex flex-col md:flex-row h-full">
+<div class="w-full md:w-1/2 aspect-square md:aspect-auto h-64 md:h-full relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A top-down professional food photograph of a Rosewater Matcha Latte. The drink features vibrant green matcha layered with frothy milk and topped with delicate, dried pink rose petals. It sits on a light oak wooden table in a sun-drenched greenhouse cafe, surrounded by soft-focus potted ferns. The lighting is ethereal and bright, emphasizing the organic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq3aY974qTymqKo2VTRfCweoFSqLMG5ew9BgSObpAqWQoT-Tw5O-9gyVPZUVu9LlnfKdceUO8LPbFroF8xxkNqVxvPqtaj7wmf3N3KaCe3dRZ02e1EYrCUSfvZ5v6kYs819Y3PkwITBUC0f8JhFe4V_sFqv-UEMJ2WTPcg4JtVvmVkTAZAKN8MdfwC3TaQsVjmlBusdf-4E-KQ46qpc2B747aOiTONEra-pXFIXfHC5dDDqqbTT5utOA"/>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">Rosewater Matcha Latte</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$6.50</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-4">Pure ceremonial grade matcha whisked with organic oat milk and a hint of wild rose essence.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-[10px]">ORGANIC</span>
+<span class="px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-[10px]">VEGAN</span>
+</div>
+</div>
+<button class="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-primary text-on-primary rounded-lg font-label-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> Add to Order
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 2: Lavender Honey Flat White -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(45,75,55,0.08)] transition-all duration-500">
+<div class="flex flex-col md:flex-row h-full">
+<div class="w-full md:w-1/2 aspect-square md:aspect-auto h-64 md:h-full relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A macro shot of a Lavender Honey Flat White. The coffee features perfect latte art with a sprig of fresh lavender lying across the rim of a hand-thrown ceramic mug. The setting is a cozy botanical garden nook with soft, diffused sunlight filtering through glass panes. The color palette consists of warm browns, creamy whites, and soft violet lavender tones, creating a tranquil morning atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6VmAWDTAKGVwcfjYFO1h8U-axpfhFsQfAIaSjo49pFjeLCMfUMZoEFfnlg0QlOhjWC5coEw1a3RYVn3KCivc5YQuTyHJEgB5yC_zul9K87wxTI8jv0bEiGaqzuHGjRNlx_ny2YBpH07MosoZttLps8gzTGu1_dul3MSCQVQb8b7nqe9tXnG1ZY47nzxRARBX1t2ugvbQlLyI8yebTp3OgIGTV6ue2NNLxMKH0sD6YW2B3px2orb9gYw"/>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">Lavender Honey Flat White</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$5.75</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-4">Double shot espresso infused with locally harvested honey and dried lavender buds.</p>
+</div>
+<button class="mt-6 flex items-center justify-center gap-2 w-full py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-primary hover:text-on-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> Add to Order
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 3: Wild Berry Hibiscus Tea -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(45,75,55,0.08)] transition-all duration-500">
+<div class="flex flex-col md:flex-row h-full">
+<div class="w-full md:w-1/2 aspect-square md:aspect-auto h-64 md:h-full relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A vibrant red Wild Berry Hibiscus Tea in a tall glass filled with ice and fresh blueberries. A slice of lemon and a single hibiscus flower garnish the glass. The background is a blurred garden of wild berries and green leaves. The lighting is crisp and summery, casting long, soft shadows. The overall aesthetic is refreshing, natural, and bursting with botanical energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHehriqyZHFPOv6n8wYIKm7NVssN2Ooyk9Gt5AS-0bdCvo9S3meh34E_qaBSEbfw0HeJ5im1zVaRvCHC9nMyNyCHOvLisCtOCos8JHQH7IBnQNdok_33aMQn9uLxErwdc0PpRzq7y1c4luo5xawI6LB95iUgf4gyPZV_zzD19z8RXzhhFesw8n7vsveBjPQLZzx8CUNzwe3HmC7AlHKk407GY_bKl5S0eGMxBAPUR1B-hmqAGq4hmX8w"/>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">Wild Berry Hibiscus Tea</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$5.00</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-4">A tart and refreshing infusion of sun-dried hibiscus, wild forest berries, and citrus.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-[10px]">ICED</span>
+<span class="px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-[10px]">NO CAFFEINE</span>
+</div>
+</div>
+<button class="mt-6 flex items-center justify-center gap-2 w-full py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-primary hover:text-on-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> Add to Order
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 4: Pistachio Moss Cake -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(45,75,55,0.08)] transition-all duration-500">
+<div class="flex flex-col md:flex-row h-full">
+<div class="w-full md:w-1/2 aspect-square md:aspect-auto h-64 md:h-full relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A slice of Pistachio Moss Cake on a textured ceramic plate. The cake has a vibrant green, sponge-like texture resembling forest moss, layered with white cream and topped with crushed pistachios and tiny edible white flowers. The scene is set in a high-end botanical bakery with minimalist decor. The lighting is soft and natural, emphasizing the organic, whimsical nature of the dessert." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3YDe56qOgc4h22ptk7_5xfWkX3jm1DSlw5mAVFKgnyYoxBB_5os7ZHPLWnNfdObboXIHRMTPaIa6ZfN3O6_9L5n_cwPjsHjIZHc3HHC5Rs3ura_nr-Tam_6q5zehLEaR7Lka6za86UoC4_n84ZFnPR7--1Qcn9t1v6U6NdG55Plj28_0rKWRkI--DklAz9r15JyjyqYUZVbFdcRuUlzH0Ac9L_L8GrV1u1fSxluuHsHNbcqTOZXVLzw"/>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">Pistachio Moss Cake</h3>
+<span class="font-label-md text-label-md text-primary font-bold">$7.50</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-4">A light, airy pistachio sponge with honey mascarpone filling, topped with edible botanical blossoms.</p>
+</div>
+<button class="mt-6 flex items-center justify-center gap-2 w-full py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-primary hover:text-on-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> Add to Order
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Community Section -->
+<section class="mt-section-gap glass-card p-12 rounded-3xl text-center border border-white/20">
+<h3 class="font-headline-lg text-headline-lg text-primary mb-4">Join the Garden Club</h3>
+<p class="text-body-lg text-on-surface-variant mb-8 max-w-lg mx-auto">Get notified about our weekly harvest, secret menu items, and botanical workshops.</p>
+<form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+<input class="flex-grow bg-white border-none rounded-xl px-6 py-3 focus:ring-2 focus:ring-primary-fixed outline-none text-body-md" placeholder="Your floral email..." type="email"/>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-label-md hover:opacity-90 active:scale-95 transition-all">Subscribe</button>
+</form>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-background/90 dark:bg-background/90 backdrop-blur-md rounded-t-xl shadow-[0_-10px_30px_rgba(45,75,55,0.08)]">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="local_florist">local_florist</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors px-5 py-1 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors px-5 py-1 rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="person_2">person_2</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Floating Atmosphere Elements -->
+<div class="fixed top-20 right-10 w-24 h-24 opacity-20 pointer-events-none animate-[spin_20s_linear_infinite]">
+<svg class="text-primary" fill="currentColor" viewbox="0 0 100 100">
+<path d="M50 10 C 55 25 65 30 80 30 C 65 35 60 45 60 60 C 55 45 45 40 30 40 C 45 35 50 25 50 10 Z"></path>
+</svg>
+</div>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Scroll shadow logic
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Spot - Secure Payment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(49, 46, 129, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cyan-pulse {
+            box-shadow: 0 0 0 0 rgba(0, 162, 230, 0.4);
+            animation: pulse-cyan 2s infinite;
+        }
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 0 0 rgba(0, 162, 230, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 162, 230, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 162, 230, 0); }
+        }
+        .light-leak {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 162, 230, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .neon-glow-primary:hover {
+            box-shadow: 0 0 15px rgba(210, 187, 255, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface": "#0c1324",
+                "on-tertiary-fixed": "#100563",
+                "surface-container-lowest": "#070d1f",
+                "surface-tint": "#d2bbff",
+                "on-secondary": "#00344d",
+                "on-surface": "#dce1fb",
+                "on-primary-container": "#ede0ff",
+                "primary-fixed": "#eaddff",
+                "background": "#0c1324",
+                "on-surface-variant": "#ccc3d8",
+                "surface-container": "#191f31",
+                "secondary-fixed-dim": "#89ceff",
+                "error-container": "#93000a",
+                "surface-dim": "#0c1324",
+                "on-secondary-container": "#00344e",
+                "tertiary-fixed-dim": "#c3c0ff",
+                "on-secondary-fixed": "#001e2f",
+                "tertiary-container": "#5f5db1",
+                "on-tertiary": "#272377",
+                "surface-bright": "#33394c",
+                "primary-container": "#7c3aed",
+                "surface-container-low": "#151b2d",
+                "on-primary": "#3f008e",
+                "outline-variant": "#4a4455",
+                "on-primary-fixed": "#25005a",
+                "on-background": "#dce1fb",
+                "secondary": "#89ceff",
+                "tertiary-fixed": "#e2dfff",
+                "on-error": "#690005",
+                "primary-fixed-dim": "#d2bbff",
+                "secondary-container": "#00a2e6",
+                "inverse-primary": "#732ee4",
+                "surface-container-high": "#23293c",
+                "on-secondary-fixed-variant": "#004c6e",
+                "inverse-surface": "#dce1fb",
+                "on-primary-fixed-variant": "#5a00c6",
+                "error": "#ffb4ab",
+                "primary": "#d2bbff",
+                "on-error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#3e3c8f",
+                "inverse-on-surface": "#2a3043",
+                "outline": "#958da1",
+                "on-tertiary-container": "#e6e3ff",
+                "surface-variant": "#2e3447",
+                "surface-container-highest": "#2e3447",
+                "secondary-fixed": "#c9e6ff",
+                "tertiary": "#c3c0ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "4px",
+                "xl": "40px",
+                "xs": "4px",
+                "gutter": "16px",
+                "container-margin": "20px",
+                "md": "16px",
+                "lg": "24px",
+                "sm": "8px"
+            },
+            "fontFamily": {
+                "label-md": ["Inter"],
+                "label-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-xl": ["Sora"],
+                "headline-md": ["Sora"],
+                "headline-lg-mobile": ["Sora"],
+                "body-lg": ["Inter"],
+                "headline-lg": ["Sora"]
+            },
+            "fontSize": {
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary selection:text-on-primary">
+<div class="light-leak"></div>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-container-margin h-16">
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-primary hover:opacity-80 active:scale-95 transition-all">arrow_back</button>
+<span class="font-headline-md text-headline-md font-bold text-primary">Social Spot</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a trendy young adult in a moody, neon-lit lounge setting, with subtle purple and cyan reflections on their face. The lighting is cinematic and low-key, capturing a sophisticated urban social atmosphere with soft bokeh background lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1cCsoVR0AtqmEEZPTU7lF--gEzshoySt7rA7vg0AVLjR5545wCLJfGX99fqXvyuPOHKmwOSgL-WnvbYZDdCTwE_4uij1syMwRebBP_ri1TT0NddwqDiIRL0MUgaX_RQdYve-xxCeZrOBHbuZKkfBBwb7RS9YsTThNtevpa2mHT0bmQwZLGbFONBsjQQmFS_UVfdljsn2iwusTRgWV6xN7oEd6-09CSgeQDc6MJ4KITom3UMU9dI_JKQ"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-container-margin max-w-lg mx-auto">
+<!-- Summary Section -->
+<section class="mb-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile mb-xs">Checkout</h1>
+<p class="text-on-surface-variant font-label-md text-label-md">Closing the night at <span class="text-secondary">Obsidian Lounge</span></p>
+</section>
+<!-- Glassmorphic Credit Card Preview -->
+<div class="glass-card w-full h-52 rounded-xl p-lg relative overflow-hidden mb-lg flex flex-col justify-between group">
+<!-- Atmospheric accent inside card -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/40 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<span class="material-symbols-outlined text-4xl text-on-surface">contactless</span>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md italic tracking-tighter">PREMIUM</span>
+<span class="text-label-sm text-on-surface-variant">SOCIAL PASS</span>
+</div>
+</div>
+<div class="z-10">
+<div class="font-headline-md text-headline-md tracking-[0.2em] mb-xs">**** **** **** 8824</div>
+<div class="flex justify-between items-end">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Card Holder</span>
+<span class="font-label-md text-label-md">ALEX VANDERBILT</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Expires</span>
+<span class="font-label-md text-label-md">12/26</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Summary -->
+<div class="bg-surface-container rounded-xl p-md mb-lg border border-white/5">
+<div class="flex justify-between mb-sm">
+<span class="text-on-surface-variant">2x Signature Cocktails</span>
+<span class="font-bold">$32.00</span>
+</div>
+<div class="flex justify-between mb-sm">
+<span class="text-on-surface-variant">1x Truffle Fries</span>
+<span class="font-bold">$14.00</span>
+</div>
+<div class="border-t border-white/10 my-md pt-md flex justify-between items-center">
+<span class="font-headline-md text-headline-md">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$46.00</span>
+</div>
+</div>
+<!-- Payment Options Grid -->
+<div class="space-y-md mb-lg">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Payment Method</h2>
+<div class="grid grid-cols-2 gap-sm">
+<!-- Digital Wallet -->
+<button class="bg-surface-container-high p-md rounded-xl border border-primary/20 flex flex-col items-center justify-center gap-sm hover:bg-surface-container-highest transition-all group active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Digital Wallet</span>
+</button>
+<!-- Split Bill -->
+<button class="bg-surface-container-high p-md rounded-xl border border-secondary/20 flex flex-col items-center justify-center gap-sm hover:bg-surface-container-highest transition-all group active:scale-95">
+<span class="material-symbols-outlined text-secondary text-3xl group-hover:scale-110 transition-transform">groups</span>
+<span class="font-label-md text-label-md">Split Bill</span>
+</button>
+</div>
+<!-- Specific Wallet Options -->
+<div class="flex gap-sm overflow-x-auto pb-xs no-scrollbar">
+<div class="flex-shrink-0 bg-surface-container border border-white/5 px-lg py-sm rounded-full flex items-center gap-sm">
+<div class="w-5 h-5 bg-[#00a2e6] rounded-full"></div>
+<span class="font-label-sm text-label-sm">GoPay</span>
+</div>
+<div class="flex-shrink-0 bg-surface-container border border-white/5 px-lg py-sm rounded-full flex items-center gap-sm">
+<div class="w-5 h-5 bg-[#4c2a86] rounded-full"></div>
+<span class="font-label-sm text-label-sm">OVO</span>
+</div>
+<div class="flex-shrink-0 bg-surface-container border border-white/5 px-lg py-sm rounded-full flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="font-label-sm text-label-sm">More</span>
+</div>
+</div>
+</div>
+<!-- Split Bill Feature (Contextual UI) -->
+<div class="bg-surface-container-low border border-secondary/10 rounded-xl p-md mb-xl">
+<div class="flex justify-between items-center mb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">person_add</span>
+<span class="font-label-md text-label-md">Active Hangout (4)</span>
+</div>
+<span class="text-secondary font-label-sm text-label-sm">$11.50 / person</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up high-quality portrait of a stylish woman in her mid-20s, with cinematic neon lighting in purple and pink tones. She has a modern urban aesthetic, wearing trendy accessories, and is looking slightly away from the camera in a sophisticated social setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC71SmnTBb4SzQVT3vWtfJC6ep4S-nVcF6Z4tECI9mB30_2csBK4kBSNniTjiLbE0Kl9LQ-7Yx5blhYkkTBBoF1ZqqwBix8ff8AHoLRu6IzBUgOxUkvhb8u-lnp3_KddcfD3kdoK3dffyYB7P1ZQlh8YVfNS-8sZY8IxK3SZM6RUsLY2EMf-jLFX32NP4Ao1mtPyyR3ZILPL22AlkheRm9F6TDizKanG0EI2Pm2h-Wahl3xYFhlGvB0rA"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young man with a cool, modern hairstyle and stylish urban streetwear. He is captured in a dimly lit, high-contrast nightclub environment with cyan and magenta light reflections on his face. The atmosphere is energetic and exclusive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-EkGnk318MVHmXiyhH88FiLDU5eOoC3AwTFiwEoT_EDTx31mMJzdrKLFj-aTG4WK_p_FOQQMvngrksZ1gaZd3171CJo4wLQaGu4wNc7ZEWyOgVW3iachIaoCSLpUuh3cUoAAD2P2BUVv5YyBkNV7e4Y3p0RIefTgbewcn9A7Pirfgu4BDB7SKv5DjvTtI45YfqxrfJ7QnhRawIOw2HSIEKbRO2f0T-JqUJaADiib79TTOrOGKz41Ogw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional quality close-up of a smiling woman in a trendy urban cafe at night. Soft warm lighting mixes with cool blue exterior neon. She is wearing a minimalist black top and gold jewelry, representing a sophisticated socialite vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhcpxBGr75AQGHy8Bx3fB8eyFcOPrU3THGxo5pwqjO3GEFeegum0_nXCcB1gO-T5zxBWsd7_kEhgeN_JF4a72QYG2J8mZgLGGHO6vInvzWLNmjuW7EdZh7d0FTR35Ld_6cHHq6GnyzgEAluuR91OJp--gKLvZvnRA9LuNd92pwC9pt98eXTVrMR6MxGRDNElPFVXgVt29Y7w2ROVxJDLb019BAVYU4oB5G7t_cHf0tG_WeIjG3eSnbpw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-secondary/20 flex items-center justify-center">
+<span class="text-[10px] font-bold text-secondary">+1</span>
+</div>
+</div>
+</div>
+<!-- Main Action Button -->
+<button class="w-full bg-primary-container text-on-primary-container py-lg rounded-xl font-headline-md text-headline-md flex items-center justify-center gap-md hover:opacity-90 active:scale-95 transition-all neon-glow-primary group">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">verified_user</span>
+            Pay &amp; Chill
+        </button>
+<p class="text-center text-on-surface-variant font-label-sm text-label-sm mt-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-xs">lock</span>
+            Encrypted by Social Secure™
+        </p>
+</main>
+<!-- Bottom Navigation Bar (Active: Bookings/Wallet intent) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface/40 backdrop-blur-xl border-t border-white/10 rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors cursor-pointer active:scale-90 transition-transform">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors cursor-pointer active:scale-90 transition-transform">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">My Spots</span>
+</div>
+<!-- Active Tab: Bookings (since payment is part of the booking/transaction flow) -->
+<div class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl p-2 cursor-pointer active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-sm text-label-sm">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:text-primary transition-colors cursor-pointer active:scale-90 transition-transform">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<script>
+        // Simple micro-interaction for button press
+        document.querySelector('.bg-primary-container').addEventListener('click', function() {
+            const btn = this;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Processing...';
+            btn.classList.add('opacity-80');
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Payment Success';
+                btn.style.backgroundColor = '#10b981'; // Success green
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('opacity-80');
+                    btn.style.backgroundColor = '';
+                    btn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+
+        // Split bill toggle mock
+        document.querySelectorAll('.grid > button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.grid > button').forEach(b => b.classList.remove('ring-2', 'ring-primary', 'bg-surface-container-highest'));
+                this.classList.add('ring-2', 'ring-primary', 'bg-surface-container-highest');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bumblebee Cafe - Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-background": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#544600",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-secondary-container": "#656464",
+                        "primary": "#705d00",
+                        "tertiary-fixed-dim": "#00dbe8",
+                        "surface-variant": "#e2e2e2",
+                        "primary-fixed-dim": "#e9c400",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#e9c400",
+                        "secondary": "#5f5e5e",
+                        "on-primary-fixed": "#221b00",
+                        "surface-container": "#eeeeee",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-container": "#006a70",
+                        "on-surface": "#1a1c1c",
+                        "surface": "#f9f9f9",
+                        "secondary-container": "#e4e2e1",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "secondary-fixed-dim": "#c8c6c6",
+                        "background": "#f9f9f9",
+                        "surface-container-low": "#f3f3f4",
+                        "on-tertiary-fixed": "#002022",
+                        "surface-tint": "#705d00",
+                        "primary-fixed": "#ffe16d",
+                        "inverse-surface": "#2f3131",
+                        "secondary-fixed": "#e4e2e1",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary-container": "#705e00",
+                        "tertiary": "#00696f",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#d0c6ab",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#79f5ff",
+                        "on-surface-variant": "#4d4732",
+                        "on-primary": "#ffffff",
+                        "outline": "#7e775f",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "primary-container": "#ffd700",
+                        "tertiary-container": "#00f1ff",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "margin-mobile": "20px",
+                        "xl": "64px",
+                        "sm": "12px",
+                        "lg": "40px",
+                        "gutter": "16px",
+                        "margin-desktop": "auto"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-dot::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            margin-left: 6px;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+<div class="flex items-center gap-sm">
+<button class="active:scale-95 transition-transform text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Bumblebee Cafe</h1>
+</div>
+<div class="flex items-center gap-sm">
+<div class="hidden md:flex items-center bg-surface-container px-3 py-1 rounded-full text-label-sm font-medium text-secondary">
+<span class="active-dot mr-1"></span> Store Open
+            </div>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary-container active:scale-95 transition-transform cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a friendly young urban professional smiling, wearing a clean charcoal grey barista-style apron over a white shirt, soft studio lighting, professional aesthetic, warm personality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEBS7C9p3fBdocfzhn7kX8NkU96OnhFRQh-C3lITDgksrxLYtx5CO208PjToLNHVODebrGP0y_DEXp4iv_ov1qnWH6YrdGdEHZYIR4BJ1hOAFdkT8tPF64PxjRt53VnUoLLuaCQRiJbY-GJrtpYDm9GdJpJj5NMBqh_7M3wcvQOWszMXoECk3fQnKcFRl23OzivtkgB2U7RA9ui6CUiW7b25R2BwU30Sud_pcnb3ZEt-KTaT9rcvzmZg"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-screen-xl mx-auto">
+<!-- Welcome & Status (Mobile Specific) -->
+<section class="mb-lg md:hidden">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-secondary font-label-md">Good morning, Alex</p>
+<h2 class="font-headline-md text-headline-md text-on-background mt-1">Ready for your buzz?</h2>
+</div>
+<div class="bg-surface-container-high px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-on-surface-variant flex items-center">
+<span class="active-dot mr-1"></span> Open
+                </div>
+</div>
+</section>
+<!-- Category Scroll -->
+<nav class="mb-lg -mx-margin-mobile px-margin-mobile overflow-x-auto no-scrollbar flex gap-sm items-center sticky top-16 bg-background/95 py-4 z-40 backdrop-blur-sm">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md transition-colors shadow-sm">All</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-label-md hover:bg-secondary-container/50 transition-colors">Coffee</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-label-md hover:bg-secondary-container/50 transition-colors">Pastries</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-label-md hover:bg-secondary-container/50 transition-colors">Brunch</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-label-md hover:bg-secondary-container/50 transition-colors">Cold Brew</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-label-md hover:bg-secondary-container/50 transition-colors">Tea</button>
+</nav>
+<!-- Menu Grid -->
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter">
+<!-- Item 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A high-end artisanal latte in a ceramic cup, featuring intricate rosetta latte art on top. The scene is bright and airy with soft natural morning light, set against a clean white marble countertop. Bumblebee yellow accents in the background provided by a small yellow flower in a vase." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKUGjX_Ghuq537PCSBMdVkj5lsHZ6TX1hmKXpO76IZ0Pm1ykhXOHZntK7naud_-m0omeDMDgOYP5knnCdwQgXDVmbtPD0Oe374D4_oi8sCfvHuoW3sEXkmc651dR4wixoBJ7iM5ZB8yUTnMKee9DlGVx0bG-b7KlCRoI8QDx8QvA7dV6pDyrZ49Ny5T1tTMngc_5cPC-yB6Qx1wc6mkxALpLXaP0Sg7B2hDRcjvLlTgqeEe-E1wkqs9A"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur-md rounded-full p-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Honey Oat Latte</h3>
+<p class="text-secondary text-label-sm mt-0.5">Signature Blend</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$5.50</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A freshly baked, flaky golden-brown croissant served on a minimalist white ceramic plate. The lighting is crisp and warm, highlighting the buttery layers of the pastry. Modern cafe setting with bright white walls and vibrant yellow napkins subtly placed to the side." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS3xZsu0RYkK3q4Bdx8qCJzRM0RXrDAEu-8lf9-a1KQ-TfF0mA1UQ7CChjyLSLMLktuSpoc4wAI2YH9U2tiZOERJmSxw2O4MuGc46QoZzOaMNiOwGDRldnXmluas0I2cPjzYyR17ciPAKiYkkBRyLKg5cnC3bPGLrg0YA-or45CtYjKM9b50z-7uyrrqQGYu_fofaDYcVUR_A7zaMZEud1JvlUBqA4Y89WOzBtXIqEjGs3F8jwmqkJpw"/>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Butter Croissant</h3>
+<p class="text-secondary text-label-sm mt-0.5">Baked Daily</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$4.25</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Smashed avocado on sourdough toast topped with a perfectly poached egg, chili flakes, and microgreens. The presentation is professional and colorful, set against a light wood table. The image has a clean, energetic feel with vibrant greens and pops of yellow yolk." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5wVa_di7UymT_iEVyh1wPdLNfpWQXKvjBVT6jdTASliPK54B7KAo7Nm7xzZdKbPiUXPaO0eeBOZFOs8k0pQfY6k1BRPDq2gzsjSmFinsbRfXb8K3M2BhRqdg2OJ40DIiQAvVnrUmC5XieRYzlq9TWP389WA-w_o5uFRBi5Yb2eHQcUVs-sP6nu5U6iK88Dzz0dRGyEYXrqyZJDnpSQDZXXh2VOMmO23Y7m5pe0CpjEa4lgAzTGWXvpg"/>
+<span class="absolute top-2 left-2 bg-primary text-on-primary text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Popular</span>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Bumble Toast</h3>
+<p class="text-secondary text-label-sm mt-0.5">Avocado &amp; Egg</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$12.00</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A tall glass of cold brew coffee with a splash of milk creating beautiful swirling patterns. Large ice cubes are visible, and the glass is condensation-covered, suggesting refreshing coldness. Bright minimalist studio lighting, high contrast, featuring a vibrant yellow straw." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0kl7d5RbuzsGpnYIQKl0zqXh38Bf4Tk0sAihPtUN-tWvNXnVceDe5MKV6fkvp3hD_RjfDrcLDJuoDB_UtFKclIY8tAjwsqD9tkyk1mywSWGFMyFxZz_R0gvbO70KipHsLRQ-JND-3UupSyB-V7RSd7u7rLxJgC53-AtG31VZ3_Iqm9y6jYkz9og2IqEHxlSHIxGyLqfviNc_2aWd62Ek2Kep-mSESX2EHsBbOTmDIeHvUugHttygDxg"/>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Nitro Cold Brew</h3>
+<p class="text-secondary text-label-sm mt-0.5">16oz Draft</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$6.00</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A bowl of fresh acai topped with neatly arranged slices of banana, strawberries, blueberries, and crunchy granola. The scene is bright and vibrant, emphasizing health and energy. Background features subtle yellow branding elements in a clean modern cafe environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA90fFVsGVnhqOq3lPF9zZOUgtjVQj-d04m9hsr0B1Cb0rqwZGPvfCOKmpn_corvipzw1Eu5I79DYnv1_L1pfvAMtBm_XyeBorrATp9VwefjcR6-IVoyyAvVo1giG3j0DMm4I42c6SoLfV3ughy7lFVPlb2c58q7xVducSawgC5TGuGWbXDe1p5xX9aYvABCyuFuP3oiNDeSIaXly5F5KJCS7wWQvWCK3nlVRUhqkVbB5Yj3-TEuWbUDA"/>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Superfood Bowl</h3>
+<p class="text-secondary text-label-sm mt-0.5">Vegan Friendly</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$11.50</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+<div class="relative h-40 md:h-52 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A warm, gooey chocolate chip cookie served with a small glass of milk. The cookie is breaking apart to show the melted chocolate center. High-key lighting, minimalist aesthetic with clean lines and bright whites, small yellow bumblebee logo in the corner." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8GWYxPEi-rG-IX4pAbOcKefEGoKTuILhgL1X1nZ6UJcQmQGHqTgbHFDPFY_XhhP4zs5eR1O6BE4I2GO5HcIJDq1o6jJA4o-TEMBv1wXol8FWqv09pua1StN1r2PwFfs7nwnx1mF-2b7x1yzCFLN9ATFreyy__aefG1vs9VYvEphGIFUE-Rx9f4RHA1alm4Tg-dO-I4OTiVHkrzq9SKuWbhILdroIKWcf857pX0xVIoTXK3j6vu7Xxew"/>
+</div>
+<div class="p-sm flex flex-col justify-between h-[110px]">
+<div>
+<h3 class="font-headline-md text-body-md text-on-surface truncate">Signature Cookie</h3>
+<p class="text-secondary text-label-sm mt-0.5">Warm &amp; Soft</p>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-primary-fixed-dim text-on-primary-container">$3.75</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Promotional Banner (Bento style) -->
+<section class="mt-xl grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bg-primary-container rounded-2xl p-lg flex flex-col justify-center relative overflow-hidden h-48 md:h-64 shadow-sm group">
+<div class="relative z-10 max-w-[60%]">
+<h2 class="font-headline-lg text-headline-lg-mobile text-on-primary-container leading-tight">Join the Colony</h2>
+<p class="text-on-primary-container/80 mt-2 font-body-md">Get every 10th coffee for free with our loyalty program.</p>
+<button class="mt-md bg-on-primary-container text-primary-container px-6 py-2 rounded-full font-label-md hover:opacity-90 transition-opacity">Sign Up Now</button>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-20 transform group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[180px]">loyalty</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-2xl p-lg flex flex-col justify-center relative overflow-hidden h-48 md:h-64 shadow-sm group">
+<div class="relative z-10">
+<h2 class="font-headline-lg text-headline-lg-mobile text-on-surface leading-tight">Fast Pickup</h2>
+<p class="text-secondary mt-2 font-body-md">Order ahead and skip the line entirely.</p>
+<div class="mt-md flex items-center gap-base">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<span class="font-label-md text-primary font-bold">15-20 mins wait</span>
+</div>
+</div>
+<div class="absolute top-0 right-0 p-lg">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl">bolt</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-xl rounded-t-xl border-t border-surface-container-highest dark:border-outline-variant shadow-[0_-4px_16px_rgba(51,51,51,0.1)] flex justify-around items-center h-20 pb-safe px-2">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        // Simple cart counter simulation
+        let cartCount = 0;
+        const addButtons = document.querySelectorAll('button:has(.material-symbols-outlined:contains("add"))');
+        
+        // Using a more reliable selector since :contains is not standard CSS
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.innerText.includes('add')) {
+                btn.addEventListener('click', function(e) {
+                    cartCount++;
+                    const cartIcon = document.querySelector('.material-symbols-outlined:contains("shopping_cart")') || document.querySelectorAll('.material-symbols-outlined')[2];
+                    
+                    // Create a little animation or feedback
+                    const originalColor = this.style.backgroundColor;
+                    this.style.backgroundColor = '#1a1c1c';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 150);
+
+                    // Alert usually intrusive, just console for demo
+                    console.log('Item added! Count: ' + cartCount);
+                });
+            }
+        });
+
+        // Category selection behavior
+        const categoryButtons = document.querySelectorAll('nav button');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+                    b.classList.add('bg-surface-container-low', 'text-secondary');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+                btn.classList.remove('bg-surface-container-low', 'text-secondary');
+            });
+        });
+    </script>
+</body></html>

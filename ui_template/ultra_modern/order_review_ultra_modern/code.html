@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Review Order | Precision Coffee</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Sora:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, rgba(78, 222, 163, 0.2), transparent) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(78, 222, 163, 0.4), 0 0 40px rgba(78, 222, 163, 0.1);
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#0b513d",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "tertiary-container": "#a2a3a3",
+                        "outline-variant": "#3c4a42",
+                        "on-primary-fixed-variant": "#005236",
+                        "primary": "#4edea3",
+                        "surface-container": "#201f1f",
+                        "background": "#131313",
+                        "primary-container": "#10b981",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#2f3131",
+                        "on-tertiary-container": "#37393a",
+                        "on-primary-fixed": "#002113",
+                        "secondary-fixed": "#b0f0d6",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#bbcabf",
+                        "primary-fixed": "#6ffbbe",
+                        "on-secondary-fixed-variant": "#0b513d",
+                        "inverse-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-surface": "#e5e2e1",
+                        "secondary": "#95d3ba",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-tint": "#4edea3",
+                        "inverse-on-surface": "#313030",
+                        "outline": "#86948a",
+                        "on-secondary-fixed": "#002117",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-secondary-container": "#83c2a9",
+                        "surface": "#131313",
+                        "surface-bright": "#3a3939",
+                        "on-primary": "#003824",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary": "#003829",
+                        "surface-container-highest": "#353534",
+                        "tertiary": "#c6c6c7",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#95d3ba",
+                        "inverse-primary": "#006c49",
+                        "on-primary-container": "#00422b",
+                        "surface-dim": "#131313",
+                        "on-background": "#e5e2e1",
+                        "on-error": "#690005"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "sm": "1rem",
+                        "unit": "4px",
+                        "xl": "8rem",
+                        "gutter": "24px",
+                        "xs": "0.5rem",
+                        "margin-desktop": "64px",
+                        "lg": "4rem",
+                        "md": "2rem"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Sora"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-mono": ["JetBrains Mono"],
+                        "display-lg": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-2xl border-b border-white/10 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary active:scale-95 duration-200">arrow_back_ios_new</button>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tighter text-primary">PRECISION COFFEE</h1>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<span class="font-label-caps text-label-caps text-on-surface-variant/80">AUTHENTICATED: USER_082</span>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">JD</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary">1,250 PTS</span>
+</div>
+</header>
+<main class="flex-grow max-w-7xl mx-auto w-full px-margin-mobile md:px-margin-desktop py-12 pb-32">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Order Items -->
+<div class="lg:col-span-7 space-y-8">
+<section>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Review Order</h2>
+<p class="font-body-md text-body-md text-on-surface-variant/60 mb-8">Verification of selected extraction profiles and laboratory-grade roasts.</p>
+<!-- Items List -->
+<div class="space-y-4">
+<!-- Item 1 -->
+<div class="glass-card p-6 rounded-xl flex items-center gap-6">
+<div class="w-20 h-20 rounded-lg bg-surface-container-highest flex-shrink-0 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro photograph of a perfectly pulled espresso shot with rich, golden crema in a minimalist matte black ceramic cup, set against a dark obsidian laboratory background with subtle emerald neon highlights. The lighting is cinematic and dramatic, emphasizing the texture of the liquid." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGVjVSYepYnKXcgf5qDUNtAkhY2nhPnZ3BIHnyPVju0XN38arXJNs7cVJkQCfETSHzykJraZCit3_NF3qRS423-t4tXZ0nxQgvVxAZ4ALq7ehgD2jQQB363OppX_AzAcXw6FcTKiFymwSH3lQH3nJUs2RXByzf051QSQiPwSXn9avkIgb966k3lR2g7YfKucTOokSgTO6j27bDS0pj4LDGd7O4SE--PdipRlUoPen8TUJ9Jze2uxZcgA"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Neon Nitro Cold Brew</h3>
+<span class="font-label-mono text-label-mono text-primary">$8.50</span>
+</div>
+<div class="mt-2 flex items-center gap-4">
+<div class="flex items-center border border-white/10 rounded-full px-2 py-1 bg-surface-container-low">
+<button class="material-symbols-outlined text-sm hover:text-primary transition-colors">remove</button>
+<span class="font-label-mono text-label-mono mx-4">01</span>
+<button class="material-symbols-outlined text-sm hover:text-primary transition-colors">add</button>
+</div>
+<div class="flex gap-2">
+<span class="font-label-caps text-[10px] uppercase tracking-widest px-2 py-1 bg-primary/10 text-primary rounded-full">Origin: Ethiopia</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest px-2 py-1 bg-white/5 text-on-surface-variant rounded-full">Ice: Minimal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="glass-card p-6 rounded-xl flex items-center gap-6">
+<div class="w-20 h-20 rounded-lg bg-surface-container-highest flex-shrink-0 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A top-down view of a designer latte with intricate geometric heart art on the surface. The cup is high-end surgical-grade steel, resting on a frosted glass coaster that glows with a faint emerald rim. The surrounding environment is a clean, dark, tech-focused coffee bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC4GpHJDk3Dzd3wHoY1y0oj9e7GcySixF8iQF7dpxj4reUtE-KwgoRi8uYQWbzptOHAxmYEcXoqHreyF6_fwFdll1aaz96xBbUtSsagiziHZQcZmqBvUfk14SzuPxIeYtd5xhrFx3E6eHqacwQLZnBNxBgv1QVV4PJGCZMstNHrOtgshApfUXING2XSYAwCgq3Gb2epyoGW2iJ7pqfEPhQHxhtlhQcJlTulIdrDmkQhkF0K4W-QUYCdQ"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Precision Flat White</h3>
+<span class="font-label-mono text-label-mono text-primary">$6.00</span>
+</div>
+<div class="mt-2 flex items-center gap-4">
+<div class="flex items-center border border-white/10 rounded-full px-2 py-1 bg-surface-container-low">
+<button class="material-symbols-outlined text-sm hover:text-primary transition-colors">remove</button>
+<span class="font-label-mono text-label-mono mx-4">02</span>
+<button class="material-symbols-outlined text-sm hover:text-primary transition-colors">add</button>
+</div>
+<div class="flex gap-2">
+<span class="font-label-caps text-[10px] uppercase tracking-widest px-2 py-1 bg-primary/10 text-primary rounded-full">Milk: Oat</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest px-2 py-1 bg-white/5 text-on-surface-variant rounded-full">Roast: Medium</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Coffee Specs Visualization -->
+<section class="glass-card p-8 rounded-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h4 class="font-label-caps text-label-caps text-on-surface tracking-[0.2em]">EXTRACTION PARAMETERS</h4>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="space-y-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant/40 block">AVG TEMP</span>
+<span class="font-label-mono text-label-mono text-primary">93.4°C</span>
+</div>
+<div class="space-y-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant/40 block">YIELD</span>
+<span class="font-label-mono text-label-mono text-primary">38.2g</span>
+</div>
+<div class="space-y-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant/40 block">TDS %</span>
+<span class="font-label-mono text-label-mono text-primary">1.35%</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Summary & Promo -->
+<div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+<!-- Promo Code -->
+<div class="glass-card p-6 rounded-xl">
+<label class="font-label-caps text-label-caps text-on-surface-variant/60 block mb-4">ACCESS KEY / PROMO CODE</label>
+<div class="flex gap-2">
+<input class="flex-grow bg-surface-container-low border-b-2 border-white/10 focus:border-primary transition-all text-on-surface font-label-mono text-label-mono px-4 py-3 focus:outline-none placeholder:text-white/20 uppercase" placeholder="ENTER CODE" type="text"/>
+<button class="bg-white/5 hover:bg-white/10 text-on-surface font-label-caps text-label-caps px-6 py-3 transition-colors border border-white/10">APPLY</button>
+</div>
+</div>
+<!-- Price Breakdown -->
+<div class="glass-card p-8 rounded-xl space-y-6">
+<div class="space-y-3">
+<div class="flex justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Subtotal</span>
+<span class="font-label-mono text-label-mono text-on-surface">$20.50</span>
+</div>
+<div class="flex justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Precision Tax (8.5%)</span>
+<span class="font-label-mono text-label-mono text-on-surface">$1.74</span>
+</div>
+<div class="flex justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Hospitality Surcharge</span>
+<span class="font-label-mono text-label-mono text-on-surface">$1.50</span>
+</div>
+<div class="border-t border-white/5 pt-3 flex justify-between items-baseline">
+<span class="font-headline-md text-headline-md text-on-surface">Total</span>
+<div class="text-right">
+<span class="font-display-lg text-headline-lg text-primary leading-none block">$23.74</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant/40">ESTIMATED PREP TIME: 06:45 MIN</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-6 rounded-lg neon-glow active:scale-95 transition-all duration-200 group flex items-center justify-center gap-4">
+                        Continue to Payment
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+<p class="font-label-mono text-[10px] text-center text-on-surface-variant/40 uppercase tracking-widest">
+                        SECURE ENCRYPTED TRANSACTION // NODE_ID: P-COFFEE-01
+                    </p>
+</div>
+<!-- Reward Progress Card -->
+<div class="glass-card p-6 rounded-xl border-primary/20 bg-primary/5">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label-caps text-label-caps text-primary">POINT ACCUMULATION</span>
+<span class="font-label-mono text-label-mono text-primary">+45 PTS</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+<p class="mt-4 font-body-md text-sm text-on-surface-variant/80">You are 155 points away from a <span class="text-primary font-bold">Limited Edition Micro-Lot</span> experience.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-full bg-surface-container/10 backdrop-blur-3xl border-t border-white/5 flex justify-around items-center h-20 px-margin-mobile pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-caps text-[10px] mt-1">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary scale-110 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-caps text-[10px] mt-1">My Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-caps text-[10px] mt-1">Vouchers</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the quantity buttons
+        document.querySelectorAll('button.material-symbols-outlined').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.85)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric background pulse for neon button
+        const btn = document.querySelector('.neon-glow');
+        if (btn) {
+            let hue = 0;
+            setInterval(() => {
+                btn.style.filter = `brightness(${1 + Math.sin(Date.now() / 1000) * 0.1})`;
+            }, 100);
+        }
+    </script>
+</body></html>

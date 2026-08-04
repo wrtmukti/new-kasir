@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skena Coffee - Bayar Dulu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&amp;family=Syne:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#005321",
+                    "surface-dim": "#dcd9da",
+                    "surface-container-high": "#eae7e8",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-container": "#f0edee",
+                    "on-error-container": "#93000a",
+                    "primary": "#006e2f",
+                    "on-surface-variant": "#3d4a3d",
+                    "on-background": "#1b1b1c",
+                    "background": "#fcf8f9",
+                    "surface-container-highest": "#e5e2e3",
+                    "tertiary-container": "#ff8e4d",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-variant": "#e5e2e3",
+                    "secondary-container": "#2170e4",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f6f3f4",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#4ae176",
+                    "surface": "#fcf8f9",
+                    "primary-fixed-dim": "#4ae176",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#6bff8f",
+                    "on-tertiary-container": "#6d2d00",
+                    "on-secondary-container": "#fefcff",
+                    "outline-variant": "#bccbb9",
+                    "primary-container": "#22c55e",
+                    "surface-tint": "#006e2f",
+                    "on-primary-container": "#004b1e",
+                    "on-primary-fixed": "#002109",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#0058be",
+                    "on-secondary-fixed": "#001a42",
+                    "tertiary": "#9d4300",
+                    "inverse-surface": "#303031",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdbca",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-tertiary-fixed": "#341100",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "inverse-on-surface": "#f3f0f1",
+                    "surface-bright": "#fcf8f9",
+                    "outline": "#6d7b6c",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb690",
+                    "on-surface": "#1b1b1c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "xs": "8px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "sm": "16px",
+                    "lg": "40px",
+                    "gutter": "20px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Space Grotesk"],
+                    "label-bold": ["Space Grotesk"],
+                    "body-md": ["Space Grotesk"],
+                    "display-xl": ["Syne"],
+                    "headline-md": ["Syne"],
+                    "headline-lg-mobile": ["Syne"],
+                    "headline-lg": ["Syne"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-xl": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .sticker-rotate {
+        transform: rotate(-3deg);
+      }
+      .sticker-rotate-alt {
+        transform: rotate(2deg);
+      }
+      .neo-shadow {
+        box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+      }
+      .neo-shadow-lg {
+        box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+      }
+      .active-payment {
+        background-color: #22c55e !important;
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px 0px rgba(0,0,0,1) !important;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-50 bg-background border-b-2 border-on-background shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex justify-between items-center px-margin-mobile py-xs">
+<button class="active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md tracking-tighter text-on-background uppercase">BAYAR DULU</h1>
+<button class="active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="help_outline">help_outline</span>
+</button>
+</header>
+<main class="px-margin-mobile pt-lg space-y-lg max-w-2xl mx-auto">
+<!-- Order Summary Section -->
+<section class="relative bg-[#FDFCF0] border-2 border-on-background neo-shadow-lg p-md overflow-hidden">
+<div class="absolute top-0 right-0 bg-tertiary text-on-tertiary px-sm py-1 border-b-2 border-l-2 border-on-background font-label-bold text-label-bold uppercase sticker-rotate-alt">
+                Kopi Indie
+            </div>
+<div class="space-y-xs">
+<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Total Tagihan</p>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md">Rp</span>
+<span class="font-display-xl text-display-xl tracking-tighter">88.000</span>
+</div>
+</div>
+<div class="mt-md border-t-2 border-on-background pt-sm space-y-1">
+<div class="flex justify-between items-center">
+<span class="text-body-md">Cold Brew Skena x2</span>
+<span class="font-label-bold text-label-bold">Rp 70.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md">Skena Fries</span>
+<span class="font-label-bold text-label-bold">Rp 18.000</span>
+</div>
+</div>
+</section>
+<!-- Payment Options Grid -->
+<section class="space-y-md">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<h2 class="font-headline-md text-headline-md uppercase">PILIH METODE</h2>
+</div>
+<div class="grid grid-cols-1 gap-sm" id="payment-methods">
+<!-- QRIS -->
+<button class="payment-card flex items-center justify-between p-md bg-[#FDFCF0] border-2 border-on-background neo-shadow hover:bg-secondary-container hover:text-on-secondary-container transition-all text-left active:translate-x-1 active:translate-y-1 active:shadow-none" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-on-background text-background flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md" data-icon="qr_code_2">qr_code_2</span>
+</div>
+<div>
+<p class="font-headline-md text-headline-md leading-none">QRIS</p>
+<p class="text-label-bold font-label-bold uppercase opacity-70">Instan &amp; Mudah</p>
+</div>
+</div>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Digital Wallet -->
+<button class="payment-card flex items-center justify-between p-md bg-[#FDFCF0] border-2 border-on-background neo-shadow hover:bg-secondary-container hover:text-on-secondary-container transition-all text-left active:translate-x-1 active:translate-y-1 active:shadow-none" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary text-on-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-headline-md text-headline-md leading-none">WALLET</p>
+<p class="text-label-bold font-label-bold uppercase opacity-70">Gopay / OVO / Dana</p>
+</div>
+</div>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Cash -->
+<button class="payment-card flex items-center justify-between p-md bg-[#FDFCF0] border-2 border-on-background neo-shadow hover:bg-secondary-container hover:text-on-secondary-container transition-all text-left active:translate-x-1 active:translate-y-1 active:shadow-none" onclick="selectPayment(this)">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-tertiary text-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-headline-md text-headline-md leading-none">TUNAI</p>
+<p class="text-label-bold font-label-bold uppercase opacity-70">Bayar di Kasir</p>
+</div>
+</div>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Security Badge Sticker -->
+<div class="flex justify-center pt-md">
+<div class="sticker-rotate bg-primary-fixed text-on-primary-fixed border-2 border-on-background px-md py-xs flex items-center gap-xs neo-shadow">
+<span class="material-symbols-outlined" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-bold text-label-bold uppercase tracking-widest">TRANSAKSI AMAN</span>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile bg-background border-t-2 border-on-background z-50">
+<div class="max-w-2xl mx-auto">
+<button class="w-full bg-primary text-on-primary border-2 border-on-background neo-shadow p-md font-headline-md text-headline-md uppercase flex items-center justify-center gap-sm active:translate-x-1 active:translate-y-1 active:shadow-none transition-all group">
+                BAYAR SEKARANG
+                <span class="material-symbols-outlined group-hover:rotate-12 transition-transform" data-icon="bolt">bolt</span>
+</button>
+</div>
+</div>
+<!-- Background Decorative Elements -->
+<div class="fixed top-32 -left-8 w-24 h-24 border-2 border-on-background bg-secondary-container opacity-20 sticker-rotate-alt pointer-events-none -z-10"></div>
+<div class="fixed bottom-40 -right-4 w-16 h-16 border-2 border-on-background bg-tertiary-container opacity-20 sticker-rotate pointer-events-none -z-10"></div>
+<script>
+        function selectPayment(element) {
+            // Remove active classes from all cards
+            const cards = document.querySelectorAll('.payment-card');
+            cards.forEach(card => {
+                card.classList.remove('active-payment');
+            });
+            
+            // Add active class to clicked element
+            element.classList.add('active-payment');
+            
+            // Micro-interaction: quick scale
+            element.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(0.98)' },
+                { transform: 'scale(1)' }
+            ], {
+                duration: 100,
+                easing: 'ease-in-out'
+            });
+        }
+    </script>
+</body></html>

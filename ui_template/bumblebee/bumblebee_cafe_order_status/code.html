@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Tracking | Bumblebee Cafe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#474747",
+                    "on-background": "#1a1c1c",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#544600",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-secondary-container": "#656464",
+                    "primary": "#705d00",
+                    "tertiary-fixed-dim": "#00dbe8",
+                    "surface-variant": "#e2e2e2",
+                    "primary-fixed-dim": "#e9c400",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#e9c400",
+                    "secondary": "#5f5e5e",
+                    "on-primary-fixed": "#221b00",
+                    "surface-container": "#eeeeee",
+                    "surface-dim": "#dadada",
+                    "on-tertiary-container": "#006a70",
+                    "on-surface": "#1a1c1c",
+                    "surface": "#f9f9f9",
+                    "secondary-container": "#e4e2e1",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "secondary-fixed-dim": "#c8c6c6",
+                    "background": "#f9f9f9",
+                    "surface-container-low": "#f3f3f4",
+                    "on-tertiary-fixed": "#002022",
+                    "surface-tint": "#705d00",
+                    "primary-fixed": "#ffe16d",
+                    "inverse-surface": "#2f3131",
+                    "secondary-fixed": "#e4e2e1",
+                    "surface-container-high": "#e8e8e8",
+                    "on-primary-container": "#705e00",
+                    "tertiary": "#00696f",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d0c6ab",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#79f5ff",
+                    "on-surface-variant": "#4d4732",
+                    "on-primary": "#ffffff",
+                    "outline": "#7e775f",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "primary-container": "#ffd700",
+                    "tertiary-container": "#00f1ff",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "margin-mobile": "20px",
+                    "xl": "64px",
+                    "sm": "12px",
+                    "lg": "40px",
+                    "gutter": "16px",
+                    "margin-desktop": "auto"
+            },
+            "fontFamily": {
+                    "headline-md": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-line-active {
+            background: linear-gradient(to bottom, #ffd700 0%, #ffd700 100%);
+        }
+        .pulse-yellow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .bento-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(51, 51, 51, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-base active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary cursor-pointer">arrow_back</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Bumblebee Cafe</h1>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden active:scale-95 transition-transform">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a smiling young urban professional, high-key lighting, minimalist white background, soft shadows, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_9LG9b7Eu-I-GTUohtz6Ubkfq-YalgV4BtjAKKvVg8y5OEw5XpfZq4LR10-nzVH6FCXRMB0g6R4ODbVm8RXGbVr2c6KItABDvMJC5jUnpVx6_j86FUIkLxGhVISXMCYCe9EvfNx15tMu7VeAjdm-sHBXVgTqHQYnfSJmpMOF3_tXKFwyv6kzfH-Q2xjH6vfEGyz3hCUswFwkMYRkxSU24NTDlnCMa4eQMl9dfzoaxvCtjbKf6GcVfwQ"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-2xl mx-auto">
+<!-- Status Hero -->
+<section class="mb-lg text-center">
+<div class="relative w-48 h-48 mx-auto mb-md">
+<!-- Status Illustration Placeholder -->
+<div class="absolute inset-0 rounded-full border-4 border-primary-container border-dashed animate-spin [animation-duration:10s]"></div>
+<div class="absolute inset-4 rounded-full bg-white shadow-xl flex items-center justify-center">
+<div class="text-center">
+<span class="material-symbols-outlined text-6xl text-primary-container mb-2" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<p class="font-label-md text-on-surface-variant uppercase tracking-widest">Preparing</p>
+</div>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background mb-xs">Coffee in the works!</h2>
+<p class="font-body-md text-on-secondary-fixed-variant mb-md">Order #BB-8492 is being handcrafted by our baristas.</p>
+<div class="inline-flex flex-col items-center p-md bg-white rounded-xl shadow-sm border border-surface-container">
+<span class="font-label-sm text-secondary uppercase tracking-tighter">Estimated Ready In</span>
+<span class="font-display-lg text-display-lg text-[#333333] font-bold">08:45</span>
+</div>
+</section>
+<!-- Progress Tracker -->
+<section class="bg-white rounded-xl p-md shadow-sm mb-md relative overflow-hidden">
+<div class="flex flex-col gap-lg">
+<!-- Step 1 -->
+<div class="flex gap-md relative">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-on-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="w-1 h-full bg-primary-container absolute top-8 left-[14px]"></div>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Order Received</h4>
+<p class="font-label-sm text-on-surface-variant">10:42 AM • Confirmed</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-md relative">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center z-10 pulse-yellow">
+<div class="w-3 h-3 rounded-full bg-on-primary-container"></div>
+</div>
+<div class="w-1 h-full bg-surface-container-highest absolute top-8 left-[14px]"></div>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-primary">Preparing</h4>
+<p class="font-label-sm text-on-surface-variant">Estimated 10:55 AM</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-md">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-secondary text-sm">local_cafe</span>
+</div>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-secondary">Ready for Pickup</h4>
+<p class="font-label-sm text-on-surface-variant">Awaiting completion</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Order Summary Card -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bento-card bg-white rounded-xl p-md shadow-sm">
+<h5 class="font-label-md text-primary mb-sm">Order Items</h5>
+<ul class="space-y-base">
+<li class="flex justify-between font-body-md border-b border-surface-container pb-xs">
+<span>Honey Lavender Latte</span>
+<span class="font-bold">x1</span>
+</li>
+<li class="flex justify-between font-body-md">
+<span>Avocado Sourdough Toast</span>
+<span class="font-bold">x1</span>
+</li>
+</ul>
+</div>
+<div class="bento-card bg-white rounded-xl p-md shadow-sm">
+<h5 class="font-label-md text-primary mb-sm">Pickup Details</h5>
+<p class="font-body-md font-semibold text-on-surface">Bumblebee Cafe - Downtown</p>
+<p class="font-label-sm text-on-surface-variant">42nd Buzz St, Honey District</p>
+<div class="mt-base flex items-center gap-xs text-primary cursor-pointer hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-sm">map</span>
+<span class="font-label-sm">Open in Maps</span>
+</div>
+</div>
+</div>
+<!-- Call Action -->
+<div class="mt-lg">
+<button class="w-full bg-primary-container text-[#333333] h-14 rounded-xl font-headline-md flex items-center justify-center gap-base active:scale-95 transition-transform shadow-sm hover:opacity-90">
+<span class="material-symbols-outlined">call</span>
+                Call Cafe
+            </button>
+<p class="text-center font-label-sm text-on-surface-variant mt-md px-lg">
+                Need to change your order? Call the cafe directly for the fastest assistance.
+            </p>
+</div>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/90 backdrop-blur-xl border-t border-surface-container-highest flex justify-around items-center h-20 pb-safe w-full px-2 shadow-[0_-4px_16px_rgba(51,51,51,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Micro-interaction for the countdown
+        let time = 525; // 8:45 in seconds
+        const timerElement = document.querySelector('.text-display-lg');
+        
+        const updateTimer = () => {
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (time > 0) time--;
+        };
+        
+        setInterval(updateTimer, 1000);
+    </script>
+</body></html>

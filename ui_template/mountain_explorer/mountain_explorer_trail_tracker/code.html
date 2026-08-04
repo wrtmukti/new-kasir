@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trail Tracker | Mountain Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Manrope:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active .icon-circle {
+            background-color: #163422;
+            color: #ffffff;
+            box-shadow: 0 0 0 4px #c8ebd0;
+        }
+        .step-completed .icon-circle {
+            background-color: #2d4b37;
+            color: #99baa1;
+        }
+        .step-pending .icon-circle {
+            background-color: #e2e2e2;
+            color: #727972;
+        }
+        .topographic-overlay {
+            background-image: url('https://www.transparenttextures.com/patterns/topographic.png');
+            opacity: 0.05;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container shadow-sm border-b-2 border-primary-container dark:border-primary">
+<div class="relative">
+<div class="absolute inset-0 topographic-overlay"></div>
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full relative z-10">
+<div class="flex items-center gap-3 active:scale-95 duration-100 cursor-pointer">
+<span class="material-symbols-outlined text-on-primary" data-icon="landscape">landscape</span>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-on-primary dark:text-on-primary-container">Mountain Explorer</h1>
+</div>
+<div class="hover:opacity-90 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-primary" data-icon="explore">explore</span>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto pb-32">
+<!-- Hero Tracking Status -->
+<section class="px-margin-mobile pt-8 pb-6">
+<div class="flex flex-col gap-2">
+<span class="font-label-bold text-label-bold text-primary uppercase tracking-widest">Order #MX-9921</span>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Trail Tracker</h2>
+<div class="flex items-center gap-2 mt-2 bg-secondary-container text-on-secondary-container px-4 py-3 rounded-xl border-b-2 border-secondary self-start">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="font-label-bold text-label-bold">Estimated arrival: 15 Menit Lagi</span>
+</div>
+</div>
+</section>
+<!-- Bento Layout for Map & Steps -->
+<div class="px-margin-mobile grid grid-cols-1 lg:grid-cols-12 gap-stack-md">
+<!-- Map View (Large Bento Cell) -->
+<div class="lg:col-span-8 relative rounded-xl overflow-hidden shadow-sm border-2 border-surface-variant bg-surface-container h-[400px] lg:h-[600px]">
+<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="A cinematic, high-angle drone shot of a lush, misty pine forest in the Pacific Northwest at dawn. A winding dirt trail carves through the deep green canopy, with a small delivery vehicle or guide seen as a tiny speck on the path. The lighting is moody and atmospheric with soft morning fog, aligning with a rugged, earthy outdoor adventure aesthetic using Primary Green and Misty Off-White tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAack0si3JAmjaHajSuLjVnEpzBCmDhzxHQ4u1LAxItaSY1uH7lqODOpkRpImvCraBjdlLZsDln8qt1AmTqxzBx29Ps706ebCJcGmU_oQ0__IarEWhd4cSNdnulukIrGCjMKfw6WLk80cKYTI-Y0wWDro0zphQLKbvL9_B0qc1VJb0YQzQ1rlDmF5XxJL3JZat58By8dytXt9GnmVCB_G77KYeeODaD9Flm5Cd_OB9vO68kJl7QofiKQg')"></div>
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+<!-- Map Overlay Elements -->
+<div class="absolute top-4 left-4 z-10 bg-surface/90 backdrop-blur-sm p-3 rounded-lg border-2 border-primary shadow-lg">
+<p class="font-label-bold text-label-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="forest">forest</span>
+                        Pine Ridge Sector
+                    </p>
+</div>
+<!-- Custom Map Markers via JS/HTML -->
+<div class="absolute top-1/2 left-1/3 z-20 flex flex-col items-center">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl animate-pulse-soft border-2 border-on-primary">
+<span class="material-symbols-outlined" data-icon="person_pin_circle">person_pin_circle</span>
+</div>
+<div class="mt-1 bg-primary px-2 py-1 rounded text-[10px] text-white font-bold uppercase">Guide Location</div>
+</div>
+<div class="absolute bottom-1/4 right-1/4 z-20 flex flex-col items-center">
+<div class="w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[18px]" data-icon="flag">flag</span>
+</div>
+<div class="mt-1 bg-secondary px-2 py-1 rounded text-[10px] text-white font-bold uppercase">Basecamp</div>
+</div>
+<!-- Gradient Mask for Legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+</div>
+<!-- Side Information Column -->
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<!-- Status Steps (Rugged Indicators) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border-2 border-surface-variant shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 topographic-overlay pointer-events-none"></div>
+<h3 class="font-label-bold text-label-bold text-on-surface-variant mb-6 uppercase">Current Status</h3>
+<div class="flex flex-col gap-8 relative">
+<!-- Connecting Line -->
+<div class="absolute left-5 top-2 bottom-2 w-0.5 bg-outline-variant"></div>
+<!-- Step: Diterima -->
+<div class="flex items-center gap-4 step-completed relative z-10">
+<div class="icon-circle w-10 h-10 rounded-full flex items-center justify-center border-2 border-transparent transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface">Diterima</span>
+<span class="text-[12px] text-on-surface-variant">08:30 AM</span>
+</div>
+</div>
+<!-- Step: Sedang Dipacking -->
+<div class="flex items-center gap-4 step-completed relative z-10">
+<div class="icon-circle w-10 h-10 rounded-full flex items-center justify-center border-2 border-transparent transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface">Sedang Dipacking</span>
+<span class="text-[12px] text-on-surface-variant">08:45 AM</span>
+</div>
+</div>
+<!-- Step: Otw Lokasi -->
+<div class="flex items-center gap-4 step-active relative z-10">
+<div class="icon-circle w-10 h-10 rounded-full flex items-center justify-center border-2 border-transparent transition-all duration-300">
+<span class="material-symbols-outlined text-[20px] animate-pulse" data-icon="local_shipping">local_shipping</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-bold text-label-bold text-primary">Otw Lokasi</span>
+<span class="text-[12px] text-on-surface-variant italic">In Progress...</span>
+</div>
+</div>
+<!-- Step: Sampai Puncak -->
+<div class="flex items-center gap-4 step-pending relative z-10">
+<div class="icon-circle w-10 h-10 rounded-full flex items-center justify-center border-2 border-transparent transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]" data-icon="landscape">landscape</span>
+</div>
+<div class="flex flex-col opacity-50">
+<span class="font-label-bold text-label-bold text-on-surface">Sampai Puncak</span>
+<span class="text-[12px] text-on-surface-variant">Estimated 09:15 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Driver Profile Card -->
+<div class="bg-primary text-on-primary p-6 rounded-xl border-b-4 border-primary-container shadow-lg flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="snowshoeing">snowshoeing</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-primary-container uppercase">Your Guide</h3>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-16 h-16 rounded-full border-2 border-earthy-tan overflow-hidden bg-surface-container shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a rugged, middle-aged male mountain guide with weathered features and a kind smile, wearing a professional forest green outdoor jacket and a beanie. He has a short, well-groomed beard. The background is a soft-focus alpine forest. High-resolution, warm natural lighting, professional photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbL3JmvduWwHuZsfLIfiren4mlXjzEGnZu12N0_Z3MU0NOBZasfpMISpZkSt1jwyxYl25y7SId08P-_J09s50WJDCQJiF3yGhbAAnLT726BiUaDx28ibgAq9ZVBG9njDxG5-2DG1qoMac-qvJlCgzIuiNNEXRx-MpiwQOWnZiQkutZJQlOdFIwm92EEdRKJdH7ZCVQFHlA2NCEPqqzd6FRmUTPDQt6Q8toPJ8UeIp0UwMT4JmBD329zA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-[20px] font-bold">Mas Rimba</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary-container text-[16px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-on-primary-container">Senior Guide</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mt-2 relative z-10">
+<button class="flex-1 bg-secondary text-on-secondary py-3 rounded-lg font-label-bold text-label-bold flex items-center justify-center gap-2 hover:bg-on-secondary-fixed-variant transition-colors border-b-2 border-on-secondary-fixed-variant active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span>
+                            Hubungi
+                        </button>
+<button class="w-12 h-12 bg-primary-container text-on-primary-container rounded-lg flex items-center justify-center hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+<!-- Order Summary Chip List -->
+<div class="bg-surface-container-high p-6 rounded-xl border-2 border-surface-variant">
+<h3 class="font-label-bold text-label-bold text-on-surface-variant mb-4 uppercase">Gear Manifest</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white border border-primary/20 px-3 py-1.5 rounded-full text-label-sm font-label-sm text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="backpack">backpack</span> Expedition Pack
+                        </span>
+<span class="bg-white border border-primary/20 px-3 py-1.5 rounded-full text-label-sm font-label-sm text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="coffee">coffee</span> Summit Brew Kit
+                        </span>
+<span class="bg-white border border-primary/20 px-3 py-1.5 rounded-full text-label-sm font-label-sm text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="ac_unit">ac_unit</span> Arctic Layer
+                        </span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface dark:bg-inverse-surface rounded-t-xl border-t-2 border-secondary-container dark:border-secondary shadow-[0_-4px_12px_rgba(22,52,34,0.1)]">
+<div class="flex justify-around items-center w-full px-2 py-3 pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-[10px] mt-1">Basecamp</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl px-4 py-1.5 border-b-2 border-primary transform scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="map" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-sm text-[10px] mt-1">Trail</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-sm text-[10px] mt-1">Gear</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1.5 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-[10px] mt-1">Peak</span>
+</div>
+</div>
+</nav>
+<script>
+        // Micro-interaction for status circles
+        document.querySelectorAll('.icon-circle').forEach(circle => {
+            circle.addEventListener('mouseenter', () => {
+                circle.style.transform = 'scale(1.1)';
+            });
+            circle.addEventListener('mouseleave', () => {
+                circle.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple visibility observer for rugged reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section, .grid > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

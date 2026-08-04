@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pembayaran - FamilyTable</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#ccebc7",
+                    "on-background": "#211a16",
+                    "on-primary-fixed": "#380d00",
+                    "secondary": "#4a6549",
+                    "surface-variant": "#ede0d9",
+                    "surface-container-highest": "#ede0d9",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#752501",
+                    "secondary-fixed-dim": "#b0cfad",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#56423c",
+                    "on-primary-fixed-variant": "#7e2b07",
+                    "primary-fixed": "#ffdbcf",
+                    "on-tertiary-container": "#424037",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#334d33",
+                    "inverse-surface": "#362f2b",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#e8e2d6",
+                    "surface-tint": "#9e421d",
+                    "surface-container": "#f9ebe4",
+                    "inverse-primary": "#ffb59b",
+                    "primary-container": "#ff8c61",
+                    "surface-bright": "#fff8f5",
+                    "outline-variant": "#ddc1b7",
+                    "outline": "#89726a",
+                    "secondary-fixed": "#ccebc7",
+                    "inverse-on-surface": "#fceee7",
+                    "on-secondary-fixed": "#07200b",
+                    "tertiary-fixed-dim": "#cbc6bb",
+                    "primary-fixed-dim": "#ffb59b",
+                    "error": "#ba1a1a",
+                    "background": "#fff8f5",
+                    "tertiary-container": "#b0aba0",
+                    "primary": "#9e421d",
+                    "on-secondary-container": "#506b4f",
+                    "surface-dim": "#e5d7d1",
+                    "on-tertiary-fixed": "#1d1c15",
+                    "surface": "#fff8f5",
+                    "tertiary": "#615e55",
+                    "on-tertiary-fixed-variant": "#49473e",
+                    "surface-container-low": "#fff1ea",
+                    "surface-container-high": "#f3e5df",
+                    "on-surface": "#211a16"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "64px",
+                    "container-margin": "24px",
+                    "gutter": "16px",
+                    "unit": "8px",
+                    "touch-target-min": "48px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Quicksand"],
+                    "headline-md": ["Quicksand"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "display-lg-mobile": ["Quicksand"],
+                    "body-md": ["Be Vietnam Pro"],
+                    "display-lg": ["Quicksand"],
+                    "label-md": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5; /* Soft Cream Background */
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: #211a16;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pill-shadow {
+            box-shadow: 0px 4px 16px rgba(92, 83, 78, 0.08);
+        }
+        .payment-card-selected {
+            border: 2px solid #9e421d;
+            background-color: #fff1ea;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-50 shadow-[0px_4px_16px_rgba(92,83,78,0.08)] flex justify-between items-center w-full px-container-margin py-unit h-touch-target-min">
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="text-headline-md-mobile font-headline-md text-primary">Pembayaran</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-container-margin mt-8">
+<!-- Order Summary Section -->
+<section class="mb-section-gap">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">receipt_long</span>
+<h2 class="font-title-lg text-title-lg text-on-background">Ringkasan Pesanan</h2>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30">
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Meja Nomor</p>
+<p class="font-title-lg text-title-lg text-primary">07 - Jendela</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Waktu</p>
+<p class="font-body-md text-body-md">19:30 WIB</p>
+</div>
+</div>
+<hr class="border-outline-variant/20"/>
+<div class="space-y-3">
+<div class="flex justify-between">
+<span class="text-body-md">Nasi Goreng Spesial x2</span>
+<span class="text-body-md font-semibold">Rp 90.000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-body-md">Es Teh Manis x3</span>
+<span class="text-body-md font-semibold">Rp 30.000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-body-md">Sate Ayam (10 tusuk)</span>
+<span class="text-body-md font-semibold">Rp 45.000</span>
+</div>
+</div>
+<hr class="border-dashed border-outline-variant/40"/>
+<div class="flex justify-between items-center pt-2">
+<span class="font-title-lg text-title-lg">Total Pembayaran</span>
+<span class="font-headline-md text-headline-md text-primary">Rp 165.000</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Options Section -->
+<section class="mb-section-gap">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">account_balance_wallet</span>
+<h2 class="font-title-lg text-title-lg text-on-background">Pilih Metode Pembayaran</h2>
+</div>
+<div class="grid grid-cols-1 gap-4" id="payment-methods">
+<!-- Kartu Keluarga (Credit Card) -->
+<label class="relative flex items-center p-5 cursor-pointer bg-surface-container-lowest rounded-xl border-2 border-transparent transition-all hover:border-primary/20 shadow-sm group">
+<input checked="" class="hidden peer" name="payment" type="radio" value="credit_card"/>
+<div class="peer-checked:bg-primary-container/20 absolute inset-0 rounded-xl transition-colors border-2 peer-checked:border-primary"></div>
+<div class="relative flex items-center w-full gap-4">
+<div class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<div class="flex-1">
+<p class="font-title-lg text-title-lg text-on-background">Kartu Keluarga</p>
+<p class="text-label-md text-on-surface-variant font-label-md">Visa, Mastercard, JCB</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity">check_circle</span>
+</div>
+</label>
+<!-- E-Wallet -->
+<label class="relative flex items-center p-5 cursor-pointer bg-surface-container-lowest rounded-xl border-2 border-transparent transition-all hover:border-primary/20 shadow-sm group">
+<input class="hidden peer" name="payment" type="radio" value="e_wallet"/>
+<div class="peer-checked:bg-primary-container/20 absolute inset-0 rounded-xl transition-colors border-2 peer-checked:border-primary"></div>
+<div class="relative flex items-center w-full gap-4">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<div class="flex-1">
+<p class="font-title-lg text-title-lg text-on-background">E-Wallet</p>
+<p class="text-label-md text-on-surface-variant font-label-md">GoPay, OVO, ShopeePay</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity">check_circle</span>
+</div>
+</label>
+<!-- Bayar di Kasir -->
+<label class="relative flex items-center p-5 cursor-pointer bg-surface-container-lowest rounded-xl border-2 border-transparent transition-all hover:border-primary/20 shadow-sm group">
+<input class="hidden peer" name="payment" type="radio" value="cashier"/>
+<div class="peer-checked:bg-primary-container/20 absolute inset-0 rounded-xl transition-colors border-2 peer-checked:border-primary"></div>
+<div class="relative flex items-center w-full gap-4">
+<div class="w-12 h-12 bg-tertiary-fixed-dim rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">point_of_sale</span>
+</div>
+<div class="flex-1">
+<p class="font-title-lg text-title-lg text-on-background">Bayar di Kasir</p>
+<p class="text-label-md text-on-surface-variant font-label-md">Tunai atau Debit di Meja Kasir</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity">check_circle</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Security Note -->
+<div class="flex items-center justify-center gap-2 mb-8 text-on-surface-variant/70">
+<span class="material-symbols-outlined text-sm">shield_lock</span>
+<p class="text-label-md font-label-md">Pembayaran Anda aman &amp; terenkripsi oleh FamilyTable</p>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface shadow-[0px_-4px_24px_rgba(92,83,78,0.08)] p-container-margin z-50">
+<div class="max-w-2xl mx-auto flex flex-col gap-4">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-primary-container/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="pay-button">
+<span>Bayar &amp; Makan</span>
+<span class="material-symbols-outlined">restaurant</span>
+</button>
+</div>
+</div>
+<!-- Success Modal (Hidden by default) -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-on-background/40 backdrop-blur-sm" id="success-modal">
+<div class="bg-surface rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl animate-in fade-in zoom-in duration-300">
+<div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-6 text-secondary animate-bounce">
+<span class="material-symbols-outlined text-5xl">check_circle</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Pesanan Diterima!</h3>
+<p class="text-body-md text-on-surface-variant mb-8">Terima kasih telah memesan. Silakan tunggu sebentar, hidangan Anda sedang disiapkan dengan penuh kasih sayang.</p>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary/90 transition-colors" onclick="closeModal()">
+                Kembali ke Menu
+            </button>
+</div>
+</div>
+<script>
+        const payButton = document.getElementById('pay-button');
+        const successModal = document.getElementById('success-modal');
+
+        payButton.addEventListener('click', () => {
+            // Simulated loading
+            payButton.innerHTML = `<span class="animate-spin material-symbols-outlined">progress_activity</span>`;
+            payButton.disabled = true;
+
+            setTimeout(() => {
+                successModal.classList.remove('hidden');
+                successModal.classList.add('flex');
+                payButton.innerHTML = `<span>Bayar & Makan</span><span class="material-symbols-outlined">restaurant</span>`;
+                payButton.disabled = false;
+            }, 1500);
+        });
+
+        function closeModal() {
+            successModal.classList.add('hidden');
+            successModal.classList.remove('flex');
+        }
+
+        // Ripple Effect for buttons
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                let x = e.clientX - e.target.offsetLeft;
+                let y = e.clientY - e.target.offsetTop;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    </script>
+<style>
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body></html>

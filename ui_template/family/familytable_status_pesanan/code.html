@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FamilyTable - Status Pesanan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: bounce-slow 3s ease-in-out infinite;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#ccebc7",
+                        "on-background": "#211a16",
+                        "on-primary-fixed": "#380d00",
+                        "secondary": "#4a6549",
+                        "surface-variant": "#ede0d9",
+                        "surface-container-highest": "#ede0d9",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#752501",
+                        "secondary-fixed-dim": "#b0cfad",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#56423c",
+                        "on-primary-fixed-variant": "#7e2b07",
+                        "primary-fixed": "#ffdbcf",
+                        "on-tertiary-container": "#424037",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#334d33",
+                        "inverse-surface": "#362f2b",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e8e2d6",
+                        "surface-tint": "#9e421d",
+                        "surface-container": "#f9ebe4",
+                        "inverse-primary": "#ffb59b",
+                        "primary-container": "#ff8c61",
+                        "surface-bright": "#fff8f5",
+                        "outline-variant": "#ddc1b7",
+                        "outline": "#89726a",
+                        "secondary-fixed": "#ccebc7",
+                        "inverse-on-surface": "#fceee7",
+                        "on-secondary-fixed": "#07200b",
+                        "tertiary-fixed-dim": "#cbc6bb",
+                        "primary-fixed-dim": "#ffb59b",
+                        "error": "#ba1a1a",
+                        "background": "#fff8f5",
+                        "tertiary-container": "#b0aba0",
+                        "primary": "#9e421d",
+                        "on-secondary-container": "#506b4f",
+                        "surface-dim": "#e5d7d1",
+                        "on-tertiary-fixed": "#1d1c15",
+                        "surface": "#fff8f5",
+                        "tertiary": "#615e55",
+                        "on-tertiary-fixed-variant": "#49473e",
+                        "surface-container-low": "#fff1ea",
+                        "surface-container-high": "#f3e5df",
+                        "on-surface": "#211a16"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "64px",
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "unit": "8px",
+                        "touch-target-min": "48px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Quicksand"],
+                        "headline-md": ["Quicksand"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "display-lg-mobile": ["Quicksand"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Quicksand"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-50 shadow-[0px_4px_16px_rgba(92,83,78,0.08)] flex justify-between items-center w-full px-container-margin py-unit h-touch-target-min">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="text-primary font-bold font-headline-md text-headline-md-mobile">FamilyTable</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant/50 transition-colors duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="max-w-md mx-auto px-container-margin pt-8 space-y-gutter">
+<!-- Hero Illustration -->
+<div class="relative w-full aspect-video rounded-3xl overflow-hidden shadow-lg mb-8">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent"></div>
+<div class="w-full h-full bg-cover bg-center" data-alt="A warm and cheerful illustration of a diverse family dining together at a rustic wooden table filled with delicious food. The art style is soft and 'pillowy' with vibrant Sunset Orange and Sage Green tones. Morning sun streams through a window, creating a glowy and optimistic atmosphere. The scene is cozy, inviting, and captures a moment of joy and connection." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzzA3Mm77aZr5_u4gyrUtjG-LbOAZMXQuEyyKTrNMP5Mkfk-pSbXXo6LSpGtAXWNdXJLjdpOgPRGnYPQZt1h9__ysEQnj_6hrQurBnXXQwHYFZ_t3A0n6QQbMmaILx6C8YvLcilyuzIjM3R8BOVmdRq8XraZEyhCOSPfFdJXF8UAja3BqZrHzKLoIMeS-XBj6YVJIZq-UgsfphuLSaHBV5E91UATu8djmSrH3ZI5HTSI6o8RsPZs0lwg')"></div>
+</div>
+<!-- Status Title -->
+<div class="text-center space-y-1">
+<h1 class="font-headline-md text-headline-md-mobile text-primary">Pesanan Sedang Dimasak</h1>
+<p class="text-on-surface-variant font-body-md">Estimasi kedatangan: 15-20 menit</p>
+</div>
+<!-- Progress Tracker Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 relative overflow-hidden">
+<!-- Asymmetric Bento-style Layout for Progress -->
+<div class="grid grid-cols-3 gap-2 relative">
+<!-- Progress Line Background -->
+<div class="absolute top-8 left-[15%] right-[15%] h-1 bg-surface-variant rounded-full">
+<div class="h-full w-1/2 bg-primary-container rounded-full"></div>
+</div>
+<!-- Step 1: Diterima -->
+<div class="flex flex-col items-center gap-3 z-10 step-active">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-3xl" data-icon="receipt_long">receipt_long</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Diterima</span>
+</div>
+<!-- Step 2: Dimasak (Active) -->
+<div class="flex flex-col items-center gap-3 z-10 step-active">
+<div class="w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg ring-4 ring-primary-fixed animate-float">
+<span class="material-symbols-outlined text-3xl" data-icon="cooking" style="font-variation-settings: 'FILL' 1;">skillet</span>
+</div>
+<span class="font-label-md text-label-md text-center text-primary font-bold">Dimasak</span>
+</div>
+<!-- Step 3: Siap Disajikan -->
+<div class="flex flex-col items-center gap-3 z-10">
+<div class="w-16 h-16 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl" data-icon="restaurant">restaurant</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface-variant">Siap</span>
+</div>
+</div>
+</div>
+<!-- Order Summary Card -->
+<div class="bg-surface-container rounded-xl p-6 shadow-sm border border-outline-variant/20">
+<h3 class="font-title-lg text-title-lg mb-4 text-on-surface">Ringkasan Pesanan</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white p-1">
+<div class="w-full h-full bg-cover bg-center rounded-md" data-alt="A macro shot of a delicious Indonesian Nasi Goreng with a sunny-side-up egg, fresh cucumber slices, and shrimp crackers. The lighting is warm and golden, emphasizing the textures of the rice and the crispy edges of the egg. The style is appetizing and clean, using a bright, professional food photography aesthetic with high saturation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGXoXDeT6IHjFHdN__u5XkdVPR5gurhGl1wAJGAezW-jUqgsgpTLj52fq_36kCtq0fUoOgW3H5gDl2ZgOhR6A3BmXqeDARYjyuwCPVYjfcORs_zK-kpHz48UJTPfiiRfajLrchh8JgdoNGriXNSMbpkZmlartnZVxlAiUxsxXICAcB7qigozHRk3dwI1BXe7p59HVkuZWMivl8J_R7_Fm-pd0WkL81mlmlk5AYXgtiwm2fT_cFdpHIDg')"></div>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Nasi Goreng Spesial</p>
+<p class="text-xs text-on-surface-variant">2x • Sedang</p>
+</div>
+</div>
+<span class="font-label-md text-on-surface">Rp 70.000</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white p-1">
+<div class="w-full h-full bg-cover bg-center rounded-md" data-alt="A refreshing glass of Indonesian Iced Tea with lemon slices and fresh mint leaves. Condensation beads are visible on the outside of the glass, suggesting coldness. The background is a soft-focus garden setting, enhancing the sunny and fresh mood of the design system." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLXJ0G1vpK_GoOB0SYn2tI3rEPGU0XlFE7oUFZ6NUKFvKglIiiUTxOqAYgBeplZJ7K7aE9jTVBgg9QcfJq6HXsZvSVISxPvfDuavVZVRilfChk3X4E-Ww9SRDrzAf94B4gCdW39E-XL39SG4bgfNqE-WZBy3lqw1UTpeODZ6OHaQkNd74WeLhY03PzeQXwtoPPscY7wJjoKgFH2Pj3rEL8FUvRVQe-MAbcazNwklF8c3TVMXwzQD3LMg')"></div>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Es Teh Manis</p>
+<p class="text-xs text-on-surface-variant">2x • Dingin</p>
+</div>
+</div>
+<span class="font-label-md text-on-surface">Rp 10.000</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/30 flex justify-between font-bold">
+<span class="text-on-surface">Total</span>
+<span class="text-primary">Rp 80.000</span>
+</div>
+</div>
+<!-- Action Section -->
+<div class="pt-4 flex flex-col gap-4">
+<button class="w-full h-[56px] bg-primary text-on-primary rounded-full font-title-lg flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all duration-150 group" id="waiterBtn" onclick="callWaiter()">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform" data-icon="notifications_active">notifications_active</span>
+                Panggil Pelayan
+            </button>
+<p class="text-center text-label-md text-on-surface-variant px-8">
+                Butuh bantuan tambahan atau ingin menambah pesanan? Tim kami siap melayani Anda.
+            </p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-low shadow-[0px_-4px_24px_rgba(92,83,78,0.08)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-md text-label-md">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-label-md text-label-md">My Table</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 scale-110 transition-transform duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="redeem">redeem</span>
+<span class="font-label-md text-label-md">Rewards</span>
+</a>
+</nav>
+<!-- Toast Notification for Calling Waiter -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-secondary-fixed text-on-secondary-fixed px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-500 transform translate-y-4 flex items-center gap-3" id="waiterToast">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+<span class="font-label-md">Pelayan akan segera datang ke meja Anda.</span>
+</div>
+<script>
+        function callWaiter() {
+            const btn = document.getElementById('waiterBtn');
+            const toast = document.getElementById('waiterToast');
+            
+            // Interaction feedback
+            btn.innerHTML = `
+                <span class="material-symbols-outlined animate-spin" data-icon="refresh">refresh</span>
+                Memanggil...
+            `;
+            btn.classList.add('opacity-80');
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined" data-icon="done_all">done_all</span>
+                    Terkirim
+                `;
+                btn.classList.replace('bg-primary', 'bg-secondary');
+                
+                // Show toast
+                toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                
+                // Reset after some time
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    setTimeout(() => {
+                        btn.innerHTML = `
+                            <span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+                            Panggil Pelayan
+                        `;
+                        btn.classList.replace('bg-secondary', 'bg-primary');
+                        btn.classList.remove('opacity-80');
+                        btn.disabled = false;
+                    }, 1000);
+                }, 3000);
+            }, 1200);
+        }
+
+        // Ambient micro-interactions
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('touchstart', () => {
+                link.classList.add('scale-95');
+            });
+            link.addEventListener('touchend', () => {
+                link.classList.remove('scale-95');
+            });
+        });
+    </script>
+</body></html>
