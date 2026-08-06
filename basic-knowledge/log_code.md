@@ -281,3 +281,14 @@
 
 | 2026-08-04 | FIX | Guest submit 302 — root cause: form kirim items & bundles sebagai JSON string di hidden input, tapi controller validasi expect PHP array. Tambah `json_decode` sebelum validasi + relax validasi product_id/bundle_id dari `alpha_num`/`string` ke `required` (JSON decode hasilin integer, bukan string) | `app/Http/Controllers/Guest/OrderController.php` |
 
+## 2026-08-06
+
+| Tipe | Deskripsi | File |
+|------|-----------|------|
+| CREATE | CSS & JS Theme Spicy Bites Guest | `public/guest/spicy_bites/css/spicy_bites.css`, `public/guest/spicy_bites/js/spicy_bites.js` |
+| CREATE | View Template Guest Spicy Bites (Layout, Index, Review, Status, Partials) | `resources/views/guest/spicy_bites/{layouts/app, index, review, status, partials/_product_card, partials/_bundle_card}.blade.php` |
+| UPDATE | Fitur View Toggle Grid/List mode + responsive CSS di template Spicy Bites (persist di sessionStorage `sb_guest_view`) | `resources/views/guest/spicy_bites/index.blade.php`, `public/guest/spicy_bites/css/spicy_bites.css` |
+| FIX | Fix bug bundle 'undefined' di keranjang, perpindahan badge harga & icon api dari overlay gambar ke body card, dan pengecilan tombol tambah di List View | `resources/views/guest/spicy_bites/index.blade.php`, `resources/views/guest/spicy_bites/partials/_product_card.blade.php`, `public/guest/spicy_bites/css/spicy_bites.css` |
+| FIX | Pengaktifan trigger modal dari seluruh area kartu produk, bundle items payload parser (`data-bundle-items`), serta penyesuaian alur checkout -> review -> status pesanan | `resources/views/guest/metropolis_brew/{index, partials/_bundle_card}.blade.php` |
+| FIX | Perbaikan form submit `checkoutForm` (`pointerEvents = 'none'`) & pencocokan multi-key `sessionStorage` agar tombol 'Lanjut ke Pembayaran' berpindah 100% lancar ke Halaman Review | `resources/views/guest/{metropolis_brew, spicy_bites}/index.blade.php` |
+| UPDATE | Set `GUEST_TEMPLATE=metropolis_brew` di file `.env` | `.env` |
