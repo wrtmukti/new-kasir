@@ -23,6 +23,9 @@ class StockRequest extends FormRequest
             'stock_amount' => 'nullable|integer|min:0',
             'stock_price' => 'nullable|numeric|min:0',
             'stock_status' => 'nullable|integer|in:0,1',
+            'deduct_raw_material' => 'nullable|in:0,1',
+            'cogs_raw_material_id' => 'nullable',
+            'raw_qty_per_unit' => 'nullable|numeric|min:0',
         ];
     }
 

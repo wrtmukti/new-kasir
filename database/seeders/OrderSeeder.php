@@ -8,6 +8,7 @@ use App\Models\SysAdmin\Company;
 use App\Models\Admin\Table;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OrderSeeder extends Seeder
 {
@@ -19,112 +20,119 @@ class OrderSeeder extends Seeder
         $products = Product::where('delete_status', 0)->get()->keyBy('product_code');
         $tables = Table::where('delete_status', 0)->get();
 
-        $orders = [
-            [
-                'type' => 'dine_in',
-                'table_idx' => 0,
-                'status' => 'completed',
-                'items' => [
-                    ['code' => 'PRD-001', 'qty' => 2, 'note' => null],     // Nasi Goreng
-                    ['code' => 'PRD-013', 'qty' => 2, 'note' => 'Es batu'], // Es Teh
-                ],
-            ],
-            [
-                'type' => 'dine_in',
-                'table_idx' => 1,
-                'status' => 'completed',
-                'items' => [
-                    ['code' => 'PRD-003', 'qty' => 1, 'note' => 'Level 3'], // Ayam Geprek
-                    ['code' => 'PRD-015', 'qty' => 1, 'note' => null],     // Kopi Hitam
-                ],
-            ],
-            [
-                'type' => 'take_away',
-                'table_idx' => null,
-                'status' => 'completed',
-                'items' => [
-                    ['code' => 'PRD-007', 'qty' => 3, 'note' => 'Pake sambel'], // Bakso
-                    ['code' => 'PRD-023', 'qty' => 2, 'note' => null],         // Kentang
-                ],
-            ],
-            [
-                'type' => 'dine_in',
-                'table_idx' => 2,
-                'status' => 'in_progress',
-                'items' => [
-                    ['code' => 'PRD-005', 'qty' => 1, 'note' => null],     // Nasi Padang
-                    ['code' => 'PRD-016', 'qty' => 1, 'note' => 'Dingin'], // Kopi Susu
-                    ['code' => 'PRD-031', 'qty' => 1, 'note' => null],     // Keju Parut
-                ],
-            ],
-            [
-                'type' => 'delivery',
-                'table_idx' => null,
-                'status' => 'in_progress',
-                'items' => [
-                    ['code' => 'PRD-009', 'qty' => 2, 'note' => null],     // Mie Goreng
-                    ['code' => 'PRD-014', 'qty' => 2, 'note' => null],     // Es Jeruk
-                    ['code' => 'PRD-024', 'qty' => 1, 'note' => null],     // Pisang Goreng
-                ],
-            ],
-            [
-                'type' => 'dine_in',
-                'table_idx' => 3,
-                'status' => 'in_progress',
-                'items' => [
-                    ['code' => 'PRD-002', 'qty' => 1, 'note' => null],     // Mie Ayam
-                    ['code' => 'PRD-017', 'qty' => 1, 'note' => null],     // Matcha Latte
-                ],
-            ],
-        ];
+        if ($products->isEmpty()) return;
 
-        foreach ($orders as $data) {
-            $tableId = null;
-            if ($data['table_idx'] !== null && isset($tables[$data['table_idx']])) {
-                $tableId = $tables[$data['table_idx']]->table_id;
-            }
+        $makananCodes = ['PRD-001', 'PRD-002', 'PRD-003', 'PRD-004', 'PRD-005', 'PRD-006', 'PRD-007', 'PRD-008', 'PRD-009', 'PRD-010', 'PRD-011', 'PRD-012'];
+        $minumanCodes = ['PRD-013', 'PRD-014', 'PRD-015', 'PRD-016', 'PRD-017', 'PRD-018', 'PRD-019', 'PRD-020', 'PRD-021', 'PRD-022'];
+        $snackCodes = ['PRD-023', 'PRD-024', 'PRD-025', 'PRD-026', 'PRD-027', 'PRD-028', 'PRD-029', 'PRD-030'];
+        $toppingCodes = ['PRD-031', 'PRD-032', 'PRD-033', 'PRD-034'];
 
-            $grandTotal = 0;
-            $syncData = [];
+        $year = (int) date('Y');
+        $month = (int) date('n');
+        $currentDay = (int) date('j');
+        $targetDays = max(26, min($currentDay, 28));
 
-            foreach ($data['items'] as $item) {
-                $product = $products->get($item['code']);
-                if (!$product) continue;
+        $orderTypes = ['dine_in', 'dine_in', 'dine_in', 'take_away', 'delivery'];
+        $notesPool = [null, null, null, 'Tidak pedas', 'Pedes banget', 'Es batu dipisah', 'Tanpa bawang goreng', 'Pake sambel extra', 'Sedikit gula'];
 
-                $price = (float) $product->product_price;
-                $subtotal = $price * $item['qty'];
-                $grandTotal += $subtotal;
+        $totalOrdersCreated = 0;
 
-                $syncData[$product->product_id] = [
-                    'company_id' => $company->company_id,
-                    'quantity' => $item['qty'],
-                    'note' => $item['note'],
-                    'delete_status' => 0,
-                    'created_by' => 'seeder',
-                ];
-            }
+        // Loop dari tanggal 1 sampai targetDays (min 26 hari)
+        for ($day = 1; $day <= $targetDays; $day++) {
+            $date = Carbon::create($year, $month, $day);
+            $isWeekend = $date->isWeekend();
 
-            if (empty($syncData)) continue;
+            // Jumlah order per hari (Weekend lebih ramai)
+            $dailyOrderCount = $isWeekend ? rand(12, 20) : rand(6, 12);
 
-            DB::transaction(function () use ($company, $data, $tableId, $grandTotal, $syncData) {
-                $order = Order::create([
-                    'company_id' => $company->company_id,
-                    'order_type' => $data['type'],
-                    'order_status' => $data['status'],
-                    'order_grand_total' => $grandTotal,
-                    'order_table_id' => $tableId,
-                    'created_by' => 'seeder',
-                ]);
+            for ($i = 0; $i < $dailyOrderCount; $i++) {
+                // Tentukan jam acak antara jam 10:00 - 21:30
+                $hour = rand(10, 21);
+                $minute = rand(0, 59);
+                $second = rand(0, 59);
+                $orderTimestamp = Carbon::create($year, $month, $day, $hour, $minute, $second);
 
-                $order->products()->sync($syncData);
-
-                // Update status meja jadi terisi kalo dine_in & in_progress
-                if ($data['type'] === 'dine_in' && $tableId && $data['status'] === 'in_progress') {
-                    Table::where('table_id', $tableId)->update(['table_status' => 'terisi']);
+                $orderType = $orderTypes[array_rand($orderTypes)];
+                $tableId = null;
+                if ($orderType === 'dine_in' && $tables->isNotEmpty()) {
+                    $tableId = $tables->random()->table_id;
                 }
-            });
+
+                // Pilih 1-3 Makanan, 1-2 Minuman, 0-2 Snack/Topping
+                $selectedCodes = [];
+                $makananQty = rand(1, 3);
+                for ($m = 0; $m < $makananQty; $m++) {
+                    $selectedCodes[] = $makananCodes[array_rand($makananCodes)];
+                }
+                $minumanQty = rand(1, 2);
+                for ($m = 0; $m < $minumanQty; $m++) {
+                    $selectedCodes[] = $minumanCodes[array_rand($minumanCodes)];
+                }
+                if (rand(0, 1) === 1) {
+                    $selectedCodes[] = $snackCodes[array_rand($snackCodes)];
+                }
+                if (rand(0, 1) === 1) {
+                    $selectedCodes[] = $toppingCodes[array_rand($toppingCodes)];
+                }
+
+                $grandTotal = 0;
+                $syncData = [];
+
+                foreach ($selectedCodes as $code) {
+                    $product = $products->get($code);
+                    if (!$product) continue;
+
+                    $itemQty = rand(1, 2);
+                    $price = (float) $product->product_price;
+                    $subtotal = $price * $itemQty;
+                    $grandTotal += $subtotal;
+
+                    $note = $notesPool[array_rand($notesPool)];
+
+                    if (isset($syncData[$product->product_id])) {
+                        $syncData[$product->product_id]['quantity'] += $itemQty;
+                    } else {
+                        $syncData[$product->product_id] = [
+                            'company_id' => $company->company_id,
+                            'quantity' => $itemQty,
+                            'note' => $note,
+                            'delete_status' => 0,
+                            'created_by' => 'seeder',
+                        ];
+                    }
+                }
+
+                if (empty($syncData)) continue;
+
+                // Hari ini beberapa pesanan terakhir bisa in_progress
+                $status = 'completed';
+                if ($day === $targetDays && $i >= ($dailyOrderCount - 2)) {
+                    $status = 'in_progress';
+                }
+
+                DB::transaction(function () use ($company, $orderType, $status, $grandTotal, $tableId, $orderTimestamp, $syncData) {
+                    $order = Order::create([
+                        'company_id' => $company->company_id,
+                        'order_type' => $orderType,
+                        'order_status' => $status,
+                        'order_grand_total' => $grandTotal,
+                        'order_table_id' => $tableId,
+                        'created_by' => 'seeder',
+                        'created_at' => $orderTimestamp,
+                        'updated_at' => $orderTimestamp,
+                    ]);
+
+                    $order->products()->sync($syncData);
+
+                    if ($orderType === 'dine_in' && $tableId && $status === 'in_progress') {
+                        Table::where('table_id', $tableId)->update(['table_status' => 'terisi']);
+                    }
+                });
+
+                $totalOrdersCreated++;
+            }
         }
 
-        $this->command->info('✅ ' . Order::count() . ' pesanan + order_product berhasil di-seed.');
+        $this->command->info("✅ {$totalOrdersCreated} pesanan (rentang {$targetDays} hari) + order_product berhasil di-seed.");
     }
 }

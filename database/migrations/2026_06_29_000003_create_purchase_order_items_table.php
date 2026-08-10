@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('purchase_order_items', function (Blueprint $table) {
             $table->id('po_item_id');
             $table->string('po_id')->nullable();                // FK integer ke purchase_orders
-            $table->string('stock_id')->nullable();              // FK integer ke stocks
+            $table->string('cogs_raw_material_id')->nullable();  // FK ke cogs_raw_materials
 
             $table->integer('qty');                              // jumlah dipesan
             $table->decimal('price', 15, 2)->default(0);         // harga beli per unit

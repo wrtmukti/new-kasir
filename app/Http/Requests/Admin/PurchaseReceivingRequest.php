@@ -16,7 +16,7 @@ class PurchaseReceivingRequest extends FormRequest
             'receiving_notes' => 'nullable|string',
             'items' => 'required|array|min:1',
             'items.*.po_item_id' => 'required|string',
-            'items.*.stock_id' => 'required|string',
+            'items.*.cogs_raw_material_id' => 'required|string',
             'items.*.received_qty' => 'required|integer|min:0',
             'items.*.received_price' => 'required|numeric|min:0',
         ];

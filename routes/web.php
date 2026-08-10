@@ -53,7 +53,6 @@ Route::get('/docs', function () {
 use App\Http\Controllers\SysAdmin\CompanyController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\SupplierController;
-use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TableController;
@@ -61,8 +60,13 @@ use App\Http\Controllers\Admin\BundleController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\DiscountController;
-use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\Keuangan\CogsRawMaterialController;
+use App\Http\Controllers\Admin\Keuangan\CogsRecipeController;
+use App\Http\Controllers\Admin\Keuangan\CogsWasteLogController;
+use App\Http\Controllers\Admin\Keuangan\HppReportController;
+use App\Http\Controllers\Admin\Keuangan\MenuAnalyticsController;
+use App\Http\Controllers\Admin\Keuangan\PurchaseOrderController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -80,15 +84,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
     Route::resource('supplier', SupplierController::class);
-
-    // Purchase Order + Receiving
-    Route::get('purchase-order/data', [PurchaseOrderController::class, 'data'])->name('purchase-order.data');
-    Route::post('purchase-order/{purchase_order}/confirm', [PurchaseOrderController::class, 'confirm'])->name('purchase-order.confirm');
-    Route::post('purchase-order/{purchase_order}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-order.cancel');
-    Route::post('purchase-order/{purchase_order}/return', [PurchaseOrderController::class, 'return'])->name('purchase-order.return');
-    Route::get('purchase-order/{purchase_order}/receiving/create', [PurchaseOrderController::class, 'receivingCreate'])->name('purchase-order.receiving.create');
-    Route::post('purchase-order/{purchase_order}/receiving', [PurchaseOrderController::class, 'receivingStore'])->name('purchase-order.receiving.store');
-    Route::resource('purchase-order', PurchaseOrderController::class);
 
     // Bundle
     Route::get('bundle/data', [BundleController::class, 'data'])->name('bundle.data');
@@ -144,6 +139,37 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('voucher/data', [HistoryController::class, 'voucherData'])->name('voucher.data');
         Route::get('voucher/{id}', [HistoryController::class, 'voucherShow'])->name('voucher.show');
     });
+
+    // Keuangan (COGS & HPP Decoupled)
+    Route::prefix('keuangan')->name('keuangan.')->group(function () {
+        Route::get('cogs-raw-material/data', [CogsRawMaterialController::class, 'data'])->name('cogs-raw-material.data');
+        Route::post('cogs-raw-material/{id}/opname', [CogsRawMaterialController::class, 'opname'])->name('cogs-raw-material.opname');
+        Route::resource('cogs-raw-material', CogsRawMaterialController::class);
+
+        Route::get('cogs-recipe/data', [CogsRecipeController::class, 'data'])->name('cogs-recipe.data');
+        Route::resource('cogs-recipe', CogsRecipeController::class);
+
+        Route::get('cogs-waste/data', [CogsWasteLogController::class, 'data'])->name('cogs-waste.data');
+        Route::resource('cogs-waste', CogsWasteLogController::class);
+
+        // Purchase Order + Receiving (Keuangan & Raw Stock)
+        Route::get('purchase-order/data', [PurchaseOrderController::class, 'data'])->name('purchase-order.data');
+        Route::post('purchase-order/{purchase_order}/confirm', [PurchaseOrderController::class, 'confirm'])->name('purchase-order.confirm');
+        Route::post('purchase-order/{purchase_order}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-order.cancel');
+        Route::post('purchase-order/{purchase_order}/return', [PurchaseOrderController::class, 'return'])->name('purchase-order.return');
+        Route::get('purchase-order/{purchase_order}/receiving/create', [PurchaseOrderController::class, 'receivingCreate'])->name('purchase-order.receiving.create');
+        Route::post('purchase-order/{purchase_order}/receiving', [PurchaseOrderController::class, 'receivingStore'])->name('purchase-order.receiving.store');
+        Route::resource('purchase-order', PurchaseOrderController::class);
+
+        Route::get('hpp-report', [HppReportController::class, 'index'])->name('hpp-report.index');
+        Route::post('hpp-report/operational', [HppReportController::class, 'storeOperational'])->name('hpp-report.store-operational');
+
+        Route::get('menu-analytics', [MenuAnalyticsController::class, 'index'])->name('menu-analytics.index');
+    });
+
+    Route::get('guide', function () {
+        return view('admin.guide.index');
+    })->name('guide.index');
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

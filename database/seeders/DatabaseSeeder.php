@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\SysAdmin\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\Keuangan\CogsRawMaterialSeeder;
+use Database\Seeders\Keuangan\CogsRecipeSeeder;
+use Database\Seeders\Keuangan\CogsWasteLogSeeder;
+use Database\Seeders\Keuangan\HppFinancialReportSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +21,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             TableSeeder::class,
             StockSeeder::class,
+            CogsRawMaterialSeeder::class,
             PurchaseOrderSeeder::class,
             ProductSeeder::class,
             BundleSeeder::class,
@@ -31,6 +35,9 @@ class DatabaseSeeder extends Seeder
             HistoryProductSeeder::class,
             HistoryVoucherSeeder::class,
             OrderBundleSeeder::class,
+            CogsRecipeSeeder::class,
+            CogsWasteLogSeeder::class,
+            HppFinancialReportSeeder::class,
         ]);
     }
 }

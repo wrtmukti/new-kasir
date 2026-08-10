@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StockRequest;
+use App\Models\Admin\Keuangan\CogsRawMaterial;
+use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
 use App\Models\Admin\Stock;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\Request;
@@ -59,7 +61,8 @@ class StockController extends Controller
     public function create()
     {
         $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.stock.create', compact('companies'));
+        $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
+        return view('admin.stock.create', compact('companies', 'cogsRawMaterials'));
     }
 
     public function store(StockRequest $request)
@@ -70,7 +73,15 @@ class StockController extends Controller
         $validated['stock_status'] = $validated['stock_status'] ?? 1;
         $validated['stock_amount'] = $validated['stock_amount'] ?? 0;
 
-        $stock = Stock::create($validated);
+        $stockData = collect($validated)->only([
+            'company_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
+            'stock_type', 'stock_unit', 'stock_amount', 'stock_price', 'stock_status'
+        ])->toArray();
+
+        $stock = Stock::create($stockData);
+
+        // Optional Deduction of Raw Material (COGS)
+        $this->handleRawDeduction($request, $stock);
 
         // Log ke stock_histories
         DB::table('stock_histories')->insert([
@@ -90,7 +101,7 @@ class StockController extends Controller
             'effective_date' => now(),
             'action_type' => 'create',
             'changed_by' => $validated['created_by'] ?? 'admin',
-            'created_by' => $validated['created_by'],
+            'created_by' => $validated['created_by'] ?? 'admin',
             'delete_status' => 0,
             'created_at' => now(),
             'updated_at' => now(),
@@ -109,7 +120,8 @@ class StockController extends Controller
     public function edit(Stock $stock)
     {
         $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.stock.edit', compact('stock', 'companies'));
+        $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
+        return view('admin.stock.edit', compact('stock', 'companies', 'cogsRawMaterials'));
     }
 
     public function update(StockRequest $request, Stock $stock)
@@ -118,7 +130,15 @@ class StockController extends Controller
 
         $validated['stock_slug'] = str()->slug($validated['stock_name']);
 
-        $stock->update($validated);
+        $stockData = collect($validated)->only([
+            'company_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
+            'stock_type', 'stock_unit', 'stock_amount', 'stock_price', 'stock_status'
+        ])->toArray();
+
+        $stock->update($stockData);
+
+        // Optional Deduction of Raw Material (COGS)
+        $this->handleRawDeduction($request, $stock);
 
         // Log ke stock_histories
         DB::table('stock_histories')->insert([
@@ -138,7 +158,7 @@ class StockController extends Controller
             'effective_date' => now(),
             'action_type' => 'update',
             'changed_by' => $validated['updated_by'] ?? 'admin',
-            'created_by' => $validated['updated_by'],
+            'created_by' => $validated['updated_by'] ?? 'admin',
             'delete_status' => 0,
             'created_at' => now(),
             'updated_at' => now(),
@@ -150,7 +170,6 @@ class StockController extends Controller
 
     public function destroy(Stock $stock)
     {
-        // Log ke stock_histories dulu sebelum soft delete
         DB::table('stock_histories')->insert([
             'stock_id' => $stock->stock_id,
             'company_id' => $stock->company_id,
@@ -182,5 +201,40 @@ class StockController extends Controller
 
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil dihapus.');
+    }
+
+    private function handleRawDeduction(Request $request, Stock $stock)
+    {
+        if ($request->input('deduct_raw_material') == 1 && $request->filled('cogs_raw_material_id')) {
+            $cogsRawMaterialId = $request->input('cogs_raw_material_id');
+            $rawQtyPerUnit = (float) $request->input('raw_qty_per_unit', 0);
+            $stockAmount = (float) $stock->stock_amount;
+            $totalRawUsed = $rawQtyPerUnit * $stockAmount;
+
+            if ($totalRawUsed > 0) {
+                $rawMat = CogsRawMaterial::find($cogsRawMaterialId);
+                if ($rawMat) {
+                    $rawMat->amount = max(0, (float)$rawMat->amount - $totalRawUsed);
+                    $rawMat->save();
+
+                    CogsRawMaterialHistory::create([
+                        'cogs_raw_material_id' => $rawMat->cogs_raw_material_id,
+                        'company_id' => $rawMat->company_id,
+                        'name' => $rawMat->name,
+                        'unit' => $rawMat->unit,
+                        'amount' => $rawMat->amount,
+                        'price_per_unit' => $rawMat->price_per_unit,
+                        'loss_percent' => $rawMat->loss_percent,
+                        'yield_percent' => $rawMat->yield_percent,
+                        'effective_price' => $rawMat->effective_price,
+                        'action_type' => 'production',
+                        'changed_by' => 'Admin',
+                        'effective_date' => now(),
+                        'history_remark' => "Pembuatan Stok {$stock->stock_name}: Dipakai {$totalRawUsed} {$rawMat->unit} {$rawMat->name} (Takaran {$rawQtyPerUnit} {$rawMat->unit}/unit x {$stockAmount} {$stock->stock_unit})",
+                        'created_by' => 'admin',
+                    ]);
+                }
+            }
+        }
     }
 }

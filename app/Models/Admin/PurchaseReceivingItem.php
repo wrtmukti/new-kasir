@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Admin\Keuangan\CogsRawMaterial;
 
 class PurchaseReceivingItem extends Model
 {
@@ -10,7 +11,7 @@ class PurchaseReceivingItem extends Model
     protected $primaryKey = 'receiving_item_id';
 
     protected $fillable = [
-        'receiving_id', 'po_item_id', 'stock_id',
+        'receiving_id', 'po_item_id', 'cogs_raw_material_id',
         'received_qty', 'received_price', 'subtotal', 'notes',
         'created_by', 'updated_by', 'delete_status',
     ];
@@ -32,8 +33,8 @@ class PurchaseReceivingItem extends Model
         return $this->belongsTo(PurchaseOrderItem::class, 'po_item_id', 'po_item_id');
     }
 
-    public function stock()
+    public function cogsRawMaterial()
     {
-        return $this->belongsTo(Stock::class, 'stock_id', 'stock_id');
+        return $this->belongsTo(CogsRawMaterial::class, 'cogs_raw_material_id', 'cogs_raw_material_id');
     }
 }

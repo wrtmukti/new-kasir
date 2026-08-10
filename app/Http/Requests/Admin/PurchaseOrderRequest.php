@@ -15,7 +15,7 @@ class PurchaseOrderRequest extends FormRequest
             'po_notes' => 'nullable|string',
             'po_status' => 'nullable|string|in:draft,ordered',
             'items' => 'required|array|min:1',
-            'items.*.stock_id' => 'required|string',
+            'items.*.cogs_raw_material_id' => 'required|string',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
         ];
@@ -27,7 +27,7 @@ class PurchaseOrderRequest extends FormRequest
             'supplier_id.required' => 'Supplier wajib dipilih.',
             'items.required' => 'Minimal 1 item bahan.',
             'items.min' => 'Minimal 1 item bahan.',
-            'items.*.stock_id.required' => 'Bahan wajib dipilih.',
+            'items.*.cogs_raw_material_id.required' => 'Bahan mentah wajib dipilih.',
             'items.*.qty.required' => 'Jumlah wajib diisi.',
             'items.*.qty.min' => 'Jumlah minimal 1.',
             'items.*.price.required' => 'Harga wajib diisi.',

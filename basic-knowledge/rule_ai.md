@@ -159,3 +159,13 @@
     - Setiap selesai buat file baru, update file, fix bug, rename, atau perubahan penting apapun → langsung catat di `basic-knowledge/log_code.md`.
     - Format: `YYYY-MM-DD | [TIPE] | Deskripsi | File terkait`
     - Jangan nunggu selesai sesi, jangan nunggu diminta. **Ada perubahan → langsung catat.**
+
+11. **Cek branch + todo sebelum mulai kerja:**
+    - Setiap sesi dimulai / setelah baca basic-knowledge → **cek dulu ada di branch mana** (`git branch --show-current`).
+    - Setelah tau branch, **cek apakah ada file todo yang namanya nyambung ke branch itu** di `basic-knowledge/` (contoh: branch `deva-branch` → `todo_deva_branch.md`).
+    - Kalau todo ada:
+      - Bilang ke user: "🚩 Lagi di branch `X`."
+      - Tanya **konfirmasi dulu** sebelum ngerjain: "Ada `todo_deva_branch.md`. Mau gue cek isi & jalanin todo-nya?"
+      - Tunggu user bilang YA sebelum jalankan TODO.
+    - Kalau todo nggak ada → jalan normal (aturan-aturan lain).
+    - Jangan lari dulu ngoding; **konfirmasi dulu sama benar.**

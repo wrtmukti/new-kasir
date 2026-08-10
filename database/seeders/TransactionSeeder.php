@@ -65,7 +65,7 @@ class TransactionSeeder extends Seeder
             // Simpan transaction
             $transaction = Transaction::create([
                 'company_id' => $order->company_id,
-                'transaction_code' => 'TRX-' . $order->order_id . '-' . $order->created_at->format('Ymd'),
+                'transaction_code' => 'TRX-' . $order->order_id . '-' . $order->created_at->format('YmdHi'),
                 'transaction_date' => $order->created_at,
                 'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => 0,
@@ -76,6 +76,8 @@ class TransactionSeeder extends Seeder
                 'transaction_customer_id' => $order->order_customer_id,
                 'transaction_remark' => 'Dari pesanan #' . $order->order_id,
                 'created_by' => 'seeder',
+                'created_at' => $order->created_at,
+                'updated_at' => $order->created_at,
             ]);
 
             // Simpan transaction_items (include diskon)
@@ -94,6 +96,8 @@ class TransactionSeeder extends Seeder
                     'subtotal' => $item['subtotal'],
                     'note' => $item['note'],
                     'created_by' => 'seeder',
+                    'created_at' => $order->created_at,
+                    'updated_at' => $order->created_at,
                 ]);
             }
 

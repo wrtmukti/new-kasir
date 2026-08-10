@@ -31,9 +31,6 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'supplier') active @endif">
           <a href="{{ route('admin.supplier.index') }}" class="nav-link"><i class="bi bi-truck"></i><span class="nav-label-text">Supplier</span></a>
         </li>
-        <li class="nav-item @if(($activeMenu ?? '') === 'purchase-order') active @endif">
-          <a href="{{ route('admin.purchase-order.index') }}" class="nav-link"><i class="bi bi-cart-plus"></i><span class="nav-label-text">Purchase Order</span></a>
-        </li>
       </ul>
 
       <div class="nav-section-title">Transaksi</div>
@@ -78,10 +75,25 @@
         </li>
       </ul>
 
-      <div class="nav-section-title">Laporan</div>
+      <div class="nav-section-title">Keuangan & COGS</div>
       <ul class="list-unstyled">
-        <li class="nav-item">
-          <a href="#" class="nav-link"><i class="bi bi-graph-up-arrow"></i><span class="nav-label-text">Analitik</span></a>
+        <li class="nav-item @if(($activeMenu ?? '') === 'cogs-raw-material') active @endif">
+          <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}" class="nav-link"><i class="bi bi-box-seam"></i><span class="nav-label-text">Bahan Mentah COGS</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'purchase-order') active @endif">
+          <a href="{{ route('admin.keuangan.purchase-order.index') }}" class="nav-link"><i class="bi bi-cart-plus"></i><span class="nav-label-text">Purchase Order (PO)</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'cogs-recipe') active @endif">
+          <a href="{{ route('admin.keuangan.cogs-recipe.index') }}" class="nav-link"><i class="bi bi-book"></i><span class="nav-label-text">Resep & COGS Menu</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'cogs-waste') active @endif">
+          <a href="{{ route('admin.keuangan.cogs-waste.index') }}" class="nav-link"><i class="bi bi-trash3"></i><span class="nav-label-text">Bahan Terbuang (Waste Log)</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'hpp-report') active @endif">
+          <a href="{{ route('admin.keuangan.hpp-report.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i><span class="nav-label-text">Laporan HPP & Laba Rugi</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'menu-analytics') active @endif">
+          <a href="{{ route('admin.keuangan.menu-analytics.index') }}" class="nav-link"><i class="bi bi-pie-chart-fill"></i><span class="nav-label-text">Performa Penjualan & Grafik</span></a>
         </li>
       </ul>
 
@@ -101,6 +113,13 @@
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'history-bundle') active @endif">
           <a href="{{ route('admin.history.bundle.index') }}" class="nav-link"><i class="bi bi-gift"></i><span class="nav-label-text">Riwayat Bundle</span></a>
+        </li>
+      </ul>
+
+      <div class="nav-section-title">Bantuan</div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'guide') active @endif">
+          <a href="{{ route('admin.guide.index') }}" class="nav-link"><i class="bi bi-book-half"></i><span class="nav-label-text">Cara Penggunaan & Alur</span></a>
         </li>
       </ul>
     </nav>
