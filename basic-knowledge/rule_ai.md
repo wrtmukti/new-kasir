@@ -161,11 +161,11 @@
     - Jangan nunggu selesai sesi, jangan nunggu diminta. **Ada perubahan → langsung catat.**
 
 11. **Cek branch + todo sebelum mulai kerja:**
-    - Setiap sesi dimulai / setelah baca basic-knowledge → **cek dulu ada di branch mana** (`git branch --show-current`).
-    - Setelah tau branch, **cek apakah ada file todo yang namanya nyambung ke branch itu** di `basic-knowledge/` (contoh: branch `deva-branch` → `todo_deva_branch.md`).
+    - Setiap sesi dimulai / setelah baca basic-knowledge &rarr; **cek dulu ada di branch mana** (`git branch --show-current`).
+    - Setelah tau branch, **cek apakah ada file todo yang namanya nyambung ke branch itu** di `basic-knowledge/deva-branch/todo.md` atau `basic-knowledge/` (contoh: branch `deva-branch` &rarr; `basic-knowledge/deva-branch/todo.md`).
     - Kalau todo ada:
-      - Bilang ke user: "🚩 Lagi di branch `X`."
-      - Tanya **konfirmasi dulu** sebelum ngerjain: "Ada `todo_deva_branch.md`. Mau gue cek isi & jalanin todo-nya?"
+      - Bilang ke user: "🚩 Lagi di branch `deva-branch`."
+      - Tanya **konfirmasi dulu** sebelum ngerjain: "Ada `basic-knowledge/deva-branch/todo.md`. Mau gue cek isi & jalanin todo-nya?"
       - Tunggu user bilang YA sebelum jalankan TODO.
-    - Kalau todo nggak ada → jalan normal (aturan-aturan lain).
+    - Kalau todo nggak ada &rarr; jalan normal (aturan-aturan lain).
     - Jangan lari dulu ngoding; **konfirmasi dulu sama benar.**
