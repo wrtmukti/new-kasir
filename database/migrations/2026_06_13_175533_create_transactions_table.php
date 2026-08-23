@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id('transaction_id'); // kusus customer
             $table->string('company_id')->nullable();
+            $table->unsignedBigInteger('daily_closing_id')->nullable();
+
 
             $table->string('transaction_code')->nullable();
             $table->string('transaction_date')->nullable(); // pending, in progress, completed, cancelled

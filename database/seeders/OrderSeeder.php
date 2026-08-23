@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Admin\Order;
 use App\Models\Admin\Product;
+use App\Models\Admin\DailyClosing;
 use App\Models\SysAdmin\Company;
+
 use App\Models\Admin\Table;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +77,7 @@ class OrderSeeder extends Seeder
                     $selectedCodes[] = $toppingCodes[array_rand($toppingCodes)];
                 }
 
-                $grandTotal = 0;
+                $itemSubtotalSum = 0;
                 $syncData = [];
 
                 foreach ($selectedCodes as $code) {
@@ -85,7 +87,7 @@ class OrderSeeder extends Seeder
                     $itemQty = rand(1, 2);
                     $price = (float) $product->product_price;
                     $subtotal = $price * $itemQty;
-                    $grandTotal += $subtotal;
+                    $itemSubtotalSum += $subtotal;
 
                     $note = $notesPool[array_rand($notesPool)];
 
@@ -104,23 +106,47 @@ class OrderSeeder extends Seeder
 
                 if (empty($syncData)) continue;
 
+                // Hitung Service Charge (5%) & Tax PB1 (10% Exclusive)
+                $serviceChargePercent = 5.00;
+                $serviceChargeAmount = round($itemSubtotalSum * ($serviceChargePercent / 100), 2);
+                $taxableBase = $itemSubtotalSum + $serviceChargeAmount;
+                $taxPercent = 10.00;
+                $taxAmount = round($taxableBase * ($taxPercent / 100), 2);
+                $grandTotal = $taxableBase + $taxAmount;
+
                 // Hari ini beberapa pesanan terakhir bisa in_progress
                 $status = 'completed';
                 if ($day === $targetDays && $i >= ($dailyOrderCount - 2)) {
                     $status = 'in_progress';
                 }
 
-                DB::transaction(function () use ($company, $orderType, $status, $grandTotal, $tableId, $orderTimestamp, $syncData) {
+                // Cari daily_closing_id untuk shift tanggal & jam ini
+                $shiftNumber = ((int) $orderTimestamp->format('H')) < 15 ? 1 : 2;
+                $closing = DailyClosing::where('company_id', $company->company_id)
+                    ->where('business_date', $date->format('Y-m-d'))
+                    ->where('shift_number', $shiftNumber)
+                    ->first();
+                $dailyClosingId = $closing ? $closing->id : null;
+
+                DB::transaction(function () use ($company, $dailyClosingId, $orderType, $status, $grandTotal, $taxPercent, $taxAmount, $serviceChargePercent, $serviceChargeAmount, $tableId, $orderTimestamp, $syncData) {
+
                     $order = Order::create([
                         'company_id' => $company->company_id,
+                        'daily_closing_id' => $dailyClosingId,
                         'order_type' => $orderType,
                         'order_status' => $status,
                         'order_grand_total' => $grandTotal,
+                        'tax_percent' => $taxPercent,
+                        'tax_amount' => $taxAmount,
+                        'tax_type' => 'exclusive',
+                        'service_charge_percent' => $serviceChargePercent,
+                        'service_charge_amount' => $serviceChargeAmount,
                         'order_table_id' => $tableId,
                         'created_by' => 'seeder',
                         'created_at' => $orderTimestamp,
                         'updated_at' => $orderTimestamp,
                     ]);
+
 
                     $order->products()->sync($syncData);
 
@@ -128,6 +154,7 @@ class OrderSeeder extends Seeder
                         Table::where('table_id', $tableId)->update(['table_status' => 'terisi']);
                     }
                 });
+
 
                 $totalOrdersCreated++;
             }

@@ -65,12 +65,13 @@ class TransactionSeeder extends Seeder
             // Simpan transaction
             $transaction = Transaction::create([
                 'company_id' => $order->company_id,
+                'daily_closing_id' => $order->daily_closing_id,
                 'transaction_code' => 'TRX-' . $order->order_id . '-' . $order->created_at->format('YmdHi'),
                 'transaction_date' => $order->created_at,
                 'transaction_subtotal' => $totalSubtotal,
-                'transaction_tax' => 0,
-                'transaction_service_charge' => 0,
-                'transaction_grand_total' => $totalSubtotal,
+                'transaction_tax' => (float) ($order->tax_amount ?? 0),
+                'transaction_service_charge' => (float) ($order->service_charge_amount ?? 0),
+                'transaction_grand_total' => (float) ($order->order_grand_total ?? $totalSubtotal),
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
@@ -79,6 +80,25 @@ class TransactionSeeder extends Seeder
                 'created_at' => $order->created_at,
                 'updated_at' => $order->created_at,
             ]);
+
+            // Update statistik DailyClosing jika terikat
+            if ($order->daily_closing_id) {
+                $closing = \App\Models\Admin\DailyClosing::find($order->daily_closing_id);
+                if ($closing) {
+                    $grandTotal = (float) ($order->order_grand_total ?? $totalSubtotal);
+                    // Alternating cash vs non-cash untuk variasi data
+                    if ($order->order_id % 2 === 0) {
+                        $closing->system_cash_sales += $grandTotal;
+                    } else {
+                        $closing->system_non_cash_sales += $grandTotal;
+                    }
+                    $closing->system_expected_cash = $closing->starting_cash + $closing->system_cash_sales;
+                    $closing->actual_cash_counted = $closing->system_expected_cash;
+                    $closing->save();
+                }
+            }
+
+
 
             // Simpan transaction_items (include diskon)
             foreach ($items as $item) {

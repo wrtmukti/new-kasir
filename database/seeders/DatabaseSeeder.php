@@ -18,8 +18,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CompanySeeder::class,
+            TaxSeeder::class,
+            ServiceChargeSeeder::class,
+            ShiftSeeder::class,
             SupplierSeeder::class,
+
             TableSeeder::class,
+
             StockSeeder::class,
             CogsRawMaterialSeeder::class,
             PurchaseOrderSeeder::class,
@@ -27,7 +32,9 @@ class DatabaseSeeder extends Seeder
             BundleSeeder::class,
             DiscountSeeder::class,
             VoucherSeeder::class,
+            DailyClosingSeeder::class,
             OrderSeeder::class,
+
             TransactionSeeder::class,
             HistoryStockSeeder::class,
             HistoryDiscountSeeder::class,

@@ -39,8 +39,9 @@
           <a href="{{ route('admin.order.index') }}" class="nav-link"><i class="bi bi-bag-fill"></i><span class="nav-label-text">Pesan</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'order-list') active @endif">
-          <a href="{{ route('admin.order.list') }}" class="nav-link"><i class="bi bi-receipt"></i><span class="nav-label-text">Riwayat Pesanan</span></a>
+          <a href="{{ route('admin.order.list') }}" class="nav-link"><i class="bi bi-receipt"></i><span class="nav-label-text">Daftar Pesanan (Konfirmasi Order)</span></a>
         </li>
+
         <li class="nav-item @if(($activeMenu ?? '') === 'transaction') active @endif">
           <a href="{{ route('admin.transaction.index') }}" class="nav-link"><i class="bi bi-credit-card"></i><span class="nav-label-text">Transaksi</span></a>
         </li>
@@ -75,9 +76,20 @@
         </li>
       </ul>
 
-      <div class="nav-section-title">Keuangan & COGS</div>
+      <div class="nav-section-title">Keuangan & Setting</div>
       <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'setting-tax') active @endif">
+          <a href="{{ route('admin.keuangan.setting-tax.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Master Pajak & Service</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'setting-shift') active @endif">
+          <a href="{{ route('admin.keuangan.setting-shift.index') }}" class="nav-link"><i class="bi bi-clock-history"></i><span class="nav-label-text">Master Shift & Cut-off</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'shift-operational') active @endif">
+          <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link"><i class="bi bi-person-badge-fill" style="color: #4ade80;"></i><span class="nav-label-text">Buka / Tutup Shift (Clock-In)</span></a>
+        </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'cogs-raw-material') active @endif">
+
+
           <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}" class="nav-link"><i class="bi bi-box-seam"></i><span class="nav-label-text">Bahan Mentah COGS</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'purchase-order') active @endif">
@@ -89,13 +101,39 @@
         <li class="nav-item @if(($activeMenu ?? '') === 'cogs-waste') active @endif">
           <a href="{{ route('admin.keuangan.cogs-waste.index') }}" class="nav-link"><i class="bi bi-trash3"></i><span class="nav-label-text">Bahan Terbuang (Waste Log)</span></a>
         </li>
+      </ul>
+
+      <div class="nav-section-title">Laporan & Analytics</div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-dashboard') active @endif">
+          <a href="{{ route('admin.reports.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i><span class="nav-label-text">Pusat Dashboard Laporan</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-sales') active @endif">
+          <a href="{{ route('admin.reports.sales') }}" class="nav-link"><i class="bi bi-credit-card-2-front"></i><span class="nav-label-text">Laporan Penjualan</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-products') active @endif">
+          <a href="{{ route('admin.reports.products') }}" class="nav-link"><i class="bi bi-cup-hot"></i><span class="nav-label-text">Performa Menu Terlaris</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-cashflow') active @endif">
+          <a href="{{ route('admin.reports.cashflow') }}" class="nav-link"><i class="bi bi-cash-stack"></i><span class="nav-label-text">Laporan Arus Kas</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-tax-service') active @endif">
+          <a href="{{ route('admin.reports.tax-service') }}" class="nav-link"><i class="bi bi-bank"></i><span class="nav-label-text">Laporan Pajak & Service</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-inventory') active @endif">
+          <a href="{{ route('admin.reports.inventory') }}" class="nav-link"><i class="bi bi-boxes"></i><span class="nav-label-text">Laporan Stok & Waste</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'reports-shifts') active @endif">
+          <a href="{{ route('admin.reports.shifts') }}" class="nav-link"><i class="bi bi-shield-lock"></i><span class="nav-label-text">Audit Shift Closing Kasir</span></a>
+        </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'hpp-report') active @endif">
           <a href="{{ route('admin.keuangan.hpp-report.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i><span class="nav-label-text">Laporan HPP & Laba Rugi</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'menu-analytics') active @endif">
-          <a href="{{ route('admin.keuangan.menu-analytics.index') }}" class="nav-link"><i class="bi bi-pie-chart-fill"></i><span class="nav-label-text">Performa Penjualan & Grafik</span></a>
+          <a href="{{ route('admin.keuangan.menu-analytics.index') }}" class="nav-link"><i class="bi bi-pie-chart-fill"></i><span class="nav-label-text">Grafik Analitik Menu</span></a>
         </li>
       </ul>
+
 
       <div class="nav-section-title">Riwayat</div>
       <ul class="list-unstyled">
@@ -116,12 +154,16 @@
         </li>
       </ul>
 
-      <div class="nav-section-title">Bantuan</div>
+      <div class="nav-section-title">Bantuan & Documentation</div>
       <ul class="list-unstyled">
-        <li class="nav-item @if(($activeMenu ?? '') === 'guide') active @endif">
-          <a href="{{ route('admin.guide.index') }}" class="nav-link"><i class="bi bi-book-half"></i><span class="nav-label-text">Cara Penggunaan & Alur</span></a>
+        <li class="nav-item @if(($activeMenu ?? '') === 'guide' || ($activeMenu ?? '') === 'manual-book') active @endif">
+          <a href="{{ route('admin.manual-book.index') }}" class="nav-link">
+            <i class="bi bi-journal-bookmark-fill" style="color: #60a5fa;"></i>
+            <span class="nav-label-text">Manual Book (Panduan System)</span>
+          </a>
         </li>
       </ul>
+
     </nav>
   </aside>
 

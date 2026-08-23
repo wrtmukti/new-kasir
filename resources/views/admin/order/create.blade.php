@@ -16,7 +16,47 @@
   </div>
 </div>
 
+@if(session('error') || $errors->any())
+  <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px;">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+      <div>
+        <strong class="d-block">Gagal Memproses Pesanan!</strong>
+        {{ session('error') ?? $errors->first() }}
+      </div>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- MODAL ERROR NOTICE -->
+  <div class="modal fade" id="orderErrorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--bg-elevated, #1e293b); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; color: #f8fafc;">
+        <div class="modal-header border-secondary border-opacity-25 px-4 py-3">
+          <h5 class="modal-title fw-bold text-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Gagal Memproses Pesanan
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center p-4">
+          <div class="mb-3 text-danger fs-1">
+            <i class="bi bi-x-circle-fill"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Pesanan Tidak Dapat Diproses</h6>
+          <p class="text-muted-c mb-0" style="font-size:0.9rem;">
+            {{ session('error') ?? $errors->first() }}
+          </p>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25 px-4 py-3">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Mengerti / Perbaiki</button>
+        </div>
+      </div>
+    </div>
+  </div>
+@endif
+
 <form method="POST" action="{{ route('admin.order.store') }}" id="orderForm">
+
   @csrf
 
   {{-- Detail Pesanan --}}
@@ -364,6 +404,15 @@ document.addEventListener('DOMContentLoaded', function() {
     modalVoucherInfo.style.display = 'none';
     modalGrandTotal.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(grandTotal);
   });
+
+  @if(session('error') || $errors->any())
+    const errModalEl = document.getElementById('orderErrorModal');
+    if (errModalEl) {
+      const errModal = new bootstrap.Modal(errModalEl);
+      errModal.show();
+    }
+  @endif
 });
 </script>
 @endpush
+

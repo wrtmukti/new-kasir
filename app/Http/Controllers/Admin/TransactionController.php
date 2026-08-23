@@ -12,7 +12,7 @@ class TransactionController extends Controller
     {
         $transactions = Transaction::where('delete_status', 0)
             ->with('company')
-            ->latest()
+            ->orderBy('transaction_id', 'desc')
             ->paginate(10);
         return view('admin.transaction.index', compact('transactions'));
     }
@@ -23,8 +23,9 @@ class TransactionController extends Controller
 
         $transactions = Transaction::where('delete_status', 0)
             ->with('company')
-            ->latest()
+            ->orderBy('transaction_id', 'desc')
             ->paginate($perPage);
+
 
         if ($request->ajax()) {
             return response()->json([

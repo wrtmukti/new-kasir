@@ -18,7 +18,47 @@
   </a>
 </div>
 
+@if(session('error'))
+  <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px;">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+      <div>
+        <strong class="d-block">Gagal Memproses Pesanan!</strong>
+        {{ session('error') }}
+      </div>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- MODAL ERROR NOTICE -->
+  <div class="modal fade" id="listErrorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--bg-elevated, #1e293b); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; color: #f8fafc;">
+        <div class="modal-header border-secondary border-opacity-25 px-4 py-3">
+          <h5 class="modal-title fw-bold text-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Pemberitahuan Sistem
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center p-4">
+          <div class="mb-3 text-danger fs-1">
+            <i class="bi bi-x-circle-fill"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Pesanan Tidak Dapat Diproses</h6>
+          <p class="text-muted-c mb-0" style="font-size:0.9rem;">
+            {{ session('error') }}
+          </p>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25 px-4 py-3">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+@endif
+
 <div class="card">
+
   <div class="card-header-flex">
     <h6>Pesanan</h6>
     <div class="d-flex align-items-center gap-2">
@@ -43,7 +83,9 @@
             <th>Status</th>
             <th>Total</th>
             <th>Tanggal</th>
+            <th style="width:130px;" class="text-end">Aksi</th>
           </tr>
+
         </thead>
         <tbody id="tableBody">
           @include('admin.order._list_data', ['orders' => $orders])
@@ -127,6 +169,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   perPageEl.addEventListener('change', function() { loadData(1, this.value); });
   attachHandlers();
+
+  @if(session('error'))
+    const listErrModalEl = document.getElementById('listErrorModal');
+    if (listErrModalEl) {
+      const listErrModal = new bootstrap.Modal(listErrModalEl);
+      listErrModal.show();
+    }
+  @endif
 });
 </script>
 @endpush
+

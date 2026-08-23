@@ -13,10 +13,17 @@ class Order extends Model
 
     protected $fillable = [
         'company_id',
+        'daily_closing_id',
         'order_type',
         'order_status',
         'order_grand_total',
+        'tax_percent',
+        'tax_amount',
+        'tax_type',
+        'service_charge_percent',
+        'service_charge_amount',
         'order_remark',
+
         'order_transaction_id',
         'order_table_id',
         'order_customer_id',
@@ -29,6 +36,12 @@ class Order extends Model
     {
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
     }
+
+    public function dailyClosing()
+    {
+        return $this->belongsTo(DailyClosing::class, 'daily_closing_id', 'id');
+    }
+
 
     public function products()
     {

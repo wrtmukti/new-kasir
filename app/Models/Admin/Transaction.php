@@ -13,6 +13,7 @@ class Transaction extends Model
 
     protected $fillable = [
         'company_id',
+        'daily_closing_id',
         'transaction_code',
         'transaction_date',
         'transaction_tax',
@@ -41,6 +42,12 @@ class Transaction extends Model
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
     }
 
+    public function dailyClosing()
+    {
+        return $this->belongsTo(DailyClosing::class, 'daily_closing_id', 'id');
+    }
+
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'transaction_id', 'order_transaction_id');
@@ -51,9 +58,15 @@ class Transaction extends Model
         return $this->hasMany(TransactionItem::class, 'transaction_id', 'transaction_id');
     }
 
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'payment_id', 'payment_id');
+    }
+
     public function bundles()
     {
         return $this->hasMany(OrderBundle::class, 'transaction_id', 'transaction_id')
             ->where('delete_status', 0);
     }
 }
+

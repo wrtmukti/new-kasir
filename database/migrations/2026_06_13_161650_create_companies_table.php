@@ -25,6 +25,7 @@ return new class extends Migration
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+
             $table->tinyInteger('delete_status')->default(0);//0 for not deleted, 1 for deleted
             $table->timestamps();
         });

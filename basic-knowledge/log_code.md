@@ -342,3 +342,96 @@
 | CREATE | Pembuatan Folder Khusus `basic-knowledge/deva-branch/` dan File TODO `todo.md` khusus pengerjaan `deva-branch` | `basic-knowledge/deva-branch/todo.md` |
 | CREATE | Pembuatan Rule AI Workspace Customization Root di `.agents/AGENTS.md` (Mengikat AI wajib mengecek branch active, `basic-knowledge/deva-branch/todo.md`, dan melakukan `log_code.md` instan) | `.agents/AGENTS.md`, `basic-knowledge/rule_ai.md` |
 | REFACTOR | Restrukturisasi Folder `basic-knowledge/` (Memindahkan seluruh file plan & todo khusus ke dalam `basic-knowledge/deva-branch/`, sehingga root `basic-knowledge/` hanya berisi `log_code.md`, `rule_ai.md`, dan folder `deva-branch/`) | `basic-knowledge/deva-branch/*` |
+
+## 2026-08-19
+
+| Tipe | Deskripsi | File |
+|------|-----------|------|
+| CREATE | Dokumentasi Konsultasi Scope & Arsitektur POS SaaS F&B (`KONSUL.MD`) | `basic-knowledge/deva-branch/KONSUL.MD` |
+| CREATE | Pembuatan Blueprint MVP POS SaaS F&B (`mvp.md`: Arsitektur Modular, Feature Matrix, POS Flow, Skema DB, Formula Accounting & Prioritas P0-P3) | `basic-knowledge/deva-branch/mvp.md` |
+| CREATE | Pembuatan Blueprint Daftar Spesifikasi Laporan POS SaaS F&B (`laporan.md`: 5 Pilar Laporan, Parameter Filter, Spesifikasi Data, Matriks Tier SaaS & Sidebar Navigation) | `basic-knowledge/deva-branch/laporan.md` |
+| UPDATE | Pembaruan `todo.md` dengan Roadmap Phase 2 (Pajak & Service Charge Master, Laporan Penjualan, & Shift Closing Kasir) | `basic-knowledge/deva-branch/todo.md` |
+| DELETE | Pembersihan & Pengarsipan File Plan/Milestone Lama yang Sudah Selesai 100% (`plan-cogs-*`, `milestone-cogs-*`) | `basic-knowledge/deva-branch/*` |
+| CREATE | Pembuatan Dokumentasi Milestone Rinci Phase 2 (`milestone-tax-sales-report.md`: Master Tax PB1, Service Charge, Checkout Formula, Laporan Penjualan & Shift Closing) | `basic-knowledge/deva-branch/milestone-tax-sales-report.md` |
+| UPDATE | Pembaruan Blueprint Laporan, Milestone, & `todo.md` dengan Arsitektur Dashboard Laporan (Level 1 Hub & Level 2 Detail Reports: Menu Terlaris, Arus Kas Pemasukan/Pengeluaran, & Fitur Export Excel `.xlsx`) | `basic-knowledge/deva-branch/{laporan.md, milestone-tax-sales-report.md, todo.md}` |
+| UPDATE | Integrasi Lengkap 6 Modul Laporan Dedicated (Termasuk `TaxServiceReportController` & `InventoryReportController`) ke dalam `milestone-tax-sales-report.md` & `todo.md` | `basic-knowledge/deva-branch/{milestone-tax-sales-report.md, todo.md}` |
+| UPDATE | Penambahan Eksplisit `🏛️ Laporan Pajak & Service Charge (/admin/reports/tax-service)` ke dalam Struktur Sidebar Navigation di `laporan.md` | `basic-knowledge/deva-branch/laporan.md` |
+| CREATE | Migration & Model Master Pajak `taxes` (`2026_08_19_000001_create_taxes_table.php`, `App\Models\Admin\Tax.php`) | `database/migrations/*`, `app/Models/Admin/Tax.php` |
+| CREATE | Migration & Model Master Service Charge `service_charges` (`2026_08_19_000002_create_service_charges_table.php`, `App\Models\Admin\ServiceCharge.php`) | `database/migrations/*`, `app/Models/Admin/ServiceCharge.php` |
+| UPDATE | Penambahan Kolom Snapshot Pajak (PB1) & Service Charge ke Migration `orders` (`create_orders_table.php` & `App\Models\Admin\Order.php`: `tax_percent`, `tax_amount`, `tax_type`, `service_charge_percent`, `service_charge_amount`) | `database/migrations/2026_06_13_175531_create_orders_table.php`, `app/Models/Admin/Order.php` |
+| CREATE | Seeder Master Pajak `TaxSeeder.php` (PBJT 10%) & Master Service Charge `ServiceChargeSeeder.php` (5%) | `database/seeders/TaxSeeder.php`, `database/seeders/ServiceChargeSeeder.php` |
+| UPDATE | Pembaruan Kalkulasi & Snapshot Seeder Pesanan `OrderSeeder.php`, Transaksi `TransactionSeeder.php`, dan Pendaftaran ke `DatabaseSeeder.php` | `database/seeders/OrderSeeder.php`, `database/seeders/TransactionSeeder.php`, `database/seeders/DatabaseSeeder.php` |
+| UPDATE | Penyesuaian Urutan Roadmap Phase 2: Shift Closing Kasir Dikerjakan di Tahap 2, Diikuti Report Dashboard & 6 Detail Dedicated Reports di Tahap 3 | `basic-knowledge/deva-branch/{milestone-tax-sales-report.md, todo.md}` |
+| CREATE | Pembuatan Blueprint Modul Shift Closing & Daily Cut-Off (`cut_off_plan.md`: Penanganan 24 Jam, Dini Hari, `company_settings`, `daily_closings`, & Audit Uang Kasir) | `basic-knowledge/deva-branch/cut_off_plan.md` |
+| CREATE | Pembuatan Blueprint Arsitektur Perusahaan & Cabang (`company_structure_plan.md`: Keputusan `company_id` + `parent_company_id` Self-Referencing Parent-Child) | `basic-knowledge/deva-branch/company_structure_plan.md` |
+| UPDATE | Pengeluaran Referensi `company_structure_plan.md` dari `todo.md` (Ditunda untuk Pembahasan Lebih Lanjut Sesuai Instruksi User) | `basic-knowledge/deva-branch/todo.md` |
+| UPDATE | Integrasi Lengkap Rincian Milestone Modul Shift Closing & Daily Cut-Off (Binding FK `transactions.daily_closing_id` & `orders.daily_closing_id`, 3 Proteksi Guard, & Checklist Task) | `basic-knowledge/deva-branch/{cut_off_plan.md, milestone-tax-sales-report.md, todo.md}` |
+| CREATE | Migration & Model Shift Closing `daily_closings` (`2026_08_19_000004_create_daily_closings_table.php`, `App\Models\Admin\DailyClosing.php`) | `database/migrations/*`, `app/Models/Admin/DailyClosing.php` |
+| UPDATE | Penambahan Kolom FK `daily_closing_id` (`nullable`) pada Migration `orders` & `transactions` serta Update `$fillable` & Relasi Eloquent Model `Order.php` & `Transaction.php` | `database/migrations/{create_orders_table.php, create_transactions_table.php}`, `app/Models/Admin/{Order.php, Transaction.php}` |
+| CREATE | Seeder `DailyClosingSeeder.php` (Histori Sesi Shift 26 Hari) & Update `OrderSeeder.php`, `TransactionSeeder.php`, `DatabaseSeeder.php` | `database/seeders/{DailyClosingSeeder.php, OrderSeeder.php, TransactionSeeder.php, DatabaseSeeder.php}` |
+| RUN | Eksekusi `php artisan migrate:fresh --seed` (Berhasil 100% Meng-seed 26 Hari Sesi Shift, 273 Order, & 271 Transaksi dengan Binding FK `daily_closing_id` & Snapshot Tax PB1 10% + Service 5%) | Database MySQL |
+| CREATE | FormRequest Validasi `TaxRequest.php` & `ServiceChargeRequest.php` (Validasi Bahasa Indonesia untuk Setting Pajak PB1 & Service Charge) | `app/Http/Requests/Admin/{TaxRequest.php, ServiceChargeRequest.php}` |
+| CREATE | Controller Master Setting Pajak & Service Charge `TaxController.php` | `app/Http/Controllers/Admin/Keuangan/TaxController.php` |
+| CREATE | View UI Setting Pajak PB1 & Service Charge (`setting-tax/index.blade.php`: Card Master Setting, Simulasi Kalkulasi Struk, NexoraToast Alert, & 400ms Feedback Latency) | `resources/views/admin/keuangan/setting-tax/index.blade.php` |
+| UPDATE | Pendaftaran Routes Setting Pajak PB1 & Service Charge (`/admin/keuangan/setting-tax`, `update-tax`, `update-service`) dan Perbaikan Missing Import `VoucherController` | `routes/web.php` |
+| UPDATE | Pembaruan Logika Checkout & Complete Order di `OrderController.php` (Kalkulasi Otomatis Subtotal -> Diskon -> Service Charge 5% -> DPP -> Tax PB1 10% Exclusive -> Grand Total & Binding `daily_closing_id`) | `app/Http/Controllers/Admin/OrderController.php` |
+| TEST | Eksekusi Script Uji Coba Matematika `scratch/test_order_tax_calc.php` (Berhasil 100% Menguji Presisi Kalkulasi Subtotal Rp 100k - Diskon 10k + Service 5% (4.5k) + Tax PB1 10% (9.45k) = Rp 103.950) | `scratch/test_order_tax_calc.php` |
+| UPDATE | Pembaruan Milestone Master Utuh Terhubung (`milestone-tax-sales-report.md`) & Checklist Task (`todo.md`) — M1 COMPLETED 100% | `basic-knowledge/deva-branch/{milestone-tax-sales-report.md, todo.md}` |
+| CREATE | Pembuatan 7 Report Controllers (`ReportDashboardController.php`, `SalesReportController.php`, `ProductReportController.php`, `CashFlowReportController.php`, `TaxServiceReportController.php`, `InventoryReportController.php`, `ShiftClosingReportController.php`) | `app/Http/Controllers/Admin/Keuangan/*` |
+| CREATE | Pembuatan 7 View UI Laporan POS (`reports/dashboard.blade.php`, `sales.blade.php`, `products.blade.php`, `cashflow.blade.php`, `tax-service.blade.php`, `inventory.blade.php`, `shifts.blade.php`) dengan 6 Kartu Navigasi Clickable & Modern Layout | `resources/views/admin/keuangan/reports/*` |
+| UPDATE | Pendaftaran 13 Route Laporan pada `/admin/reports/*` di `routes/web.php` & Verifikasi `php artisan view:cache` (100% Success) | `routes/web.php` |
+| UPDATE | Pembaruan Status Milestone M3 (Report Dashboard Hub & 6 Detail Dedicated Laporan + Export Excel) Menjadi COMPLETED 100% | `basic-knowledge/deva-branch/{milestone-tax-sales-report.md, todo.md}` |
+| UPDATE | Penambahan Menu Setting Pajak (`Master Pajak & Service`) dan Pengelompokan 9 Item Menu Sidebar `Laporan & Analytics` pada `app.blade.php` | `resources/views/admin/layouts/app.blade.php` |
+| FIX | Perbaikan Nama Kolom Database pada Report Controllers: `waste_cost` (dari `cost_ruined`), `po_total_amount` & `po_status` (dari `total_amount`), `raw_material_code` (dari `material_code`), serta Namespace `App\Models\Admin\PurchaseOrder` | `app/Http/Controllers/Admin/Keuangan/{ReportDashboardController.php, CashFlowReportController.php, InventoryReportController.php}`, `resources/views/admin/keuangan/reports/inventory.blade.php` |
+| TEST | Eksekusi Script `scratch/test_report_controllers.php` Menguji 7 Query Index & 6 Export CSV Seluruh Report Controllers (100% SUCCESS PASS) | `scratch/test_report_controllers.php` |
+| UPDATE | Implementasi Theme Auto-Adaptation Dark/Light Mode pada Seluruh View Laporan & Setting Tax (Perbaikan Header Tabel Putih menjadi Dynamic `var(--bg-elevated)` & `var(--text-primary)`) | `resources/views/admin/keuangan/{reports/*.blade.php, setting-tax/index.blade.php}` |
+| UPDATE | Penambahan Fitur Interaktif Per-Page Dropdown (`10`, `20`, `50`, `100`, `all`), Realtime Search Filter (`search`), Date Range Filter, dan Tombol Print Laporan (`@media print` CSS) | `app/Http/Controllers/Admin/Keuangan/{SalesReportController.php, ProductReportController.php, TaxServiceReportController.php, InventoryReportController.php, ShiftClosingReportController.php}`, `resources/views/admin/keuangan/reports/*.blade.php` |
+| UPDATE | Perombakan Total UI Seluruh View Laporan (`inventory`, `sales`, `products`, `tax-service`, `shifts`) Menggunakan Standar Desain Nexora POS Presisi `admin/category`: `<table class="table-modern">`, `<div class="card-header-flex">`, `form-select-modern`, `chip-tag`, dan `text-muted-c` (100% Sleek Dark Mode Mata-Friendly) | `resources/views/admin/keuangan/reports/*.blade.php` |
+| CREATE | Pembuatan Menu & Halaman `Manual Book (Panduan System)` 9 Bab Lengkap (Quick Start, Master Data, POS Kasir, Shift Closing Z-Report, Purchasing PO, Resep COGS & Waste, Pajak PB1 & Service, Hub Laporan, FAQ Troubleshooting) Lengkap dengan Realtime Search Topik & Cetak PDF | `resources/views/admin/guide/index.blade.php`, `routes/web.php`, `resources/views/admin/layouts/app.blade.php` |
+| UPDATE | Pengayaan & Expansion Super Detail Halaman `Manual Book System` (Petunjuk Langkah-demi-Langkah Klik Demi Klik, Syarat Operasional, Breakdown Rumus Matematika Struk & HPP, Simulasi Kasir, Kebijakan Keamanan Shift, serta Solusi Troubleshooting Lapangan) | `resources/views/admin/guide/index.blade.php` |
+| FIX | Perbaikan Controller `TaxController.php` (`updateTax` & `updateServiceCharge`) agar Mendukung Baik AJAX JSON Response Maupun Standard Form Submit (Redirect Back dengan Flash Session Success) & Perbaikan Argumen `NexoraToast` pada `setting-tax/index.blade.php` | `app/Http/Controllers/Admin/Keuangan/TaxController.php`, `resources/views/admin/keuangan/setting-tax/index.blade.php` |
+| UPDATE | Penambahan Dokumentasi Milestone Sub-Module M2.1 (Master Shift & Cut-Off Settings System: Migrations `shift_settings` & `shifts`, Models, Seeder, Controller `ShiftSettingController`, UI View `setting-shift/index.blade.php` & Sidebar Menu) | `basic-knowledge/deva-branch/{milestone-tax-sales-report.md, todo.md}` |
+| CREATE | Pembuatan Dedicated Clock-In & Clock-Out System M2.2: Controller `ShiftOperationalController.php`, Dedicated View UI `shift-operational/index.blade.php` (Live Dashboard Stats, Quick Preset Cash, Cash Balancing Calculator & Realtime Variance Badge), Struk Z-Report Thermal `z-report.blade.php`, Route `/admin/keuangan/shift-operational`, dan Menu Sidebar `Buka / Tutup Shift (Clock-In)` | `app/Http/Controllers/Admin/Keuangan/ShiftOperationalController.php`, `resources/views/admin/keuangan/shift-operational/{index.blade.php, z-report.blade.php}`, `routes/web.php`, `resources/views/admin/layouts/app.blade.php` |
+| FIX | Perbaikan SQL Query pada `ShiftOperationalController.php` (`index()` & `closeShift()`): Mengganti kolom `amount_paid` & `payment_method` dengan `transaction_grand_total` & relasi `payment` (`payment_metode`) sesuai skema database `transactions` & `payments` + Pembuatan Model Eloquent `Payment.php` | `app/Http/Controllers/Admin/Keuangan/ShiftOperationalController.php`, `app/Models/Admin/{Payment.php, Transaction.php}` |
+| UPDATE | Perombakan & Penyesuaian Presisi UI View `setting-shift/index.blade.php` & `shift-operational/index.blade.php` Mengikuti Standar Referensi `admin/category`: Penambahan `page-header`, `breadcrumb-trail`, `.card`, `.card-header-flex`, `.table-modern`, `.chip-tag`, `.btn-primary-grad`, `.btn-action-icon`, dan Sleek Dark Mode Auto-Adaptation | `resources/views/admin/keuangan/{setting-shift/index.blade.php, shift-operational/index.blade.php}` |
+| FIX | Perbaikan Missing Import Model `Voucher` (`use App\Models\Admin\Voucher;`) pada `app/Http/Controllers/Admin/OrderController.php` (Mengatasi Error `Class App\Http\Controllers\Admin\Voucher not found` saat pencarian/kalkulasi voucher kasir) | `app/Http/Controllers/Admin/OrderController.php` |
+| FIX | Perbaikan Alur Redirect Pembuatan Pesanan: Mengubah target redirect `OrderController@store` dari `admin.order.index` menjadi `admin.order.list` agar pesanan baru yang dibuat langsung muncul di layar Daftar Pesanan Kasir + Penambahan tombol aksi `[ 👁️ Detail / Bayar ]` langsung pada tabel `_list_data.blade.php` | `app/Http/Controllers/Admin/OrderController.php`, `resources/views/admin/order/{list.blade.php, _list_data.blade.php}`, `resources/views/admin/layouts/app.blade.php` |
+| FEAT | Penambahan Fitur Modal Error Alert & Pop-Up Notification: Jika pembuatan pesanan gagal (misal validasi item kosong, voucher tidak berlaku, atau kendala server), sistem secara otomatis memunculkan Modal Pop-Up Notifikasi Error dan Banner Alert Merah yang menjelaskan alasan gagalnya pesanan secara transparan | `app/Http/Controllers/Admin/OrderController.php`, `resources/views/admin/order/{create.blade.php, list.blade.php}` |
+| FIX | Perbaikan Blade Syntax Error: Menghapus duplicate directive `@empty` pada `resources/views/admin/order/_list_data.blade.php` yang menyebabkan `syntax error, unexpected token "="` saat kompilasi view | `resources/views/admin/order/_list_data.blade.php` |
+| FIX | Perbaikan Penyebab Pesanan Tidak Tersimpan (Root Cause Fix): Menghapus pengetatan tipe data `string` pada aturan validasi `product_id`, `table_id`, `customer_id`, dan `bundle_id` di `OrderController@store` yang sebelumnya menolak ID ber-tipe integer (`1`, `2`, dll), sehingga order gagal diproses dan kembali ke halaman form | `app/Http/Controllers/Admin/OrderController.php` |
+| FIX | Perbaikan Pengurutan Daftar Pesanan (`orderBy('order_id', 'desc')`): Mengganti pengurutan `latest()` (`created_at DESC`) menjadi `orderBy('order_id', 'desc')` pada `OrderController@list` & `listData` agar pesanan terbaru (seperti `#303`, `#302`) SELALU berada paling atas No. 1 di halaman pertama tanpa tertutup oleh data sampel dummy bertanggal masa depan (`26/08/2026`) | `app/Http/Controllers/Admin/OrderController.php` |
+| FIX | Perbaikan Pengurutan Daftar Transaksi Lunas (`orderBy('transaction_id', 'desc')`): Mengganti `latest()` menjadi `orderBy('transaction_id', 'desc')` pada `TransactionController` agar setiap pesanan ber-status `completed` yang berubah menjadi transaksi Lunas SELALU langsung muncul paling atas No. 1 di menu Transaksi | `app/Http/Controllers/Admin/TransactionController.php` |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

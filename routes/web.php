@@ -60,13 +60,29 @@ use App\Http\Controllers\Admin\BundleController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\HistoryController;
+
 use App\Http\Controllers\Admin\Keuangan\CogsRawMaterialController;
 use App\Http\Controllers\Admin\Keuangan\CogsRecipeController;
 use App\Http\Controllers\Admin\Keuangan\CogsWasteLogController;
 use App\Http\Controllers\Admin\Keuangan\HppReportController;
 use App\Http\Controllers\Admin\Keuangan\MenuAnalyticsController;
 use App\Http\Controllers\Admin\Keuangan\PurchaseOrderController;
+use App\Http\Controllers\Admin\Keuangan\TaxController;
+use App\Http\Controllers\Admin\Keuangan\ReportDashboardController;
+use App\Http\Controllers\Admin\Keuangan\SalesReportController;
+use App\Http\Controllers\Admin\Keuangan\ProductReportController;
+use App\Http\Controllers\Admin\Keuangan\CashFlowReportController;
+use App\Http\Controllers\Admin\Keuangan\TaxServiceReportController;
+use App\Http\Controllers\Admin\Keuangan\InventoryReportController;
+use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
+use App\Http\Controllers\Admin\Keuangan\ShiftSettingController;
+use App\Http\Controllers\Admin\Keuangan\ShiftOperationalController;
+
+
+
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -165,11 +181,61 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('hpp-report/operational', [HppReportController::class, 'storeOperational'])->name('hpp-report.store-operational');
 
         Route::get('menu-analytics', [MenuAnalyticsController::class, 'index'])->name('menu-analytics.index');
+
+        // Setting Master Pajak & Service Charge
+        Route::get('setting-tax', [TaxController::class, 'index'])->name('setting-tax.index');
+        Route::post('setting-tax/update-tax', [TaxController::class, 'updateTax'])->name('setting-tax.update-tax');
+        Route::post('setting-tax/update-service', [TaxController::class, 'updateServiceCharge'])->name('setting-tax.update-service');
+
+        // Setting Master Shift & Jam Cut-Off Restoran
+        Route::get('setting-shift', [ShiftSettingController::class, 'index'])->name('setting-shift.index');
+        Route::post('setting-shift/update-cutoff', [ShiftSettingController::class, 'updateCutoff'])->name('setting-shift.update-cutoff');
+        Route::post('setting-shift/store-shift', [ShiftSettingController::class, 'storeShift'])->name('setting-shift.store-shift');
+        Route::post('setting-shift/{shift}/update', [ShiftSettingController::class, 'updateShift'])->name('setting-shift.update-shift');
+        Route::delete('setting-shift/{shift}/delete', [ShiftSettingController::class, 'destroyShift'])->name('setting-shift.destroy-shift');
+
+        // Dedicated Operasional Clock-In & Clock-Out Kasir
+        Route::get('shift-operational', [ShiftOperationalController::class, 'index'])->name('shift-operational.index');
+        Route::post('shift-operational/open', [ShiftOperationalController::class, 'openShift'])->name('shift-operational.open');
+        Route::post('shift-operational/close', [ShiftOperationalController::class, 'closeShift'])->name('shift-operational.close');
+        Route::get('shift-operational/{dailyClosing}/z-report', [ShiftOperationalController::class, 'zReport'])->name('shift-operational.z-report');
     });
+
+
+
+    // Modul Laporan SaaS POS (Level 1 Hub & Level 2 Detail Reports)
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportDashboardController::class, 'index'])->name('dashboard');
+        
+        Route::get('sales', [SalesReportController::class, 'index'])->name('sales');
+        Route::get('sales/export', [SalesReportController::class, 'export'])->name('sales.export');
+
+        Route::get('products', [ProductReportController::class, 'index'])->name('products');
+        Route::get('products/export', [ProductReportController::class, 'export'])->name('products.export');
+
+        Route::get('cashflow', [CashFlowReportController::class, 'index'])->name('cashflow');
+        Route::get('cashflow/export', [CashFlowReportController::class, 'export'])->name('cashflow.export');
+
+        Route::get('tax-service', [TaxServiceReportController::class, 'index'])->name('tax-service');
+        Route::get('tax-service/export', [TaxServiceReportController::class, 'export'])->name('tax-service.export');
+
+        Route::get('inventory', [InventoryReportController::class, 'index'])->name('inventory');
+        Route::get('inventory/export', [InventoryReportController::class, 'export'])->name('inventory.export');
+
+        Route::get('shifts', [ShiftClosingReportController::class, 'index'])->name('shifts');
+        Route::get('shifts/export', [ShiftClosingReportController::class, 'export'])->name('shifts.export');
+    });
+
+
 
     Route::get('guide', function () {
         return view('admin.guide.index');
     })->name('guide.index');
+
+    Route::get('manual-book', function () {
+        return view('admin.guide.index');
+    })->name('manual-book.index');
+
 });
 
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {

@@ -1,39 +1,49 @@
 @forelse($orders as $order)
 <tr class="row-clickable" data-url="{{ route('admin.order.show', $order) }}">
-  <td class="text-mono" style="font-weight:500;">#{{ $order->order_id }}</td>
+  <td class="text-mono" style="font-weight:600; color:var(--text-primary, #f8fafc);">#{{ $order->order_id }}</td>
   <td>
     @if($order->order_type == 'dine_in')
-      <span class="pill pill-info">Dine In</span>
+      <span class="chip-tag" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;"><i class="bi bi-grid-3x3-gap-fill me-1"></i>Dine In</span>
     @elseif($order->order_type == 'take_away')
-      <span class="pill pill-warning">Take Away</span>
+      <span class="chip-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;"><i class="bi bi-bag-check-fill me-1"></i>Take Away</span>
     @else
-      <span class="pill pill-neutral">Delivery</span>
+      <span class="chip-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;"><i class="bi bi-truck me-1"></i>Delivery</span>
     @endif
   </td>
   <td>
     @php
       $status = $order->order_status;
-      $badge = match($status) {
-        'in_progress' => 'pill-info',
-        'completed' => 'pill-success',
-        'cancelled' => 'pill-danger',
-        default => 'pill-neutral'
+      $badgeStyle = match($status) {
+        'in_progress' => 'background: rgba(59, 130, 246, 0.15); color: #60a5fa;',
+        'completed' => 'background: rgba(34, 197, 94, 0.15); color: #4ade80;',
+        'cancelled' => 'background: rgba(239, 68, 68, 0.15); color: #f87171;',
+        default => 'background: rgba(148, 163, 184, 0.15); color: #cbd5e1;'
       };
     @endphp
-    <span class="pill {{ $badge }}">{{ str_replace('_', ' ', ucfirst($status)) }}</span>
+    <span class="chip-tag" style="{{ $badgeStyle }} font-weight:600;">
+      {{ str_replace('_', ' ', ucfirst($status)) }}
+    </span>
   </td>
-  <td class="text-mono">
+  <td class="text-mono fw-bold text-success">
     @php
       $total = $order->order_status === 'completed' && $order->transaction
         ? (float) $order->transaction->items->sum('subtotal') + (float) $order->bundles->sum('subtotal')
         : (float) ($order->order_grand_total ?? 0);
     @endphp
-    Rp {{ number_format($total, 0) }}
+    Rp {{ number_format($total, 0, ',', '.') }}
   </td>
-  <td>{{ optional($order->created_at)->format('d M Y H:i') ?? '-' }}</td>
+  <td class="text-muted-c" style="font-size:0.85rem;">{{ optional($order->created_at)->format('d/m/Y H:i') ?? '-' }} WIB</td>
+  <td class="text-end" onclick="event.stopPropagation();">
+    <a href="{{ route('admin.order.show', $order) }}" class="btn btn-primary-grad btn-sm py-1 px-2 text-nowrap" style="font-size:0.78rem;">
+      <i class="bi bi-eye me-1"></i> Detail / Bayar
+    </a>
+  </td>
 </tr>
 @empty
 <tr>
-  <td colspan="5" class="text-center text-muted-c py-4">Belum ada pesanan.</td>
+  <td colspan="6" class="text-center text-muted-c py-4">
+    <i class="bi bi-inbox d-block fs-3 mb-2 text-secondary"></i>
+    Belum ada data pesanan.
+  </td>
 </tr>
 @endforelse
