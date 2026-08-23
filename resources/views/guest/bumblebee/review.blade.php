@@ -16,6 +16,16 @@
     </div>
   </div>
 
+  @if(session('error') || $errors->any())
+    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3.5 rounded-2xl flex items-start gap-3 shadow-xs">
+      <span class="material-symbols-outlined text-red-600 flex-shrink-0 mt-0.5">error</span>
+      <div class="text-sm font-headline">
+        <div class="font-bold">Gagal Mengirim Pesanan</div>
+        <div class="text-xs mt-0.5 text-red-600">{{ session('error') ?? $errors->first() }}</div>
+      </div>
+    </div>
+  @endif
+
   <!-- Ordered Items Bento Card -->
   <div class="bg-white rounded-2xl p-6 border border-surface-variant shadow-xs mb-6">
     <h3 class="font-headline font-extrabold text-base text-on-background mb-4 flex items-center gap-2 border-b border-surface-variant pb-3">
@@ -103,7 +113,7 @@
     </h3>
     
     <div class="flex gap-2">
-      <input type="text" id="bbVoucherInput" placeholder="Masukkan kode voucher..."
+      <input type="text" id="bbVoucherInput" value="{{ old('voucher_code') }}" placeholder="Masukkan kode voucher..."
              class="flex-grow bg-surface-container-low border border-surface-variant rounded-xl px-4 py-2.5 text-sm uppercase font-headline font-bold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"/>
       <button type="button" id="bbVoucherBtn" class="bg-amber-400 hover:bg-amber-500 text-slate-900 px-5 py-2.5 rounded-xl font-headline font-extrabold text-xs transition-all active:scale-95 shadow-xs">
         Gunakan
@@ -271,17 +281,22 @@ document.addEventListener('DOMContentLoaded', function() {
       bundle_id: b.bundle_id,
       bundle_name: b.bundle_name,
       bundle_price: b.bundle_price,
-      qty: b.qty,
-      items: (b.items || []).map(i => ({ product_id: i.product_id, quantity: i.quantity }))
+      qty: b.qty
     })));
 
     document.getElementById('bbFormVoucherCode').value = appliedVoucher ? appliedVoucher.code : '';
     document.getElementById('bbFormOrderRemark').value = document.getElementById('bbOrderRemark').value.trim();
 
     // Clear saved local cart after submit
-    sessionStorage.removeItem('guest_cart_{{ $table->table_id }}');
     sessionStorage.removeItem('bb_guest_cart_{{ $table->table_id }}');
+    sessionStorage.removeItem('guest_cart_{{ $table->table_id }}');
   });
+
+  // Auto-check voucher if pre-filled from old input
+  const prefilledVoucher = voucherInput.value.trim();
+  if (prefilledVoucher) {
+    voucherBtn.click();
+  }
 });
 </script>
 @endpush

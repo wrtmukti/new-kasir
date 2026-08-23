@@ -78,11 +78,8 @@
 
       <div class="nav-section-title">Keuangan & Setting</div>
       <ul class="list-unstyled">
-        <li class="nav-item @if(($activeMenu ?? '') === 'setting-tax') active @endif">
-          <a href="{{ route('admin.keuangan.setting-tax.index') }}" class="nav-link"><i class="bi bi-percent"></i><span class="nav-label-text">Master Pajak & Service</span></a>
-        </li>
-        <li class="nav-item @if(($activeMenu ?? '') === 'setting-shift') active @endif">
-          <a href="{{ route('admin.keuangan.setting-shift.index') }}" class="nav-link"><i class="bi bi-clock-history"></i><span class="nav-label-text">Master Shift & Cut-off</span></a>
+        <li class="nav-item @if(($activeMenu ?? '') === 'setting' || ($activeMenu ?? '') === 'setting-tax' || ($activeMenu ?? '') === 'setting-shift') active @endif">
+          <a href="{{ route('admin.setting.index') }}" class="nav-link"><i class="bi bi-gear-fill"></i><span class="nav-label-text">Setting</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'shift-operational') active @endif">
           <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link"><i class="bi bi-person-badge-fill" style="color: #4ade80;"></i><span class="nav-label-text">Buka / Tutup Shift (Clock-In)</span></a>

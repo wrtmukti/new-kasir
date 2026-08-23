@@ -8,12 +8,13 @@ use App\Models\Admin\OrderBundle;
 use App\Models\Admin\OrderVoucher;
 use App\Models\Admin\Voucher;
 use App\Models\Admin\Product;
-
 use App\Models\Admin\Category;
+use App\Models\Admin\Bundle;
 use App\Models\Admin\Table;
 use App\Models\Admin\Customer;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
+use App\Models\Admin\Payment;
 use App\Models\Admin\Tax;
 use App\Models\Admin\ServiceCharge;
 use App\Models\Admin\DailyClosing;
@@ -135,44 +136,153 @@ class OrderController extends Controller
         return view('admin.order.list', compact('orders'));
     }
 
-    // ——— Complete pesanan ———
-    public function complete(Order $order)
+    // ——— Halaman Pembayaran Kasir ———
+    public function payment(Order $order)
     {
-        if ($order->delete_status || $order->order_status !== 'in_progress') {
-            return response()->json(['success' => false, 'message' => 'Pesanan tidak dapat diselesaikan.'], 400);
+        if ($order->delete_status) {
+            return redirect()->route('admin.order.list')
+                ->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        DB::transaction(function () use ($order) {
-            $order->load('products', 'bundles');
+        if ($order->order_status === 'completed') {
+            return redirect()->route('admin.order.show', $order)
+                ->with('info', 'Pesanan ini sudah selesai dan dibayar.');
+        }
 
-            $companyId = $order->company_id;
+        if ($order->order_status === 'cancelled') {
+            return redirect()->route('admin.order.show', $order)
+                ->with('error', 'Pesanan ini sudah dibatalkan.');
+        }
 
-            // Hitung per item (include diskon produk)
+        $order->load(['company', 'products.activeDiscount', 'vouchers', 'bundles.bundle.items.product']);
+
+        $table = null;
+        if ($order->order_table_id) {
+            $table = Table::where('table_id', $order->order_table_id)->first();
+        }
+
+        $customer = null;
+        if ($order->order_customer_id) {
+            $customer = Customer::where('customer_id', $order->order_customer_id)->first();
+        }
+
+        $company = Company::where('delete_status', 0)->first();
+
+        // Hitung Subtotal Produk & Diskon
+        $items = [];
+        $totalSubtotal = 0;
+        foreach ($order->products as $product) {
+            $qty = (int) $product->pivot->quantity;
+            $price = (float) $product->product_price;
+            $activeDisc = $product->activeDiscount()->first();
+            $discountType = $activeDisc?->discount_type;
+            $discountValue = $activeDisc ? (float) ($activeDisc->discount_value ?? 0) : 0;
+
+            $discountAmount = 0;
+            if ($discountType === 'percentage' && $discountValue > 0) {
+                $discountAmount = round($price * ($discountValue / 100), 2);
+            } elseif ($discountType === 'nominal' && $discountValue > 0) {
+                $discountAmount = min($discountValue, $price);
+            }
+            $discountAmount = min($discountAmount, $price);
+
+            $subtotal = ($price - $discountAmount) * $qty;
+            $totalSubtotal += $subtotal;
+
+            $items[] = [
+                'product' => $product,
+                'qty' => $qty,
+                'price' => $price,
+                'discount_type' => $discountType,
+                'discount_value' => $discountValue,
+                'discount_amount' => $discountAmount,
+                'subtotal' => $subtotal,
+                'note' => $product->pivot->note,
+            ];
+        }
+
+        // Subtotal Bundle
+        $bundleSubtotal = 0;
+        foreach ($order->bundles as $ob) {
+            $bundleSubtotal += (float) $ob->bundle_price * (int) $ob->quantity;
+        }
+        $totalSubtotal += $bundleSubtotal;
+
+        return view('admin.order.payment', compact('order', 'table', 'customer', 'company', 'items', 'totalSubtotal'));
+    }
+
+    // ——— Proses Simpan Pembayaran Kasir ———
+    public function processPayment(Request $request, Order $order)
+    {
+        if ($order->delete_status) {
+            return redirect()->route('admin.order.list')
+                ->with('error', 'Pesanan tidak ditemukan.');
+        }
+
+        if ($order->order_status === 'completed') {
+            return redirect()->route('admin.order.show', $order)
+                ->with('info', 'Pesanan ini sudah selesai dan dibayar.');
+        }
+
+        $validated = $request->validate([
+            'payment_metode' => 'required|in:cash,debit',
+            'payment_amount' => 'required|numeric|min:0',
+            'payment_reference' => 'nullable|string|max:100',
+            'payment_remark' => 'nullable|string|max:255',
+        ], [
+            'payment_metode.required' => 'Metode pembayaran wajib dipilih.',
+            'payment_metode.in' => 'Metode pembayaran harus cash atau debit.',
+            'payment_amount.required' => 'Nominal pembayaran wajib diisi.',
+            'payment_amount.numeric' => 'Nominal pembayaran harus berupa angka.',
+            'payment_amount.min' => 'Nominal pembayaran minimal 0.',
+        ]);
+
+        $grandTotal = (float) $order->order_grand_total;
+        $paymentMetode = strtolower($validated['payment_metode']);
+        $paymentAmount = ($paymentMetode === 'debit') ? $grandTotal : (float) $validated['payment_amount'];
+
+        if ($paymentMetode === 'cash' && $paymentAmount < $grandTotal) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Uang tunai yang diterima (Rp ' . number_format($paymentAmount, 0, ',', '.') . ') kurang dari total tagihan (Rp ' . number_format($grandTotal, 0, ',', '.') . ').',
+                ], 422);
+            }
+            return back()->withInput()->with('error', 'Uang tunai yang diterima kurang dari total tagihan.');
+        }
+
+        $companyId = $order->company_id ?? Company::first()?->company_id;
+
+        // Ambil sesi shift aktif jika ada
+        $dailyClosingId = $order->daily_closing_id;
+        if (!$dailyClosingId) {
+            $activeShift = DailyClosing::where('company_id', $companyId)->where('status', 'open')->latest()->first();
+            $dailyClosingId = $activeShift ? $activeShift->id : null;
+        }
+
+        $order->load(['products.activeDiscount', 'bundles', 'vouchers']);
+
+        DB::transaction(function () use ($order, $validated, $companyId, $dailyClosingId, $grandTotal, $paymentMetode, $paymentAmount) {
             $items = [];
             $totalSubtotal = 0;
-            $totalDiscount = 0;
 
             foreach ($order->products as $product) {
                 $qty = (int) $product->pivot->quantity;
                 $price = (float) $product->product_price;
-                // Baca diskon dari pivot aktif
                 $activeDisc = $product->activeDiscount()->first();
                 $discountType = $activeDisc?->discount_type;
                 $discountValue = $activeDisc ? (float) ($activeDisc->discount_value ?? 0) : 0;
 
-                // Hitung discount_amount
                 $discountAmount = 0;
                 if ($discountType === 'percentage' && $discountValue > 0) {
                     $discountAmount = round($price * ($discountValue / 100), 2);
                 } elseif ($discountType === 'nominal' && $discountValue > 0) {
                     $discountAmount = min($discountValue, $price);
                 }
-                // Cap biar gak minus
                 $discountAmount = min($discountAmount, $price);
 
                 $subtotal = ($price - $discountAmount) * $qty;
                 $totalSubtotal += $subtotal;
-                $totalDiscount += $discountAmount * $qty;
 
                 $items[] = [
                     'product' => $product,
@@ -182,33 +292,69 @@ class OrderController extends Controller
                     'discount_value' => $discountValue,
                     'discount_amount' => $discountAmount,
                     'subtotal' => $subtotal,
+                    'note' => $product->pivot->note,
                 ];
             }
 
-            // Bundle masuk ke transaction_subtotal (bundle_price x qty, tanpa diskon)
             foreach ($order->bundles as $ob) {
                 $totalSubtotal += (float) $ob->bundle_price * (int) $ob->quantity;
             }
 
-            // Simpan transaction — grand_total pake dari order (udah include tax & service)
+            // 1. Simpan Transaksi
             $transaction = Transaction::create([
                 'company_id' => $companyId,
-                'daily_closing_id' => $order->daily_closing_id,
-                'transaction_code' => 'TRX-' . $order->order_id . '-' . now()->format('Ymd'),
+                'daily_closing_id' => $dailyClosingId,
+                'transaction_code' => 'TRX-' . $order->order_id . '-' . now()->format('YmdHis'),
                 'transaction_date' => now(),
                 'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => (float) ($order->tax_amount ?? 0),
                 'transaction_service_charge' => (float) ($order->service_charge_amount ?? 0),
-                'transaction_grand_total' => (float) $order->order_grand_total,
+                'transaction_grand_total' => $grandTotal,
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
-                'transaction_remark' => 'Dari pesanan #' . $order->order_id,
+                'transaction_remark' => 'Pembayaran ' . ($paymentMetode === 'cash' ? 'Tunai' : 'Debit Card') . ' pesanan #' . $order->order_id,
                 'created_by' => 'admin',
             ]);
 
+            // Hitung kembalian & set format remark
+            $changeAmount = max(0, $paymentAmount - $grandTotal);
+            $paymentRemark = $validated['payment_remark'] ?? null;
+            if (!$paymentRemark) {
+                if ($paymentMetode === 'cash') {
+                    $paymentRemark = 'Tunai: Rp ' . number_format($paymentAmount, 0, ',', '.') . ' (Kembalian: Rp ' . number_format($changeAmount, 0, ',', '.') . ')';
+                } else {
+                    $paymentRemark = 'Debit Card: ' . ($validated['payment_reference'] ?? 'EDC');
+                }
+            }
 
-            // Simpan transaction_items (include diskon)
+            $paymentRef = $validated['payment_reference'] ?? null;
+            if (!$paymentRef) {
+                $paymentRef = strtoupper($paymentMetode) . '-ORD' . $order->order_id;
+            }
+
+            // 2. Simpan Pembayaran (Semua Kolom Terisi Lengkap)
+            $payment = Payment::create([
+                'company_id' => $companyId,
+                'transaction_id' => $transaction->transaction_id,
+                'payment_metode' => $paymentMetode,
+                'payment_amount' => $paymentAmount,
+                'payment_reference' => $paymentRef,
+                'payment_status' => 'completed',
+                'payment_grand_total' => $grandTotal,
+                'payment_remark' => $paymentRemark,
+                'payment_date' => now()->format('Y-m-d H:i:s'),
+                'payment_table_id' => (string) ($order->order_table_id ?? ''),
+                'payment_customer_id' => (string) ($order->order_customer_id ?? ''),
+                'created_by' => 'admin',
+                'updated_by' => 'admin',
+                'delete_status' => 0,
+            ]);
+
+            // 3. Kaitkan payment_id ke transaction
+            $transaction->update(['payment_id' => $payment->payment_id]);
+
+            // 4. Simpan Transaction Items
             foreach ($items as $item) {
                 $product = $item['product'];
                 TransactionItem::create([
@@ -222,37 +368,74 @@ class OrderController extends Controller
                     'discount_amount' => $item['discount_amount'],
                     'qty' => $item['qty'],
                     'subtotal' => $item['subtotal'],
-                    'note' => $product->pivot->note,
+                    'note' => $item['note'],
                     'created_by' => 'admin',
                 ]);
             }
 
-            // Link bundle ke transaction (isi transaction_id — 1 tabel utuh)
+            // 5. Link bundle ke transaction
             $order->bundles()->update([
                 'transaction_id' => $transaction->transaction_id,
                 'updated_by' => 'admin',
             ]);
 
-            // Update status order + link ke transaction
+            // 6. Update order status
             $order->update([
                 'order_status' => 'completed',
                 'order_transaction_id' => $transaction->transaction_id,
+                'daily_closing_id' => $dailyClosingId,
             ]);
 
-            // Free table
+            // 7. Free table
             if ($order->order_table_id) {
                 Table::where('table_id', $order->order_table_id)
                     ->where('delete_status', 0)
                     ->update(['table_status' => 'tersedia']);
             }
+
+            // 8. Update Statistik Kas Shift Aktif jika ada
+            if ($dailyClosingId) {
+                $closing = DailyClosing::find($dailyClosingId);
+                if ($closing && $closing->status === 'open') {
+                    if ($validated['payment_metode'] === 'cash') {
+                        $closing->system_cash_sales += $grandTotal;
+                    } else {
+                        $closing->system_non_cash_sales += $grandTotal;
+                    }
+                    $closing->system_expected_cash = $closing->starting_cash + $closing->system_cash_sales;
+                    $closing->save();
+                }
+            }
         });
 
-        if (request()->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Pesanan selesai.']);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran berhasil disimpan dan pesanan telah selesai.',
+                'redirect_url' => route('admin.order.receipt', $order),
+                'show_url' => route('admin.order.show', $order),
+            ]);
         }
 
         return redirect()->route('admin.order.show', $order)
-            ->with('success', 'Pesanan selesai.');
+            ->with('success', 'Pembayaran berhasil disimpan dan pesanan telah selesai.');
+    }
+
+    // ——— Complete pesanan (Fallback) ———
+    public function complete(Order $order)
+    {
+        if ($order->delete_status || $order->order_status !== 'in_progress') {
+            return response()->json(['success' => false, 'message' => 'Pesanan tidak dapat diselesaikan.'], 400);
+        }
+
+        $request = new Request([
+            'payment_metode' => 'cash',
+            'payment_amount' => (float) $order->order_grand_total,
+            'payment_reference' => 'CASH-ORD' . $order->order_id,
+            'payment_remark' => 'Pembayaran Tunai Pas (Auto-Complete)',
+        ]);
+
+        return $this->processPayment($request, $order);
     }
 
     // ——— Terima pesanan (pending → in_progress, decrement stock, meja terisi) ———
@@ -321,9 +504,9 @@ class OrderController extends Controller
             abort(404);
         }
 
-        // Load transaction_items untuk snapshot harga & diskon
+        // Load transaction_items & payment untuk snapshot harga & diskon
         $order->load('vouchers', 'bundles.bundle.items.product');
-        $transaction = Transaction::with('items')
+        $transaction = Transaction::with('items', 'payment')
             ->where('transaction_id', $order->order_transaction_id)
             ->where('delete_status', 0)
             ->first();
@@ -348,11 +531,11 @@ class OrderController extends Controller
 
         $order->load('company', 'products', 'vouchers', 'bundles.bundle.items.product');
 
-        // Kalo completed, load transaction_items jg biar dapet snapshot harga & diskon
+        // Kalo completed, load transaction_items & payment jg biar dapet snapshot harga & diskon
         $transaction = null;
         $transactionItems = null;
         if ($order->order_status === 'completed' && $order->order_transaction_id) {
-            $transaction = Transaction::with('items')
+            $transaction = Transaction::with('items', 'payment')
                 ->where('transaction_id', $order->order_transaction_id)
                 ->where('delete_status', 0)
                 ->first();

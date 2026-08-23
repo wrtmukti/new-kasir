@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('company_id')->nullable();
 
             $table->integer('transaction_id')->nullable();
-            $table->string('payment_metode')->nullable();
+            $table->string('payment_metode')->nullable(); // cash, debit
             $table->decimal('payment_amount', 10, 2)->nullable();
             $table->string('payment_reference')->nullable(); // pending, in progress, completed, cancelled
             $table->string('payment_status')->nullable(); // pending, in progress, completed, cancelled

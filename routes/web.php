@@ -62,6 +62,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\SettingController;
 
 use App\Http\Controllers\Admin\Keuangan\CogsRawMaterialController;
 use App\Http\Controllers\Admin\Keuangan\CogsRecipeController;
@@ -127,6 +128,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Order — List & detail
     Route::get('order/list', [OrderController::class, 'list'])->name('order.list');
     Route::get('order/list-data', [OrderController::class, 'listData'])->name('order.list-data');
+    Route::get('order/{order}/payment', [OrderController::class, 'payment'])->name('order.payment');
+    Route::post('order/{order}/payment', [OrderController::class, 'processPayment'])->name('order.processPayment');
     Route::post('order/{order}/complete', [OrderController::class, 'complete'])->name('order.complete');
     Route::post('order/{order}/accept', [OrderController::class, 'accept'])->name('order.accept');
     Route::get('order/{order}/receipt', [OrderController::class, 'receipt'])->name('order.receipt');
@@ -227,6 +230,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
 
+
+    // ===================== SETTING OUTLET & KASIR =====================
+    Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('setting/payment', [SettingController::class, 'updatePaymentSetting'])->name('setting.update-payment');
+    Route::post('setting/theme', [SettingController::class, 'updateThemeSetting'])->name('setting.update-theme');
+    Route::post('setting/profile', [SettingController::class, 'updateCompanyProfile'])->name('setting.update-profile');
 
     Route::get('guide', function () {
         return view('admin.guide.index');

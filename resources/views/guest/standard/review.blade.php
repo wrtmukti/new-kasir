@@ -187,8 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
       bundle_id: b.bundle_id,
       bundle_name: b.bundle_name,
       bundle_price: b.bundle_price,
-      qty: b.qty,
-      items: (b.items || []).map(i => ({ product_id: i.product_id, quantity: i.quantity })),
+      qty: b.qty
     })));
     document.getElementById('guestSubmitVoucher').value = appliedVoucher ? appliedVoucher.code : '';
     document.getElementById('guestSubmitRemark').value = document.getElementById('guestOrderRemark').value.trim();
@@ -196,6 +195,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('input[name="total_price"]').value = Math.max(0, grandTotal - (appliedVoucher ? appliedVoucher.amount : 0));
     // Biarkan form submit normal (POST), redirect ke status page
   });
+
+  // Auto check voucher if prefilled
+  if (voucherCodeEl.value.trim()) {
+    document.getElementById('guestVoucherBtn').click();
+  }
 });
 </script>
 @endpush

@@ -223,6 +223,52 @@
   </div>
 </div>
 
+{{-- Informasi Pembayaran jika Selesai --}}
+@if($order->order_status === 'completed' && $transaction && $transaction->payment)
+<div class="card mb-3 border-success-subtle">
+  <div class="card-header-flex">
+    <h6 class="text-success"><i class="bi bi-check-circle-fill me-2"></i>Informasi Pembayaran</h6>
+    <span class="chip-tag" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight:700;">
+      LUNAS
+    </span>
+  </div>
+  <div class="card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Metode Pembayaran</span>
+        <span class="detail-value fw-bold text-uppercase">
+          @if($transaction->payment->payment_metode === 'cash')
+            <i class="bi bi-cash-stack text-success me-1"></i>Tunai (Cash)
+          @else
+            <i class="bi bi-credit-card-2-front text-primary me-1"></i>Debit Card
+          @endif
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Total Tagihan</span>
+        <span class="detail-value text-mono fw-bold">Rp {{ number_format($transaction->payment->payment_grand_total, 0, ',', '.') }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Uang Diterima / Dibayar</span>
+        <span class="detail-value text-mono fw-bold text-success">Rp {{ number_format($transaction->payment->payment_amount, 0, ',', '.') }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">No. Referensi</span>
+        <span class="detail-value text-mono">{{ $transaction->payment->payment_reference ?? '-' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Waktu Pembayaran</span>
+        <span class="detail-value">{{ $transaction->payment->payment_date ?? '-' }}</span>
+      </div>
+      <div class="detail-item" style="grid-column:1/-1;">
+        <span class="detail-label">Catatan Pembayaran</span>
+        <span class="detail-value text-muted-c">{{ $transaction->payment->payment_remark ?? '-' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+
 {{-- Tombol --}}
 <div class="d-flex justify-content-end gap-2">
   <a href="{{ route('admin.order.list') }}" class="btn btn-outline-soft">Kembali</a>
@@ -234,9 +280,9 @@
   @endif
 
   @if($order->order_status === 'in_progress')
-    <button type="button" class="btn btn-success-grad" id="completeBtn">
-      <i class="bi bi-check2-circle me-1"></i>Selesaikan Pesanan
-    </button>
+    <a href="{{ route('admin.order.payment', $order) }}" class="btn btn-success-grad">
+      <i class="bi bi-credit-card me-1"></i>Lanjut ke Pembayaran
+    </a>
   @endif
 
   @if($order->order_status === 'completed')
@@ -264,29 +310,6 @@
         <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Batal</button>
         <button type="button" class="btn btn-primary-grad" id="confirmAcceptBtn">
           <i class="bi bi-check-lg me-1"></i>Ya, Terima
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-{{-- MODAL KONFIRMASI SELESAI --}}
-<div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="mb-0"><i class="bi bi-check2-circle me-2"></i>Selesaikan Pesanan</h6>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center py-3">
-        <i class="bi bi-check-circle" style="font-size:2.5rem;color:var(--success);display:block;margin-bottom:0.5rem;"></i>
-        <p class="mb-0">Yakin ingin menyelesaikan pesanan <strong>#{{ $order->order_id }}</strong>?</p>
-        <small class="text-muted-c">Pesanan akan selesai dan transaksi akan tercatat.</small>
-      </div>
-      <div class="modal-footer justify-content-center border-0 pt-0">
-        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Batal</button>
-        <button type="button" class="btn btn-success-grad" id="confirmCompleteBtn">
-          <i class="bi bi-check-lg me-1"></i>Ya, Selesaikan
         </button>
       </div>
     </div>
@@ -347,45 +370,6 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(d => {
         if (d.success) {
           NexoraToast(d.message || 'Pesanan diterima.', 'success');
-          setTimeout(() => location.reload(), 800);
-        } else {
-          NexoraToast(d.message || 'Gagal.', 'danger');
-        }
-      })
-      .catch(() => {
-        NexoraToast('Terjadi kesalahan.', 'danger');
-      });
-    });
-  }
-
-  const completeBtn = document.getElementById('completeBtn');
-  const confirmBtn = document.getElementById('confirmCompleteBtn');
-
-  if (completeBtn) {
-    completeBtn.addEventListener('click', function() {
-      var modal = new bootstrap.Modal(document.getElementById('completeModal'));
-      modal.show();
-    });
-  }
-
-  if (confirmBtn) {
-    confirmBtn.addEventListener('click', function() {
-      const btn = this;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memproses...';
-      // Tutup modal
-      var modal = bootstrap.Modal.getInstance(document.getElementById('completeModal'));
-      if (modal) modal.hide();
-      // Kirim request
-      fetch('{{ route("admin.order.complete", $order) }}', {
-        method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: '_token={{ csrf_token() }}'
-      })
-      .then(r => r.json())
-      .then(d => {
-        if (d.success) {
-          NexoraToast(d.message || 'Pesanan selesai.', 'success');
           setTimeout(() => location.reload(), 800);
         } else {
           NexoraToast(d.message || 'Gagal.', 'danger');

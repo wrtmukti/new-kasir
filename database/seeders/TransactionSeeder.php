@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Admin\Order;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
+use App\Models\Admin\Payment;
 use App\Models\SysAdmin\Company;
 use Illuminate\Database\Seeder;
 
@@ -62,6 +63,16 @@ class TransactionSeeder extends Seeder
                 ];
             }
 
+            $grandTotal = (float) ($order->order_grand_total ?? $totalSubtotal);
+            $isCash = ($order->order_id % 2 === 0);
+            $paymentMetode = $isCash ? 'cash' : 'debit';
+            $paymentAmount = $isCash ? ceil($grandTotal / 10000) * 10000 : $grandTotal;
+            $paymentRef = $isCash ? 'CASH-ORD' . $order->order_id : 'EDC-BCA-' . rand(100000, 999999);
+            $change = max(0, $paymentAmount - $grandTotal);
+            $paymentRemark = $isCash
+                ? 'Tunai: Rp ' . number_format($paymentAmount, 0, ',', '.') . ' (Kembalian: Rp ' . number_format($change, 0, ',', '.') . ')'
+                : 'Debit Card EDC BCA';
+
             // Simpan transaction
             $transaction = Transaction::create([
                 'company_id' => $order->company_id,
@@ -71,7 +82,7 @@ class TransactionSeeder extends Seeder
                 'transaction_subtotal' => $totalSubtotal,
                 'transaction_tax' => (float) ($order->tax_amount ?? 0),
                 'transaction_service_charge' => (float) ($order->service_charge_amount ?? 0),
-                'transaction_grand_total' => (float) ($order->order_grand_total ?? $totalSubtotal),
+                'transaction_grand_total' => $grandTotal,
                 'transaction_status' => 'success',
                 'transaction_table_id' => $order->order_table_id,
                 'transaction_customer_id' => $order->order_customer_id,
@@ -81,13 +92,33 @@ class TransactionSeeder extends Seeder
                 'updated_at' => $order->created_at,
             ]);
 
+            // Simpan payment
+            $payment = Payment::create([
+                'company_id' => $order->company_id,
+                'transaction_id' => $transaction->transaction_id,
+                'payment_metode' => $paymentMetode,
+                'payment_amount' => $paymentAmount,
+                'payment_reference' => $paymentRef,
+                'payment_status' => 'completed',
+                'payment_grand_total' => $grandTotal,
+                'payment_remark' => $paymentRemark,
+                'payment_date' => $order->created_at->format('Y-m-d H:i:s'),
+                'payment_table_id' => (string) ($order->order_table_id ?? ''),
+                'payment_customer_id' => (string) ($order->order_customer_id ?? ''),
+                'created_by' => 'seeder',
+                'updated_by' => 'seeder',
+                'delete_status' => 0,
+                'created_at' => $order->created_at,
+                'updated_at' => $order->created_at,
+            ]);
+
+            $transaction->update(['payment_id' => $payment->payment_id]);
+
             // Update statistik DailyClosing jika terikat
             if ($order->daily_closing_id) {
                 $closing = \App\Models\Admin\DailyClosing::find($order->daily_closing_id);
                 if ($closing) {
-                    $grandTotal = (float) ($order->order_grand_total ?? $totalSubtotal);
-                    // Alternating cash vs non-cash untuk variasi data
-                    if ($order->order_id % 2 === 0) {
+                    if ($isCash) {
                         $closing->system_cash_sales += $grandTotal;
                     } else {
                         $closing->system_non_cash_sales += $grandTotal;

@@ -181,16 +181,52 @@ body {
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="3">Total</td>
+        <td colspan="4">Subtotal</td>
         <td class="col-total">{{ number_format($grandTotal, 0) }}</td>
       </tr>
       @if($order->vouchers->isNotEmpty())
         @foreach($order->vouchers as $v)
         <tr>
-          <td colspan="3" style="font-size:10px;">Voucher {{ $v->voucher_code }}</td>
+          <td colspan="4" style="font-size:10px;">Voucher ({{ $v->voucher_code }})</td>
           <td class="col-total" style="font-size:10px;">-{{ number_format($v->voucher_amount, 0) }}</td>
         </tr>
         @endforeach
+      @endif
+      @if($order->service_charge_amount > 0)
+        <tr>
+          <td colspan="4" style="font-size:10px;">Service Charge ({{ number_format($order->service_charge_percent, 0) }}%)</td>
+          <td class="col-total" style="font-size:10px;">{{ number_format($order->service_charge_amount, 0) }}</td>
+        </tr>
+      @endif
+      @if($order->tax_amount > 0)
+        <tr>
+          <td colspan="4" style="font-size:10px;">PB1 Restoran ({{ number_format($order->tax_percent, 0) }}%)</td>
+          <td class="col-total" style="font-size:10px;">{{ number_format($order->tax_amount, 0) }}</td>
+        </tr>
+      @endif
+      <tr style="border-top: 1px solid #000; font-size: 13px;">
+        <td colspan="4" style="padding-top:4px;">TOTAL</td>
+        <td class="col-total" style="padding-top:4px;">{{ number_format($order->order_grand_total ?? $grandTotal, 0) }}</td>
+      </tr>
+      @if($transaction && $transaction->payment)
+        @php
+          $pm = $transaction->payment;
+          $change = max(0, (float)$pm->payment_amount - (float)$pm->payment_grand_total);
+        @endphp
+        <tr style="font-size:11px;">
+          <td colspan="4" style="padding-top:4px;">BAYAR ({{ strtoupper($pm->payment_metode) }})</td>
+          <td class="col-total" style="padding-top:4px;">{{ number_format($pm->payment_amount, 0) }}</td>
+        </tr>
+        @if($pm->payment_metode === 'cash')
+          <tr style="font-size:11px;">
+            <td colspan="4">KEMBALI</td>
+            <td class="col-total">{{ number_format($change, 0) }}</td>
+          </tr>
+        @elseif($pm->payment_reference)
+          <tr style="font-size:10px; color:#555;">
+            <td colspan="5" style="text-align:left; padding-top:2px;">Ref/Trace: {{ $pm->payment_reference }}</td>
+          </tr>
+        @endif
       @endif
     </tfoot>
   </table>
@@ -199,7 +235,7 @@ body {
 
   <div class="receipt-footer">
     <p>Terima kasih atas kunjungan Anda!</p>
-    <p style="margin-top:6px;">— Barang yang sudah dibeli tidak dapat dikembalikan —</p>
+    <p style="margin-top:4px;">— Struk Resmi Pembayaran Kasir —</p>
   </div>
 
 </div>

@@ -12,6 +12,7 @@ use App\Models\Admin\OrderVoucher;
 use App\Models\Admin\Product;
 use App\Models\Admin\Table;
 use App\Models\Admin\Voucher;
+use App\Models\Admin\SettingOutlet;
 use App\Models\SysAdmin\Company;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,12 +21,13 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     /**
-     * Resolve nama view guest berdasarkan template yg di-set di .env (GUEST_TEMPLATE).
+     * Resolve nama view guest berdasarkan template yg di-set di SettingOutlet (DB) atau fallback .env.
      * Format: guest.{template}.{view}
      */
     protected function guestView(string $view): string
     {
-        $template = config('app.guest_template', 'standard');
+        $setting = SettingOutlet::where('delete_status', 0)->first();
+        $template = $setting?->theme ?? config('app.guest_template', 'spicy_bites');
         return "guest.{$template}.{$view}";
     }
     /**
@@ -234,12 +236,9 @@ class OrderController extends Controller
             'items.*.note' => 'nullable|string|max:500',
             'bundles' => 'nullable|array',
             'bundles.*.bundle_id' => 'required',
-            'bundles.*.bundle_name' => 'required|string',
-            'bundles.*.bundle_price' => 'required|numeric|min:0',
+            'bundles.*.bundle_name' => 'nullable|string',
+            'bundles.*.bundle_price' => 'nullable|numeric|min:0',
             'bundles.*.qty' => 'required|integer|min:1',
-            'bundles.*.items' => 'required|array|min:1',
-            'bundles.*.items.*.product_id' => 'required',
-            'bundles.*.items.*.quantity' => 'required|integer|min:1',
             'order_remark' => 'nullable|string|max:500',
             'voucher_code' => 'nullable|string|max:50',
             'total_price' => 'required|numeric|min:0',
@@ -315,17 +314,18 @@ class OrderController extends Controller
         // ——— Hitung bundle (harga paket tetap) ———
         $bundleDetails = [];
         foreach ($validated['bundles'] ?? [] as $b) {
-            $bSubtotal = (float) $b['bundle_price'] * (int) $b['qty'];
+            $bundleModel = Bundle::where('delete_status', 0)->find($b['bundle_id']);
+            $bPrice = $bundleModel ? (float) $bundleModel->bundle_price : (float) ($b['bundle_price'] ?? 0);
+            $bName = $bundleModel ? $bundleModel->bundle_name : ($b['bundle_name'] ?? 'Paket');
+            $bQty = (int) ($b['qty'] ?? 1);
+            $bSubtotal = $bPrice * $bQty;
             $grandTotal += $bSubtotal;
             $bundleDetails[] = [
                 'bundle_id' => $b['bundle_id'],
-                'bundle_name' => $b['bundle_name'],
-                'bundle_price' => (float) $b['bundle_price'],
-                'qty' => (int) $b['qty'],
-                'items' => array_map(fn($i) => [
-                    'product_id' => $i['product_id'],
-                    'quantity' => (int) $i['quantity'],
-                ], $b['items']),
+                'bundle_name' => $bName,
+                'bundle_price' => $bPrice,
+                'qty' => $bQty,
+                'subtotal' => $bSubtotal,
             ];
         }
 
