@@ -14,7 +14,7 @@ class SupplierRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'supplier_code' => 'nullable|string|max:50',
             'supplier_name' => 'required|string|max:255',
             'supplier_contact' => 'nullable|string|max:255',

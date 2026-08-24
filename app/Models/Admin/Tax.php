@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Tax extends Model
 {
@@ -11,7 +11,7 @@ class Tax extends Model
     protected $primaryKey = 'tax_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'tax_name',
         'rate_percent',
         'type',
@@ -27,8 +27,8 @@ class Tax extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="csrf-token" content="{{ csrf_token() }}"/>
-  <title>@yield('title', 'Omah Kopi Jogja') — {{ $company->company_name ?? 'Omah Kopi Jogja' }}</title>
+  <title>@yield('title', 'Omah Kopi Jogja') — {{ $outlet->outlet_name ?? 'Omah Kopi Jogja' }}</title>
 
   <!-- Google Fonts: Playfair Display & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,15 +89,15 @@
     <div class="flex justify-between items-center px-4 h-16 w-full max-w-7xl mx-auto">
       <div class="flex items-center gap-3">
         <a href="{{ route('guest.index', $table->table_id) }}" class="flex items-center gap-2.5 group">
-          @if(!empty($company->company_image))
-            <img src="{{ asset('storage/' . $company->company_image) }}" alt="Logo" class="w-9 h-9 rounded-xl object-cover border border-primary/30 group-hover:scale-105 transition-transform"/>
+          @if(!empty($outlet->outlet_image))
+            <img src="{{ asset('storage/' . $outlet->outlet_image) }}" alt="Logo" class="w-9 h-9 rounded-xl object-cover border border-primary/30 group-hover:scale-105 transition-transform"/>
           @else
             <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-black shadow-md">
               <span class="material-symbols-outlined text-[20px] fill-icon">coffee</span>
             </div>
           @endif
           <h1 class="text-xl font-headline font-black text-primary tracking-tight">
-            {{ $company->company_name ?? 'Omah Kopi Jogja' }}
+            {{ $outlet->outlet_name ?? 'Omah Kopi Jogja' }}
           </h1>
         </a>
       </div>

@@ -4,7 +4,7 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Table extends Model
 {
@@ -20,7 +20,7 @@ class Table extends Model
 
     protected $fillable = [
         'table_id',
-        'company_id',
+        'outlet_id',
         'table_number',
         'table_status',
         'table_capacity',
@@ -30,8 +30,33 @@ class Table extends Model
         'delete_status',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
+    }
+
+    /**
+     * Ambil outlet_id yang valid (dengan fallback ke outlet pertama).
+     */
+    public function getEffectiveOutletIdAttribute(): string
+    {
+        if (!empty($this->outlet_id)) {
+            return (string) $this->outlet_id;
+        }
+        return (string) (Outlet::where('delete_status', 0)->value('outlet_id') ?? 'default');
+    }
+
+    /**
+     * Generate Link Akses Menu Meja untuk Guest: /{client_id}/{outlet_id}/{table_id}
+     */
+    public function getGuestMenuUrlAttribute(): string
+    {
+        $clientId = session('client_id') ?? session('tenant_client_id') ?? '';
+        if (empty($clientId) && session('client_database')) {
+            $client = \App\Models\SysAdmin\Client::where('database_name', session('client_database'))->first();
+            $clientId = $client?->client_id ?? '';
+        }
+        $outletId = $this->effective_outlet_id;
+        return url("{$clientId}/{$outletId}/{$this->table_id}");
     }
 }

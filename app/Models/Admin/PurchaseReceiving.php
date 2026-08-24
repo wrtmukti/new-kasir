@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class PurchaseReceiving extends Model
 {
@@ -11,7 +11,7 @@ class PurchaseReceiving extends Model
     protected $primaryKey = 'receiving_id';
 
     protected $fillable = [
-        'company_id', 'receiving_code', 'receiving_date',
+        'outlet_id', 'receiving_code', 'receiving_date',
         'po_id', 'po_code', 'receiving_status', 'receiving_notes',
         'received_by', 'created_by', 'updated_by', 'delete_status',
     ];
@@ -21,9 +21,9 @@ class PurchaseReceiving extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function purchaseOrder()

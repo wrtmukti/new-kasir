@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Database\Eloquent\Model;
 
 class Bundle extends Model
@@ -11,7 +11,7 @@ class Bundle extends Model
     protected $primaryKey = 'bundle_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'bundle_code',
         'bundle_name',
         'bundle_slug',
@@ -30,9 +30,9 @@ class Bundle extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function items()

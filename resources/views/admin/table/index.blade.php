@@ -38,13 +38,15 @@
         <thead>
           <tr>
             <th>No. Meja</th>
+            <th>Outlet / Cabang</th>
             <th>Kapasitas</th>
             <th>Status</th>
+            <th>Akses Link Menu (QR)</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          @include('admin.table._data', ['tables' => $tables])
+          @include('admin.table._data', ['tables' => $tables, 'clientId' => $clientId ?? ''])
         </tbody>
       </table>
     </div>
@@ -99,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let rows = '';
     for (let i = 0; i < count; i++) {
       rows += '<tr>';
-      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < 6; j++) {
         rows += '<td><div class="skeleton skeleton-text"></div></td>';
       }
       rows += '</tr>';
@@ -137,11 +139,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      NexoraToast('Link menu meja berhasil disalin!', 'success');
+    } catch (err) {
+      NexoraToast('Gagal menyalin link.', 'danger');
+    }
+    document.body.removeChild(ta);
+  }
+
   function attachHandlers() {
     paginationContainer.querySelectorAll('[data-page]').forEach(function(link) {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         loadData(parseInt(this.dataset.page), perPage.value);
+      });
+    });
+
+    document.querySelectorAll('.btn-copy-url').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const url = this.dataset.url;
+        if (!url) return;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(url).then(() => {
+            NexoraToast('Link menu meja berhasil disalin!', 'success');
+          }).catch(() => {
+            fallbackCopy(url);
+          });
+        } else {
+          fallbackCopy(url);
+        }
       });
     });
 

@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\DB;
 
 class HistoryController extends Controller
 {
+    // ============ MAIN HISTORY DASHBOARD ============
+
+    public function index()
+    {
+        $totalStock = DB::table('stock_histories')->where('delete_status', 0)->count();
+        $totalProduct = DB::table('product_histories')->where('delete_status', 0)->count();
+        $totalDiscount = DB::table('discount_histories')->where('delete_status', 0)->count();
+        $totalVoucher = DB::table('voucher_histories')->where('delete_status', 0)->count();
+        $totalBundle = DB::table('bundle_histories')->where('delete_status', 0)->count();
+        $totalAll = $totalStock + $totalProduct + $totalDiscount + $totalVoucher + $totalBundle;
+
+        return view('admin.history.index', compact(
+            'totalStock',
+            'totalProduct',
+            'totalDiscount',
+            'totalVoucher',
+            'totalBundle',
+            'totalAll'
+        ));
+    }
+
     // ============ STOCK HISTORY ============
 
     public function stockShow($id)

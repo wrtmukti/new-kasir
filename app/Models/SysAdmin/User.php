@@ -18,10 +18,18 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'client_id',
+        'outlet_id',
         'name',
         'email',
         'password',
+        'role',
     ];
+
+    public function outlet()
+    {
+        return $this->belongsTo(\App\Models\Admin\Outlet::class, 'outlet_id', 'outlet_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,5 +52,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Tentukan koneksi database secara dinamis berdasarkan sesi client yang aktif atau context koneksi.
+     */
+    public function getConnectionName()
+    {
+        $clientDb = session('client_database') 
+            ?? session('tenant_database') 
+            ?? \App\Services\Client\ClientDatabaseManager::getCurrentClientDatabase();
+
+        if ($clientDb) {
+            $connected = true;
+            if (\App\Services\Client\ClientDatabaseManager::getCurrentClientDatabase() !== $clientDb) {
+                $connected = \App\Services\Client\ClientDatabaseManager::connectToClient($clientDb);
+            }
+            if ($connected) {
+                return 'client';
+            }
+        }
+
+        return config('database.default');
     }
 }

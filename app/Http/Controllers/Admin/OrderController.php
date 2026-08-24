@@ -18,7 +18,7 @@ use App\Models\Admin\Payment;
 use App\Models\Admin\Tax;
 use App\Models\Admin\ServiceCharge;
 use App\Models\Admin\DailyClosing;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,23 +26,39 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    protected function getActiveOutletId(): ?string
+    {
+        return session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
+    }
+
     // ——— Ordering page (pilih produk + cart) ———
     public function index()
     {
-        $products = Product::where('delete_status', 0)
-            ->with('company', 'category', 'stocks')
-            ->latest()
-            ->paginate(10);
+        $activeOutletId = $this->getActiveOutletId();
+        $query = Product::where('delete_status', 0)->with('outlet', 'category', 'stocks');
+        if ($activeOutletId) {
+            $query->where(function ($q) use ($activeOutletId) {
+                $q->where('outlet_id', $activeOutletId)->orWhereNull('outlet_id');
+            });
+        }
+        $products = $query->latest()->paginate(10);
         return view('admin.order.index', compact('products'));
     }
 
     public function data(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
         $perPage = $request->input('per_page', 10);
         $categoryId = $request->input('category_id');
 
         $query = Product::where('delete_status', 0)
-            ->with('company', 'category', 'stocks');
+            ->with('outlet', 'category', 'stocks');
+
+        if ($activeOutletId) {
+            $query->where(function ($q) use ($activeOutletId) {
+                $q->where('outlet_id', $activeOutletId)->orWhereNull('outlet_id');
+            });
+        }
 
         if ($categoryId) {
             $query->where('category_id', $categoryId);
@@ -70,14 +86,21 @@ class OrderController extends Controller
     // ——— Bundle data (AJAX) ———
     public function bundleData(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
         $perPage = $request->input('per_page', 10);
         $view = $request->input('view', 'card');
 
-        $bundles = Bundle::where('delete_status', 0)
+        $query = Bundle::where('delete_status', 0)
             ->where('bundle_status', 1)
-            ->with('items.product')
-            ->latest()
-            ->paginate($perPage);
+            ->with('items.product');
+
+        if ($activeOutletId) {
+            $query->where(function ($q) use ($activeOutletId) {
+                $q->where('outlet_id', $activeOutletId)->orWhereNull('outlet_id');
+            });
+        }
+
+        $bundles = $query->latest()->paginate($perPage);
 
         if ($request->ajax()) {
             $partial = $view === 'list' ? 'admin.order._bundle_data' : 'admin.order._bundle_card';
@@ -96,21 +119,29 @@ class OrderController extends Controller
     // ——— List pesanan (table) ———
     public function list()
     {
-        $orders = Order::where('delete_status', 0)
-            ->with('company')
-            ->with('transaction.items')
-            ->with('bundles')
-            ->orderBy('order_id', 'desc')
-            ->paginate(10);
+        $activeOutletId = $this->getActiveOutletId();
+        $query = Order::where('delete_status', 0)
+            ->with('outlet', 'transaction.items', 'bundles');
+
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
+
+        $orders = $query->orderBy('order_id', 'desc')->paginate(10);
         return view('admin.order.list', compact('orders'));
     }
 
     public function listData(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
         $perPage = $request->input('per_page', 10);
         $search = $request->input('search');
 
-        $query = Order::where('delete_status', 0)->with('company');
+        $query = Order::where('delete_status', 0)->with('outlet');
+
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -121,7 +152,6 @@ class OrderController extends Controller
         }
 
         $orders = $query->orderBy('order_id', 'desc')->with('transaction.items', 'bundles')->paginate($perPage);
-
 
         if ($request->ajax()) {
             return response()->json([
@@ -154,7 +184,7 @@ class OrderController extends Controller
                 ->with('error', 'Pesanan ini sudah dibatalkan.');
         }
 
-        $order->load(['company', 'products.activeDiscount', 'vouchers', 'bundles.bundle.items.product']);
+        $order->load(['outlet', 'products.activeDiscount', 'vouchers', 'bundles.bundle.items.product']);
 
         $table = null;
         if ($order->order_table_id) {
@@ -166,7 +196,7 @@ class OrderController extends Controller
             $customer = Customer::where('customer_id', $order->order_customer_id)->first();
         }
 
-        $company = Company::where('delete_status', 0)->first();
+        $outlet = Outlet::where('delete_status', 0)->first();
 
         // Hitung Subtotal Produk & Diskon
         $items = [];
@@ -208,7 +238,7 @@ class OrderController extends Controller
         }
         $totalSubtotal += $bundleSubtotal;
 
-        return view('admin.order.payment', compact('order', 'table', 'customer', 'company', 'items', 'totalSubtotal'));
+        return view('admin.order.payment', compact('order', 'table', 'customer', 'outlet', 'items', 'totalSubtotal'));
     }
 
     // ——— Proses Simpan Pembayaran Kasir ———
@@ -251,12 +281,12 @@ class OrderController extends Controller
             return back()->withInput()->with('error', 'Uang tunai yang diterima kurang dari total tagihan.');
         }
 
-        $companyId = $order->company_id ?? Company::first()?->company_id;
+        $companyId = $order->outlet_id ?? Outlet::first()?->outlet_id;
 
         // Ambil sesi shift aktif jika ada
         $dailyClosingId = $order->daily_closing_id;
         if (!$dailyClosingId) {
-            $activeShift = DailyClosing::where('company_id', $companyId)->where('status', 'open')->latest()->first();
+            $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
             $dailyClosingId = $activeShift ? $activeShift->id : null;
         }
 
@@ -302,7 +332,7 @@ class OrderController extends Controller
 
             // 1. Simpan Transaksi
             $transaction = Transaction::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'daily_closing_id' => $dailyClosingId,
                 'transaction_code' => 'TRX-' . $order->order_id . '-' . now()->format('YmdHis'),
                 'transaction_date' => now(),
@@ -335,7 +365,7 @@ class OrderController extends Controller
 
             // 2. Simpan Pembayaran (Semua Kolom Terisi Lengkap)
             $payment = Payment::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'transaction_id' => $transaction->transaction_id,
                 'payment_metode' => $paymentMetode,
                 'payment_amount' => $paymentAmount,
@@ -358,7 +388,7 @@ class OrderController extends Controller
             foreach ($items as $item) {
                 $product = $item['product'];
                 TransactionItem::create([
-                    'company_id' => $companyId,
+                    'outlet_id' => $companyId,
                     'transaction_id' => $transaction->transaction_id,
                     'product_id' => $product->product_id,
                     'product_name' => $product->product_name,
@@ -516,9 +546,9 @@ class OrderController extends Controller
             $table = Table::where('table_id', $order->order_table_id)->first();
         }
 
-        $company = Company::where('delete_status', 0)->first();
+        $outlet = Outlet::where('delete_status', 0)->first();
 
-        return view('admin.order.receipt', compact('order', 'transaction', 'table', 'company'));
+        return view('admin.order.receipt', compact('order', 'transaction', 'table', 'outlet'));
     }
 
     // ——— Detail pesanan ———
@@ -529,7 +559,7 @@ class OrderController extends Controller
                 ->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $order->load('company', 'products', 'vouchers', 'bundles.bundle.items.product');
+        $order->load('outlet', 'products', 'vouchers', 'bundles.bundle.items.product');
 
         // Kalo completed, load transaction_items & payment jg biar dapet snapshot harga & diskon
         $transaction = null;
@@ -663,7 +693,7 @@ class OrderController extends Controller
             return back()->withErrors(['items' => 'Minimal satu item produk atau bundle.'])->withInput();
         }
 
-        $companyId = Company::where('delete_status', 0)->value('company_id');
+        $companyId = Outlet::where('delete_status', 0)->value('outlet_id');
 
         // Hitung grand total include diskon produk
         $grandTotal = 0;
@@ -745,7 +775,7 @@ class OrderController extends Controller
             }
 
             $voucherData = [
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'voucher_code' => $voucher->voucher_code,
                 'voucher_type' => $voucher->voucher_type,
                 'voucher_value' => (float) $voucher->voucher_value,
@@ -773,13 +803,13 @@ class OrderController extends Controller
         $finalGrandTotal = $taxableBase + $taxAmount;
 
         // Ambil Sesi Shift Aktif
-        $activeShift = DailyClosing::where('company_id', $companyId)->where('status', 'open')->latest()->first();
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
         $dailyClosingId = $activeShift ? $activeShift->id : null;
 
         try {
             DB::transaction(function () use ($validated, $companyId, $dailyClosingId, $finalGrandTotal, $taxPercent, $taxAmount, $taxType, $scPercent, $scAmount, $itemDetails, $bundleDetails, $voucherData, $request) {
                 $order = Order::create([
-                    'company_id' => $companyId,
+                    'outlet_id' => $companyId,
                     'daily_closing_id' => $dailyClosingId,
                     'order_type' => $validated['order_type'],
                     'order_status' => 'in_progress',
@@ -800,7 +830,7 @@ class OrderController extends Controller
                 $syncData = [];
                 foreach ($itemDetails as $item) {
                     $syncData[$item['product_id']] = [
-                        'company_id' => $companyId,
+                        'outlet_id' => $companyId,
                         'quantity' => $item['qty'],
                         'note' => $item['note'] ?? null,
                         'delete_status' => 0,
@@ -812,7 +842,7 @@ class OrderController extends Controller
                 // Simpan bundle: 1 baris per bundle di order_bundle (identitas utuh)
                 foreach ($bundleDetails as $bd) {
                     OrderBundle::create([
-                        'company_id' => $companyId,
+                        'outlet_id' => $companyId,
                         'order_id' => $order->order_id,
                         'bundle_id' => $bd['bundle_id'],
                         'bundle_name' => $bd['bundle_name'],

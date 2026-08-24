@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\BundleRequest;
 use App\Models\Admin\Bundle;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +17,7 @@ class BundleController extends Controller
     public function index()
     {
         $bundles = Bundle::where('delete_status', 0)
-            ->with('company', 'items.product')
+            ->with('outlet', 'items.product')
             ->latest()
             ->paginate(10);
         return view('admin.bundle.index', compact('bundles'));
@@ -29,7 +29,7 @@ class BundleController extends Controller
         $view = $request->input('view', 'list');
 
         $query = Bundle::where('delete_status', 0)
-            ->with('company', 'items.product');
+            ->with('outlet', 'items.product');
 
         $bundles = $query->latest()->paginate($perPage);
 
@@ -86,13 +86,13 @@ class BundleController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $categories = Category::where('delete_status', 0)->where('category_status', 1)->get();
         $products = Product::where('delete_status', 0)->where('product_status', 1)
             ->with('category')
             ->orderBy('product_name')
             ->get(['product_id', 'product_name', 'product_code', 'product_price', 'category_id']);
-        return view('admin.bundle.create', compact('companies', 'categories', 'products'));
+        return view('admin.bundle.create', compact('outlets', 'categories', 'products'));
     }
 
     public function store(BundleRequest $request)
@@ -141,7 +141,7 @@ class BundleController extends Controller
             // Log ke bundle_histories
             DB::table('bundle_histories')->insert([
                 'bundle_id' => $bundle->bundle_id,
-                'company_id' => $bundle->company_id,
+                'outlet_id' => $bundle->outlet_id,
                 'bundle_code' => $bundle->bundle_code,
                 'bundle_name' => $bundle->bundle_name,
                 'bundle_slug' => $bundle->bundle_slug,
@@ -165,20 +165,20 @@ class BundleController extends Controller
 
     public function show(Bundle $bundle)
     {
-        $bundle->load('company', 'items.product');
+        $bundle->load('outlet', 'items.product');
         return view('admin.bundle.show', compact('bundle'));
     }
 
     public function edit(Bundle $bundle)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $categories = Category::where('delete_status', 0)->where('category_status', 1)->get();
         $products = Product::where('delete_status', 0)->where('product_status', 1)
             ->with('category')
             ->orderBy('product_name')
             ->get(['product_id', 'product_name', 'product_code', 'product_price', 'category_id']);
         $bundle->load('items.product');
-        return view('admin.bundle.edit', compact('bundle', 'companies', 'categories', 'products'));
+        return view('admin.bundle.edit', compact('bundle', 'outlets', 'categories', 'products'));
     }
 
     public function update(BundleRequest $request, Bundle $bundle)
@@ -229,7 +229,7 @@ class BundleController extends Controller
             // Log ke bundle_histories
             DB::table('bundle_histories')->insert([
                 'bundle_id' => $bundle->bundle_id,
-                'company_id' => $bundle->company_id,
+                'outlet_id' => $bundle->outlet_id,
                 'bundle_code' => $bundle->bundle_code,
                 'bundle_name' => $bundle->bundle_name,
                 'bundle_slug' => $bundle->bundle_slug,
@@ -256,7 +256,7 @@ class BundleController extends Controller
         // Log ke bundle_histories dulu sebelum soft delete
         DB::table('bundle_histories')->insert([
             'bundle_id' => $bundle->bundle_id,
-            'company_id' => $bundle->company_id,
+            'outlet_id' => $bundle->outlet_id,
             'bundle_code' => $bundle->bundle_code,
             'bundle_name' => $bundle->bundle_name,
             'bundle_slug' => $bundle->bundle_slug,

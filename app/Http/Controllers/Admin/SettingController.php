@@ -8,7 +8,7 @@ use App\Models\Admin\Tax;
 use App\Models\Admin\ServiceCharge;
 use App\Models\Admin\ShiftSetting;
 use App\Models\Admin\Shift;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,37 +20,50 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $company = Company::where('delete_status', 0)->first();
-        if (!$company) {
-            $company = Company::create([
-                'company_name' => 'Restoran & Cafe',
-                'company_code' => 'RESTO',
-                'company_branch' => 'Pusat',
+        $activeOutletId = session('active_outlet_id') ?? session('outlet_id');
+        $outlet = null;
+        if ($activeOutletId) {
+            $outlet = Outlet::where('outlet_id', $activeOutletId)->where('delete_status', 0)->first();
+        }
+        if (!$outlet) {
+            $outlet = Outlet::where('delete_status', 0)->first();
+        }
+        if (!$outlet) {
+            $outlet = Outlet::create([
+                'outlet_id' => (string) \Illuminate\Support\Str::ulid(),
+                'outlet_name' => 'Restoran & Cafe',
+                'outlet_code' => 'RESTO',
+                'outlet_branch' => 'Pusat',
                 'created_by' => 'admin',
             ]);
         }
 
-        $setting = SettingOutlet::where('company_id', $company->company_id)
+        $setting = SettingOutlet::where('outlet_id', $outlet->outlet_id)
             ->where('delete_status', 0)
             ->first();
 
         if (!$setting) {
             $setting = SettingOutlet::create([
-                'company_id' => $company->company_id,
-                'outlet_name' => $company->company_name,
+                'outlet_id' => $outlet->outlet_id,
+                'company_name' => $outlet->outlet_name,
+                'company_address' => $outlet->outlet_address,
+                'company_phone' => $outlet->outlet_phone,
+                'company_email' => $outlet->outlet_email,
+                'receipt_header' => strtoupper($outlet->outlet_name),
+                'receipt_footer' => 'Terima Kasih Atas Kunjungan Anda!',
                 'payment_timing' => 'post_payment',
                 'theme' => config('app.guest_template', 'spicy_bites'),
                 'created_by' => 'admin',
             ]);
         }
 
-        // Data Master Pajak & Service Charge
-        $tax = Tax::where('is_active', 1)->first() ?? Tax::first();
-        $service = ServiceCharge::where('is_active', 1)->first() ?? ServiceCharge::first();
+        // Data Master Pajak & Service Charge untuk Outlet Aktif
+        $tax = Tax::where('outlet_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? Tax::where('outlet_id', $outlet->outlet_id)->first() ?? Tax::first();
+        $service = ServiceCharge::where('outlet_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? ServiceCharge::where('outlet_id', $outlet->outlet_id)->first() ?? ServiceCharge::first();
 
         // Data Master Shift & Cut-Off
-        $companyId = session('company_id') ?? $company->company_id ?? 'COMP-001';
-        $shiftSetting = ShiftSetting::where('company_id', $companyId)->first() 
+        $outletId = $outlet->outlet_id;
+        $shiftSetting = ShiftSetting::where('outlet_id', $outletId)->first() 
             ?? ShiftSetting::first() 
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
@@ -127,7 +140,7 @@ class SettingController extends Controller
             ],
         ];
 
-        return view('admin.setting.index', compact('company', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts'));
+        return view('admin.setting.index', compact('outlet', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts'));
     }
 
     /**
@@ -139,13 +152,13 @@ class SettingController extends Controller
             'payment_timing' => 'required|in:post_payment,pre_payment',
         ]);
 
-        $company = Company::where('delete_status', 0)->first();
+        $outlet = Outlet::where('delete_status', 0)->first();
         if (!$company) {
             return response()->json(['success' => false, 'message' => 'Perusahaan tidak ditemukan.'], 404);
         }
 
         $setting = SettingOutlet::firstOrCreate(
-            ['company_id' => $company->company_id],
+            ['outlet_id' => $outlet->outlet_id],
             ['created_by' => 'admin']
         );
 
@@ -172,13 +185,13 @@ class SettingController extends Controller
             'theme' => 'required|string|in:standard,spicy_bites,metropolis_brew,ignite_spice,midnight_social,omah_kopi_jogja,bumblebee',
         ]);
 
-        $company = Company::where('delete_status', 0)->first();
+        $outlet = Outlet::where('delete_status', 0)->first();
         if (!$company) {
             return response()->json(['success' => false, 'message' => 'Perusahaan tidak ditemukan.'], 404);
         }
 
         $setting = SettingOutlet::firstOrCreate(
-            ['company_id' => $company->company_id],
+            ['outlet_id' => $outlet->outlet_id],
             ['created_by' => 'admin']
         );
 
@@ -200,54 +213,172 @@ class SettingController extends Controller
     public function updateCompanyProfile(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'company_name' => 'required|string|max:150',
-            'company_code' => 'nullable|string|max:20',
-            'company_branch' => 'nullable|string|max:100',
-            'company_email' => 'nullable|email|max:100',
-            'company_phone' => 'nullable|string|max:30',
-            'company_address' => 'nullable|string|max:500',
-            'company_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'outlet_name' => 'required|string|max:150',
+            'outlet_code' => 'nullable|string|max:20',
+            'outlet_branch' => 'nullable|string|max:100',
+            'outlet_email' => 'nullable|email|max:100',
+            'outlet_phone' => 'nullable|string|max:30',
+            'outlet_address' => 'nullable|string|max:500',
+            'outlet_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
         ]);
 
-        $company = Company::where('delete_status', 0)->first();
+        $outlet = Outlet::where('delete_status', 0)->first();
         if (!$company) {
-            $company = Company::create([
-                'company_name' => $validated['company_name'],
+            $outlet = Outlet::create([
+                'outlet_name' => $validated['outlet_name'],
                 'created_by' => 'admin',
             ]);
         }
 
         $updateData = [
-            'company_name' => $validated['company_name'],
-            'company_code' => $validated['company_code'] ?? $company->company_code,
-            'company_branch' => $validated['company_branch'] ?? $company->company_branch,
-            'company_email' => $validated['company_email'] ?? $company->company_email,
-            'company_phone' => $validated['company_phone'] ?? $company->company_phone,
-            'company_address' => $validated['company_address'] ?? $company->company_address,
+            'outlet_name' => $validated['outlet_name'],
+            'outlet_code' => $validated['outlet_code'] ?? $outlet->outlet_code,
+            'outlet_branch' => $validated['outlet_branch'] ?? $outlet->outlet_branch,
+            'outlet_email' => $validated['outlet_email'] ?? $outlet->outlet_email,
+            'outlet_phone' => $validated['outlet_phone'] ?? $outlet->outlet_phone,
+            'outlet_address' => $validated['outlet_address'] ?? $outlet->outlet_address,
             'updated_by' => 'admin',
         ];
 
-        if ($request->hasFile('company_image')) {
-            if ($company->company_image && Storage::disk('public')->exists($company->company_image)) {
-                Storage::disk('public')->delete($company->company_image);
+        if ($request->hasFile('outlet_image')) {
+            if ($outlet->outlet_image && Storage::disk('public')->exists($outlet->outlet_image)) {
+                Storage::disk('public')->delete($outlet->outlet_image);
             }
-            $path = $request->file('company_image')->store('companies', 'public');
-            $updateData['company_image'] = $path;
+            $path = $request->file('outlet_image')->store('outlets', 'public');
+            $updateData['outlet_image'] = $path;
         }
 
-        $company->update($updateData);
+        $outlet->update($updateData);
 
         // Sinkronisasi nama outlet ke setting_outlets
         SettingOutlet::updateOrCreate(
-            ['company_id' => $company->company_id],
-            ['outlet_name' => $company->company_name, 'updated_by' => 'admin']
+            ['outlet_id' => $outlet->outlet_id],
+            ['outlet_name' => $outlet->outlet_name, 'updated_by' => 'admin']
         );
 
         return response()->json([
             'success' => true,
             'message' => 'Informasi profil usaha berhasil diperbarui.',
-            'company_name' => $company->company_name,
-            'image_url' => $company->company_image ? asset('storage/' . $company->company_image) : null,
+            'outlet_name' => $outlet->outlet_name,
+            'image_url' => $outlet->outlet_image ? asset('storage/' . $outlet->outlet_image) : null,
         ]);
+    }
+
+    /**
+     * Beralih cabang outlet aktif untuk sesi kasir/admin.
+     */
+    public function switchOutlet(Request $request)
+    {
+        $request->validate([
+            'outlet_id' => 'required|string',
+        ]);
+
+        $outlet = Outlet::where('outlet_id', $request->outlet_id)
+            ->where('delete_status', 0)
+            ->first();
+
+        if ($outlet) {
+            session([
+                'active_outlet_id' => $outlet->outlet_id,
+                'outlet_id' => $outlet->outlet_id,
+                'active_outlet_name' => $outlet->outlet_name,
+            ]);
+
+            return back()->with('success', "Berhasil beralih ke cabang: {$outlet->outlet_name}");
+        }
+
+        return back()->with('error', 'Cabang outlet tidak ditemukan.');
+    }
+
+    /**
+     * Tampilkan form halaman baru untuk menambah cabang baru di panel POS Admin.
+     */
+    public function createOutlet()
+    {
+        $currentOutlets = Outlet::where('delete_status', 0)->get();
+        $suggestedBrand = session('client_name') ?? session('business_name') ?? 'Outlet';
+
+        return view('admin.setting.create_outlet', [
+            'currentOutlets' => $currentOutlets,
+            'suggestedBrand' => $suggestedBrand,
+        ]);
+    }
+
+    /**
+     * Simpan cabang baru langsung di database client.
+     */
+    public function storeOutlet(Request $request)
+    {
+        $validated = $request->validate([
+            'outlet_name' => 'required|string|max:150',
+            'outlet_code' => 'nullable|string|max:20',
+            'outlet_branch' => 'nullable|string|max:100',
+            'outlet_phone' => 'nullable|string|max:30',
+            'outlet_email' => 'nullable|email|max:100',
+            'outlet_address' => 'nullable|string|max:500',
+            'outlet_status' => 'nullable|in:0,1',
+        ]);
+
+        $outletId = (string) \Illuminate\Support\Str::ulid();
+        $outletSlug = \Illuminate\Support\Str::slug($validated['outlet_name']) . '-' . \Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(4));
+
+        $outlet = Outlet::create([
+            'outlet_id' => $outletId,
+            'outlet_name' => $validated['outlet_name'],
+            'outlet_code' => $validated['outlet_code'] ?? strtoupper(\Illuminate\Support\Str::random(4)),
+            'outlet_branch' => $validated['outlet_branch'] ?? 'Cabang',
+            'outlet_slug' => $outletSlug,
+            'outlet_phone' => $validated['outlet_phone'] ?? null,
+            'outlet_email' => $validated['outlet_email'] ?? null,
+            'outlet_address' => $validated['outlet_address'] ?? null,
+            'outlet_status' => $validated['outlet_status'] ?? 1,
+            'created_by' => auth()->user()?->name ?? 'Admin',
+        ]);
+
+        // Auto-inisialisasi setting outlet
+        SettingOutlet::create([
+            'outlet_id' => $outletId,
+            'outlet_name' => $validated['outlet_name'],
+            'payment_timing' => 'post_payment',
+            'theme' => config('app.guest_template', 'spicy_bites'),
+            'created_by' => auth()->user()?->name ?? 'Admin',
+        ]);
+
+        // Auto-inisialisasi shift settings
+        ShiftSetting::create([
+            'outlet_id' => $outletId,
+            'daily_cutoff_time' => '03:00:00',
+            'shift_mode' => 'auto_master',
+            'auto_lock_unclosed' => 1,
+        ]);
+
+        // Auto-inisialisasi Pajak & Service Charge
+        Tax::create([
+            'outlet_id' => $outletId,
+            'tax_name' => 'PB1 Restoran (10%)',
+            'rate_percent' => 10.00,
+            'type' => 'exclusive',
+            'is_active' => 1,
+            'created_by' => auth()->user()?->name ?? 'Admin',
+        ]);
+
+        ServiceCharge::create([
+            'outlet_id' => $outletId,
+            'service_name' => 'Service Charge (5%)',
+            'rate_percent' => 5.00,
+            'is_taxable' => 1,
+            'is_active' => 1,
+            'created_by' => auth()->user()?->name ?? 'Admin',
+        ]);
+
+        // Otomatis aktifkan sesi ke cabang yang baru dibuat
+        session([
+            'active_outlet_id' => $outlet->outlet_id,
+            'outlet_id' => $outlet->outlet_id,
+            'active_outlet_name' => $outlet->outlet_name,
+        ]);
+
+        return redirect()->route('admin.setting.index')
+            ->with('success', "Cabang '{$outlet->outlet_name}' berhasil ditambahkan dan langsung aktif!");
     }
 }

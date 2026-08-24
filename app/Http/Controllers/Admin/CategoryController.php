@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategoryRequest;
 use App\Models\Admin\Category;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate(10);
         return view('admin.category.index', compact('categories'));
@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $categories = Category::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate($perPage);
 
@@ -43,8 +43,8 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.category.create', compact('companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.category.create', compact('outlets'));
     }
 
     public function store(CategoryRequest $request)
@@ -68,14 +68,14 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $category->load('company');
+        $category->load('outlet');
         return view('admin.category.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.category.edit', compact('category', 'companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.category.edit', compact('category', 'outlets'));
     }
 
     public function update(CategoryRequest $request, Category $category)

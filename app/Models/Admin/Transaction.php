@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Transaction extends Model
 {
@@ -12,7 +12,7 @@ class Transaction extends Model
     protected $primaryKey = 'transaction_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'daily_closing_id',
         'transaction_code',
         'transaction_date',
@@ -37,9 +37,9 @@ class Transaction extends Model
         'delete_status',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function dailyClosing()

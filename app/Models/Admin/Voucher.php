@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Voucher extends Model
 {
@@ -24,7 +24,7 @@ class Voucher extends Model
     ];
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'voucher_code',
         'voucher_name',
         'voucher_description',
@@ -43,9 +43,9 @@ class Voucher extends Model
         'delete_status',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function scopeActive($query)

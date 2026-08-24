@@ -12,7 +12,7 @@ use App\Models\Admin\PurchaseReceivingItem;
 use App\Models\Admin\Keuangan\CogsRawMaterial;
 use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
 use App\Models\Admin\Supplier;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +23,7 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $orders = PurchaseOrder::where('delete_status', 0)
-            ->with('supplier', 'company')
+            ->with('supplier', 'outlet')
             ->latest()
             ->paginate(10);
         return view('admin.keuangan.purchase-order.index', compact('orders'));
@@ -33,7 +33,7 @@ class PurchaseOrderController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $orders = PurchaseOrder::where('delete_status', 0)
-            ->with('supplier', 'company')
+            ->with('supplier', 'outlet')
             ->latest()
             ->paginate($perPage);
 
@@ -63,7 +63,7 @@ class PurchaseOrderController extends Controller
 
         DB::beginTransaction();
         try {
-            $companyId = session('company_id') ?? Company::first()?->company_id;
+            $companyId = session('outlet_id') ?? Outlet::first()?->outlet_id;
 
             // Generate PO code
             $lastPo = PurchaseOrder::latest()->first();
@@ -84,7 +84,7 @@ class PurchaseOrderController extends Controller
             }
 
             $order = PurchaseOrder::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'po_code' => $poCode,
                 'po_date' => now(),
                 'supplier_id' => $validated['supplier_id'],
@@ -280,7 +280,7 @@ class PurchaseOrderController extends Controller
 
             CogsRawMaterialHistory::create([
                 'cogs_raw_material_id' => $rawMat->cogs_raw_material_id,
-                'company_id' => $purchase_order->company_id,
+                'outlet_id' => $purchase_order->outlet_id,
                 'name' => $rawMat->name,
                 'unit' => $rawMat->unit,
                 'amount' => $amountAfter,
@@ -331,14 +331,14 @@ class PurchaseOrderController extends Controller
 
         DB::beginTransaction();
         try {
-            $companyId = session('company_id') ?? Company::first()?->company_id;
+            $companyId = session('outlet_id') ?? Outlet::first()?->outlet_id;
 
             $lastReceiving = PurchaseReceiving::latest()->first();
             $nextNum = $lastReceiving ? ((int) substr($lastReceiving->receiving_code, -3)) + 1 : 1;
             $receivingCode = 'RCV-' . now()->format('Ymd') . '-' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
 
             $receiving = PurchaseReceiving::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'receiving_code' => $receivingCode,
                 'receiving_date' => $validated['receiving_date'],
                 'po_id' => $order->po_id,
@@ -385,7 +385,7 @@ class PurchaseOrderController extends Controller
                     // Catat riwayat di CogsRawMaterialHistory
                     CogsRawMaterialHistory::create([
                         'cogs_raw_material_id' => $rawMat->cogs_raw_material_id,
-                        'company_id' => $companyId,
+                        'outlet_id' => $companyId,
                         'name' => $rawMat->name,
                         'unit' => $rawMat->unit,
                         'amount' => $amountAfter,

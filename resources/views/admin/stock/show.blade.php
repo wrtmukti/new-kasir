@@ -30,7 +30,7 @@
         <table class="detail-table">
           <tr>
             <td class="detail-label">Perusahaan</td>
-            <td class="detail-value">{{ $stock->company?->company_name ?? '-' }}</td>
+            <td class="detail-value">{{ $stock->outlet?->outlet_name ?? '-' }}</td>
           </tr>
           <tr>
             <td class="detail-label">Kode Stok</td>

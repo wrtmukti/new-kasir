@@ -5,7 +5,7 @@ namespace App\Models\Admin\Keuangan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Admin\Product;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class CogsRecipe extends Model
 {
@@ -15,7 +15,7 @@ class CogsRecipe extends Model
     protected $primaryKey = 'cogs_recipe_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'product_id',
         'recipe_name',
         'recipe_category',
@@ -33,9 +33,9 @@ class CogsRecipe extends Model
         return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function items()

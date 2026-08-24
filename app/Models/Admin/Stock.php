@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Stock extends Model
 {
@@ -12,7 +12,7 @@ class Stock extends Model
     protected $primaryKey = 'stock_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'stock_code',
         'stock_name',
         'stock_slug',
@@ -38,9 +38,9 @@ class Stock extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function products()

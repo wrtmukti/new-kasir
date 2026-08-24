@@ -7,28 +7,37 @@ use App\Http\Requests\Admin\StockRequest;
 use App\Models\Admin\Keuangan\CogsRawMaterial;
 use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
 use App\Models\Admin\Stock;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
+    protected function getActiveOutletId(): ?string
+    {
+        return session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
+    }
+
     public function index()
     {
-        $stocks = Stock::where('delete_status', 0)
-            ->with('company')
-            ->latest()
-            ->paginate(10);
+        $activeOutletId = $this->getActiveOutletId();
+        $query = Stock::where('delete_status', 0)->with('outlet');
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
+        $stocks = $query->latest()->paginate(10);
         return view('admin.stock.index', compact('stocks'));
     }
 
     public function data(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
         $perPage = $request->input('per_page', 10);
-        $stocks = Stock::where('delete_status', 0)
-            ->with('company')
-            ->latest()
-            ->paginate($perPage);
+        $query = Stock::where('delete_status', 0)->with('outlet');
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
+        $stocks = $query->latest()->paginate($perPage);
 
         if ($request->ajax()) {
             return response()->json([
@@ -60,9 +69,9 @@ class StockController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
-        return view('admin.stock.create', compact('companies', 'cogsRawMaterials'));
+        return view('admin.stock.create', compact('outlets', 'cogsRawMaterials'));
     }
 
     public function store(StockRequest $request)
@@ -74,7 +83,7 @@ class StockController extends Controller
         $validated['stock_amount'] = $validated['stock_amount'] ?? 0;
 
         $stockData = collect($validated)->only([
-            'company_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
+            'outlet_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
             'stock_type', 'stock_unit', 'stock_amount', 'stock_price', 'stock_status'
         ])->toArray();
 
@@ -86,7 +95,7 @@ class StockController extends Controller
         // Log ke stock_histories
         DB::table('stock_histories')->insert([
             'stock_id' => $stock->stock_id,
-            'company_id' => $stock->company_id,
+            'outlet_id' => $stock->outlet_id,
             'stock_code' => $stock->stock_code,
             'stock_name' => $stock->stock_name,
             'stock_slug' => $stock->stock_slug,
@@ -113,15 +122,15 @@ class StockController extends Controller
 
     public function show(Stock $stock)
     {
-        $stock->load('company');
+        $stock->load('outlet');
         return view('admin.stock.show', compact('stock'));
     }
 
     public function edit(Stock $stock)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
-        return view('admin.stock.edit', compact('stock', 'companies', 'cogsRawMaterials'));
+        return view('admin.stock.edit', compact('stock', 'outlets', 'cogsRawMaterials'));
     }
 
     public function update(StockRequest $request, Stock $stock)
@@ -131,7 +140,7 @@ class StockController extends Controller
         $validated['stock_slug'] = str()->slug($validated['stock_name']);
 
         $stockData = collect($validated)->only([
-            'company_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
+            'outlet_id', 'stock_code', 'stock_name', 'stock_slug', 'stock_description',
             'stock_type', 'stock_unit', 'stock_amount', 'stock_price', 'stock_status'
         ])->toArray();
 
@@ -143,7 +152,7 @@ class StockController extends Controller
         // Log ke stock_histories
         DB::table('stock_histories')->insert([
             'stock_id' => $stock->stock_id,
-            'company_id' => $stock->company_id,
+            'outlet_id' => $stock->outlet_id,
             'stock_code' => $stock->stock_code,
             'stock_name' => $stock->stock_name,
             'stock_slug' => $stock->stock_slug,
@@ -172,7 +181,7 @@ class StockController extends Controller
     {
         DB::table('stock_histories')->insert([
             'stock_id' => $stock->stock_id,
-            'company_id' => $stock->company_id,
+            'outlet_id' => $stock->outlet_id,
             'stock_code' => $stock->stock_code,
             'stock_name' => $stock->stock_name,
             'stock_slug' => $stock->stock_slug,
@@ -219,7 +228,7 @@ class StockController extends Controller
 
                     CogsRawMaterialHistory::create([
                         'cogs_raw_material_id' => $rawMat->cogs_raw_material_id,
-                        'company_id' => $rawMat->company_id,
+                        'outlet_id' => $rawMat->outlet_id,
                         'name' => $rawMat->name,
                         'unit' => $rawMat->unit,
                         'amount' => $rawMat->amount,

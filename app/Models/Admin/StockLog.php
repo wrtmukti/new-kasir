@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class StockLog extends Model
 {
@@ -11,7 +11,7 @@ class StockLog extends Model
     protected $primaryKey = 'log_id';
 
     protected $fillable = [
-        'company_id', 'stock_id',
+        'outlet_id', 'stock_id',
         'reference_type', 'reference_code', 'type',
         'qty', 'price', 'total',
         'stock_before', 'stock_after',
@@ -28,9 +28,9 @@ class StockLog extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function stock()

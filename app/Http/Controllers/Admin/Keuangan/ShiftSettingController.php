@@ -14,9 +14,9 @@ class ShiftSettingController extends Controller
      */
     public function index()
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
-        $setting = ShiftSetting::where('company_id', $companyId)->first() 
+        $setting = ShiftSetting::where('outlet_id', $companyId)->first() 
             ?? ShiftSetting::first() 
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
@@ -24,7 +24,7 @@ class ShiftSettingController extends Controller
                 'auto_lock_unclosed' => 1,
             ]);
 
-        $shifts = Shift::where('company_id', $companyId)
+        $shifts = Shift::where('outlet_id', $companyId)
             ->orderBy('shift_number', 'asc')
             ->get();
 
@@ -46,12 +46,12 @@ class ShiftSettingController extends Controller
             'shift_mode.in' => 'Mode shift tidak valid.',
         ]);
 
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
         $cutoffTime = $request->daily_cutoff_time . ':00';
 
         $setting = ShiftSetting::updateOrCreate(
-            ['company_id' => $companyId],
+            ['outlet_id' => $companyId],
             [
                 'daily_cutoff_time' => $cutoffTime,
                 'shift_mode' => $request->shift_mode,
@@ -89,15 +89,15 @@ class ShiftSettingController extends Controller
             'default_starting_cash.numeric' => 'Default modal awal harus berupa angka.',
         ]);
 
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
-        $nextShiftNumber = Shift::where('company_id', $companyId)->max('shift_number') + 1;
+        $nextShiftNumber = Shift::where('outlet_id', $companyId)->max('shift_number') + 1;
 
         $startTime = strlen($request->start_time) == 5 ? $request->start_time . ':00' : $request->start_time;
         $endTime = strlen($request->end_time) == 5 ? $request->end_time . ':00' : $request->end_time;
 
         $shift = Shift::create([
-            'company_id' => $companyId,
+            'outlet_id' => $companyId,
             'shift_number' => $nextShiftNumber,
             'shift_name' => $request->shift_name,
             'start_time' => $startTime,

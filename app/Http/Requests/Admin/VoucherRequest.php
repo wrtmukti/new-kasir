@@ -14,7 +14,7 @@ class VoucherRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'voucher_code' => 'required|string|max:50|unique:vouchers,voucher_code,' . $this->route('voucher')?->voucher_id . ',voucher_id',
             'voucher_name' => 'required|string|max:255',
             'voucher_type' => 'required|string|in:nominal,percentage,free_item',

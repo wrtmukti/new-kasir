@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Database\Eloquent\Model;
 
 class SettingOutlet extends Model
@@ -10,7 +10,7 @@ class SettingOutlet extends Model
     protected $table = 'setting_outlets';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'outlet_name',
         'payment_timing',
         'theme',
@@ -23,8 +23,8 @@ class SettingOutlet extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

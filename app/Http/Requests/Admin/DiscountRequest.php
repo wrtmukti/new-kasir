@@ -14,7 +14,7 @@ class DiscountRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'discount_name' => 'required|string|max:255',
             'discount_type' => 'required|string|in:percentage,nominal',
             'discount_value' => 'required|numeric|min:0',

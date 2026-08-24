@@ -4,7 +4,7 @@ namespace App\Models\Admin\Keuangan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class CogsWasteHistory extends Model
 {
@@ -15,7 +15,7 @@ class CogsWasteHistory extends Model
 
     protected $fillable = [
         'cogs_waste_log_id',
-        'company_id',
+        'outlet_id',
         'cogs_raw_material_id',
         'qty_lost',
         'waste_cost',
@@ -39,8 +39,8 @@ class CogsWasteHistory extends Model
         return $this->belongsTo(CogsRawMaterial::class, 'cogs_raw_material_id', 'cogs_raw_material_id');
     }
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

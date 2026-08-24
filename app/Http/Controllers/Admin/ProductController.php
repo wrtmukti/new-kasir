@@ -8,7 +8,7 @@ use App\Models\Admin\Category;
 use App\Models\Admin\Discount;
 use App\Models\Admin\Product;
 use App\Models\Admin\Stock;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::where('delete_status', 0)
-            ->with('company', 'category', 'stocks')
+            ->with('outlet', 'category', 'stocks')
             ->latest()
             ->paginate(10);
         return view('admin.product.index', compact('products'));
@@ -30,7 +30,7 @@ class ProductController extends Controller
         $categoryId = $request->input('category_id');
 
         $query = Product::where('delete_status', 0)
-            ->with('company', 'category', 'stocks');
+            ->with('outlet', 'category', 'stocks');
 
         if ($categoryId) {
             $query->where('category_id', $categoryId);
@@ -57,13 +57,13 @@ class ProductController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $categories = Category::where('delete_status', 0)->where('category_status', 1)->get();
         $stocks = Stock::where('delete_status', 0)->where('stock_status', 1)
             ->orderBy('stock_name')
             ->get(['stock_id', 'stock_name', 'stock_code', 'stock_unit', 'stock_price', 'stock_amount']);
         $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
-        return view('admin.product.create', compact('companies', 'categories', 'stocks', 'discounts'));
+        return view('admin.product.create', compact('outlets', 'categories', 'stocks', 'discounts'));
     }
 
     public function store(ProductRequest $request)
@@ -112,7 +112,7 @@ class ProductController extends Controller
             // Simpan diskon ke pivot kalo dipilih
             if ($request->filled('discount_id')) {
                 DB::table('discount_product')->insert([
-                    'company_id' => $product->company_id,
+                    'outlet_id' => $product->outlet_id,
                     'product_id' => $product->product_id,
                     'discount_id' => $request->discount_id,
                     'start_date' => now(),
@@ -129,13 +129,13 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $product->load('company', 'category', 'stocks');
+        $product->load('outlet', 'category', 'stocks');
         return view('admin.product.show', compact('product'));
     }
 
     public function edit(Product $product)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $categories = Category::where('delete_status', 0)->where('category_status', 1)->get();
         $stocks = Stock::where('delete_status', 0)->where('stock_status', 1)
             ->orderBy('stock_name')
@@ -144,7 +144,7 @@ class ProductController extends Controller
         $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
         $activeDiscount = $product->activeDiscount()->first();
         $activeDiscountId = $activeDiscount?->id;
-        return view('admin.product.edit', compact('product', 'companies', 'categories', 'stocks', 'discounts', 'activeDiscountId'));
+        return view('admin.product.edit', compact('product', 'outlets', 'categories', 'stocks', 'discounts', 'activeDiscountId'));
     }
 
     public function update(ProductRequest $request, Product $product)
@@ -212,7 +212,7 @@ class ProductController extends Controller
                 // Aktifkan diskon baru kalo dipilih
                 if ($newDiscountId) {
                     DB::table('discount_product')->insert([
-                        'company_id' => $product->company_id,
+                        'outlet_id' => $product->outlet_id,
                         'product_id' => $product->product_id,
                         'discount_id' => $newDiscountId,
                         'start_date' => now(),

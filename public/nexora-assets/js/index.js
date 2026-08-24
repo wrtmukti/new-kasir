@@ -22,6 +22,7 @@
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem(STORAGE_KEY, next);
     syncThemeToggleIcon(next);
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: next } }));
   }
 
   function syncThemeToggleIcon(theme) {

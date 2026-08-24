@@ -4,7 +4,7 @@ namespace App\Models\Admin\Keuangan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class CogsRawMaterialHistory extends Model
 {
@@ -15,7 +15,7 @@ class CogsRawMaterialHistory extends Model
 
     protected $fillable = [
         'cogs_raw_material_id',
-        'company_id',
+        'outlet_id',
         'name',
         'unit',
         'amount',
@@ -37,8 +37,8 @@ class CogsRawMaterialHistory extends Model
         return $this->belongsTo(CogsRawMaterial::class, 'cogs_raw_material_id', 'cogs_raw_material_id');
     }
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

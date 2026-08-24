@@ -8,7 +8,7 @@ use App\Models\Admin\Keuangan\CogsRawMaterial;
 use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
 use App\Models\Admin\Keuangan\CogsWasteHistory;
 use App\Models\Admin\Keuangan\CogsWasteLog;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -58,8 +58,8 @@ class CogsWasteLogController extends Controller
 
     public function store(CogsWasteLogRequest $request)
     {
-        $company = Company::where('delete_status', 0)->first();
-        $companyId = $company ? $company->company_id : null;
+        $outlet = Outlet::where('delete_status', 0)->first();
+        $companyId = $company ? $outlet->outlet_id : null;
 
         $rawMaterial = CogsRawMaterial::find($request->cogs_raw_material_id);
         if (!$rawMaterial) {
@@ -72,7 +72,7 @@ class CogsWasteLogController extends Controller
         DB::transaction(function () use ($request, $companyId, $rawMaterial, $qtyLost, $wasteCost) {
             // Create Waste Log
             $wasteLog = CogsWasteLog::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'cogs_raw_material_id' => $rawMaterial->cogs_raw_material_id,
                 'qty_lost' => $qtyLost,
                 'waste_cost' => $wasteCost,
@@ -90,7 +90,7 @@ class CogsWasteLogController extends Controller
             // Audit Trail Waste History
             CogsWasteHistory::create([
                 'cogs_waste_log_id' => $wasteLog->cogs_waste_log_id,
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'cogs_raw_material_id' => $rawMaterial->cogs_raw_material_id,
                 'qty_lost' => $qtyLost,
                 'waste_cost' => $wasteCost,
@@ -105,7 +105,7 @@ class CogsWasteLogController extends Controller
             // Log di raw material history
             CogsRawMaterialHistory::create([
                 'cogs_raw_material_id' => $rawMaterial->cogs_raw_material_id,
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'name' => $rawMaterial->name,
                 'unit' => $rawMaterial->unit,
                 'amount' => $stockAfter,
@@ -137,7 +137,7 @@ class CogsWasteLogController extends Controller
         // Audit Trail Waste History
         CogsWasteHistory::create([
             'cogs_waste_log_id' => $cogsWasteLog->cogs_waste_log_id,
-            'company_id' => $cogsWasteLog->company_id,
+            'outlet_id' => $cogsWasteLog->outlet_id,
             'cogs_raw_material_id' => $cogsWasteLog->cogs_raw_material_id,
             'qty_lost' => $cogsWasteLog->qty_lost,
             'waste_cost' => $cogsWasteLog->waste_cost,

@@ -9,7 +9,7 @@ use App\Models\Admin\Keuangan\CogsRecipe;
 use App\Models\Admin\Keuangan\CogsRecipeHistory;
 use App\Models\Admin\Keuangan\CogsRecipeItem;
 use App\Models\Admin\Product;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -59,12 +59,12 @@ class CogsRecipeController extends Controller
 
     public function store(CogsRecipeRequest $request)
     {
-        $company = Company::where('delete_status', 0)->first();
-        $companyId = $company ? $company->company_id : null;
+        $outlet = Outlet::where('delete_status', 0)->first();
+        $companyId = $company ? $outlet->outlet_id : null;
 
         DB::transaction(function () use ($request, $companyId, &$recipe) {
             $recipe = CogsRecipe::create([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'product_id' => $request->product_id,
                 'recipe_name' => $request->recipe_name,
                 'target_food_cost' => (float) $request->target_food_cost,
@@ -101,7 +101,7 @@ class CogsRecipeController extends Controller
             // Audit Trail History
             CogsRecipeHistory::create([
                 'cogs_recipe_id' => $recipe->cogs_recipe_id,
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'recipe_name' => $recipe->recipe_name,
                 'target_food_cost' => $recipe->target_food_cost,
                 'estimated_cogs' => $recipe->estimated_cogs,
@@ -196,7 +196,7 @@ class CogsRecipeController extends Controller
             // Audit Trail History
             CogsRecipeHistory::create([
                 'cogs_recipe_id' => $cogsRecipe->cogs_recipe_id,
-                'company_id' => $cogsRecipe->company_id,
+                'outlet_id' => $cogsRecipe->outlet_id,
                 'recipe_name' => $cogsRecipe->recipe_name,
                 'target_food_cost' => $cogsRecipe->target_food_cost,
                 'estimated_cogs' => $cogsRecipe->estimated_cogs,
@@ -226,7 +226,7 @@ class CogsRecipeController extends Controller
         // Audit Trail History
         CogsRecipeHistory::create([
             'cogs_recipe_id' => $cogsRecipe->cogs_recipe_id,
-            'company_id' => $cogsRecipe->company_id,
+            'outlet_id' => $cogsRecipe->outlet_id,
             'recipe_name' => $cogsRecipe->recipe_name,
             'target_food_cost' => $cogsRecipe->target_food_cost,
             'estimated_cogs' => $cogsRecipe->estimated_cogs,

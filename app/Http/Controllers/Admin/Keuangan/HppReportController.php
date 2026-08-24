@@ -10,7 +10,7 @@ use App\Models\Admin\OrderBundle;
 use App\Models\Admin\Product;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -21,30 +21,34 @@ class HppReportController extends Controller
         $year = (int) $request->input('year', date('Y'));
         $month = (int) $request->input('month', date('n'));
 
-        $company = Company::where('delete_status', 0)->first();
-        $companyId = $company ? $company->company_id : null;
+        $activeOutletId = session('active_outlet_id');
+        $outlet = $activeOutletId ? Outlet::where('outlet_id', $activeOutletId)->first() : Outlet::where('delete_status', 0)->first();
+        $outletId = $outlet ? $outlet->outlet_id : $activeOutletId;
 
         // Ambil data laporan tersimpan dari DB (jika ada)
-        $existingReport = HppFinancialReport::where('company_id', $companyId)
+        $existingReport = HppFinancialReport::where('outlet_id', $outletId)
             ->where('year', $year)
             ->where('month', $month)
             ->first();
 
         // 1. Total Revenue Omzet Kasir (dari transaksi berstatus success)
-        $totalRevenue = (float) Transaction::whereYear('transaction_date', $year)
+        $totalRevenue = (float) Transaction::when($outletId, fn($q) => $q->where('outlet_id', $outletId))
+            ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->where('transaction_status', 'success')
             ->where('delete_status', 0)
             ->sum('transaction_grand_total');
 
         // 2. Total Waste Cost bulan ini
-        $totalWasteCost = (float) CogsWasteLog::whereYear('loss_date', $year)
+        $totalWasteCost = (float) CogsWasteLog::when($outletId, fn($q) => $q->where('outlet_id', $outletId))
+            ->whereYear('loss_date', $year)
             ->whereMonth('loss_date', $month)
             ->where('delete_status', 0)
             ->sum('waste_cost');
 
         // 3. Estimasi COGS & Breakdown Per Menu Terjual
-        $transactionIds = Transaction::whereYear('transaction_date', $year)
+        $transactionIds = Transaction::when($outletId, fn($q) => $q->where('outlet_id', $outletId))
+            ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->where('transaction_status', 'success')
             ->where('delete_status', 0)
@@ -195,7 +199,8 @@ class HppReportController extends Controller
         $grossProfit = $totalRevenue - $totalCogsEstimated;
         $netProfit = $grossProfit - $totalWasteCost - $totalLaborCost - $totalOverheadCost;
 
-        $totalPaidTransactions = Transaction::whereYear('transaction_date', $year)
+        $totalPaidTransactions = Transaction::when($outletId, fn($q) => $q->where('outlet_id', $outletId))
+            ->whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->where('transaction_status', 'success')
             ->where('delete_status', 0)
@@ -206,7 +211,7 @@ class HppReportController extends Controller
 
         // Auto sync / update ke database hpp_financial_reports
         $report = HppFinancialReport::updateOrCreate(
-            ['company_id' => $companyId, 'year' => $year, 'month' => $month],
+            ['outlet_id' => $outletId, 'year' => $year, 'month' => $month],
             [
                 'total_revenue' => $totalRevenue,
                 'total_cogs_estimated' => $totalCogsEstimated,
@@ -221,14 +226,17 @@ class HppReportController extends Controller
         );
 
         // 4. Total Pembelian Bahan Mentah dari PO (Purchase Order) bulan ini
-        $totalPoPurchases = (float) \App\Models\Admin\PurchaseOrder::whereYear('po_date', $year)
+        $totalPoPurchases = (float) \App\Models\Admin\PurchaseOrder::when($outletId, fn($q) => $q->where('outlet_id', $outletId))
+            ->whereYear('po_date', $year)
             ->whereMonth('po_date', $month)
             ->whereIn('po_status', ['ordered', 'partial', 'completed'])
             ->where('delete_status', 0)
             ->sum('po_total_amount');
 
-        $totalPoReceivedCost = (float) \App\Models\Admin\PurchaseReceivingItem::whereHas('receiving', function ($q) use ($year, $month) {
-            $q->whereYear('receiving_date', $year)->whereMonth('receiving_date', $month);
+        $totalPoReceivedCost = (float) \App\Models\Admin\PurchaseReceivingItem::whereHas('receiving', function ($q) use ($year, $month, $outletId) {
+            $q->when($outletId, fn($sq) => $sq->where('outlet_id', $outletId))
+              ->whereYear('receiving_date', $year)
+              ->whereMonth('receiving_date', $month);
         })->where('delete_status', 0)->sum('subtotal');
 
         return view('admin.keuangan.hpp-report.index', compact(
@@ -250,13 +258,14 @@ class HppReportController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $company = Company::where('delete_status', 0)->first();
-        $companyId = $company ? $company->company_id : null;
+        $activeOutletId = session('active_outlet_id');
+        $outlet = $activeOutletId ? Outlet::where('outlet_id', $activeOutletId)->first() : Outlet::where('delete_status', 0)->first();
+        $outletId = $outlet ? $outlet->outlet_id : $activeOutletId;
 
         $year = (int) $request->year;
         $month = (int) $request->month;
 
-        $report = HppFinancialReport::where('company_id', $companyId)
+        $report = HppFinancialReport::where('outlet_id', $outletId)
             ->where('year', $year)
             ->where('month', $month)
             ->first();
@@ -272,7 +281,7 @@ class HppReportController extends Controller
         $netProfit = $grossProfit - $totalWasteCost - $totalLaborCost - $totalOverheadCost;
 
         HppFinancialReport::updateOrCreate(
-            ['company_id' => $companyId, 'year' => $year, 'month' => $month],
+            ['outlet_id' => $outletId, 'year' => $year, 'month' => $month],
             [
                 'total_revenue' => $totalRevenue,
                 'total_cogs_estimated' => $totalCogsEstimated,

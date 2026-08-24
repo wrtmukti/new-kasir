@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class Customer extends Model
 {
@@ -12,7 +12,7 @@ class Customer extends Model
     protected $primaryKey = 'customer_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'transaction_id',
         'customer_name',
         'customer_email',
@@ -24,8 +24,8 @@ class Customer extends Model
         'delete_status',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

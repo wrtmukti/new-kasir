@@ -18,7 +18,7 @@
 {{-- Hero --}}
 <div class="guest-hero">
   <div class="guest-hero-overlay">
-    <h1>{{ $company->company_name ?? 'Selamat Datang' }}</h1>
+    <h1>{{ $outlet->outlet_name ?? 'Selamat Datang' }}</h1>
     <p>Scan & Pesan — pilih menu favoritmu</p>
   </div>
 </div>

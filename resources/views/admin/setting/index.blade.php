@@ -9,7 +9,7 @@
   <div>
     <h1>Setting</h1>
     <div class="breadcrumb-trail">
-      <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('admin.dashboard') }}">Beranda</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Setting</span>
     </div>
   </div>
@@ -22,6 +22,12 @@
       <div class="card-body p-2">
         <ul class="list-unstyled m-0 settings-menu">
           <li class="nav-item active">
+            <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-profile">
+              <i class="bi bi-building-fill me-2 text-success"></i>
+              <span class="nav-label-text fw-semibold">Profil Outlet</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-payment">
               <i class="bi bi-credit-card-2-front-fill me-2 text-primary"></i>
               <span class="nav-label-text fw-semibold">Alur Pembayaran</span>
@@ -34,21 +40,15 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-profile">
-              <i class="bi bi-building-fill me-2 text-success"></i>
-              <span class="nav-label-text fw-semibold">Profil Outlet</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-tax">
               <i class="bi bi-percent me-2 text-info"></i>
-              <span class="nav-label-text fw-semibold">Master Pajak & Service</span>
+              <span class="nav-label-text fw-semibold">Pajak & Service</span>
             </a>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-shift">
               <i class="bi bi-clock-history me-2 text-warning"></i>
-              <span class="nav-label-text fw-semibold">Master Shift & Cut-off</span>
+              <span class="nav-label-text fw-semibold">Shift & Cut-off</span>
             </a>
           </li>
         </ul>
@@ -71,8 +71,83 @@
   <div class="col-lg-9">
     <div class="settings-panels">
 
-      {{-- PANEL 1: ALUR PEMBAYARAN KASIR (BAYAR DI AWAL VS BAYAR DI AKHIR) --}}
-      <div id="settings-payment" class="settings-panel">
+      {{-- PANEL 1: PROFIL OUTLET & PERUSAHAAN (DEFAULT AKTIF) --}}
+      <div id="settings-profile" class="settings-panel" style="display:block;">
+        <div class="card mb-4">
+          <div class="card-header-flex">
+            <h6><i class="bi bi-building me-2 text-success"></i>Profil Usaha & Informasi Outlet</h6>
+            <span class="chip-tag" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight:600;">
+              Outlet Info
+            </span>
+          </div>
+          <div class="card-body">
+            <form id="companyProfileForm" action="{{ route('admin.setting.update-profile') }}" method="POST" enctype="multipart/form-data">
+              @csrf
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6 input-skeleton">
+                  <label for="outlet_name" class="form-label-modern fw-semibold">Nama Usaha / Brand <span class="text-danger">*</span></label>
+                  <input type="text" name="outlet_name" id="outlet_name" class="form-control form-control-modern"
+                         value="{{ $outlet->outlet_name }}" required placeholder="Contoh: Geprek Gambus / Cafe Kopi">
+                </div>
+                <div class="col-md-3 input-skeleton">
+                  <label for="outlet_code" class="form-label-modern">Kode Singkat</label>
+                  <input type="text" name="outlet_code" id="outlet_code" class="form-control form-control-modern text-uppercase"
+                         value="{{ $outlet->outlet_code }}" placeholder="Contoh: GGB">
+                </div>
+                <div class="col-md-3 input-skeleton">
+                  <label for="outlet_branch" class="form-label-modern">Cabang</label>
+                  <input type="text" name="outlet_branch" id="outlet_branch" class="form-control form-control-modern"
+                         value="{{ $outlet->outlet_branch }}" placeholder="Contoh: Pusat / Jogja">
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6 input-skeleton">
+                  <label for="outlet_phone" class="form-label-modern">Nomor Telepon / WhatsApp</label>
+                  <input type="text" name="outlet_phone" id="outlet_phone" class="form-control form-control-modern"
+                         value="{{ $outlet->outlet_phone }}" placeholder="Contoh: 081234567890">
+                </div>
+                <div class="col-md-6 input-skeleton">
+                  <label for="outlet_email" class="form-label-modern">Email Usaha</label>
+                  <input type="email" name="outlet_email" id="outlet_email" class="form-control form-control-modern"
+                         value="{{ $outlet->outlet_email }}" placeholder="Contoh: info@restocafe.com">
+                </div>
+              </div>
+
+              <div class="mb-3 input-skeleton">
+                <label for="outlet_address" class="form-label-modern">Alamat Lengkap</label>
+                <textarea name="outlet_address" id="outlet_address" rows="2" class="form-control form-control-modern"
+                          placeholder="Contoh: Jl. Merdeka No. 10, Jakarta Pusat">{{ $outlet->outlet_address }}</textarea>
+              </div>
+
+              <div class="mb-4 input-skeleton">
+                <label for="outlet_image" class="form-label-modern">Logo Usaha (Opsional)</label>
+                <div class="d-flex align-items-center gap-3">
+                  @if($outlet->outlet_image)
+                    <img src="{{ asset('storage/' . $outlet->outlet_image) }}" id="logoPreview" alt="Logo" class="rounded-3 border border-secondary-subtle object-fit-cover" style="width:60px; height:60px;">
+                  @else
+                    <div id="logoPlaceholder" class="rounded-3 d-flex align-items-center justify-center text-muted-c" style="width:60px; height:60px; background:var(--bg-elevated-2); border:1px dashed var(--border-subtle);">
+                      <i class="bi bi-image fs-4"></i>
+                    </div>
+                  @endif
+                  <input type="file" name="outlet_image" id="outlet_image" class="form-control form-control-modern" accept="image/*">
+                </div>
+                <small class="text-muted-c mt-1 d-block">Format gambar: PNG, JPG, JPEG, WEBP (Maksimal 2MB).</small>
+              </div>
+
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary-grad px-4 btn-loading" id="btnSaveCompanyProfile">
+                  <i class="bi bi-check2-circle me-1"></i>Simpan Profil Usaha
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {{-- PANEL 2: ALUR PEMBAYARAN KASIR (BAYAR DI AWAL VS BAYAR DI AKHIR) --}}
+      <div id="settings-payment" class="settings-panel" style="display:none;">
         <div class="card mb-4 border-0 shadow-sm" style="border: 1px solid var(--border-subtle) !important; border-radius: 1rem;">
           <div class="card-header-flex py-3 px-4" style="border-bottom: 1px solid var(--border-subtle);">
             <div class="d-flex align-items-center gap-2">
@@ -271,7 +346,7 @@
         </div>
       </div>
 
-      {{-- PANEL 2: TEMA QR GUEST ORDERING --}}
+      {{-- PANEL 3: TEMA QR GUEST ORDERING --}}
       <div id="settings-theme" class="settings-panel" style="display:none;">
         <div class="card mb-4">
           <div class="card-header-flex">
@@ -329,81 +404,6 @@
               <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary-grad px-4 btn-loading" id="btnSaveTheme">
                   <i class="bi bi-check2-circle me-1"></i>Terapkan Tema Guest
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {{-- PANEL 3: PROFIL OUTLET & PERUSAHAAN --}}
-      <div id="settings-profile" class="settings-panel" style="display:none;">
-        <div class="card mb-4">
-          <div class="card-header-flex">
-            <h6><i class="bi bi-building me-2 text-success"></i>Profil Usaha & Informasi Outlet</h6>
-            <span class="chip-tag" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight:600;">
-              Outlet Info
-            </span>
-          </div>
-          <div class="card-body">
-            <form id="companyProfileForm" action="{{ route('admin.setting.update-profile') }}" method="POST" enctype="multipart/form-data">
-              @csrf
-
-              <div class="row g-3 mb-3">
-                <div class="col-md-6 input-skeleton">
-                  <label for="company_name" class="form-label-modern fw-semibold">Nama Usaha / Brand <span class="text-danger">*</span></label>
-                  <input type="text" name="company_name" id="company_name" class="form-control form-control-modern"
-                         value="{{ $company->company_name }}" required placeholder="Contoh: Geprek Gambus / Cafe Kopi">
-                </div>
-                <div class="col-md-3 input-skeleton">
-                  <label for="company_code" class="form-label-modern">Kode Singkat</label>
-                  <input type="text" name="company_code" id="company_code" class="form-control form-control-modern text-uppercase"
-                         value="{{ $company->company_code }}" placeholder="Contoh: GGB">
-                </div>
-                <div class="col-md-3 input-skeleton">
-                  <label for="company_branch" class="form-label-modern">Cabang</label>
-                  <input type="text" name="company_branch" id="company_branch" class="form-control form-control-modern"
-                         value="{{ $company->company_branch }}" placeholder="Contoh: Pusat / Jogja">
-                </div>
-              </div>
-
-              <div class="row g-3 mb-3">
-                <div class="col-md-6 input-skeleton">
-                  <label for="company_phone" class="form-label-modern">Nomor Telepon / WhatsApp</label>
-                  <input type="text" name="company_phone" id="company_phone" class="form-control form-control-modern"
-                         value="{{ $company->company_phone }}" placeholder="Contoh: 081234567890">
-                </div>
-                <div class="col-md-6 input-skeleton">
-                  <label for="company_email" class="form-label-modern">Email Usaha</label>
-                  <input type="email" name="company_email" id="company_email" class="form-control form-control-modern"
-                         value="{{ $company->company_email }}" placeholder="Contoh: info@restocafe.com">
-                </div>
-              </div>
-
-              <div class="mb-3 input-skeleton">
-                <label for="company_address" class="form-label-modern">Alamat Lengkap</label>
-                <textarea name="company_address" id="company_address" rows="2" class="form-control form-control-modern"
-                          placeholder="Contoh: Jl. Merdeka No. 10, Jakarta Pusat">{{ $company->company_address }}</textarea>
-              </div>
-
-              <div class="mb-4 input-skeleton">
-                <label for="company_image" class="form-label-modern">Logo Usaha (Opsional)</label>
-                <div class="d-flex align-items-center gap-3">
-                  @if($company->company_image)
-                    <img src="{{ asset('storage/' . $company->company_image) }}" id="logoPreview" alt="Logo" class="rounded-3 border border-secondary-subtle object-fit-cover" style="width:60px; height:60px;">
-                  @else
-                    <div id="logoPlaceholder" class="rounded-3 d-flex align-items-center justify-center text-muted-c" style="width:60px; height:60px; background:var(--bg-elevated-2); border:1px dashed var(--border-subtle);">
-                      <i class="bi bi-image fs-4"></i>
-                    </div>
-                  @endif
-                  <input type="file" name="company_image" id="company_image" class="form-control form-control-modern" accept="image/*">
-                </div>
-                <small class="text-muted-c mt-1 d-block">Format gambar: PNG, JPG, JPEG, WEBP (Maksimal 2MB).</small>
-              </div>
-
-              <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary-grad px-4 btn-loading" id="btnSaveCompanyProfile">
-                  <i class="bi bi-check2-circle me-1"></i>Simpan Profil Usaha
                 </button>
               </div>
             </form>

@@ -31,7 +31,7 @@ class BundleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'bundle_code' => 'nullable|string|max:50',
             'bundle_name' => 'required|string|max:255',
             'bundle_description' => 'nullable|string',

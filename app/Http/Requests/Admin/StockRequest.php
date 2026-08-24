@@ -14,7 +14,7 @@ class StockRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'stock_code' => 'nullable|string|max:50',
             'stock_name' => 'required|string|max:255',
             'stock_description' => 'nullable|string',

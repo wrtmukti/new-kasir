@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
@@ -11,7 +11,7 @@ class Discount extends Model
     protected $primaryKey = 'discount_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'discount_name',
         'discount_type',
         'discount_value',
@@ -34,9 +34,9 @@ class Discount extends Model
         'end_date' => 'datetime',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function activeProducts()

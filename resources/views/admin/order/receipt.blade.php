@@ -76,10 +76,10 @@ body {
 <div class="receipt">
 
   <div class="receipt-header">
-    <div class="title">{{ $company->company_name ?? 'Kasir POS' }}</div>
-    @if($company)
-      <div class="info">{{ $company->company_address ?? '' }}</div>
-      <div class="info">{{ $company->company_phone ?? '' }}</div>
+    <div class="title">{{ $outlet->outlet_name ?? 'Kasir POS' }}</div>
+    @if($outlet)
+      <div class="info">{{ $outlet->outlet_address ?? '' }}</div>
+      <div class="info">{{ $outlet->outlet_phone ?? '' }}</div>
     @endif
   </div>
 

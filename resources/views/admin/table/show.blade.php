@@ -28,7 +28,7 @@
       <div class="card-header-flex"><h6><i class="bi bi-info-circle me-2"></i>Informasi Meja</h6></div>
       <div class="card-body">
         <table class="table table-borderless mb-0" style="font-size:0.9rem;">
-          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $table->company?->company_name ?? '-' }}</td></tr>
+          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $table->outlet?->outlet_name ?? '-' }}</td></tr>
           <tr><td style="color:var(--text-muted);">Nomor Meja</td><td class="fw-semibold">{{ $table->table_number }}</td></tr>
           <tr><td style="color:var(--text-muted);">Kapasitas</td><td class="text-mono">{{ $table->table_capacity ? $table->table_capacity . ' orang' : '-' }}</td></tr>
           <tr><td style="color:var(--text-muted);">Deskripsi</td><td>{{ $table->table_description ?? '-' }}</td></tr>

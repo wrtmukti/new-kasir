@@ -9,7 +9,7 @@ class OrderVoucher extends Model
     protected $table = 'order_voucher';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'order_id',
         'voucher_code',
         'voucher_type',

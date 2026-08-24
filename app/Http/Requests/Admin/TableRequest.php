@@ -14,7 +14,7 @@ class TableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'table_number' => 'required|integer|min:1',
             'table_status' => 'nullable|string|in:inactive,active,reserved,occupied',
             'table_capacity' => 'nullable|integer|min:1',

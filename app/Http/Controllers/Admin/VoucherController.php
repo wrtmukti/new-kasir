@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\VoucherRequest;
 use App\Models\Admin\Voucher;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +14,7 @@ class VoucherController extends Controller
     public function index()
     {
         $vouchers = Voucher::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate(10);
         return view('admin.voucher.index', compact('vouchers'));
@@ -24,7 +24,7 @@ class VoucherController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $vouchers = Voucher::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate($perPage);
 
@@ -43,8 +43,8 @@ class VoucherController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.voucher.create', compact('companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.voucher.create', compact('outlets'));
     }
 
     public function store(VoucherRequest $request)
@@ -57,7 +57,7 @@ class VoucherController extends Controller
         // Log ke voucher_histories
         DB::table('voucher_histories')->insert([
             'voucher_id' => $voucher->voucher_id,
-            'company_id' => $voucher->company_id,
+            'outlet_id' => $voucher->outlet_id,
             'voucher_code' => $voucher->voucher_code,
             'voucher_name' => $voucher->voucher_name,
             'voucher_description' => $voucher->voucher_description,
@@ -90,8 +90,8 @@ class VoucherController extends Controller
 
     public function edit(Voucher $voucher)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.voucher.edit', compact('voucher', 'companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.voucher.edit', compact('voucher', 'outlets'));
     }
 
     public function update(VoucherRequest $request, Voucher $voucher)
@@ -102,7 +102,7 @@ class VoucherController extends Controller
         // Log ke voucher_histories (data sesudah update)
         DB::table('voucher_histories')->insert([
             'voucher_id' => $voucher->voucher_id,
-            'company_id' => $voucher->company_id,
+            'outlet_id' => $voucher->outlet_id,
             'voucher_code' => $voucher->voucher_code,
             'voucher_name' => $voucher->voucher_name,
             'voucher_description' => $voucher->voucher_description,
@@ -133,7 +133,7 @@ class VoucherController extends Controller
         // Log ke voucher_histories dulu sebelum soft delete
         DB::table('voucher_histories')->insert([
             'voucher_id' => $voucher->voucher_id,
-            'company_id' => $voucher->company_id,
+            'outlet_id' => $voucher->outlet_id,
             'voucher_code' => $voucher->voucher_code,
             'voucher_name' => $voucher->voucher_name,
             'voucher_description' => $voucher->voucher_description,

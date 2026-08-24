@@ -28,7 +28,7 @@
       <div class="card-header-flex"><h6><i class="bi bi-info-circle me-2"></i>Informasi Kategori</h6></div>
       <div class="card-body">
         <table class="table table-borderless mb-0" style="font-size:0.9rem;">
-          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $category->company?->company_name ?? '-' }}</td></tr>
+          <tr><td style="width:180px; color:var(--text-muted);">Perusahaan</td><td>{{ $category->outlet?->outlet_name ?? '-' }}</td></tr>
           <tr><td style="color:var(--text-muted);">Nama</td><td class="fw-semibold">{{ $category->category_name }}</td></tr>
           <tr><td style="color:var(--text-muted);">Gambar</td>
             <td>

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Keuangan\CogsRawMaterialRequest;
 use App\Models\Admin\Keuangan\CogsRawMaterial;
 use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -53,11 +53,11 @@ class CogsRawMaterialController extends Controller
 
     public function store(CogsRawMaterialRequest $request)
     {
-        $company = Company::where('delete_status', 0)->first();
-        $companyId = $company ? $company->company_id : null;
+        $outlet = Outlet::where('delete_status', 0)->first();
+        $companyId = $company ? $outlet->outlet_id : null;
 
         $rawMaterial = new CogsRawMaterial();
-        $rawMaterial->company_id = $companyId;
+        $rawMaterial->outlet_id = $companyId;
         $rawMaterial->raw_material_code = 'RAW-' . strtoupper(Str::random(6));
         $rawMaterial->name = $request->name;
         $rawMaterial->slug = Str::slug($request->name);
@@ -75,7 +75,7 @@ class CogsRawMaterialController extends Controller
         // Audit Trail History
         CogsRawMaterialHistory::create([
             'cogs_raw_material_id' => $rawMaterial->cogs_raw_material_id,
-            'company_id' => $companyId,
+            'outlet_id' => $companyId,
             'name' => $rawMaterial->name,
             'unit' => $rawMaterial->unit,
             'amount' => $rawMaterial->amount,
@@ -142,7 +142,7 @@ class CogsRawMaterialController extends Controller
         // Audit Trail History
         CogsRawMaterialHistory::create([
             'cogs_raw_material_id' => $cogsRawMaterial->cogs_raw_material_id,
-            'company_id' => $cogsRawMaterial->company_id,
+            'outlet_id' => $cogsRawMaterial->outlet_id,
             'name' => $cogsRawMaterial->name,
             'unit' => $cogsRawMaterial->unit,
             'amount' => $cogsRawMaterial->amount,
@@ -173,7 +173,7 @@ class CogsRawMaterialController extends Controller
         // Audit Trail History
         CogsRawMaterialHistory::create([
             'cogs_raw_material_id' => $cogsRawMaterial->cogs_raw_material_id,
-            'company_id' => $cogsRawMaterial->company_id,
+            'outlet_id' => $cogsRawMaterial->outlet_id,
             'name' => $cogsRawMaterial->name,
             'unit' => $cogsRawMaterial->unit,
             'amount' => $cogsRawMaterial->amount,
@@ -216,7 +216,7 @@ class CogsRawMaterialController extends Controller
         // Audit Trail History Opname
         CogsRawMaterialHistory::create([
             'cogs_raw_material_id' => $cogsRawMaterial->cogs_raw_material_id,
-            'company_id' => $cogsRawMaterial->company_id,
+            'outlet_id' => $cogsRawMaterial->outlet_id,
             'name' => $cogsRawMaterial->name,
             'unit' => $cogsRawMaterial->unit,
             'amount' => $physicalAmount,

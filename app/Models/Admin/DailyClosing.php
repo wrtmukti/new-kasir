@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class DailyClosing extends Model
 {
@@ -12,7 +12,7 @@ class DailyClosing extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'cashier_id',
         'shift_number',
         'shift_name',
@@ -45,9 +45,9 @@ class DailyClosing extends Model
         'cash_difference' => 'float',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function orders()

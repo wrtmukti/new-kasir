@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderBundle extends Model
@@ -10,7 +10,7 @@ class OrderBundle extends Model
     protected $table = 'order_bundle';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'order_id',
         'transaction_id',
         'bundle_id',
@@ -30,9 +30,9 @@ class OrderBundle extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function order()

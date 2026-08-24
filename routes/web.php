@@ -80,12 +80,21 @@ use App\Http\Controllers\Admin\Keuangan\InventoryReportController;
 use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
 use App\Http\Controllers\Admin\Keuangan\ShiftSettingController;
 use App\Http\Controllers\Admin\Keuangan\ShiftOperationalController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
+// ===================== AUTH POS & CASHIER =====================
+Route::middleware('guest:web')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+});
+Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
+// ===================== ADMIN POS (CRUD & Operations) =====================
+Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->group(function () {
+    // Dashboard & Analitik (Landing Utama Admin)
+    Route::get('/', [MenuAnalyticsController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [MenuAnalyticsController::class, 'index'])->name('dashboard.index');
 
-
-
-Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
     Route::get('stock/json-list', [StockController::class, 'jsonList'])->name('stock.json-list');
     Route::resource('stock', StockController::class);
@@ -142,6 +151,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // History
     Route::prefix('history')->name('history.')->group(function () {
+        Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('stock', [HistoryController::class, 'stockIndex'])->name('stock.index');
         Route::get('stock/data', [HistoryController::class, 'stockData'])->name('stock.data');
         Route::get('stock/{id}', [HistoryController::class, 'stockShow'])->name('stock.show');
@@ -232,7 +242,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
     // ===================== SETTING OUTLET & KASIR =====================
+    Route::post('switch-outlet', [SettingController::class, 'switchOutlet'])->name('switch-outlet');
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::get('outlets/create', [SettingController::class, 'createOutlet'])->name('outlets.create');
+    Route::post('outlets', [SettingController::class, 'storeOutlet'])->name('outlets.store');
     Route::post('setting/payment', [SettingController::class, 'updatePaymentSetting'])->name('setting.update-payment');
     Route::post('setting/theme', [SettingController::class, 'updateThemeSetting'])->name('setting.update-theme');
     Route::post('setting/profile', [SettingController::class, 'updateCompanyProfile'])->name('setting.update-profile');
@@ -247,23 +260,100 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 });
 
+// ===================== SYSTEM ADMIN (Platform Multi-Client) =====================
+use App\Http\Controllers\SysAdmin\AuthController as SysAdminAuthController;
+use App\Http\Controllers\SysAdmin\DashboardController as SysAdminDashboardController;
+use App\Http\Controllers\SysAdmin\DatabaseManagementController as SysAdminDatabaseController;
+use App\Http\Controllers\SysAdmin\ClientController as SysAdminClientController;
+use App\Http\Controllers\SysAdmin\OutletOverviewController as SysAdminOutletController;
+use App\Http\Controllers\SysAdmin\UserOverviewController as SysAdminUserController;
+use App\Http\Controllers\SysAdmin\PlanController as SysAdminPlanController;
+use App\Http\Controllers\SysAdmin\SubscriptionController as SysAdminSubscriptionController;
+
 Route::prefix('sys_admin')->name('sys_admin.')->group(function () {
-    Route::get('company/data', [CompanyController::class, 'data'])->name('company.data');
-    Route::resource('company', CompanyController::class);
+    // Guest SysAdmin Routes (Login)
+    Route::middleware(\App\Http\Middleware\SysAdmin\RedirectIfSystemAdminAuthenticated::class)->group(function () {
+        Route::get('/login', [SysAdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [SysAdminAuthController::class, 'login'])->name('login.post');
+    });
+
+    // Logout
+    Route::post('/logout', [SysAdminAuthController::class, 'logout'])->name('logout');
+
+    // Authenticated SysAdmin Routes
+    Route::middleware(\App\Http\Middleware\SysAdmin\AuthenticateSystemAdmin::class)->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('sys_admin.dashboard');
+        });
+        Route::get('/dashboard', [SysAdminDashboardController::class, 'index'])->name('dashboard');
+
+        // Client Management: Clients
+        Route::post('clients/{clientId}/suspend', [SysAdminClientController::class, 'suspend'])->name('clients.suspend');
+        Route::post('clients/{clientId}/reactivate', [SysAdminClientController::class, 'reactivate'])->name('clients.reactivate');
+        Route::resource('clients', SysAdminClientController::class)->names('clients');
+
+        // Client Management: Outlets & Users Overview
+        Route::get('outlets', [SysAdminOutletController::class, 'index'])->name('outlets.index');
+        Route::get('outlets/create', [SysAdminOutletController::class, 'create'])->name('outlets.create');
+        Route::post('outlets', [SysAdminOutletController::class, 'store'])->name('outlets.store');
+        Route::get('users', [SysAdminUserController::class, 'index'])->name('users.index');
+
+        // Client Management: Plans & Subscriptions
+        Route::get('plans', [SysAdminPlanController::class, 'index'])->name('plans.index');
+        Route::post('plans', [SysAdminPlanController::class, 'store'])->name('plans.store');
+        Route::get('subscriptions', [SysAdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+        Route::post('subscriptions/{id}/extend', [SysAdminSubscriptionController::class, 'extend'])->name('subscriptions.extend');
+
+        // Infrastructure: Database Management
+        Route::get('databases', [SysAdminDatabaseController::class, 'index'])->name('databases.index');
+        Route::post('databases/{clientId}/test-connection', [SysAdminDatabaseController::class, 'testConnection'])->name('databases.test-connection');
+        Route::post('databases/{clientId}/migrate', [SysAdminDatabaseController::class, 'runMigration'])->name('databases.migrate');
+
+        // Infrastructure: System Health & Monitoring
+        Route::get('health', [\App\Http\Controllers\SysAdmin\SystemHealthController::class, 'index'])->name('health.index');
+        Route::post('health/ping-all', [\App\Http\Controllers\SysAdmin\SystemHealthController::class, 'pingAll'])->name('health.ping-all');
+
+        // Infrastructure: Database Backups
+        Route::get('backups', [\App\Http\Controllers\SysAdmin\BackupController::class, 'index'])->name('backups.index');
+        Route::post('backups/{clientId}/snapshot', [\App\Http\Controllers\SysAdmin\BackupController::class, 'createSnapshot'])->name('backups.snapshot');
+        Route::get('backups/{clientId}/{fileName}', [\App\Http\Controllers\SysAdmin\BackupController::class, 'download'])->name('backups.download');
+        Route::delete('backups/{clientId}/{fileName}', [\App\Http\Controllers\SysAdmin\BackupController::class, 'destroy'])->name('backups.destroy');
+
+        // System Tools & Maintenance
+        Route::get('tools', [\App\Http\Controllers\SysAdmin\SystemToolsController::class, 'index'])->name('tools.index');
+        Route::post('tools/run', [\App\Http\Controllers\SysAdmin\SystemToolsController::class, 'runTool'])->name('tools.run');
+
+        // Impersonation ("Login as Client")
+        Route::get('impersonate/stop', [\App\Http\Controllers\SysAdmin\ImpersonationController::class, 'stop'])->name('impersonate.stop');
+        Route::get('impersonate/{clientId}', [\App\Http\Controllers\SysAdmin\ImpersonationController::class, 'start'])->name('impersonate.start');
+
+        // Security & Audit Logs
+        Route::get('audit-logs', [\App\Http\Controllers\SysAdmin\AuditLogController::class, 'index'])->name('audit-logs.index');
+
+        // Legacy Company resource
+        Route::get('company/data', [CompanyController::class, 'data'])->name('company.data');
+        Route::resource('company', CompanyController::class);
+    });
 });
 
-// ===================== GUEST (QR Ordering) =====================
+// ===================== GUEST (QR Ordering Multi-Client & Multi-Outlet) =====================
 use App\Http\Controllers\Guest\OrderController as GuestOrderController;
 
-Route::prefix('guest')->name('guest.')->group(function () {
-    // Menu (QR meja)
-    Route::get('/menu/{table_id}', [GuestOrderController::class, 'index'])->name('index');
-    // Review & checkout
+// URL Format Baru: /{client_id}/{outlet_id}/{table_id}
+Route::prefix('{client_id}/{outlet_id}/{table_id}')->name('guest.')->group(function () {
+    // Menu (QR Meja)
+    Route::get('/', [GuestOrderController::class, 'index'])->name('index');
+    // Review & Checkout
     Route::post('/checkout', [GuestOrderController::class, 'checkout'])->name('checkout');
-    Route::get('/review/{table_id}', [GuestOrderController::class, 'review'])->name('review');
+    Route::get('/review', [GuestOrderController::class, 'review'])->name('review');
     Route::post('/submit', [GuestOrderController::class, 'submit'])->name('submit');
     // Status pesanan per meja
-    Route::get('/status/{table_id}', [GuestOrderController::class, 'status'])->name('status');
+    Route::get('/status', [GuestOrderController::class, 'status'])->name('status');
     // Cek voucher (AJAX)
     Route::post('/check-voucher', [GuestOrderController::class, 'checkVoucher'])->name('check-voucher');
+});
+
+// Fallback legacy route
+Route::prefix('guest')->group(function () {
+    Route::get('/menu/{table_id}', [GuestOrderController::class, 'legacyIndex']);
 });

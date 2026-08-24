@@ -750,7 +750,7 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 0.35rem;
   display: block;
 }
-.form-control-modern, .form-select-modern {
+.form-control-modern, .form-select-modern, .form-control, .form-select {
   width: 100%;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
@@ -760,11 +760,14 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.85rem;
   font-family: var(--font-body);
 }
-.form-control-modern:focus, .form-select-modern:focus {
-  outline: none; border-color: var(--accent-1);
+.form-control-modern:focus, .form-select-modern:focus, .form-control:focus, .form-select:focus {
+  outline: none;
+  background: var(--bg-elevated);
+  border-color: var(--accent-1);
+  color: var(--text-primary);
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
 }
-.form-select-modern {
+.form-select-modern, .form-select {
   position: relative;
   -webkit-appearance: none;
   appearance: none;
@@ -773,8 +776,8 @@ a { color: inherit; text-decoration: none; }
   background-repeat: no-repeat;
   background-position: right 0.8rem center;
 }
-.form-select-modern option { background: var(--bg-surface); color: var(--text-primary); }
-.form-control-modern::placeholder { color: var(--text-muted); }
+.form-select-modern option, .form-select option { background: var(--bg-surface); color: var(--text-primary); }
+.form-control-modern::placeholder, .form-control::placeholder { color: var(--text-muted); }
 
 .form-check-modern { display: flex; align-items: center; gap: 0.5rem; }
 .form-check-modern input { accent-color: var(--accent-1); width: 16px; height: 16px; }
@@ -1242,3 +1245,109 @@ a { color: inherit; text-decoration: none; }
   .btn-group .btn:first-child { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
   .btn-group .btn:last-child { border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
 }
+
+/* ==========================================================================
+   THEME AUTO-ADAPTATION (DARK / LIGHT MODE SYNC)
+   ========================================================================== */
+.card {
+  background-color: var(--bg-surface);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.modal-content {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-subtle) !important;
+}
+
+.nav-pills .nav-link {
+  color: var(--text-secondary);
+  background: transparent;
+  transition: var(--transition);
+}
+.nav-pills .nav-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated-2);
+}
+.nav-pills .nav-link.active {
+  color: #ffffff !important;
+  background: var(--accent-gradient) !important;
+}
+
+[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="light"] .btn-close {
+  filter: none;
+}
+
+.dropdown-menu {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+.dropdown-item {
+  color: var(--text-secondary) !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: var(--bg-elevated-2) !important;
+  color: var(--text-primary) !important;
+}
+
+.dropdown-divider {
+  border-color: var(--border-subtle) !important;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text-primary);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent !important;
+  color: inherit;
+  border-bottom-color: var(--border-subtle);
+}
+
+.table thead th {
+  background-color: var(--bg-elevated-2) !important;
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-subtle) !important;
+}
+
+.input-group-text {
+  background: var(--bg-elevated-2) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] {
+  --bg-base:          #F8FAFC;
+  --bg-surface:       #FFFFFF;
+  --bg-elevated:      #FFFFFF;
+  --bg-elevated-2:    #F1F5F9;
+
+  --border-subtle:    #E2E8F0;
+  --border-strong:    #CBD5E1;
+
+  --text-primary:     #0F172A;
+  --text-secondary:   #334155;
+  --text-muted:       #64748B;
+}
+

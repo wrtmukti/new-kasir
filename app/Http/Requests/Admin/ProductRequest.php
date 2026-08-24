@@ -33,7 +33,7 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => 'nullable|string|max:255',
+            'outlet_id' => 'nullable|string|max:255',
             'category_id' => 'nullable|integer|exists:categories,category_id',
             'product_code' => 'nullable|string|max:50',
             'product_name' => 'required|string|max:255',

@@ -28,10 +28,10 @@ class TaxController extends Controller
      */
     public function updateTax(TaxRequest $request)
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
         $tax = Tax::updateOrCreate(
-            ['company_id' => $companyId],
+            ['outlet_id' => $companyId],
             [
                 'tax_name' => $request->tax_name,
                 'rate_percent' => $request->rate_percent,
@@ -56,10 +56,10 @@ class TaxController extends Controller
      */
     public function updateServiceCharge(ServiceChargeRequest $request)
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
         $service = ServiceCharge::updateOrCreate(
-            ['company_id' => $companyId],
+            ['outlet_id' => $companyId],
             [
                 'service_name' => $request->service_name,
                 'rate_percent' => $request->rate_percent,

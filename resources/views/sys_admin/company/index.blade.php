@@ -2,7 +2,7 @@
 
 @section('title', 'Perusahaan')
 
-@php $activeMenu = 'company' @endphp
+@php $activeMenu = 'outlet' @endphp
 
 @section('content')
 <div class="page-header">
@@ -29,7 +29,7 @@
         <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
       </select>
       <span class="text-muted-c" style="font-size:0.85rem;">data</span>
-      <span class="chip-tag" id="totalCount">{{ $companies->total() }} item</span>
+      <span class="chip-tag" id="totalCount">{{ $outlets->total() }} item</span>
     </div>
   </div>
   <div class="card-body p-0">
@@ -47,15 +47,15 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          @include('sys_admin.company._data', ['companies' => $companies])
+          @include('sys_admin.company._data', ['companies' => $outlets])
         </tbody>
       </table>
     </div>
     <div class="px-3 py-2 d-flex justify-content-between align-items-center" id="paginationContainer">
       <span class="text-muted-c" style="font-size:0.85rem;" id="pageInfo">
-        Menampilkan {{ $companies->firstItem() ?? 0 }} - {{ $companies->lastItem() ?? 0 }} dari {{ $companies->total() }}
+        Menampilkan {{ $outlets->firstItem() ?? 0 }} - {{ $outlets->lastItem() ?? 0 }} dari {{ $outlets->total() }}
       </span>
-      {{ $companies->onEachSide(1)->links('vendor.pagination.modern') }}
+      {{ $outlets->onEachSide(1)->links('vendor.pagination.modern') }}
     </div>
   </div>
 </div>

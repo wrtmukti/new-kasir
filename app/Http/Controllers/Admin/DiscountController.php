@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DiscountRequest;
 use App\Models\Admin\Discount;
 use App\Models\Admin\Product;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +15,7 @@ class DiscountController extends Controller
     public function index()
     {
         $discounts = Discount::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate(10);
         return view('admin.discount.index', compact('discounts'));
@@ -25,7 +25,7 @@ class DiscountController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $discounts = Discount::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate($perPage);
 
@@ -44,8 +44,8 @@ class DiscountController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.discount.create', compact('companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.discount.create', compact('outlets'));
     }
 
     public function store(DiscountRequest $request)
@@ -58,7 +58,7 @@ class DiscountController extends Controller
         // Log ke discount_histories
         DB::table('discount_histories')->insert([
             'discount_id' => $discount->discount_id,
-            'company_id' => $discount->company_id,
+            'outlet_id' => $discount->outlet_id,
             'discount_name' => $discount->discount_name,
             'discount_type' => $discount->discount_type,
             'discount_value' => $discount->discount_value,
@@ -79,7 +79,7 @@ class DiscountController extends Controller
 
     public function show(Discount $discount)
     {
-        $discount->load('company', 'activeProducts');
+        $discount->load('outlet', 'activeProducts');
         $products = Product::where('delete_status', 0)
             ->where('product_status', 1)
             ->with('category')
@@ -91,8 +91,8 @@ class DiscountController extends Controller
 
     public function edit(Discount $discount)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.discount.edit', compact('discount', 'companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.discount.edit', compact('discount', 'outlets'));
     }
 
     public function update(DiscountRequest $request, Discount $discount)
@@ -103,7 +103,7 @@ class DiscountController extends Controller
         // Log ke discount_histories
         DB::table('discount_histories')->insert([
             'discount_id' => $discount->discount_id,
-            'company_id' => $discount->company_id,
+            'outlet_id' => $discount->outlet_id,
             'discount_name' => $discount->discount_name,
             'discount_type' => $discount->discount_type,
             'discount_value' => $discount->discount_value,
@@ -127,7 +127,7 @@ class DiscountController extends Controller
         // Log ke discount_histories dulu sebelum soft delete
         DB::table('discount_histories')->insert([
             'discount_id' => $discount->discount_id,
-            'company_id' => $discount->company_id,
+            'outlet_id' => $discount->outlet_id,
             'discount_name' => $discount->discount_name,
             'discount_type' => $discount->discount_type,
             'discount_value' => $discount->discount_value,
@@ -165,7 +165,7 @@ class DiscountController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         DB::transaction(function () use ($product, $discount, $request) {
-            $companyId = $product->company_id;
+            $companyId = $product->outlet_id;
             $userId = $request->input('created_by', 'admin');
 
             // 1. Matikan pivot aktif kalo ada
@@ -181,7 +181,7 @@ class DiscountController extends Controller
 
             // 2. Insert pivot baru
             DB::table('discount_product')->insert([
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'product_id' => $product->product_id,
                 'discount_id' => $discount->discount_id,
                 'start_date' => now(),
@@ -193,7 +193,7 @@ class DiscountController extends Controller
             // 3. Log ke product_histories — rekam perubahan
             DB::table('product_histories')->insert([
                 'product_id' => $product->product_id,
-                'company_id' => $companyId,
+                'outlet_id' => $companyId,
                 'history_code' => $product->product_code,
                 'history_name' => $product->product_name,
                 'history_slug' => $product->product_slug,
@@ -246,7 +246,7 @@ class DiscountController extends Controller
             // Log ke product_histories
             DB::table('product_histories')->insert([
                 'product_id' => $product->product_id,
-                'company_id' => $product->company_id,
+                'outlet_id' => $product->outlet_id,
                 'history_code' => $product->product_code,
                 'history_name' => $product->product_name,
                 'history_slug' => $product->product_slug,

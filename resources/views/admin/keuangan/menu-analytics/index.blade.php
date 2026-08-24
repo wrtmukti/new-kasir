@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Performa Penjualan & Grafik Analitik')
+@section('title', 'Dashboard')
 
-@php $activeMenu = 'menu-analytics' @endphp
+@php $activeMenu = 'dashboard' @endphp
 
 @push('styles')
 <style>
@@ -54,11 +54,13 @@
   <!-- Header Page with Inline Filters -->
   <div class="page-header">
     <div>
-      <h1>Analitik Penjualan & Performa Menu</h1>
+      <h1 class="h3 fw-bold mb-1" style="color: var(--text-primary);">
+        <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
+      </h1>
       <div class="breadcrumb-trail">
-        <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-        <span>Analitik</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-        <span>Performa Penjualan</span>
+        <a href="{{ route('admin.dashboard') }}" class="text-muted-c text-decoration-none">Beranda</a>
+        <i class="bi bi-chevron-right text-muted-c" style="font-size:0.6rem;"></i>
+        <span style="color: var(--text-primary); font-weight: 600;">Dashboard</span>
       </div>
     </div>
 

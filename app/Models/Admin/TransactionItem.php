@@ -11,7 +11,7 @@ class TransactionItem extends Model
     protected $primaryKey = 'item_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'transaction_id',
         'product_id',
         'product_name',

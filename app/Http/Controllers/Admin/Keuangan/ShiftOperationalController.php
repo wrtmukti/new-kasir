@@ -18,10 +18,10 @@ class ShiftOperationalController extends Controller
      */
     public function index()
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
         // Ambil Shift Settings
-        $setting = ShiftSetting::where('company_id', $companyId)->first()
+        $setting = ShiftSetting::where('outlet_id', $companyId)->first()
             ?? ShiftSetting::first()
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
@@ -30,13 +30,13 @@ class ShiftOperationalController extends Controller
             ]);
 
         // Ambil Daftar Master Shift yang Aktif
-        $masterShifts = Shift::where('company_id', $companyId)
+        $masterShifts = Shift::where('outlet_id', $companyId)
             ->where('is_active', 1)
             ->orderBy('shift_number', 'asc')
             ->get();
 
         // Cek Sesi Shift yang Sedang AKTIF (Status = open)
-        $activeShift = DailyClosing::where('company_id', $companyId)
+        $activeShift = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
             ->latest()
             ->first();
@@ -84,7 +84,7 @@ class ShiftOperationalController extends Controller
         }
 
         // Histori 5 Shift Closing Terakhir
-        $recentClosings = DailyClosing::where('company_id', $companyId)
+        $recentClosings = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'closed')
             ->orderBy('closed_at', 'desc')
             ->take(5)
@@ -104,10 +104,10 @@ class ShiftOperationalController extends Controller
      */
     public function openShift(Request $request)
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
         // Cek apakah sudah ada shift yang sedang OPEN
-        $existingActive = DailyClosing::where('company_id', $companyId)
+        $existingActive = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
             ->first();
 
@@ -129,14 +129,14 @@ class ShiftOperationalController extends Controller
         ]);
 
         // Hitung Tanggal Bisnis berdasarkan Cut-Off Time Resto
-        $setting = ShiftSetting::where('company_id', $companyId)->first();
+        $setting = ShiftSetting::where('outlet_id', $companyId)->first();
         $cutoffTime = $setting ? $setting->daily_cutoff_time : '03:00:00';
         $businessDate = $this->calculateBusinessDate($cutoffTime);
 
         $shiftNumber = $request->input('shift_number', 1);
 
         $dailyClosing = DailyClosing::create([
-            'company_id' => $companyId,
+            'outlet_id' => $companyId,
             'cashier_id' => auth()->id() ?? 1,
             'shift_number' => $shiftNumber,
             'shift_name' => $request->shift_name,
@@ -172,9 +172,9 @@ class ShiftOperationalController extends Controller
      */
     public function closeShift(Request $request)
     {
-        $companyId = session('company_id') ?? 'COMP-001';
+        $companyId = session('outlet_id') ?? 'COMP-001';
 
-        $activeShift = DailyClosing::where('company_id', $companyId)
+        $activeShift = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
             ->latest()
             ->first();

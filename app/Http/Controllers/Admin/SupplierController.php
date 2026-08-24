@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SupplierRequest;
 use App\Models\Admin\Supplier;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -13,7 +13,7 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate(10);
         return view('admin.supplier.index', compact('suppliers'));
@@ -23,7 +23,7 @@ class SupplierController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $suppliers = Supplier::where('delete_status', 0)
-            ->with('company')
+            ->with('outlet')
             ->latest()
             ->paginate($perPage);
 
@@ -42,8 +42,8 @@ class SupplierController extends Controller
 
     public function create()
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.supplier.create', compact('companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.supplier.create', compact('outlets'));
     }
 
     public function store(SupplierRequest $request)
@@ -59,14 +59,14 @@ class SupplierController extends Controller
 
     public function show(Supplier $supplier)
     {
-        $supplier->load('company');
+        $supplier->load('outlet');
         return view('admin.supplier.show', compact('supplier'));
     }
 
     public function edit(Supplier $supplier)
     {
-        $companies = Company::where('delete_status', 0)->where('company_status', 1)->get();
-        return view('admin.supplier.edit', compact('supplier', 'companies'));
+        $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
+        return view('admin.supplier.edit', compact('supplier', 'outlets'));
     }
 
     public function update(SupplierRequest $request, Supplier $supplier)

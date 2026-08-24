@@ -12,7 +12,7 @@
     </a>
     <div>
       <h2 class="font-headline font-black text-2xl text-on-background">Konfirmasi Pesanan</h2>
-      <p class="text-xs text-on-surface-variant font-bold">Meja {{ $table->table_number }} • {{ $company->company_name ?? 'Omah Kopi Jogja' }}</p>
+      <p class="text-xs text-on-surface-variant font-bold">Meja {{ $table->table_number }} • {{ $outlet->outlet_name ?? 'Omah Kopi Jogja' }}</p>
     </div>
   </div>
 

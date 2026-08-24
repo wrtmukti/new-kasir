@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->web(append: [
+            \App\Http\Middleware\SetClientContext::class,
+        ]);
+        $middleware->alias([
+            'client' => \App\Http\Middleware\SetClientContext::class,
+            'tenant' => \App\Http\Middleware\SetClientContext::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

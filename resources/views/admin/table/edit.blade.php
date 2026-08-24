@@ -25,10 +25,10 @@
         <div class="col-md-4">
           <label class="form-label-modern">Perusahaan</label>
           <div class="input-skeleton">
-            <select name="company_id" class="form-select-modern">
+            <select name="outlet_id" class="form-select-modern">
               <option value="">-- Pilih Perusahaan --</option>
-              @foreach($companies as $c)
-                <option value="{{ $c->company_id }}" {{ old('company_id', $table->company_id) == $c->company_id ? 'selected' : '' }}>{{ $c->company_name }}</option>
+              @foreach($outlets as $c)
+                <option value="{{ $c->outlet_id }}" {{ old('outlet_id', $table->outlet_id) == $c->outlet_id ? 'selected' : '' }}>{{ $c->outlet_name }}</option>
               @endforeach
             </select>
           </div>

@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 
 class ServiceCharge extends Model
 {
@@ -11,7 +11,7 @@ class ServiceCharge extends Model
     protected $primaryKey = 'service_charge_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'service_name',
         'rate_percent',
         'is_taxable',
@@ -28,8 +28,8 @@ class ServiceCharge extends Model
         'delete_status' => 'integer',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

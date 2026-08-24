@@ -8,24 +8,31 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    protected function getActiveOutletId(): ?string
+    {
+        return session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
+    }
+
     public function index()
     {
-        $transactions = Transaction::where('delete_status', 0)
-            ->with('company')
-            ->orderBy('transaction_id', 'desc')
-            ->paginate(10);
+        $activeOutletId = $this->getActiveOutletId();
+        $query = Transaction::where('delete_status', 0)->with('outlet');
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
+        $transactions = $query->orderBy('transaction_id', 'desc')->paginate(10);
         return view('admin.transaction.index', compact('transactions'));
     }
 
     public function data(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
         $perPage = $request->input('per_page', 10);
-
-        $transactions = Transaction::where('delete_status', 0)
-            ->with('company')
-            ->orderBy('transaction_id', 'desc')
-            ->paginate($perPage);
-
+        $query = Transaction::where('delete_status', 0)->with('outlet');
+        if ($activeOutletId) {
+            $query->where('outlet_id', $activeOutletId);
+        }
+        $transactions = $query->orderBy('transaction_id', 'desc')->paginate($perPage);
 
         if ($request->ajax()) {
             return response()->json([

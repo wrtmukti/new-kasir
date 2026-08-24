@@ -3,7 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\SysAdmin\Company;
+use App\Models\Admin\Outlet;
 use App\Models\Admin\Discount;
 
 class Product extends Model
@@ -13,7 +13,7 @@ class Product extends Model
     protected $primaryKey = 'product_id';
 
     protected $fillable = [
-        'company_id',
+        'outlet_id',
         'category_id',
         'product_code',
         'product_name',
@@ -28,9 +28,9 @@ class Product extends Model
         'delete_status',
     ];
 
-    public function company()
+    public function outlet()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'company_id');
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'outlet_id');
     }
 
     public function category()
