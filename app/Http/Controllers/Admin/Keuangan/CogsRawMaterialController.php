@@ -53,8 +53,7 @@ class CogsRawMaterialController extends Controller
 
     public function store(CogsRawMaterialRequest $request)
     {
-        $outlet = Outlet::where('delete_status', 0)->first();
-        $companyId = $company ? $outlet->outlet_id : null;
+        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
 
         $rawMaterial = new CogsRawMaterial();
         $rawMaterial->outlet_id = $companyId;

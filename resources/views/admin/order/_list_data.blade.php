@@ -13,6 +13,7 @@
   <td>
     @php
       $status = $order->order_status;
+      $isPaid = $order->isPaid();
       $badgeStyle = match($status) {
         'in_progress' => 'background: rgba(59, 130, 246, 0.15); color: #60a5fa;',
         'completed' => 'background: rgba(34, 197, 94, 0.15); color: #4ade80;',
@@ -20,9 +21,23 @@
         default => 'background: rgba(148, 163, 184, 0.15); color: #cbd5e1;'
       };
     @endphp
-    <span class="chip-tag" style="{{ $badgeStyle }} font-weight:600;">
-      {{ str_replace('_', ' ', ucfirst($status)) }}
-    </span>
+    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+      {{-- Payment Status Badge --}}
+      @if($isPaid)
+        <span class="chip-tag" style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight:700; font-size:0.75rem;">
+          <i class="bi bi-check2 me-0.5"></i>Lunas
+        </span>
+      @else
+        <span class="chip-tag" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight:700; font-size:0.75rem;">
+          <i class="bi bi-clock me-0.5"></i>Belum Bayar
+        </span>
+      @endif
+
+      {{-- Operational Status Badge --}}
+      <span class="chip-tag" style="{{ $badgeStyle }} font-weight:600; font-size:0.75rem;">
+        {{ str_replace('_', ' ', ucfirst($status)) }}
+      </span>
+    </div>
   </td>
   <td class="text-mono fw-bold text-success">
     @php
@@ -35,7 +50,7 @@
   <td class="text-muted-c" style="font-size:0.85rem;">{{ optional($order->created_at)->format('d/m/Y H:i') ?? '-' }} WIB</td>
   <td class="text-end" onclick="event.stopPropagation();">
     <a href="{{ route('admin.order.show', $order) }}" class="btn btn-primary-grad btn-sm py-1 px-2 text-nowrap" style="font-size:0.78rem;">
-      <i class="bi bi-eye me-1"></i> Detail / Bayar
+      <i class="bi bi-eye me-1"></i> Detail / Aksi
     </a>
   </td>
 </tr>

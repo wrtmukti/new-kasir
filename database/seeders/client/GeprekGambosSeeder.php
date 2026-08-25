@@ -367,6 +367,7 @@ class GeprekGambosSeeder extends Seeder
                     'order_customer_id' => $randCust->customer_id,
                     'order_type' => 'dine_in',
                     'order_status' => 'completed',
+                    'payment_status' => 'paid',
                     'order_grand_total' => $grandTotal,
                     'tax_percent' => 10.00,
                     'tax_amount' => $taxAmount,

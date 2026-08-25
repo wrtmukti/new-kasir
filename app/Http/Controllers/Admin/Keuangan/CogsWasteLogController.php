@@ -58,8 +58,7 @@ class CogsWasteLogController extends Controller
 
     public function store(CogsWasteLogRequest $request)
     {
-        $outlet = Outlet::where('delete_status', 0)->first();
-        $companyId = $company ? $outlet->outlet_id : null;
+        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
 
         $rawMaterial = CogsRawMaterial::find($request->cogs_raw_material_id);
         if (!$rawMaterial) {

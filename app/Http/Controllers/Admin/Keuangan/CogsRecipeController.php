@@ -59,8 +59,7 @@ class CogsRecipeController extends Controller
 
     public function store(CogsRecipeRequest $request)
     {
-        $outlet = Outlet::where('delete_status', 0)->first();
-        $companyId = $company ? $outlet->outlet_id : null;
+        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? Outlet::where('delete_status', 0)->value('outlet_id');
 
         DB::transaction(function () use ($request, $companyId, &$recipe) {
             $recipe = CogsRecipe::create([

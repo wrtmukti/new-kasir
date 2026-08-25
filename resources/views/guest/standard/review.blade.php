@@ -115,9 +115,15 @@
   </button>
 </form>
 
+@if(($paymentTiming ?? 'post_payment') === 'pre_payment')
+<div class="alert alert-warning text-center mt-3 py-2.5 px-3" style="font-size:0.85rem; border-radius:10px;">
+  <i class="bi bi-info-circle me-1"></i><strong>Mode Bayar di Awal:</strong> Setelah kirim pesanan, silakan ke kasir untuk bayar agar pesanan segera dimasak.
+</div>
+@else
 <p class="guest-hint text-center mt-3">
   <i class="bi bi-info-circle me-1"></i>Pesanan akan diterima oleh kasir terlebih dahulu sebelum dimasak.
 </p>
+@endif
 </div>{{-- /.guest-narrow --}}
 @endsection
 

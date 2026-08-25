@@ -16,6 +16,7 @@ class Order extends Model
         'daily_closing_id',
         'order_type',
         'order_status',
+        'payment_status',
         'order_grand_total',
         'tax_percent',
         'tax_amount',
@@ -54,6 +55,26 @@ class Order extends Model
     public function transaction()
     {
         return $this->hasOne(Transaction::class, 'transaction_id', 'order_transaction_id');
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === 'paid' || !empty($this->order_transaction_id);
+    }
+
+    public function isUnpaid(): bool
+    {
+        return !$this->isPaid();
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where('payment_status', 'paid');
+    }
+
+    public function scopeUnpaid($query)
+    {
+        return $query->where('payment_status', '!=', 'paid')->orWhereNull('payment_status');
     }
 
     public function vouchers()

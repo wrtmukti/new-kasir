@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Storage;
 class SettingController extends Controller
 {
     /**
-     * Tampilkan halaman utama Setting Outlet & Kasir.
+     * Resolusi outlet aktif berdasarkan session atau outlet default.
      */
-    public function index()
+    private function resolveActiveOutlet(): Outlet
     {
         $activeOutletId = session('active_outlet_id') ?? session('outlet_id');
         $outlet = null;
@@ -37,6 +37,15 @@ class SettingController extends Controller
                 'created_by' => 'admin',
             ]);
         }
+        return $outlet;
+    }
+
+    /**
+     * Tampilkan halaman utama Setting Outlet & Kasir.
+     */
+    public function index()
+    {
+        $outlet = $this->resolveActiveOutlet();
 
         $setting = SettingOutlet::where('outlet_id', $outlet->outlet_id)
             ->where('delete_status', 0)
@@ -45,12 +54,7 @@ class SettingController extends Controller
         if (!$setting) {
             $setting = SettingOutlet::create([
                 'outlet_id' => $outlet->outlet_id,
-                'company_name' => $outlet->outlet_name,
-                'company_address' => $outlet->outlet_address,
-                'company_phone' => $outlet->outlet_phone,
-                'company_email' => $outlet->outlet_email,
-                'receipt_header' => strtoupper($outlet->outlet_name),
-                'receipt_footer' => 'Terima Kasih Atas Kunjungan Anda!',
+                'outlet_name' => $outlet->outlet_name,
                 'payment_timing' => 'post_payment',
                 'theme' => config('app.guest_template', 'spicy_bites'),
                 'created_by' => 'admin',
@@ -152,14 +156,14 @@ class SettingController extends Controller
             'payment_timing' => 'required|in:post_payment,pre_payment',
         ]);
 
-        $outlet = Outlet::where('delete_status', 0)->first();
-        if (!$company) {
-            return response()->json(['success' => false, 'message' => 'Perusahaan tidak ditemukan.'], 404);
-        }
+        $outlet = $this->resolveActiveOutlet();
 
         $setting = SettingOutlet::firstOrCreate(
             ['outlet_id' => $outlet->outlet_id],
-            ['created_by' => 'admin']
+            [
+                'outlet_name' => $outlet->outlet_name,
+                'created_by' => 'admin',
+            ]
         );
 
         $setting->update([
@@ -185,14 +189,14 @@ class SettingController extends Controller
             'theme' => 'required|string|in:standard,spicy_bites,metropolis_brew,ignite_spice,midnight_social,omah_kopi_jogja,bumblebee',
         ]);
 
-        $outlet = Outlet::where('delete_status', 0)->first();
-        if (!$company) {
-            return response()->json(['success' => false, 'message' => 'Perusahaan tidak ditemukan.'], 404);
-        }
+        $outlet = $this->resolveActiveOutlet();
 
         $setting = SettingOutlet::firstOrCreate(
             ['outlet_id' => $outlet->outlet_id],
-            ['created_by' => 'admin']
+            [
+                'outlet_name' => $outlet->outlet_name,
+                'created_by' => 'admin',
+            ]
         );
 
         $setting->update([
@@ -222,13 +226,7 @@ class SettingController extends Controller
             'outlet_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
         ]);
 
-        $outlet = Outlet::where('delete_status', 0)->first();
-        if (!$company) {
-            $outlet = Outlet::create([
-                'outlet_name' => $validated['outlet_name'],
-                'created_by' => 'admin',
-            ]);
-        }
+        $outlet = $this->resolveActiveOutlet();
 
         $updateData = [
             'outlet_name' => $validated['outlet_name'],

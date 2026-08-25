@@ -140,6 +140,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
     Route::get('order/{order}/payment', [OrderController::class, 'payment'])->name('order.payment');
     Route::post('order/{order}/payment', [OrderController::class, 'processPayment'])->name('order.processPayment');
     Route::post('order/{order}/complete', [OrderController::class, 'complete'])->name('order.complete');
+    Route::post('order/{order}/complete-serving', [OrderController::class, 'completeServing'])->name('order.completeServing');
     Route::post('order/{order}/accept', [OrderController::class, 'accept'])->name('order.accept');
     Route::get('order/{order}/receipt', [OrderController::class, 'receipt'])->name('order.receipt');
     Route::get('order/{order}', [OrderController::class, 'show'])->name('order.show');

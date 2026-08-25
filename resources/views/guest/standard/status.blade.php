@@ -36,13 +36,26 @@
   @foreach($orders as $order)
     @php
       $status = $order->order_status;
-      $statusLabel = match($status) {
-        'pending' => 'Menunggu Konfirmasi',
-        'in_progress' => 'Sedang Disiapkan',
-        'completed' => 'Selesai',
-        'cancelled' => 'Dibatalkan',
-        default => ucfirst($status),
-      };
+      $isPaid = $order->isPaid();
+      $isPre = ($paymentTiming ?? 'post_payment') === 'pre_payment';
+      
+      if ($isPre) {
+        $statusLabel = match($status) {
+          'pending' => 'Menunggu Pembayaran Kasir',
+          'in_progress' => ($isPaid ? 'Lunas & Sedang Disiapkan' : 'Sedang Disiapkan'),
+          'completed' => 'Selesai Disajikan',
+          'cancelled' => 'Dibatalkan',
+          default => ucfirst($status),
+        };
+      } else {
+        $statusLabel = match($status) {
+          'pending' => 'Menunggu Konfirmasi',
+          'in_progress' => 'Sedang Disiapkan',
+          'completed' => 'Selesai & Lunas',
+          'cancelled' => 'Dibatalkan',
+          default => ucfirst($status),
+        };
+      }
       $statusIcon = match($status) {
         'pending' => 'bi-hourglass-split',
         'in_progress' => 'bi-fire',
@@ -55,13 +68,30 @@
     @endphp
 
     <div class="guest-card guest-order-card">
-      <div class="d-flex align-items-center justify-content-between mb-2">
+      <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-1">
         <div class="fw-semibold">Pesanan #{{ $order->order_id }}</div>
-        <span class="guest-status-pill guest-status-{{ $status }}">
-          <i class="bi {{ $statusIcon }} me-1"></i>{{ $statusLabel }}
-        </span>
+        <div class="d-flex align-items-center gap-1">
+          @if($isPaid)
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 rounded-pill font-sm">
+              <i class="bi bi-check2 me-1"></i>Lunas
+            </span>
+          @else
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-0.5 rounded-pill font-sm">
+              <i class="bi bi-clock me-1"></i>Belum Bayar
+            </span>
+          @endif
+          <span class="guest-status-pill guest-status-{{ $status }}">
+            <i class="bi {{ $statusIcon }} me-1"></i>{{ $statusLabel }}
+          </span>
+        </div>
       </div>
       <small class="text-muted-guest">{{ $order->created_at->format('d M Y H:i') }}</small>
+
+      @if($isPre && !$isPaid && $status === 'pending')
+        <div class="alert alert-warning py-2 px-3 mt-2 mb-2" style="font-size:0.82rem; border-radius:8px;">
+          <i class="bi bi-wallet2 me-1"></i><strong>Bayar di Kasir:</strong> Tunjukkan pesanan <strong>#{{ $order->order_id }}</strong> (Rp {{ number_format($order->order_grand_total, 0, ',', '.') }}) ke kasir agar segera diproses.
+        </div>
+      @endif
 
       {{-- Item --}}
       <div class="guest-order-items mt-2">
@@ -76,8 +106,8 @@
       {{-- Progress stepper --}}
       <div class="guest-progress mt-3">
         <div class="guest-progress-step {{ $status !== 'cancelled' ? 'active' : '' }}">
-          <i class="bi bi-check-lg"></i>
-          <span>Diterima</span>
+          <i class="bi {{ ($isPre && !$isPaid) ? 'bi-wallet2' : 'bi-check-lg' }}"></i>
+          <span>{{ $isPre ? ($isPaid ? 'Sudah Bayar' : 'Bayar Kasir') : 'Diterima' }}</span>
         </div>
         <div class="guest-progress-line {{ $stepActive ? 'active' : '' }}"></div>
         <div class="guest-progress-step {{ $stepActive ? 'active' : '' }}">

@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->string('order_type')->nullable(); // dine in, take away, delivery (opsional)
             $table->string('order_status')->nullable(); // pending, in progress, completed, cancelled
+            $table->string('payment_status', 20)->default('unpaid'); // unpaid, paid, refunded
             $table->decimal('order_grand_total', 10, 2)->nullable(); // total order
             $table->decimal('tax_percent', 5, 2)->default(0);
             $table->decimal('tax_amount', 15, 2)->default(0);

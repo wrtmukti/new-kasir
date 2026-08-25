@@ -169,10 +169,20 @@
     </button>
   </form>
 
-  <p class="text-xs text-center text-on-surface-variant mt-4 flex items-center justify-center gap-1">
-    <span class="material-symbols-outlined text-[16px] text-outline">info</span>
-    Pesanan akan langsung diteruskan ke dapur omah kopi.
-  </p>
+  @if(($paymentTiming ?? 'post_payment') === 'pre_payment')
+    <div class="mt-4 p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs flex items-start gap-2.5 shadow-xs">
+      <span class="material-symbols-outlined text-amber-600 flex-shrink-0 text-[18px]">info</span>
+      <div>
+        <strong class="font-bold">Mode Bayar di Awal:</strong>
+        <p class="mt-0.5 text-amber-800">Setelah mengirim pesanan, silakan tunjukkan nomor meja ke kasir untuk melakukan pembayaran agar pesanan segera dimasak dapur.</p>
+      </div>
+    </div>
+  @else
+    <p class="text-xs text-center text-on-surface-variant mt-4 flex items-center justify-center gap-1">
+      <span class="material-symbols-outlined text-[16px] text-outline">info</span>
+      Pesanan akan langsung diteruskan ke dapur omah kopi.
+    </p>
+  @endif
 
 </div>
 @endsection

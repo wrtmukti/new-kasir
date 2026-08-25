@@ -37,13 +37,26 @@
       @foreach($orders as $order)
         @php
           $status = $order->order_status;
-          $statusLabel = match($status) {
-            'pending' => 'Menunggu Konfirmasi',
-            'in_progress' => 'Sedang Dimasak',
-            'completed' => 'Selesai',
-            'cancelled' => 'Dibatalkan',
-            default => ucfirst($status),
-          };
+          $isPaid = $order->isPaid();
+          $isPre = ($paymentTiming ?? 'post_payment') === 'pre_payment';
+          
+          if ($isPre) {
+            $statusLabel = match($status) {
+              'pending' => 'Menunggu Pembayaran Kasir',
+              'in_progress' => ($isPaid ? 'Lunas & Sedang Dimasak' : 'Sedang Dimasak'),
+              'completed' => 'Selesai Disajikan',
+              'cancelled' => 'Dibatalkan',
+              default => ucfirst($status),
+            };
+          } else {
+            $statusLabel = match($status) {
+              'pending' => 'Menunggu Konfirmasi',
+              'in_progress' => 'Sedang Dimasak',
+              'completed' => 'Selesai & Lunas',
+              'cancelled' => 'Dibatalkan',
+              default => ucfirst($status),
+            };
+          }
           $stepActive = $status === 'in_progress' || $status === 'completed';
           $stepDone = $status === 'completed';
         @endphp
@@ -58,7 +71,18 @@
               </div>
             </div>
             
-            <span class="px-3.5 py-1 rounded-full font-headline font-extrabold text-xs flex items-center gap-1.5 shadow-xs
+            <div class="flex items-center gap-1.5 flex-wrap">
+              @if($isPaid)
+                <span class="px-2.5 py-0.5 rounded-full font-headline font-bold text-[11px] bg-green-100 text-green-800 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">check</span> Lunas
+                </span>
+              @else
+                <span class="px-2.5 py-0.5 rounded-full font-headline font-bold text-[11px] bg-amber-100 text-amber-800 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">schedule</span> Belum Bayar
+                </span>
+              @endif
+
+              <span class="px-3.5 py-1 rounded-full font-headline font-extrabold text-xs flex items-center gap-1.5 shadow-xs
               @if($status === 'pending') bg-yellow-100 text-yellow-800
               @elseif($status === 'in_progress') bg-orange-100 text-orange-800
               @elseif($status === 'completed') bg-green-100 text-green-800
@@ -66,7 +90,18 @@
               <span class="w-2 h-2 rounded-full @if($status === 'pending') bg-yellow-500 animate-ping @elseif($status === 'in_progress') bg-orange-500 animate-pulse @elseif($status === 'completed') bg-green-500 @else bg-red-500 @endif"></span>
               {{ $statusLabel }}
             </span>
+            </div>
           </div>
+
+          @if($isPre && !$isPaid && $status === 'pending')
+            <div class="mb-4 p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs flex items-start gap-2.5 shadow-xs">
+              <span class="material-symbols-outlined text-amber-600 flex-shrink-0 text-[20px]">payments</span>
+              <div>
+                <strong class="font-bold">Silakan Lakukan Pembayaran di Kasir:</strong>
+                <p class="mt-0.5 text-amber-800">Tunjukkan nomor pesanan <strong>#{{ $order->order_id }}</strong> atau Meja {{ $table->table_number }} ke kasir dengan total <strong>Rp {{ number_format($order->order_grand_total, 0, ',', '.') }}</strong> agar pesanan segera dimasak.</p>
+              </div>
+            </div>
+          @endif
 
           <!-- Tracking Stepper Bar -->
           @if($status !== 'cancelled')
@@ -82,7 +117,7 @@
                   <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-xs border-2 border-white">
                     <span class="material-symbols-outlined text-[20px] fill-icon">check_circle</span>
                   </div>
-                  <span class="font-headline font-bold text-xs text-on-background">Diterima</span>
+                  <span class="font-headline font-bold text-xs text-on-background">{{ $isPre ? ($isPaid ? 'Sudah Bayar' : 'Bayar Kasir') : 'Diterima' }}</span>
                 </div>
 
                 <!-- Step 2: Dimasak -->
@@ -134,6 +169,7 @@
           <div class="flex items-center justify-between">
             <span class="font-headline font-bold text-xs text-on-surface-variant uppercase tracking-wider">Total Pesanan</span>
             <span class="font-headline font-black text-lg text-primary">Rp {{ number_format($order->order_grand_total, 0, ',', '.') }}</span>
+            </div>
           </div>
         </div>
       @endforeach

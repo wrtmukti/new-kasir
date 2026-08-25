@@ -290,9 +290,12 @@ class OrderController extends Controller
             $dailyClosingId = $activeShift ? $activeShift->id : null;
         }
 
+        $initialStatus = $order->order_status;
+        $isPrePayment = ($initialStatus === 'pending');
+
         $order->load(['products.activeDiscount', 'bundles', 'vouchers']);
 
-        DB::transaction(function () use ($order, $validated, $companyId, $dailyClosingId, $grandTotal, $paymentMetode, $paymentAmount) {
+        DB::transaction(function () use ($order, $validated, $companyId, $dailyClosingId, $grandTotal, $paymentMetode, $paymentAmount, $isPrePayment) {
             $items = [];
             $totalSubtotal = 0;
 
@@ -409,21 +412,71 @@ class OrderController extends Controller
                 'updated_by' => 'admin',
             ]);
 
-            // 6. Update order status
-            $order->update([
-                'order_status' => 'completed',
-                'order_transaction_id' => $transaction->transaction_id,
-                'daily_closing_id' => $dailyClosingId,
-            ]);
+            // 6. Jika Pre-Payment (dari status pending): potong stok sekarang & set meja terisi
+            if ($isPrePayment) {
+                // Auto-decrement stok produk
+                foreach ($order->products as $product) {
+                    $orderQty = (int) $product->pivot->quantity;
+                    $product->load('stocks');
+                    foreach ($product->stocks as $stock) {
+                        $bomQty = (int) $stock->pivot->quantity;
+                        $deductQty = $bomQty * $orderQty;
+                        if ($deductQty <= 0) continue;
+                        $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
+                        $stock->update(['stock_amount' => $stockAfter]);
+                    }
+                }
 
-            // 7. Free table
-            if ($order->order_table_id) {
-                Table::where('table_id', $order->order_table_id)
-                    ->where('delete_status', 0)
-                    ->update(['table_status' => 'tersedia']);
+                // Auto-decrement stok isi bundle
+                foreach ($order->bundles as $ob) {
+                    $bd = $ob->bundle;
+                    if (!$bd) continue;
+                    foreach ($bd->items as $bi) {
+                        $product = Product::with('stocks')->find($bi->product_id);
+                        if (!$product) continue;
+                        $orderQty = (int) $bi->quantity * (int) $ob->quantity;
+                        foreach ($product->stocks as $stock) {
+                            $bomQty = (int) $stock->pivot->quantity;
+                            $deductQty = $bomQty * $orderQty;
+                            if ($deductQty <= 0) continue;
+                            $stockAfter = max(0, (int) $stock->stock_amount - $deductQty);
+                            $stock->update(['stock_amount' => $stockAfter]);
+                        }
+                    }
+                }
+
+                // Meja di-set terisi
+                if ($order->order_table_id) {
+                    Table::where('table_id', $order->order_table_id)
+                        ->where('delete_status', 0)
+                        ->update(['table_status' => 'terisi']);
+                }
+
+                // Update order status: in_progress & paid
+                $order->update([
+                    'order_status' => 'in_progress',
+                    'payment_status' => 'paid',
+                    'order_transaction_id' => $transaction->transaction_id,
+                    'daily_closing_id' => $dailyClosingId,
+                ]);
+            } else {
+                // Mode Post-Payment: pesanan sudah selesai dimasak & sekarang dibayar
+                $order->update([
+                    'order_status' => 'completed',
+                    'payment_status' => 'paid',
+                    'order_transaction_id' => $transaction->transaction_id,
+                    'daily_closing_id' => $dailyClosingId,
+                ]);
+
+                // Free table
+                if ($order->order_table_id) {
+                    Table::where('table_id', $order->order_table_id)
+                        ->where('delete_status', 0)
+                        ->update(['table_status' => 'tersedia']);
+                }
             }
 
-            // 8. Update Statistik Kas Shift Aktif jika ada
+            // 7. Update Statistik Kas Shift Aktif jika ada
             if ($dailyClosingId) {
                 $closing = DailyClosing::find($dailyClosingId);
                 if ($closing && $closing->status === 'open') {
@@ -438,17 +491,54 @@ class OrderController extends Controller
             }
         });
 
+        $message = $isPrePayment
+            ? 'Pembayaran berhasil diterima. Pesanan dikirim ke dapur untuk dimasak.'
+            : 'Pembayaran berhasil disimpan dan pesanan telah selesai.';
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Pembayaran berhasil disimpan dan pesanan telah selesai.',
+                'message' => $message,
                 'redirect_url' => route('admin.order.receipt', $order),
                 'show_url' => route('admin.order.show', $order),
             ]);
         }
 
         return redirect()->route('admin.order.show', $order)
-            ->with('success', 'Pembayaran berhasil disimpan dan pesanan telah selesai.');
+            ->with('success', $message);
+    }
+
+    // ——— Tandai Selesai Disajikan (Khusus Order Pre-Payment yang sudah Lunas) ———
+    public function completeServing(Order $order)
+    {
+        if ($order->delete_status || $order->order_status !== 'in_progress' || $order->payment_status !== 'paid') {
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Pesanan tidak dapat diselesaikan.'], 400);
+            }
+            return redirect()->route('admin.order.show', $order)->with('error', 'Pesanan tidak dapat diselesaikan.');
+        }
+
+        DB::transaction(function () use ($order) {
+            $order->update([
+                'order_status' => 'completed',
+            ]);
+
+            if ($order->order_table_id) {
+                Table::where('table_id', $order->order_table_id)
+                    ->where('delete_status', 0)
+                    ->update(['table_status' => 'tersedia']);
+            }
+        });
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesanan #' . $order->order_id . ' telah selesai disajikan dan meja telah dikosongkan.',
+            ]);
+        }
+
+        return redirect()->route('admin.order.show', $order)
+            ->with('success', 'Pesanan #' . $order->order_id . ' telah selesai disajikan dan meja telah dikosongkan.');
     }
 
     // ——— Complete pesanan (Fallback) ———
@@ -530,7 +620,7 @@ class OrderController extends Controller
     // ——— Cetak struk ———
     public function receipt(Order $order)
     {
-        if ($order->delete_status || $order->order_status !== 'completed') {
+        if ($order->delete_status || ($order->order_status !== 'completed' && $order->payment_status !== 'paid')) {
             abort(404);
         }
 
@@ -561,10 +651,10 @@ class OrderController extends Controller
 
         $order->load('outlet', 'products', 'vouchers', 'bundles.bundle.items.product');
 
-        // Kalo completed, load transaction_items & payment jg biar dapet snapshot harga & diskon
+        // Kalo ada order_transaction_id (lunas), load transaction_items & payment jg biar dapet snapshot harga & diskon
         $transaction = null;
         $transactionItems = null;
-        if ($order->order_status === 'completed' && $order->order_transaction_id) {
+        if ($order->order_transaction_id) {
             $transaction = Transaction::with('items', 'payment')
                 ->where('transaction_id', $order->order_transaction_id)
                 ->where('delete_status', 0)
@@ -584,7 +674,10 @@ class OrderController extends Controller
             $customer = Customer::where('customer_id', $order->order_customer_id)->first();
         }
 
-        return view('admin.order.show', compact('order', 'table', 'customer', 'transaction', 'transactionItems'));
+        $setting = \App\Models\Admin\SettingOutlet::where('delete_status', 0)->first();
+        $paymentTiming = $setting?->payment_timing ?? 'post_payment';
+
+        return view('admin.order.show', compact('order', 'table', 'customer', 'transaction', 'transactionItems', 'setting', 'paymentTiming'));
     }
 
     public function storeCart(Request $request)

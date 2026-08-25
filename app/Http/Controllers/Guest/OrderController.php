@@ -276,7 +276,10 @@ class OrderController extends Controller
             ];
         }, $items);
 
-        return view($this->guestView('review'), compact('client', 'table', 'outlet', 'items', 'bundleRows', 'itemsJson', 'grandTotal', 'totalPrice'));
+        $setting = SettingOutlet::where('delete_status', 0)->first();
+        $paymentTiming = $setting?->payment_timing ?? 'post_payment';
+
+        return view($this->guestView('review'), compact('client', 'table', 'outlet', 'items', 'bundleRows', 'itemsJson', 'grandTotal', 'totalPrice', 'paymentTiming', 'setting'));
     }
 
     /**
@@ -431,6 +434,7 @@ class OrderController extends Controller
                 'outlet_id' => $companyId,
                 'order_type' => 'dine_in',
                 'order_status' => 'pending',
+                'payment_status' => 'unpaid',
                 'order_grand_total' => $finalGrandTotal,
                 'order_remark' => $validated['order_remark'] ?? null,
                 'order_table_id' => $table->table_id,
@@ -492,7 +496,10 @@ class OrderController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view($this->guestView('status'), compact('client', 'table', 'outlet', 'orders'));
+        $setting = SettingOutlet::where('delete_status', 0)->first();
+        $paymentTiming = $setting?->payment_timing ?? 'post_payment';
+
+        return view($this->guestView('status'), compact('client', 'table', 'outlet', 'orders', 'paymentTiming', 'setting'));
     }
 
     /**
