@@ -80,4 +80,14 @@ class Outlet extends Model
     {
         return $this->hasOne(SettingOutlet::class, 'outlet_id', 'outlet_id');
     }
+
+    public function shiftSetting(): HasOne
+    {
+        return $this->hasOne(ShiftSetting::class, 'outlet_id', 'outlet_id');
+    }
+
+    public function dailyClosings(): HasMany
+    {
+        return $this->hasMany(DailyClosing::class, 'outlet_id', 'outlet_id');
+    }
 }

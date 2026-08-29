@@ -1,17 +1,17 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Bahan Mentah COGS & Stock Opname')
+@section('title', 'Bahan Mentah & Stock Opname')
 
 @php $activeMenu = 'cogs-raw-material' @endphp
 
 @section('content')
 <div class="page-header">
   <div>
-    <h1>Bahan Mentah COGS & Stock Opname</h1>
+    <h1>Bahan Mentah & Stock Opname</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Analitik</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Bahan Mentah COGS</span>
+      <span>Keuangan</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <span>Bahan Mentah</span>
     </div>
   </div>
   <a href="{{ route('admin.keuangan.cogs-raw-material.create') }}" class="btn btn-primary-grad">
@@ -21,7 +21,7 @@
 
 <div class="card">
   <div class="card-header-flex">
-    <h6>Daftar Bahan Mentah, Opname & Estimasi Harga COGS</h6>
+    <h6>Daftar Bahan Mentah & Stock Opname</h6>
     <div class="d-flex align-items-center gap-2">
       <label class="form-label-modern mb-0" style="font-size:0.85rem;">Tampilkan</label>
       <select class="form-select-modern" id="perPage" style="width:auto;min-width:70px;">

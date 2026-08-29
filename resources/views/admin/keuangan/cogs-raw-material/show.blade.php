@@ -10,7 +10,7 @@
     <h1>Detail Bahan Mentah: {{ $cogsRawMaterial->name }}</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}">Bahan Mentah COGS</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}">Bahan Mentah</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Detail</span>
     </div>
   </div>

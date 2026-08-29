@@ -74,7 +74,7 @@
             <table class="table-modern" id="recipeItemsTable">
               <thead>
                 <tr>
-                  <th>Bahan Mentah COGS</th>
+                  <th>Bahan Mentah</th>
                   <th style="width: 150px;">Takaran Qty</th>
                   <th style="width: 60px;">Aksi</th>
                 </tr>

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id('receiving_item_id');
             $table->string('receiving_id')->nullable();          // FK integer ke purchase_receivings
             $table->string('po_item_id')->nullable();            // FK integer ke purchase_order_items
-            $table->string('cogs_raw_material_id')->nullable();  // FK ke cogs_raw_materials
+            $table->string('raw_stock_material_id')->nullable(); // FK ke raw_stock_materials
 
             $table->integer('received_qty');                     // jumlah yg diterima skrg
             $table->decimal('received_price', 15, 2)->default(0); // harga pas diterima

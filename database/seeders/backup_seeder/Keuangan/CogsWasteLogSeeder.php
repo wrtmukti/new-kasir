@@ -3,7 +3,7 @@
 namespace Database\Seeders\Keuangan;
 
 use Illuminate\Database\Seeder;
-use App\Models\Admin\Keuangan\CogsRawMaterial;
+use App\Models\Admin\Keuangan\RawStockMaterial;
 use App\Models\Admin\Keuangan\CogsWasteHistory;
 use App\Models\Admin\Keuangan\CogsWasteLog;
 use App\Models\Admin\Outlet;
@@ -15,9 +15,9 @@ class CogsWasteLogSeeder extends Seeder
         $outlet = Outlet::where('delete_status', 0)->first();
         $outletId = $outlet ? $outlet->outlet_id : null;
 
-        $ayam = CogsRawMaterial::where('raw_material_code', 'RAW-AYAM01')->first();
-        $cabe = CogsRawMaterial::where('raw_material_code', 'RAW-CABE01')->first();
-        $gelas = CogsRawMaterial::where('raw_material_code', 'RAW-GLN01')->first();
+        $ayam = RawStockMaterial::where('raw_material_code', 'RAW-AYAM01')->first();
+        $cabe = RawStockMaterial::where('raw_material_code', 'RAW-CABE01')->first();
+        $gelas = RawStockMaterial::where('raw_material_code', 'RAW-GLN01')->first();
 
         $wastes = [];
 
@@ -57,7 +57,7 @@ class CogsWasteLogSeeder extends Seeder
 
             $log = CogsWasteLog::create([
                 'outlet_id' => $outletId,
-                'cogs_raw_material_id' => $raw->cogs_raw_material_id,
+                'raw_stock_material_id' => $raw->raw_stock_material_id,
                 'qty_lost' => $w['qty_lost'],
                 'waste_cost' => $wasteCost,
                 'reason' => $w['reason'],
@@ -73,7 +73,7 @@ class CogsWasteLogSeeder extends Seeder
             CogsWasteHistory::create([
                 'cogs_waste_log_id' => $log->cogs_waste_log_id,
                 'outlet_id' => $outletId,
-                'cogs_raw_material_id' => $raw->cogs_raw_material_id,
+                'raw_stock_material_id' => $raw->raw_stock_material_id,
                 'qty_lost' => $w['qty_lost'],
                 'waste_cost' => $wasteCost,
                 'reason' => $w['reason'],

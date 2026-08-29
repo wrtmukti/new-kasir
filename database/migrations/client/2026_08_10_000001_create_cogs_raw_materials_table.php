@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cogs_raw_materials', function (Blueprint $table) {
-            $table->id('cogs_raw_material_id');
+        Schema::create('raw_stock_materials', function (Blueprint $table) {
+            $table->id('raw_stock_material_id');
             $table->string('outlet_id')->nullable();
             $table->string('raw_material_code')->nullable();
             $table->string('name');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cogs_raw_materials');
+        Schema::dropIfExists('raw_stock_materials');
     }
 };

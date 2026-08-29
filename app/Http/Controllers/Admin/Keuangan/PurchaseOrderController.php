@@ -212,6 +212,34 @@ class PurchaseOrderController extends Controller
             ->with('success', 'PO berhasil dikonfirmasi. Status sekarang: Ordered.');
     }
 
+    // ===================== PAYMENT (PLAN B CASH FLOW) =====================
+
+    public function pay(Request $request, PurchaseOrder $purchase_order)
+    {
+        $request->validate([
+            'payment_method' => 'required|string|in:cash,transfer_bank,qris,other',
+            'payment_date' => 'nullable|date',
+            'payment_notes' => 'nullable|string|max:500',
+        ]);
+
+        $purchase_order->update([
+            'payment_status' => 'paid',
+            'payment_date' => $request->payment_date ? Carbon::parse($request->payment_date) : now(),
+            'payment_method' => $request->payment_method,
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Status pembayaran PO ' . $purchase_order->po_code . ' berhasil diubah menjadi LUNAS.',
+                'payment_status' => 'paid',
+            ]);
+        }
+
+        return redirect()->route('admin.keuangan.purchase-order.show', $purchase_order)
+            ->with('success', 'Status pembayaran PO ' . $purchase_order->po_code . ' berhasil diubah menjadi LUNAS.');
+    }
+
     // ===================== CANCEL =====================
 
     public function cancel(Request $request, PurchaseOrder $purchase_order)

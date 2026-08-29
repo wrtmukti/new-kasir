@@ -16,6 +16,10 @@ return new class extends Migration
             $table->datetime('po_date');
             $table->string('supplier_id')->nullable();          // FK integer ke suppliers (nullable, no constraint)
             $table->string('po_status');                        // draft | ordered | partial | completed | cancelled
+            $table->enum('payment_status', ['unpaid', 'partial', 'paid'])->default('paid'); // Status bayar tunai vs tempo
+            $table->timestamp('payment_date')->nullable();      // Tanggal kas riil keluar
+            $table->string('payment_method', 50)->nullable();   // cash, bank_transfer, tempo
+            $table->date('due_date')->nullable();               // Jatuh tempo faktur supplier
             $table->decimal('po_total_amount', 15, 2)->default(0);
             $table->text('po_notes')->nullable();
 

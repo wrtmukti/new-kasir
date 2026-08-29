@@ -1,16 +1,16 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Tambah Bahan Mentah COGS')
+@section('title', 'Tambah Bahan Mentah')
 
 @php $activeMenu = 'cogs-raw-material' @endphp
 
 @section('content')
 <div class="page-header">
   <div>
-    <h1>Tambah Bahan Mentah COGS</h1>
+    <h1>Tambah Bahan Mentah</h1>
     <div class="breadcrumb-trail">
       <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}">Bahan Mentah COGS</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}">Bahan Mentah</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Tambah</span>
     </div>
   </div>
@@ -18,7 +18,7 @@
 
 <div class="card" style="max-width: 720px;">
   <div class="card-header-flex">
-    <h6>Form Tambah Bahan Mentah COGS</h6>
+    <h6>Form Tambah Bahan Mentah</h6>
   </div>
   <div class="card-body p-4">
     <form action="{{ route('admin.keuangan.cogs-raw-material.store') }}" method="POST" id="rawMaterialForm">

@@ -26,8 +26,11 @@ class DailyClosing extends Model
         'cash_out_amount',
         'system_expected_cash',
         'actual_cash_counted',
+        'retained_cash_float',
+        'cash_deposit_to_safe',
         'cash_difference',
         'notes',
+        'cashier_note',
         'status',
     ];
 
@@ -42,6 +45,8 @@ class DailyClosing extends Model
         'cash_out_amount' => 'float',
         'system_expected_cash' => 'float',
         'actual_cash_counted' => 'float',
+        'retained_cash_float' => 'float',
+        'cash_deposit_to_safe' => 'float',
         'cash_difference' => 'float',
     ];
 
@@ -58,5 +63,10 @@ class DailyClosing extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'daily_closing_id', 'id');
+    }
+
+    public function cashDrawerLogs()
+    {
+        return $this->hasMany(CashDrawerLog::class, 'daily_closing_id', 'id');
     }
 }

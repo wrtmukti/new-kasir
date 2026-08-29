@@ -71,11 +71,12 @@ class ClientMigrateCommand extends Command
      */
     protected function migrateClientDatabase(Client $client, bool $verbose = true)
     {
+        $fresh = (bool) $this->option('fresh');
         if ($verbose) {
-            $this->info("⏳ Menjalankan migrasi untuk [{$client->client_id}] {$client->client_name} (DB: {$client->database_name})...");
+            $this->info("⏳ Menjalankan migrasi" . ($fresh ? " (FRESH)" : "") . " untuk [{$client->client_id}] {$client->client_name} (DB: {$client->database_name})...");
         }
 
-        $result = ClientDatabaseManager::runClientMigrations($client->database_name);
+        $result = ClientDatabaseManager::runClientMigrations($client->database_name, $fresh);
 
         if ($result['success']) {
             if ($verbose) {

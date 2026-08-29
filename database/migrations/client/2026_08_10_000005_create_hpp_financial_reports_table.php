@@ -22,7 +22,9 @@ return new class extends Migration
             $table->decimal('total_labor_cost', 15, 2)->default(0.00); // Total Gaji
             $table->decimal('total_overhead_cost', 15, 2)->default(0.00); // Total Operasional
             $table->decimal('gross_profit', 15, 2)->default(0.00); // Revenue - COGS
-            $table->decimal('net_profit_estimated', 15, 2)->default(0.00); // Revenue - COGS - Waste - Labor - Overhead
+            $table->decimal('gross_margin_percent', 5, 2)->default(0.00); // (Gross Profit / Revenue) * 100%
+            $table->decimal('net_profit_estimated', 15, 2)->default(0.00); // Revenue - COGS - Labor - Overhead
+            $table->decimal('net_margin_percent', 5, 2)->default(0.00); // (Net Profit / Revenue) * 100%
             $table->text('notes')->nullable();
 
             $table->string('created_by', 50)->nullable();

@@ -3,7 +3,7 @@
 namespace Database\Seeders\Keuangan;
 
 use Illuminate\Database\Seeder;
-use App\Models\Admin\Keuangan\CogsRawMaterial;
+use App\Models\Admin\Keuangan\RawStockMaterial;
 use App\Models\Admin\Keuangan\CogsRecipe;
 use App\Models\Admin\Keuangan\CogsRecipeHistory;
 use App\Models\Admin\Keuangan\CogsRecipeItem;
@@ -17,7 +17,7 @@ class CogsRecipeSeeder extends Seeder
         $outlet = Outlet::where('delete_status', 0)->first();
         $outletId = $outlet ? $outlet->outlet_id : null;
 
-        $materials = CogsRawMaterial::where('delete_status', 0)->pluck('cogs_raw_material_id', 'raw_material_code');
+        $materials = RawStockMaterial::where('delete_status', 0)->pluck('raw_stock_material_id', 'raw_material_code');
 
         $ayam = $materials['RAW-AYAM01'] ?? null;
         $sapi = $materials['RAW-SAPI01'] ?? null;
@@ -103,14 +103,14 @@ class CogsRecipeSeeder extends Seeder
                 $qty = (float) ($itemArr[1] ?? 0);
                 if (!$materialId || $qty <= 0) continue;
 
-                $rawMat = CogsRawMaterial::find($materialId);
+                $rawMat = RawStockMaterial::find($materialId);
                 if (!$rawMat) continue;
 
                 $itemCost = $qty * (float) $rawMat->effective_price;
 
                 CogsRecipeItem::create([
                     'cogs_recipe_id' => $recipe->cogs_recipe_id,
-                    'cogs_raw_material_id' => $rawMat->cogs_raw_material_id,
+                    'raw_stock_material_id' => $rawMat->raw_stock_material_id,
                     'ingredient_qty' => $qty,
                     'ingredient_cost' => $itemCost,
                 ]);

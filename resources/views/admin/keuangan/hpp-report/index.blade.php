@@ -5,38 +5,46 @@
 @php $activeMenu = 'hpp-report' @endphp
 
 @section('content')
-<!-- Header Page with Inline Filters -->
-<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+<!-- Header Page with Inline Filters & Action Buttons -->
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 no-print">
   <div>
-    <h1 class="h3 fw-bold mb-1" style="color: var(--text-primary);">Laporan HPP & Proyeksi Laba Rugi</h1>
+    <h1 class="h3 fw-bold mb-1" style="color: var(--text-primary);">📊 Laporan HPP & Proyeksi Laba Rugi</h1>
     <div class="breadcrumb-trail">
-      <a href="{{ url('docs/index') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Analitik</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Laporan HPP</span>
+      <a href="{{ route('admin.reports.dashboard') }}">Dashboard Laporan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <span>Laporan HPP (P&L)</span>
     </div>
   </div>
 
-  <!-- Inline Filter Form -->
-  <form action="{{ route('admin.keuangan.hpp-report.index') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
-    <button type="button" class="btn btn-outline-soft btn-sm px-3" data-bs-toggle="modal" data-bs-target="#operationalModal">
-      <i class="bi bi-pencil-square me-1"></i>Input Gaji & Operasional
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <!-- Inline Filter Form -->
+    <form action="{{ route('admin.keuangan.hpp-report.index') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+      <button type="button" class="btn btn-outline-soft btn-sm px-3" data-bs-toggle="modal" data-bs-target="#operationalModal">
+        <i class="bi bi-pencil-square me-1"></i>Input Gaji & OPEX
+      </button>
+      <select name="month" class="form-select-modern" style="width:auto; min-width:110px;">
+        @for($m = 1; $m <= 12; $m++)
+          <option value="{{ sprintf('%02d', $m) }}" {{ $month == sprintf('%02d', $m) ? 'selected' : '' }}>
+            {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+          </option>
+        @endfor
+      </select>
+      <select name="year" class="form-select-modern" style="width:auto; min-width:90px;">
+        @for($y = date('Y'); $y >= 2024; $y--)
+          <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+        @endfor
+      </select>
+      <button type="submit" class="btn btn-primary-grad btn-sm px-3">
+        <i class="bi bi-filter me-1"></i>Filter
+      </button>
+    </form>
+
+    <button onclick="window.print()" class="btn btn-outline-secondary btn-sm px-3">
+      <i class="bi bi-printer me-1"></i>Cetak
     </button>
-    <select name="month" class="form-select-modern" style="width:auto; min-width:110px;">
-      @for($m = 1; $m <= 12; $m++)
-        <option value="{{ sprintf('%02d', $m) }}" {{ $month == sprintf('%02d', $m) ? 'selected' : '' }}>
-          {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-        </option>
-      @endfor
-    </select>
-    <select name="year" class="form-select-modern" style="width:auto; min-width:90px;">
-      @for($y = date('Y'); $y >= 2024; $y--)
-        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-      @endfor
-    </select>
-    <button type="submit" class="btn btn-primary-grad btn-sm px-3">
-      <i class="bi bi-filter me-1"></i>Filter
-    </button>
-  </form>
+    <a href="{{ route('admin.keuangan.hpp-report.export', ['year' => $year, 'month' => $month]) }}" class="btn btn-success btn-sm px-3">
+      <i class="bi bi-file-earmark-excel me-1"></i>Export Excel / CSV
+    </a>
+  </div>
 </div>
 
 <!-- 4 Summary KPI Cards with Glowing Borders -->
@@ -101,7 +109,10 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(16, 185, 129, 0.08);">
-          <span class="fw-bold" style="color: #10b981;">LABA KOTOR (GROSS PROFIT)</span>
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold" style="color: #10b981;">LABA KOTOR (GROSS PROFIT)</span>
+            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 fs-xs">Margin: {{ number_format($grossMarginPercent, 1) }}%</span>
+          </div>
           <span class="fw-bold" style="color: #10b981;">Rp {{ number_format($grossProfit, 2, ',', '.') }}</span>
         </div>
 
@@ -121,7 +132,10 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center p-3 rounded mt-2" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3);">
-          <span class="fw-bold" style="color: #10b981; font-size:0.95rem;">ESTIMASI LABA BERSIH TOKO (NET PROFIT)</span>
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold" style="color: #10b981; font-size:0.95rem;">ESTIMASI LABA BERSIH (NET PROFIT)</span>
+            <span class="badge {{ $netMarginPercent >= 0 ? 'bg-success' : 'bg-danger' }} fs-xs">Net Margin: {{ number_format($netMarginPercent, 1) }}%</span>
+          </div>
           <span class="fw-bold fs-5" style="color: #10b981;">Rp {{ number_format($netProfit, 2, ',', '.') }}</span>
         </div>
       </div>

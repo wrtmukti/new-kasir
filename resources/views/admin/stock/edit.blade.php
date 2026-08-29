@@ -106,7 +106,7 @@
     <div class="card-body">
       <div class="form-check form-switch mb-3">
         <input class="form-check-input" type="checkbox" name="deduct_raw_material" id="deduct_raw_material" value="1" {{ old('deduct_raw_material') ? 'checked' : '' }}>
-        <label class="form-check-label fw-bold" for="deduct_raw_material" style="color: var(--text-primary);">Potong Stok Bahan Mentah COGS Otomatis Saat Memperbarui Stok Ini</label>
+        <label class="form-check-label fw-bold" for="deduct_raw_material" style="color: var(--text-primary);">Potong Stok Bahan Mentah Otomatis Saat Memperbarui Stok Ini</label>
       </div>
 
       <div id="rawDeductionFields" style="display: none;">

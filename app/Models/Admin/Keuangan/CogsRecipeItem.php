@@ -14,6 +14,7 @@ class CogsRecipeItem extends Model
 
     protected $fillable = [
         'cogs_recipe_id',
+        'raw_stock_material_id',
         'cogs_raw_material_id',
         'ingredient_qty',
         'ingredient_cost',
@@ -24,8 +25,13 @@ class CogsRecipeItem extends Model
         return $this->belongsTo(CogsRecipe::class, 'cogs_recipe_id', 'cogs_recipe_id');
     }
 
+    public function rawStockMaterial()
+    {
+        return $this->belongsTo(RawStockMaterial::class, 'raw_stock_material_id', 'raw_stock_material_id');
+    }
+
     public function rawMaterial()
     {
-        return $this->belongsTo(CogsRawMaterial::class, 'cogs_raw_material_id', 'cogs_raw_material_id');
+        return $this->belongsTo(RawStockMaterial::class, 'raw_stock_material_id', 'raw_stock_material_id');
     }
 }

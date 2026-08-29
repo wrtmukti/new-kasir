@@ -16,6 +16,7 @@ class CogsWasteHistory extends Model
     protected $fillable = [
         'cogs_waste_log_id',
         'outlet_id',
+        'raw_stock_material_id',
         'cogs_raw_material_id',
         'qty_lost',
         'waste_cost',
@@ -34,9 +35,14 @@ class CogsWasteHistory extends Model
         return $this->belongsTo(CogsWasteLog::class, 'cogs_waste_log_id', 'cogs_waste_log_id');
     }
 
+    public function rawStockMaterial()
+    {
+        return $this->belongsTo(RawStockMaterial::class, 'raw_stock_material_id', 'raw_stock_material_id');
+    }
+
     public function rawMaterial()
     {
-        return $this->belongsTo(CogsRawMaterial::class, 'cogs_raw_material_id', 'cogs_raw_material_id');
+        return $this->belongsTo(RawStockMaterial::class, 'raw_stock_material_id', 'raw_stock_material_id');
     }
 
     public function outlet()

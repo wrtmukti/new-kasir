@@ -1,12 +1,9 @@
-# TODO List & Roadmap — Branch `deva-branch`
-
 > **Branch Context**: `deva-branch`
-> **Project Scope**: POS SaaS F&B MVP (Decoupled COGS + HPP Report + Master Tax & Service Charge + Shift Closing Kasir + Report Dashboard & 6 Dedicated Detail Reports + Excel Export).
-> **Dokumen Milestone Detail**: [`milestone-tax-sales-report.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/milestone-tax-sales-report.md)
-> **Dokumen Cut-off Plan**: [`cut_off_plan.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/cut_off_plan.md)
-> **Dokumen Spesifikasi Laporan**: [`laporan.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/laporan.md)
-
-> **Status**: **Phase 1 (COGS & HPP) COMPLETED 100% | Phase 2 (Tax, Shift & Reports) COMPLETED 100%**
+> **Project Scope**: POS SaaS F&B MVP (Decoupled COGS + HPP Report + Master Tax & Service Charge + Shift Closing Kasir + Dedicated Cash Flow Plan B + Multi-Outlet Owner Executive Hub).
+> **Dokumen Milestone Phase 3 (Owner Portal)**: [`2026-08-29/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/milestone.md)
+> **Dokumen Task Tracker Phase 3**: [`2026-08-29/todo.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/todo.md)
+> **Dokumen Milestone Plan B**: [`2026-08-28/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-28/milestone.md)
+> **Status**: **Phase 1 & Phase 2 COMPLETED 100% | Phase 3 (Owner Multi-Branch Consolidated Hub) APPROVED & READY**
 
 ---
 

@@ -74,9 +74,11 @@
             <table class="table-modern" id="recipeItemsTable">
               <thead>
                 <tr>
-                  <th>Bahan Mentah COGS</th>
-                  <th style="width: 150px;">Takaran Qty</th>
-                  <th style="width: 60px;">Aksi</th>
+                  <th>Bahan Mentah</th>
+                  <th>Jumlah / Qty Resep</th>
+                  <th>Satuan / Unit</th>
+                  <th>Estimasi Biaya Resep</th>
+                  <th class="text-end" style="width: 50px;">Aksi</th>
                 </tr>
               </thead>
               <tbody>

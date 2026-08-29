@@ -39,7 +39,7 @@
     @empty
     <tr>
       <td colspan="7" class="text-center py-4 text-muted-c">
-        <i class="bi bi-inbox fs-2 d-block mb-2"></i>Belum ada data bahan mentah COGS.
+        <i class="bi bi-inbox fs-2 d-block mb-2"></i>Belum ada data bahan mentah.
       </td>
     </tr>
     @endforelse

@@ -77,10 +77,16 @@ use App\Http\Controllers\Admin\Keuangan\ProductReportController;
 use App\Http\Controllers\Admin\Keuangan\CashFlowReportController;
 use App\Http\Controllers\Admin\Keuangan\TaxServiceReportController;
 use App\Http\Controllers\Admin\Keuangan\InventoryReportController;
-use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
 use App\Http\Controllers\Admin\Keuangan\ShiftSettingController;
 use App\Http\Controllers\Admin\Keuangan\ShiftOperationalController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+
+use App\Http\Controllers\Admin\Owner\OwnerDashboardController;
+use App\Http\Controllers\Admin\Owner\OwnerFinancialController;
+use App\Http\Controllers\Admin\Owner\OwnerBenchmarkController;
+use App\Http\Controllers\Admin\Owner\OwnerAuditController;
+use App\Http\Controllers\Admin\Owner\OwnerCashDebtController;
+use App\Http\Controllers\Admin\Owner\OwnerBranchController;
 
 // ===================== AUTH POS & CASHIER =====================
 Route::middleware('guest:web')->group(function () {
@@ -185,6 +191,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
         // Purchase Order + Receiving (Keuangan & Raw Stock)
         Route::get('purchase-order/data', [PurchaseOrderController::class, 'data'])->name('purchase-order.data');
         Route::post('purchase-order/{purchase_order}/confirm', [PurchaseOrderController::class, 'confirm'])->name('purchase-order.confirm');
+        Route::post('purchase-order/{purchase_order}/pay', [PurchaseOrderController::class, 'pay'])->name('purchase-order.pay');
         Route::post('purchase-order/{purchase_order}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-order.cancel');
         Route::post('purchase-order/{purchase_order}/return', [PurchaseOrderController::class, 'return'])->name('purchase-order.return');
         Route::get('purchase-order/{purchase_order}/receiving/create', [PurchaseOrderController::class, 'receivingCreate'])->name('purchase-order.receiving.create');
@@ -192,7 +199,11 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
         Route::resource('purchase-order', PurchaseOrderController::class);
 
         Route::get('hpp-report', [HppReportController::class, 'index'])->name('hpp-report.index');
+        Route::get('hpp-report/export', [HppReportController::class, 'export'])->name('hpp-report.export');
         Route::post('hpp-report/operational', [HppReportController::class, 'storeOperational'])->name('hpp-report.store-operational');
+
+        Route::get('cashflow-report', [CashFlowReportController::class, 'index'])->name('cashflow-report.index');
+        Route::get('cashflow-report/export', [CashFlowReportController::class, 'export'])->name('cashflow-report.export');
 
         Route::get('menu-analytics', [MenuAnalyticsController::class, 'index'])->name('menu-analytics.index');
 
@@ -208,11 +219,18 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
         Route::post('setting-shift/{shift}/update', [ShiftSettingController::class, 'updateShift'])->name('setting-shift.update-shift');
         Route::delete('setting-shift/{shift}/delete', [ShiftSettingController::class, 'destroyShift'])->name('setting-shift.destroy-shift');
 
-        // Dedicated Operasional Clock-In & Clock-Out Kasir
+        // Dedicated Operasional Clock-In & Clock-Out Kasir & Buku Kas Laci
         Route::get('shift-operational', [ShiftOperationalController::class, 'index'])->name('shift-operational.index');
         Route::post('shift-operational/open', [ShiftOperationalController::class, 'openShift'])->name('shift-operational.open');
         Route::post('shift-operational/close', [ShiftOperationalController::class, 'closeShift'])->name('shift-operational.close');
+        Route::post('shift-operational/cash-in', [ShiftOperationalController::class, 'cashIn'])->name('shift-operational.cash-in');
+        Route::post('shift-operational/cash-out', [ShiftOperationalController::class, 'cashOut'])->name('shift-operational.cash-out');
         Route::get('shift-operational/{dailyClosing}/z-report', [ShiftOperationalController::class, 'zReport'])->name('shift-operational.z-report');
+
+        // Panduan Lengkap Arsitektur Finansial, HPP & Cash Flow (Plan B)
+        Route::get('financial-guide', function () {
+            return view('admin.keuangan.guide.index');
+        })->name('financial-guide.index');
     });
 
 
@@ -238,6 +256,23 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
 
         Route::get('shifts', [ShiftClosingReportController::class, 'index'])->name('shifts');
         Route::get('shifts/export', [ShiftClosingReportController::class, 'export'])->name('shifts.export');
+    });
+
+    // ===================== PORTAL OWNER (Multi-Outlet Executive Suite) =====================
+    Route::prefix('owner')->name('owner.')->group(function () {
+        Route::get('dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
+        
+        Route::get('financial', [OwnerFinancialController::class, 'index'])->name('financial');
+        Route::get('financial/export', [OwnerFinancialController::class, 'export'])->name('financial.export');
+        
+        Route::get('benchmark', [OwnerBenchmarkController::class, 'index'])->name('benchmark');
+        Route::get('audit', [OwnerAuditController::class, 'index'])->name('audit');
+        Route::get('cash-debt', [OwnerCashDebtController::class, 'index'])->name('cash-debt');
+        
+        Route::get('branches', [OwnerBranchController::class, 'index'])->name('branches.index');
+        Route::post('branches', [OwnerBranchController::class, 'store'])->name('branches.store');
+        Route::post('branches/{id}/update', [OwnerBranchController::class, 'update'])->name('branches.update');
+        Route::delete('branches/{id}', [OwnerBranchController::class, 'destroy'])->name('branches.destroy');
     });
 
 

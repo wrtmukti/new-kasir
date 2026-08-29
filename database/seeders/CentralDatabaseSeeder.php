@@ -197,38 +197,42 @@ class CentralDatabaseSeeder extends Seeder
         ];
 
         foreach ($demoClients as $demo) {
-            $clientId = (string) Str::ulid();
             $slug = Str::slug($demo['client_name']);
             $dbName = ClientProvisioningService::generateDatabaseName($demo['client_code'], 'dev');
 
-            // 4.1 Buat Record Client di Central DB
-            $client = Client::create([
-                'client_id' => $clientId,
-                'client_slug' => $slug,
-                'client_name' => $demo['client_name'],
-                'client_code' => $demo['client_code'],
-                'business_name' => $demo['business_name'],
-                'owner_name' => $demo['owner_name'],
-                'owner_email' => $demo['owner_email'],
-                'owner_phone' => $demo['owner_phone'],
-                'address' => $demo['address'],
-                'database_name' => $dbName,
-                'db_host' => env('DB_HOST', '127.0.0.1'),
-                'db_port' => env('DB_PORT', 3306),
-                'db_username' => env('DB_USERNAME', 'root'),
-                'db_password' => env('DB_PASSWORD', ''),
-                'status' => 'active',
-                'provisioned_at' => now(),
-                'last_active_at' => now(),
-                'created_by' => 'CentralSeeder',
-            ]);
+            $existingClient = Client::where('client_code', $demo['client_code'])->orWhere('client_slug', $slug)->first();
+            $clientId = $existingClient ? $existingClient->client_id : (string) Str::ulid();
 
-            // 4.2 Buat Database Fisik di MySQL
+            // 4.1 Buat Record Client di Central DB
+            $client = Client::updateOrCreate(
+                ['client_code' => $demo['client_code']],
+                [
+                    'client_id' => $clientId,
+                    'client_slug' => $slug,
+                    'client_name' => $demo['client_name'],
+                    'business_name' => $demo['business_name'],
+                    'owner_name' => $demo['owner_name'],
+                    'owner_email' => $demo['owner_email'],
+                    'owner_phone' => $demo['owner_phone'],
+                    'address' => $demo['address'],
+                    'database_name' => $dbName,
+                    'db_host' => env('DB_HOST', '127.0.0.1'),
+                    'db_port' => env('DB_PORT', 3306),
+                    'db_username' => env('DB_USERNAME', 'root'),
+                    'db_password' => env('DB_PASSWORD', ''),
+                    'status' => 'active',
+                    'provisioned_at' => now(),
+                    'last_active_at' => now(),
+                    'created_by' => 'CentralSeeder',
+                ]
+            );
+
+            // 4.2 Buat Database Fisik di MySQL jika belum ada
             ClientDatabaseManager::createDatabase($dbName);
 
-            // 4.3 Jalankan Migrasi Client & Seed Data Operasional Khusus Klien
+            // 4.3 Jalankan Migrasi Fresh Client & Seed Data Operasional Khusus Klien
             ClientDatabaseManager::connectToClient($dbName);
-            Artisan::call('migrate', [
+            Artisan::call('migrate:fresh', [
                 '--database' => 'client',
                 '--path' => 'database/migrations/client',
                 '--force' => true,

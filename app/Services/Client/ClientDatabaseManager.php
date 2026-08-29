@@ -173,7 +173,7 @@ class ClientDatabaseManager
     /**
      * Jalankan migrasi tabel operasional POS ke database client.
      */
-    public static function runClientMigrations(string $databaseName): array
+    public static function runClientMigrations(string $databaseName, bool $fresh = false): array
     {
         $connected = self::connectToClient($databaseName);
         if (!$connected) {
@@ -184,7 +184,8 @@ class ClientDatabaseManager
         }
 
         try {
-            Artisan::call('migrate', [
+            $command = $fresh ? 'migrate:fresh' : 'migrate';
+            Artisan::call($command, [
                 '--database' => self::CLIENT_CONNECTION,
                 '--path' => 'database/migrations/client',
                 '--force' => true,
@@ -194,7 +195,7 @@ class ClientDatabaseManager
             return [
                 'success' => true,
                 'output' => $output,
-                'message' => "Migrasi client berhasil dijalankan pada database: {$databaseName}",
+                'message' => "Migrasi client" . ($fresh ? " (fresh)" : "") . " berhasil dijalankan pada database: {$databaseName}",
             ];
         } catch (Exception $e) {
             Log::error("[ClientDatabaseManager] Error running migrations on {$databaseName}: " . $e->getMessage());

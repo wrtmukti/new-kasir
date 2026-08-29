@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cogs_waste_logs', function (Blueprint $table) {
             $table->id('cogs_waste_log_id');
             $table->string('outlet_id')->nullable();
-            $table->foreignId('cogs_raw_material_id')->constrained('cogs_raw_materials', 'cogs_raw_material_id')->cascadeOnDelete();
+            $table->foreignId('raw_stock_material_id')->constrained('raw_stock_materials', 'raw_stock_material_id')->cascadeOnDelete();
             $table->decimal('qty_lost', 15, 4); // jumlah terbuang
             $table->decimal('waste_cost', 15, 2); // rupiah kerugian
             $table->string('reason')->default('Rotten/Basi'); // Basi, Rusak, Tumpah, Expired

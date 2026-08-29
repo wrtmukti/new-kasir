@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('cogs_waste_history_id');
             $table->foreignId('cogs_waste_log_id')->constrained('cogs_waste_logs', 'cogs_waste_log_id')->cascadeOnDelete();
             $table->string('outlet_id')->nullable();
-            $table->foreignId('cogs_raw_material_id')->constrained('cogs_raw_materials', 'cogs_raw_material_id')->cascadeOnDelete();
+            $table->foreignId('raw_stock_material_id')->constrained('raw_stock_materials', 'raw_stock_material_id')->cascadeOnDelete();
             $table->decimal('qty_lost', 15, 4);
             $table->decimal('waste_cost', 15, 2);
             $table->string('reason')->default('Rotten/Basi');

@@ -10,8 +10,8 @@ class CogsRawMaterial extends Model
 {
     use HasFactory;
 
-    protected $table = 'cogs_raw_materials';
-    protected $primaryKey = 'cogs_raw_material_id';
+    protected $table = 'raw_stock_materials';
+    protected $primaryKey = 'raw_stock_material_id';
 
     protected $fillable = [
         'outlet_id',

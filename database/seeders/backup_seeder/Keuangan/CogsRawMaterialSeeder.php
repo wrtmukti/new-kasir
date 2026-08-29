@@ -3,8 +3,8 @@
 namespace Database\Seeders\Keuangan;
 
 use Illuminate\Database\Seeder;
-use App\Models\Admin\Keuangan\CogsRawMaterial;
-use App\Models\Admin\Keuangan\CogsRawMaterialHistory;
+use App\Models\Admin\Keuangan\RawStockMaterial;
+use App\Models\Admin\Keuangan\RawStockMaterialHistory;
 use App\Models\Admin\Outlet;
 
 class CogsRawMaterialSeeder extends Seeder
@@ -171,9 +171,9 @@ class CogsRawMaterialSeeder extends Seeder
         ];
 
         foreach ($materials as $m) {
-            $raw = CogsRawMaterial::where('raw_material_code', $m['raw_material_code'])->first();
+            $raw = RawStockMaterial::where('raw_material_code', $m['raw_material_code'])->first();
             if (!$raw) {
-                $raw = new CogsRawMaterial();
+                $raw = new RawStockMaterial();
             }
             $raw->outlet_id = $outletId;
             $raw->raw_material_code = $m['raw_material_code'];
@@ -189,13 +189,13 @@ class CogsRawMaterialSeeder extends Seeder
             $raw->save();
 
             // History Log Seeder
-            $history = CogsRawMaterialHistory::where('cogs_raw_material_id', $raw->cogs_raw_material_id)
+            $history = RawStockMaterialHistory::where('raw_stock_material_id', $raw->raw_stock_material_id)
                 ->where('action_type', 'create')
                 ->first();
 
             if (!$history) {
-                CogsRawMaterialHistory::create([
-                    'cogs_raw_material_id' => $raw->cogs_raw_material_id,
+                RawStockMaterialHistory::create([
+                    'raw_stock_material_id' => $raw->raw_stock_material_id,
                     'outlet_id' => $outletId,
                     'name' => $raw->name,
                     'unit' => $raw->unit,
@@ -207,7 +207,7 @@ class CogsRawMaterialSeeder extends Seeder
                     'action_type' => 'create',
                     'changed_by' => 'Seeder',
                     'effective_date' => now(),
-                    'history_remark' => 'Initial seeder data bahan mentah COGS',
+                    'history_remark' => 'Initial seeder data bahan mentah Raw Stock Material',
                     'created_by' => 'seeder',
                 ]);
             }

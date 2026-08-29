@@ -42,6 +42,7 @@ class ShiftOperationalController extends Controller
             ->first();
 
         $liveStats = null;
+        $drawerLogs = collect();
         if ($activeShift) {
             // Hitung Penjualan Realtime dari Order/Transaction yang terikat daily_closing_id ini
             $cashSales = (float) Transaction::where('daily_closing_id', $activeShift->id)
@@ -67,20 +68,29 @@ class ShiftOperationalController extends Controller
                 $nonCashSales = (float) $activeShift->system_non_cash_sales;
             }
 
+            // Hitung Uang Masuk / Keluar Laci Realtime
+            $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'in')->sum('amount');
+            $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'out')->sum('amount');
+
             $orderCount = Order::where('daily_closing_id', $activeShift->id)->count();
 
-            $expectedCash = $activeShift->starting_cash + $cashSales;
-
+            $expectedCash = $activeShift->starting_cash + $cashSales + $drawerCashIn - $drawerCashOut;
 
             $liveStats = [
                 'cash_sales' => $cashSales,
                 'non_cash_sales' => $nonCashSales,
+                'drawer_cash_in' => $drawerCashIn,
+                'drawer_cash_out' => $drawerCashOut,
                 'total_sales' => $cashSales + $nonCashSales,
                 'order_count' => $orderCount,
                 'starting_cash' => (float) $activeShift->starting_cash,
                 'expected_cash' => $expectedCash,
                 'runtime_duration' => Carbon::parse($activeShift->opened_at)->diffForHumans(null, true),
             ];
+
+            $drawerLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)
+                ->latest()
+                ->get();
         }
 
         // Histori 5 Shift Closing Terakhir
@@ -95,6 +105,7 @@ class ShiftOperationalController extends Controller
             'masterShifts',
             'activeShift',
             'liveStats',
+            'drawerLogs',
             'recentClosings'
         ));
     }
@@ -168,6 +179,124 @@ class ShiftOperationalController extends Controller
     }
 
     /**
+     * Catat Kas Masuk Laci (Cash In / Owner Top Up)
+     */
+    public function cashIn(Request $request)
+    {
+        $companyId = session('outlet_id') ?? 'COMP-001';
+
+        $activeShift = DailyClosing::where('outlet_id', $companyId)
+            ->where('status', 'open')
+            ->latest()
+            ->first();
+
+        if (!$activeShift) {
+            $errMsg = 'Tidak ada sesi shift yang sedang aktif.';
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['status' => 'error', 'message' => $errMsg], 422);
+            }
+            return redirect()->route('admin.keuangan.shift-operational.index')->with('error', $errMsg);
+        }
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'reason' => 'required|string|max:255',
+            'category' => 'nullable|string|max:100',
+        ]);
+
+        $amount = (float) $request->amount;
+        $category = $request->input('category') ?: 'Top-up Owner';
+
+        \App\Models\Admin\CashDrawerLog::create([
+            'outlet_id' => $companyId,
+            'daily_closing_id' => $activeShift->id,
+            'cashier_id' => auth()->id() ?? 1,
+            'type' => 'in',
+            'category' => $category,
+            'amount' => $amount,
+            'reason' => $request->reason,
+            'created_by' => auth()->user()->name ?? 'Kasir',
+        ]);
+
+        $activeShift->increment('cash_in_amount', $amount);
+        $activeShift->update([
+            'system_expected_cash' => $activeShift->starting_cash + $activeShift->system_cash_sales + $activeShift->cash_in_amount - $activeShift->cash_out_amount,
+        ]);
+
+        $msg = 'Kas masuk sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil dicatat ke laci.';
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $msg,
+                'new_cash_in' => $activeShift->fresh()->cash_in_amount,
+                'expected_cash' => $activeShift->fresh()->system_expected_cash,
+            ]);
+        }
+
+        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+    }
+
+    /**
+     * Catat Kas Keluar Laci (Cash Out / Petty Cash / Beli Es/Gas)
+     */
+    public function cashOut(Request $request)
+    {
+        $companyId = session('outlet_id') ?? 'COMP-001';
+
+        $activeShift = DailyClosing::where('outlet_id', $companyId)
+            ->where('status', 'open')
+            ->latest()
+            ->first();
+
+        if (!$activeShift) {
+            $errMsg = 'Tidak ada sesi shift yang sedang aktif.';
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['status' => 'error', 'message' => $errMsg], 422);
+            }
+            return redirect()->route('admin.keuangan.shift-operational.index')->with('error', $errMsg);
+        }
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'reason' => 'required|string|max:255',
+            'category' => 'nullable|string|max:100',
+        ]);
+
+        $amount = (float) $request->amount;
+        $category = $request->input('category') ?: 'Petty Cash';
+
+        \App\Models\Admin\CashDrawerLog::create([
+            'outlet_id' => $companyId,
+            'daily_closing_id' => $activeShift->id,
+            'cashier_id' => auth()->id() ?? 1,
+            'type' => 'out',
+            'category' => $category,
+            'amount' => $amount,
+            'reason' => $request->reason,
+            'created_by' => auth()->user()->name ?? 'Kasir',
+        ]);
+
+        $activeShift->increment('cash_out_amount', $amount);
+        $activeShift->update([
+            'system_expected_cash' => $activeShift->starting_cash + $activeShift->system_cash_sales + $activeShift->cash_in_amount - $activeShift->cash_out_amount,
+        ]);
+
+        $msg = 'Kas keluar sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil dicatat.';
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $msg,
+                'new_cash_out' => $activeShift->fresh()->cash_out_amount,
+                'expected_cash' => $activeShift->fresh()->system_expected_cash,
+            ]);
+        }
+
+        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+    }
+
+    /**
      * Proses Clock-Out / Tutup Shift Kasir & Cetak Z-Report
      */
     public function closeShift(Request $request)
@@ -189,6 +318,8 @@ class ShiftOperationalController extends Controller
 
         $request->validate([
             'actual_cash_counted' => 'required|numeric|min:0',
+            'retained_cash_float' => 'nullable|numeric|min:0',
+            'cashier_note' => 'nullable|string|max:500',
         ], [
             'actual_cash_counted.required' => 'Hitungan fisik uang tunai kasir wajib diisi.',
             'actual_cash_counted.numeric' => 'Hitungan fisik kasir harus berupa angka.',
@@ -223,6 +354,9 @@ class ShiftOperationalController extends Controller
         $actualCash = (float) $request->actual_cash_counted;
         $difference = $actualCash - $expectedCash;
 
+        $retainedFloat = (float) ($request->retained_cash_float ?? 0);
+        $depositToSafe = max(0, $actualCash - $retainedFloat);
+
         $notes = $request->input('notes', '');
         if ($difference != 0) {
             $diffType = $difference > 0 ? 'Kelebihan Kas (Over)' : 'Kekurangan Kas (Short)';
@@ -235,12 +369,15 @@ class ShiftOperationalController extends Controller
             'system_non_cash_sales' => $nonCashSales,
             'system_expected_cash' => $expectedCash,
             'actual_cash_counted' => $actualCash,
+            'retained_cash_float' => $retainedFloat,
+            'cash_deposit_to_safe' => $depositToSafe,
             'cash_difference' => $difference,
             'notes' => trim($notes),
+            'cashier_note' => $request->cashier_note,
             'status' => 'closed',
         ]);
 
-        $msg = 'Berhasil Clock-Out! Shift (' . $activeShift->shift_name . ') telah ditutup. Selisih kas: Rp ' . number_format($difference, 0, ',', '.') . '.';
+        $msg = 'Berhasil Clock-Out! Shift (' . $activeShift->shift_name . ') telah ditutup. Setor brankas: Rp ' . number_format($depositToSafe, 0, ',', '.') . ' (Sisa laci: Rp ' . number_format($retainedFloat, 0, ',', '.') . '). Selisih: Rp ' . number_format($difference, 0, ',', '.') . '.';
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([

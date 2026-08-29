@@ -119,10 +119,53 @@
         </li>
       </ul>
 
+      <div class="nav-section-title d-flex align-items-center justify-content-between">
+        <span>Portal Owner</span>
+        <span class="badge badge-warning" style="font-size: 0.62rem; padding: 2px 6px; font-weight: 700;">MULTI-CABANG</span>
+      </div>
+      <ul class="list-unstyled">
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-dashboard') active @endif">
+          <a href="{{ route('admin.owner.dashboard') }}" class="nav-link">
+            <i class="bi bi-grid-fill text-warning"></i>
+            <span class="nav-label-text">Konsolidasi Cabang</span>
+          </a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-financial') active @endif">
+          <a href="{{ route('admin.owner.financial') }}" class="nav-link">
+            <i class="bi bi-pie-chart-fill"></i>
+            <span class="nav-label-text">Laba Rugi &amp; Cash Flow</span>
+          </a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-benchmark') active @endif">
+          <a href="{{ route('admin.owner.benchmark') }}" class="nav-link">
+            <i class="bi bi-trophy-fill"></i>
+            <span class="nav-label-text">Leaderboard &amp; Benchmark</span>
+          </a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-audit') active @endif">
+          <a href="{{ route('admin.owner.audit') }}" class="nav-link">
+            <i class="bi bi-shield-exclamation"></i>
+            <span class="nav-label-text">Audit Selisih &amp; Waste</span>
+          </a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-cash-debt') active @endif">
+          <a href="{{ route('admin.owner.cash-debt') }}" class="nav-link">
+            <i class="bi bi-wallet2"></i>
+            <span class="nav-label-text">Setoran &amp; Hutang PO</span>
+          </a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'owner-branches') active @endif">
+          <a href="{{ route('admin.owner.branches.index') }}" class="nav-link">
+            <i class="bi bi-buildings-fill"></i>
+            <span class="nav-label-text">Manajemen Cabang</span>
+          </a>
+        </li>
+      </ul>
+
       <div class="nav-section-title">Keuangan</div>
       <ul class="list-unstyled">
         <li class="nav-item @if(($activeMenu ?? '') === 'cogs-raw-material') active @endif">
-          <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}" class="nav-link"><i class="bi bi-box-seam"></i><span class="nav-label-text">Bahan Mentah COGS</span></a>
+          <a href="{{ route('admin.keuangan.cogs-raw-material.index') }}" class="nav-link"><i class="bi bi-box-seam"></i><span class="nav-label-text">Bahan Mentah</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'purchase-order') active @endif">
           <a href="{{ route('admin.keuangan.purchase-order.index') }}" class="nav-link"><i class="bi bi-cart-plus"></i><span class="nav-label-text">Purchase Order</span></a>
@@ -132,6 +175,9 @@
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'cogs-waste') active @endif">
           <a href="{{ route('admin.keuangan.cogs-waste.index') }}" class="nav-link"><i class="bi bi-trash3"></i><span class="nav-label-text">Bahan Terbuang</span></a>
+        </li>
+        <li class="nav-item @if(($activeMenu ?? '') === 'financial-guide') active @endif">
+          <a href="{{ route('admin.keuangan.financial-guide.index') }}" class="nav-link"><i class="bi bi-journal-bookmark"></i><span class="nav-label-text">Panduan Finansial & Kas</span></a>
         </li>
       </ul>
 

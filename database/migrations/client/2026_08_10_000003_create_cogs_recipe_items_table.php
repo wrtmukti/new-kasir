@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cogs_recipe_items', function (Blueprint $table) {
             $table->id('cogs_recipe_item_id');
             $table->foreignId('cogs_recipe_id')->constrained('cogs_recipes', 'cogs_recipe_id')->cascadeOnDelete();
-            $table->foreignId('cogs_raw_material_id')->constrained('cogs_raw_materials', 'cogs_raw_material_id')->cascadeOnDelete();
+            $table->foreignId('raw_stock_material_id')->constrained('raw_stock_materials', 'raw_stock_material_id')->cascadeOnDelete();
             $table->decimal('ingredient_qty', 15, 4)->default(0); // takaran gram/ml/pcs
             $table->decimal('ingredient_cost', 15, 2)->default(0); // subtotal modal bahan
             $table->timestamps();

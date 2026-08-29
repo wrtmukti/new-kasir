@@ -31,9 +31,12 @@ return new class extends Migration
             $table->decimal('system_expected_cash', 15, 2)->default(0);
             
             $table->decimal('actual_cash_counted', 15, 2)->default(0);
+            $table->decimal('retained_cash_float', 15, 2)->default(0); // Kas disisakan di laci untuk shift berikutnya
+            $table->decimal('cash_deposit_to_safe', 15, 2)->default(0); // Kas disetor ke brankas/owner
             $table->decimal('cash_difference', 15, 2)->default(0);
             
             $table->text('notes')->nullable();
+            $table->text('cashier_note')->nullable();
             $table->enum('status', ['open', 'closed'])->default('open');
             
             $table->timestamps();

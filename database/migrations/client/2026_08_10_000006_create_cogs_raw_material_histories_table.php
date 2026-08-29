@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cogs_raw_material_histories', function (Blueprint $table) {
-            $table->id('cogs_raw_material_history_id');
-            $table->foreignId('cogs_raw_material_id')->constrained('cogs_raw_materials', 'cogs_raw_material_id')->cascadeOnDelete();
+        Schema::create('raw_stock_material_histories', function (Blueprint $table) {
+            $table->id('raw_stock_material_history_id');
+            $table->foreignId('raw_stock_material_id')->constrained('raw_stock_materials', 'raw_stock_material_id')->cascadeOnDelete();
             $table->string('outlet_id')->nullable();
             $table->string('name');
             $table->string('unit', 20)->default('kg');
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cogs_raw_material_histories');
+        Schema::dropIfExists('raw_stock_material_histories');
     }
 };
