@@ -278,7 +278,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
 
 
     // ===================== SETTING OUTLET & KASIR =====================
-    Route::post('switch-outlet', [SettingController::class, 'switchOutlet'])->name('switch-outlet');
+    Route::match(['get', 'post'], 'switch-outlet/{outlet_id?}', [SettingController::class, 'switchOutlet'])->name('switch-outlet');
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
     Route::get('outlets/create', [SettingController::class, 'createOutlet'])->name('outlets.create');
     Route::post('outlets', [SettingController::class, 'storeOutlet'])->name('outlets.store');

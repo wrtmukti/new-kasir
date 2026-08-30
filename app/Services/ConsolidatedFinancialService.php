@@ -26,13 +26,23 @@ class ConsolidatedFinancialService
     }
 
     /**
+     * Normalisasi filter ID outlet agar string kosong disaring
+     */
+    protected function normalizeOutletIds(array $selectedOutletIds = []): array
+    {
+        $filtered = array_filter($selectedOutletIds, fn($id) => !empty($id));
+        if (!empty($filtered)) {
+            return array_values($filtered);
+        }
+        return Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+    }
+
+    /**
      * Hitung KPI Finansial Konsolidasi Gabungan
      */
     public function getConsolidatedKPIs(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
-        $outletIds = !empty($selectedOutletIds) 
-            ? $selectedOutletIds 
-            : Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
 
         // 1. Total Revenue Omzet Kasir
         $transactionsQuery = Transaction::whereIn('outlet_id', $outletIds)
@@ -185,8 +195,9 @@ class ConsolidatedFinancialService
      */
     public function getOutletLeaderboard(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
         $outlets = Outlet::where('delete_status', 0)
-            ->when(!empty($selectedOutletIds), fn($q) => $q->whereIn('outlet_id', $selectedOutletIds))
+            ->whereIn('outlet_id', $outletIds)
             ->get();
 
         $allRecipes = CogsRecipe::with('items.rawMaterial')->where('delete_status', 0)->get();
@@ -295,8 +306,9 @@ class ConsolidatedFinancialService
      */
     public function getMultiBranchTrendChart(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
         $outlets = Outlet::where('delete_status', 0)
-            ->when(!empty($selectedOutletIds), fn($q) => $q->whereIn('outlet_id', $selectedOutletIds))
+            ->whereIn('outlet_id', $outletIds)
             ->get();
 
         $start = Carbon::parse($startDate);
@@ -358,8 +370,9 @@ class ConsolidatedFinancialService
      */
     public function getCrossBranchHppBenchmark(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
         $outlets = Outlet::where('delete_status', 0)
-            ->when(!empty($selectedOutletIds), fn($q) => $q->whereIn('outlet_id', $selectedOutletIds))
+            ->whereIn('outlet_id', $outletIds)
             ->get();
 
         $allRecipes = CogsRecipe::with('items.rawMaterial')->where('delete_status', 0)->get();
@@ -438,9 +451,7 @@ class ConsolidatedFinancialService
      */
     public function getAuditCenterData(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
-        $outletIds = !empty($selectedOutletIds) 
-            ? $selectedOutletIds 
-            : Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
 
         // 1. Audit Selisih Kasir saat Tutup Shift
         $cashierClosings = DailyClosing::with('outlet')
@@ -472,9 +483,7 @@ class ConsolidatedFinancialService
      */
     public function getCashAndDebtCenterData(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
-        $outletIds = !empty($selectedOutletIds) 
-            ? $selectedOutletIds 
-            : Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+        $outletIds = $this->normalizeOutletIds($selectedOutletIds);
 
         // 1. Live Safe Deposits per Outlet
         $safeDeposits = DailyClosing::with('outlet')

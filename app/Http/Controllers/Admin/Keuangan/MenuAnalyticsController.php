@@ -16,11 +16,14 @@ class MenuAnalyticsController extends Controller
         $month = sprintf('%02d', $request->input('month', date('m')));
         $year = (int) $request->input('year', date('Y'));
 
+        $activeOutletId = session('active_outlet_id') ?? session('outlet_id');
+
         // Query Paid Transactions in selected month/year
         $transactions = Transaction::whereYear('transaction_date', $year)
             ->whereMonth('transaction_date', $month)
             ->where('transaction_status', 'success')
             ->where('delete_status', 0)
+            ->when($activeOutletId, fn($q) => $q->where('outlet_id', $activeOutletId))
             ->get();
 
         $transactionIds = $transactions->pluck('transaction_id');

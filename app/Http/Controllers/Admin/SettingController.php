@@ -265,13 +265,15 @@ class SettingController extends Controller
     /**
      * Beralih cabang outlet aktif untuk sesi kasir/admin.
      */
-    public function switchOutlet(Request $request)
+    public function switchOutlet(Request $request, $outlet_id = null)
     {
-        $request->validate([
-            'outlet_id' => 'required|string',
-        ]);
+        $targetOutletId = $request->input('outlet_id') ?? $outlet_id ?? $request->query('outlet_id');
 
-        $outlet = Outlet::where('outlet_id', $request->outlet_id)
+        if (!$targetOutletId) {
+            return back()->with('error', 'Pilih cabang outlet terlebih dahulu.');
+        }
+
+        $outlet = Outlet::where('outlet_id', $targetOutletId)
             ->where('delete_status', 0)
             ->first();
 
@@ -280,6 +282,7 @@ class SettingController extends Controller
                 'active_outlet_id' => $outlet->outlet_id,
                 'outlet_id' => $outlet->outlet_id,
                 'active_outlet_name' => $outlet->outlet_name,
+                'current_outlet_name' => $outlet->outlet_name,
             ]);
 
             return back()->with('success', "Berhasil beralih ke cabang: {$outlet->outlet_name}");

@@ -286,16 +286,11 @@
 
             <!-- Outlet List (Interactive Cards) -->
             <div class="p-2 scroll-thin" style="max-height: 260px; overflow-y: auto;">
-              <form action="{{ route('admin.switch-outlet') }}" method="POST" id="navbarSwitchOutletForm">
-                @csrf
-                <input type="hidden" name="outlet_id" id="navbarSwitchOutletId">
-              </form>
-
               @foreach($availableOutlets as $out)
                 @php $isActive = ($activeOutletId == $out->outlet_id); @endphp
-                <div class="d-flex align-items-center justify-content-between p-2 rounded-3 mb-1 cursor-pointer text-decoration-none"
-                     onclick="document.getElementById('navbarSwitchOutletId').value='{{ $out->outlet_id }}'; document.getElementById('navbarSwitchOutletForm').submit();"
-                     style="background: {{ $isActive ? 'rgba(99, 102, 241, 0.08)' : 'transparent' }}; border: 1px solid {{ $isActive ? 'rgba(99, 102, 241, 0.3)' : 'transparent' }}; transition: all 0.15s ease; cursor: pointer;">
+                <a href="{{ route('admin.switch-outlet', ['outlet_id' => $out->outlet_id]) }}" 
+                   class="d-flex align-items-center justify-content-between p-2 rounded-3 mb-1 text-decoration-none"
+                   style="background: {{ $isActive ? 'rgba(99, 102, 241, 0.1)' : 'transparent' }}; border: 1px solid {{ $isActive ? 'rgba(99, 102, 241, 0.35)' : 'transparent' }}; transition: all 0.15s ease; color: inherit;">
                   <div class="d-flex align-items-center min-w-0">
                     <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
                          style="width: 38px; height: 38px; margin-right: 12px; background: {{ $isActive ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'var(--bg-elevated-2)' }}; color: {{ $isActive ? '#ffffff' : 'var(--text-muted)' }}; font-size: 1rem;">
@@ -329,7 +324,7 @@
                       </span>
                     </div>
                   @endif
-                </div>
+                </a>
               @endforeach
             </div>
 

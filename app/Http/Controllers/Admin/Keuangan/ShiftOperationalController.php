@@ -14,11 +14,22 @@ use Carbon\Carbon;
 class ShiftOperationalController extends Controller
 {
     /**
+     * Helper resolusi ID outlet aktif sesi kasir/admin
+     */
+    private function resolveOutletId(): string
+    {
+        return session('active_outlet_id') 
+            ?? session('outlet_id') 
+            ?? \App\Models\Admin\Outlet::where('delete_status', 0)->value('outlet_id') 
+            ?? 'COMP-001';
+    }
+
+    /**
      * Tampilan Utama Halaman Dedicated Buka / Tutup Shift (Clock-In & Clock-Out)
      */
     public function index()
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = $this->resolveOutletId();
 
         // Ambil Shift Settings
         $setting = ShiftSetting::where('outlet_id', $companyId)->first()
@@ -115,7 +126,7 @@ class ShiftOperationalController extends Controller
      */
     public function openShift(Request $request)
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = $this->resolveOutletId();
 
         // Cek apakah sudah ada shift yang sedang OPEN
         $existingActive = DailyClosing::where('outlet_id', $companyId)
@@ -183,7 +194,7 @@ class ShiftOperationalController extends Controller
      */
     public function cashIn(Request $request)
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = $this->resolveOutletId();
 
         $activeShift = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
@@ -242,7 +253,7 @@ class ShiftOperationalController extends Controller
      */
     public function cashOut(Request $request)
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = $this->resolveOutletId();
 
         $activeShift = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
@@ -301,7 +312,7 @@ class ShiftOperationalController extends Controller
      */
     public function closeShift(Request $request)
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = $this->resolveOutletId();
 
         $activeShift = DailyClosing::where('outlet_id', $companyId)
             ->where('status', 'open')
