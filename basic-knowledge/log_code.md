@@ -511,6 +511,20 @@
 | HANDOVER & DOCS | Pembuatan Dokumen Master Briefing & Handover Arsitektur Portal Eksekutif Owner Multi-Cabang (Phase 3) di direktori publik `basic-knowledge/owner_suite_multi_branch_briefing.md`: Memuat penjelasan lengkap 6 sub-menu, backend aggregator service `ConsolidatedFinancialService`, panduan migrasi & seeder 3 cabang (Jakarta, Bandung, Yogyakarta), serta guardrails pengkodean (Zero Raw JSON, auto dark/light theme, dan integritas akuntansi Plan B) | `basic-knowledge/owner_suite_multi_branch_briefing.md` |
 | 2026-08-30 | FIX & ENHANCE | Perbaikan & Optimasi Fitur Switch Cabang Outlet: (1) Mengubah item switcher navbar di `resources/views/admin/layouts/app.blade.php` menjadi elemen link `<a>` native dengan `href="{{ route('admin.switch-outlet', ['outlet_id' => $out->outlet_id]) }}"` sehingga langsung berpindah tanpa terblokir event dropdown Bootstrap, (2) Membuka dukungan HTTP GET dan POST pada route `admin.switch-outlet` di `routes/web.php` dan `SettingController@switchOutlet`, (3) Normalisasi filter outlet kosong `array_filter()` di `ConsolidatedFinancialService.php` agar pilihan '-- Semua Cabang --' menampilkan seluruh cabang holding dengan tepat, dan (4) Sinkronisasi `resolveOutletId()` di `ShiftOperationalController.php` dan `MenuAnalyticsController.php` | `resources/views/admin/layouts/app.blade.php`, `routes/web.php`, `app/Http/Controllers/Admin/SettingController.php`, `app/Services/ConsolidatedFinancialService.php`, `app/Http/Controllers/Admin/Keuangan/ShiftOperationalController.php`, `app/Http/Controllers/Admin/Keuangan/MenuAnalyticsController.php` |
 
+## 2026-08-31
+
+| Tipe | Deskripsi | File |
+|------|-----------|------|
+| ARCH & BIZ | Penyusunan Dokumen Master Strategi Tiering SaaS, Analisis Pasar Kompetitor (Moka, Majoo, Pawoon, Olsera, Toast), Arsitektur 4-Tier Langganan (Starter Lite, Pro Resto, Business Holding, Enterprise Franchise), Matriks Feature Gate JSON, Pembeda Kompetitif Tier Dasar vs Tier Atas, Panduan Teknis Middleware Laravel Paywall, dan Playbook Sales ROI | `basic-knowledge/saas_tiering_strategy_and_market_benchmark.md` |
+
+## 2026-09-01
+
+| Tipe | Deskripsi | File |
+|------|-----------|------|
+| ARCH & DOC | Penyusunan Dokumen Arsitektur Lengkap Alur Arus Kas (Cash Flow), Siklus Hidup Shift Kasir (Clock-In & Clock-Out Blind Drop Z-Report), Rekonsiliasi Kas Laci, dan Arah Aliran Uang Fisik ke Brankas (Safe Deposit) & Holding dalam Format JSON Schema & Formula Finansial Plan B | `basic-knowledge/deva-branch/cash_flow_and_clock_in_out_architecture.md` |
+
+
+
 
 
 
