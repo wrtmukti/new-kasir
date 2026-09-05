@@ -80,7 +80,6 @@ use App\Http\Controllers\Admin\Keuangan\TaxServiceReportController;
 use App\Http\Controllers\Admin\Keuangan\InventoryReportController;
 use App\Http\Controllers\Admin\Keuangan\ShiftSettingController;
 use App\Http\Controllers\Admin\Keuangan\ShiftOperationalController;
-use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 use App\Http\Controllers\Admin\Owner\OwnerDashboardController;
