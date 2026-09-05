@@ -21,7 +21,28 @@
     <i class="bi bi-cart-fill me-1"></i>Keranjang
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartBadge" style="font-size:0.65rem;display:none;">0</span>
   </button>
-</div>
+@if(!$hasActiveShift)
+  <div class="alert alert-warning border-0 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 p-3.5 rounded-3" 
+       style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 1.3rem;">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+      <div>
+        <div class="fw-bold" style="font-size: 0.94rem; color: #f59e0b;">Laci Kasir Belum Dibuka</div>
+        <small class="text-muted-c d-block" style="font-size: 0.78rem;">
+          Untuk menjaga akurasi uang fisik laci, kasir wajib melakukan Buka Kasir dan input modal awal sebelum memproses pembayaran tunai.
+        </small>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+      <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-warning text-dark fw-bold rounded-pill px-3.5 py-2 shadow-sm d-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
+        <i class="bi bi-cash-stack fs-6"></i>
+        <span>Buka Kasir Sekarang</span>
+      </a>
+    </div>
+  </div>
+@endif
 
 <div class="card">
   <div class="card-header-flex">
@@ -145,8 +166,14 @@
       <div class="modal-body p-0">
         <div class="text-center text-muted-c py-5" id="cartEmpty">
           <i class="bi bi-cart" style="font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.4;"></i>
-          Keranjang kosong
-        </div>
+        @if(!$hasActiveShift)
+          <div class="px-3 pt-3">
+            <div class="alert alert-warning border-0 rounded-3 p-2.5 mb-0 d-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; font-size: 0.78rem;">
+              <i class="bi bi-exclamation-triangle-fill text-warning flex-shrink-0"></i>
+              <span><strong>Perhatian:</strong> Laci kasir belum dibuka. Anda wajib melakukan Buka Kasir sebelum menerima pembayaran tunai.</span>
+            </div>
+          </div>
+        @endif
         <table class="table-modern" id="cartTable" style="display:none;">
           <thead>
             <tr>

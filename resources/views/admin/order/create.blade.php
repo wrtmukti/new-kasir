@@ -52,6 +52,26 @@
         </div>
       </div>
     </div>
+@if(!$hasActiveShift)
+  <div class="alert alert-warning border-0 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 p-3.5 rounded-3" 
+       style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 1.3rem;">
+        <i class="bi bi-shield-lock-fill"></i>
+      </div>
+      <div>
+        <div class="fw-bold" style="font-size: 0.94rem; color: #f59e0b;">Laci Kasir Belum Dibuka</div>
+        <small class="text-muted-c d-block" style="font-size: 0.78rem;">
+          Sesi kasir belum aktif. Untuk menerima uang tunai, pastikan kasir sudah melakukan Buka Kasir dan menghitung modal awal laci.
+        </small>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+      <a href="{{ route('admin.keuangan.shift-operational.index') }}" target="_blank" class="btn btn-warning text-dark fw-bold rounded-pill px-3.5 py-2 shadow-sm d-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
+        <i class="bi bi-cash-stack fs-6"></i>
+        <span>Buka Kasir Sekarang</span>
+      </a>
+    </div>
   </div>
 @endif
 

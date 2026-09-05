@@ -44,23 +44,23 @@
     <span>{{ \Carbon\Carbon::parse($dailyClosing->business_date)->format('d/m/Y') }}</span>
   </div>
   <div class="flex-between">
-    <span>Nama Shift:</span>
+    <span>Sesi Kasir:</span>
     <span class="bold">{{ $dailyClosing->shift_name }}</span>
   </div>
   <div class="flex-between">
     <span>Kasir Bertugas:</span>
-    <span>ID #{{ $dailyClosing->cashier_id }}</span>
+    <span>{{ $dailyClosing->cashier?->name ?? 'ID #' . $dailyClosing->cashier_id }}</span>
   </div>
 
   <div class="divider"></div>
 
   <div class="flex-between">
-    <span>Jam Clock-In:</span>
+    <span>Waktu Buka Kasir:</span>
     <span>{{ \Carbon\Carbon::parse($dailyClosing->opened_at)->format('d/m/Y H:i') }}</span>
   </div>
   <div class="flex-between">
-    <span>Jam Clock-Out:</span>
-    <span>{{ $dailyClosing->closed_at ? \Carbon\Carbon::parse($dailyClosing->closed_at)->format('d/m/Y H:i') : 'SEDESANG BERJALAN' }}</span>
+    <span>Waktu Tutup Kasir:</span>
+    <span>{{ $dailyClosing->closed_at ? \Carbon\Carbon::parse($dailyClosing->closed_at)->format('d/m/Y H:i') : 'SEDANG BERJALAN' }}</span>
   </div>
 
   <div class="double-divider"></div>

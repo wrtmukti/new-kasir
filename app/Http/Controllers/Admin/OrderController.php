@@ -35,6 +35,10 @@ class OrderController extends Controller
     public function index()
     {
         $activeOutletId = $this->getActiveOutletId();
+        $companyId = $activeOutletId ?? Outlet::where('delete_status', 0)->value('outlet_id');
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+        $hasActiveShift = (bool) $activeShift;
+
         $query = Product::where('delete_status', 0)->with('outlet', 'category', 'stocks');
         if ($activeOutletId) {
             $query->where(function ($q) use ($activeOutletId) {
@@ -42,7 +46,7 @@ class OrderController extends Controller
             });
         }
         $products = $query->latest()->paginate(10);
-        return view('admin.order.index', compact('products'));
+        return view('admin.order.index', compact('products', 'hasActiveShift', 'activeShift'));
     }
 
     public function data(Request $request)
@@ -238,7 +242,11 @@ class OrderController extends Controller
         }
         $totalSubtotal += $bundleSubtotal;
 
-        return view('admin.order.payment', compact('order', 'table', 'customer', 'outlet', 'items', 'totalSubtotal'));
+        $companyId = $order->outlet_id ?? $outlet?->outlet_id;
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+        $hasActiveShift = (bool) $activeShift;
+
+        return view('admin.order.payment', compact('order', 'table', 'customer', 'outlet', 'items', 'totalSubtotal', 'hasActiveShift', 'activeShift'));
     }
 
     // ——— Proses Simpan Pembayaran Kasir ———
@@ -288,6 +296,19 @@ class OrderController extends Controller
         if (!$dailyClosingId) {
             $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
             $dailyClosingId = $activeShift ? $activeShift->id : null;
+        }
+
+        // Gatekeeper: Jika metode pembayaran CASH dan tidak ada sesi shift aktif, tolak transaksi!
+        if ($paymentMetode === 'cash' && !$dailyClosingId) {
+            $msg = 'Laci kasir belum dibuka. Harap lakukan Buka Kasir terlebih dahulu sebelum memproses pembayaran tunai.';
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $msg,
+                    'requires_shift_open' => true,
+                ], 422);
+            }
+            return back()->withInput()->with('error', $msg);
         }
 
         $initialStatus = $order->order_status;
@@ -753,8 +774,11 @@ class OrderController extends Controller
             ->orderBy('customer_name')
             ->get(['customer_id', 'customer_name', 'customer_phone']);
         $vouchers = Voucher::active()->get();
+        $companyId = Outlet::where('delete_status', 0)->value('outlet_id');
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+        $hasActiveShift = (bool) $activeShift;
 
-        return view('admin.order.create', compact('cart', 'tables', 'customers', 'vouchers'));
+        return view('admin.order.create', compact('cart', 'tables', 'customers', 'vouchers', 'hasActiveShift', 'activeShift'));
     }
 
     public function store(Request $request)

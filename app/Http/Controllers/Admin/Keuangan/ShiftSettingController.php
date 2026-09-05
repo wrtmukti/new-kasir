@@ -67,7 +67,7 @@ class ShiftSettingController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.setting-shift.index')->with('success', 'Pengaturan jam cut-off operasional & mode shift berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Pengaturan jam cut-off operasional & mode shift berhasil diperbarui.');
     }
 
     /**
@@ -95,6 +95,8 @@ class ShiftSettingController extends Controller
 
         $startTime = strlen($request->start_time) == 5 ? $request->start_time . ':00' : $request->start_time;
         $endTime = strlen($request->end_time) == 5 ? $request->end_time . ':00' : $request->end_time;
+        if ($startTime === '24:00:00') $startTime = '00:00:00';
+        if ($endTime === '24:00:00') $endTime = '23:59:00';
 
         $shift = Shift::create([
             'outlet_id' => $companyId,
@@ -114,7 +116,7 @@ class ShiftSettingController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.setting-shift.index')->with('success', 'Master Shift baru berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Master Shift baru berhasil ditambahkan.');
     }
 
     /**
@@ -136,6 +138,8 @@ class ShiftSettingController extends Controller
 
         $startTime = strlen($request->start_time) == 5 ? $request->start_time . ':00' : $request->start_time;
         $endTime = strlen($request->end_time) == 5 ? $request->end_time . ':00' : $request->end_time;
+        if ($startTime === '24:00:00') $startTime = '00:00:00';
+        if ($endTime === '24:00:00') $endTime = '23:59:00';
 
         $shift->update([
             'shift_name' => $request->shift_name,
@@ -153,7 +157,7 @@ class ShiftSettingController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.setting-shift.index')->with('success', 'Master Shift berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Master Shift berhasil diperbarui.');
     }
 
     /**
@@ -170,6 +174,6 @@ class ShiftSettingController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.setting-shift.index')->with('success', 'Master Shift berhasil dihapus.');
+        return redirect()->back()->with('success', 'Master Shift berhasil dihapus.');
     }
 }

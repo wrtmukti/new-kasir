@@ -160,6 +160,21 @@
 
           {{-- SECTION CASH --}}
           <div id="sectionCash" class="payment-section">
+            @if(!$hasActiveShift)
+              <div class="alert alert-warning border-0 rounded-3 p-3 mb-3 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2" style="background: rgba(245, 158, 11, 0.15); border: 1.5px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24;">
+                <div class="d-flex align-items-center gap-2.5">
+                  <i class="bi bi-shield-lock-fill fs-4 text-warning flex-shrink-0"></i>
+                  <div>
+                    <strong class="d-block" style="font-size:0.88rem; color:#f59e0b;">Laci Kasir Belum Dibuka!</strong>
+                    <span style="font-size:0.78rem; opacity:0.9;">Untuk menerima pembayaran tunai (Cash), Anda wajib melakukan Buka Kasir terlebih dahulu.</span>
+                  </div>
+                </div>
+                <a href="{{ route('admin.keuangan.shift-operational.index') }}" target="_blank" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3 py-1.5 text-nowrap align-self-start align-self-sm-center">
+                  <i class="bi bi-cash-stack me-1"></i>Buka Kasir
+                </a>
+              </div>
+            @endif
+
             <div class="mb-3 input-skeleton">
               <label for="cashAmountInput" class="form-label-modern fw-semibold">Uang Diterima (Rp)</label>
               <div class="input-group input-group-lg">
@@ -317,6 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const quickCashButtons = document.querySelectorAll('.quick-cash-btn');
   const paymentForm = document.getElementById('paymentForm');
   const submitPaymentBtn = document.getElementById('submitPaymentBtn');
+  const hasActiveShift = @json($hasActiveShift ?? false);
 
   // Format angka ke format rupiah ribuan
   function formatRupiah(num) {
@@ -381,6 +397,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const selectedMethod = document.getElementById('paymentMetodeInput').value;
     const amountVal = parseFloat(actualPaymentAmount.value) || 0;
+
+    if (selectedMethod === 'cash' && !hasActiveShift) {
+      NexoraToast('Laci kasir belum dibuka. Harap lakukan Buka Kasir terlebih dahulu sebelum memproses pembayaran tunai.', 'warning');
+      return;
+    }
 
     if (selectedMethod === 'cash' && amountVal < grandTotal) {
       NexoraToast('Nominal uang tunai kurang dari total tagihan!', 'danger');

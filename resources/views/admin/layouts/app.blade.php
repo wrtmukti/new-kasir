@@ -66,7 +66,7 @@
           <a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i><span class="nav-label-text">Dashboard</span></a>
         </li>
         <li class="nav-item @if(($activeMenu ?? '') === 'shift-operational') active @endif">
-          <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link"><i class="bi bi-person-badge-fill"></i><span class="nav-label-text">Clock In</span></a>
+          <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link"><i class="bi bi-cash-stack"></i><span class="nav-label-text">Buka Kasir</span></a>
         </li>
       </ul>
 
@@ -246,6 +246,19 @@
           $currentOutlet = $availableOutlets->firstWhere('outlet_id', $activeOutletId) ?? $availableOutlets->first();
         @endphp
 
+        <!-- PERSISTENT CASHIER SHIFT & DRAWER HUD PILL (MILESTONE V2) -->
+        <button type="button" 
+                class="btn btn-sm d-flex align-items-center gap-1.5 rounded-3 px-2.5 py-1.5 shadow-sm border-0" 
+                id="navbarShiftHudPill"
+                data-bs-toggle="offcanvas" 
+                data-bs-target="#cashierDrawerHud"
+                aria-controls="cashierDrawerHud"
+                title="Buka Laci Kasir (F4 atau Shift+D)"
+                style="background: var(--bg-elevated); border: 1px solid var(--border-subtle) !important; color: var(--text-muted); transition: all 0.2s ease;">
+          <span class="spinner-border spinner-border-sm" style="width: 12px; height: 12px;" role="status"></span>
+          <span class="fw-semibold" style="font-size: 0.78rem;">Memuat Laci...</span>
+        </button>
+
         <!-- MODERN OUTLET SWITCHER WIDGET -->
         <div class="dropdown">
           <button class="btn d-flex align-items-center px-3 py-1.5 rounded-3 border-0 shadow-sm" 
@@ -390,6 +403,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="{{ asset('nexora-assets/js/index.js') }}"></script>
+
+<!-- OFFCANVAS DRAWER UTILITY & SHIFT HUD (MILESTONE V2) -->
+@include('admin.layouts.partials._shift_hud_offcanvas')
+
 @stack('scripts')
 </body>
 </html>

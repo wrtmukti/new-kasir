@@ -69,4 +69,9 @@ class DailyClosing extends Model
     {
         return $this->hasMany(CashDrawerLog::class, 'daily_closing_id', 'id');
     }
+
+    public function cashier()
+    {
+        return $this->belongsTo(\App\Models\SysAdmin\User::class, 'cashier_id', 'id');
+    }
 }

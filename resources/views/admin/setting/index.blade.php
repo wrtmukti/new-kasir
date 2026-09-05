@@ -640,7 +640,7 @@
 
               <!-- Jam Cut-Off & Auto Lock -->
               <div class="row g-4 align-items-end pt-2">
-                <div class="col-md-4 input-skeleton">
+                <div class="col-md-4">
                   <label for="daily_cutoff_time" class="form-label-modern mb-1 fw-semibold">
                     Jam Cut-Off Operasional Harian <span class="text-danger">*</span>
                   </label>
@@ -707,6 +707,17 @@
                         <span class="fw-bold">{{ $shift->shift_name }}</span>
                       </td>
                       <td>
+                        @php
+                          $is24Hours = (
+                            \Carbon\Carbon::parse($shift->start_time)->format('H:i') === '00:00' && 
+                            in_array(\Carbon\Carbon::parse($shift->end_time)->format('H:i'), ['23:59', '00:00'])
+                          );
+                        @endphp
+                        @if($is24Hours)
+                          <span class="badge px-2.5 py-1 rounded-pill bg-warning-subtle text-warning border border-warning-subtle me-1">
+                            <i class="bi bi-lightning-charge-fill me-1"></i>24 Jam
+                          </span>
+                        @endif
                         <span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25);">
                           <i class="bi bi-clock me-1"></i>
                           {{ \Carbon\Carbon::parse($shift->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($shift->end_time)->format('H:i') }} WIB
@@ -769,23 +780,59 @@
       <form action="{{ route('admin.keuangan.setting-shift.store-shift') }}" method="POST">
         @csrf
         <div class="modal-body p-4">
-          <div class="mb-3 input-skeleton">
-            <label for="shift_name" class="form-label-modern fw-semibold">Nama Shift <span class="text-danger">*</span></label>
-            <input type="text" name="shift_name" class="form-control form-control-modern" placeholder="Contoh: Shift 1 Pagi" required>
+          <div class="mb-3">
+            <label for="add_shift_name" class="form-label-modern fw-semibold">Nama Shift <span class="text-danger">*</span></label>
+            <input type="text" name="shift_name" id="add_shift_name" class="form-control form-control-modern" placeholder="Contoh: Shift 1 Pagi / Shift 24 Jam" required>
           </div>
-          <div class="row g-3 mb-3">
-            <div class="col-6 input-skeleton">
-              <label for="start_time" class="form-label-modern fw-semibold">Jam Mulai <span class="text-danger">*</span></label>
-              <input type="time" name="start_time" class="form-control form-control-modern" value="08:00" required>
+
+          <div class="row g-3 mb-2">
+            <div class="col-6">
+              <label for="add_start_time" class="form-label-modern fw-semibold">Jam Mulai (24 Jam) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                  <i class="bi bi-clock"></i>
+                </span>
+                <input type="text" name="start_time" id="add_start_time" 
+                       class="form-control form-control-modern border-start-0 font-monospace" 
+                       value="08:00" placeholder="08:00" maxlength="5" required 
+                       oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+              </div>
             </div>
-            <div class="col-6 input-skeleton">
-              <label for="end_time" class="form-label-modern fw-semibold">Jam Selesai <span class="text-danger">*</span></label>
-              <input type="time" name="end_time" class="form-control form-control-modern" value="16:00" required>
+            <div class="col-6">
+              <label for="add_end_time" class="form-label-modern fw-semibold">Jam Selesai (24 Jam) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                  <i class="bi bi-clock"></i>
+                </span>
+                <input type="text" name="end_time" id="add_end_time" 
+                       class="form-control form-control-modern border-start-0 font-monospace" 
+                       value="16:00" placeholder="16:00" maxlength="5" required 
+                       oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+              </div>
             </div>
           </div>
-          <div class="mb-3 input-skeleton">
-            <label for="default_starting_cash" class="form-label-modern fw-semibold">Default Modal Awal Kasir (Rp) <span class="text-danger">*</span></label>
-            <input type="number" name="default_starting_cash" class="form-control form-control-modern" value="300000" step="1000" min="0" required>
+
+          <!-- Pilihan Cepat Jam (Minimal & Adem di Mata) -->
+          <div class="mb-3">
+            <div class="d-flex flex-wrap gap-1.5 align-items-center">
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '23:59', 'Shift 24 Jam', 'add')">
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('08:00', '16:00', 'Shift Pagi', 'add')">
+                Pagi (08:00 - 16:00)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('16:00', '00:00', 'Shift Sore', 'add')">
+                Sore (16:00 - 00:00)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '08:00', 'Shift Malam', 'add')">
+                Malam (00:00 - 08:00)
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="add_default_starting_cash" class="form-label-modern fw-semibold">Default Modal Awal Kasir (Rp) <span class="text-danger">*</span></label>
+            <input type="number" name="default_starting_cash" id="add_default_starting_cash" class="form-control form-control-modern" value="300000" step="any" min="0" required>
           </div>
           <div class="form-check form-switch pt-1">
             <input class="form-check-input" type="checkbox" name="is_active" id="add_is_active" value="1" checked style="cursor: pointer; width:2.2em; height:1.1em;">
@@ -814,23 +861,57 @@
       <form id="formEditShift" method="POST">
         @csrf
         <div class="modal-body p-4">
-          <div class="mb-3 input-skeleton">
+          <div class="mb-3">
             <label for="edit_shift_name" class="form-label-modern fw-semibold">Nama Shift <span class="text-danger">*</span></label>
             <input type="text" name="shift_name" id="edit_shift_name" class="form-control form-control-modern" required>
           </div>
-          <div class="row g-3 mb-3">
-            <div class="col-6 input-skeleton">
-              <label for="edit_start_time" class="form-label-modern fw-semibold">Jam Mulai <span class="text-danger">*</span></label>
-              <input type="time" name="start_time" id="edit_start_time" class="form-control form-control-modern" required>
+
+          <div class="row g-3 mb-2">
+            <div class="col-6">
+              <label for="edit_start_time" class="form-label-modern fw-semibold">Jam Mulai (24 Jam) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                  <i class="bi bi-clock"></i>
+                </span>
+                <input type="text" name="start_time" id="edit_start_time" 
+                       class="form-control form-control-modern border-start-0 font-monospace" 
+                       required oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+              </div>
             </div>
-            <div class="col-6 input-skeleton">
-              <label for="edit_end_time" class="form-label-modern fw-semibold">Jam Selesai <span class="text-danger">*</span></label>
-              <input type="time" name="end_time" id="edit_end_time" class="form-control form-control-modern" required>
+            <div class="col-6">
+              <label for="edit_end_time" class="form-label-modern fw-semibold">Jam Selesai (24 Jam) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                  <i class="bi bi-clock"></i>
+                </span>
+                <input type="text" name="end_time" id="edit_end_time" 
+                       class="form-control form-control-modern border-start-0 font-monospace" 
+                       required oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+              </div>
             </div>
           </div>
-          <div class="mb-3 input-skeleton">
+
+          <!-- Pilihan Cepat Jam (Minimal & Adem di Mata) -->
+          <div class="mb-3">
+            <div class="d-flex flex-wrap gap-1.5 align-items-center">
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '23:59', 'Shift 24 Jam', 'edit')">
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('08:00', '16:00', 'Shift Pagi', 'edit')">
+                Pagi (08:00 - 16:00)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('16:00', '00:00', 'Shift Sore', 'edit')">
+                Sore (16:00 - 00:00)
+              </button>
+              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '08:00', 'Shift Malam', 'edit')">
+                Malam (00:00 - 08:00)
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
             <label for="edit_default_starting_cash" class="form-label-modern fw-semibold">Default Modal Awal Kasir (Rp) <span class="text-danger">*</span></label>
-            <input type="number" name="default_starting_cash" id="edit_default_starting_cash" class="form-control form-control-modern" step="1000" min="0" required>
+            <input type="number" name="default_starting_cash" id="edit_default_starting_cash" class="form-control form-control-modern" step="any" min="0" required>
           </div>
           <div class="form-check form-switch pt-1">
             <input class="form-check-input" type="checkbox" name="is_active" id="edit_is_active" value="1" style="cursor: pointer; width:2.2em; height:1.1em;">
@@ -845,6 +926,22 @@
     </div>
   </div>
 </div>
+
+<datalist id="list24h">
+  <option value="00:00">00:00 (Tengah Malam)</option>
+  <option value="06:00">06:00 (Pagi)</option>
+  <option value="07:00">07:00</option>
+  <option value="08:00">08:00</option>
+  <option value="09:00">09:00</option>
+  <option value="12:00">12:00 (Siang)</option>
+  <option value="15:00">15:00</option>
+  <option value="16:00">16:00 (Sore)</option>
+  <option value="17:00">17:00</option>
+  <option value="20:00">20:00 (Malam)</option>
+  <option value="22:00">22:00</option>
+  <option value="23:00">23:00</option>
+  <option value="23:59">23:59 (Akhir Hari)</option>
+</datalist>
 @endsection
 
 @push('styles')
@@ -862,6 +959,48 @@
 .settings-menu .nav-item.active .nav-link {
   color: #fff;
   background: var(--accent-1, #3b82f6);
+}
+
+/* Subtle Shift Preset Buttons */
+.btn-subtle-preset {
+  background: var(--bg-surface, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+  color: var(--text-secondary, #94a3b8);
+  border-radius: 6px;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.65rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+.btn-subtle-preset:hover {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: var(--text-primary, #f8fafc);
+}
+[data-theme="light"] .btn-subtle-preset {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+[data-theme="light"] .btn-subtle-preset:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+/* 24-Hour Custom Dropdown */
+.custom-24h-dropdown .dropdown-item {
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.custom-24h-dropdown .dropdown-item:hover {
+  background: var(--accent-1, #3b82f6) !important;
+  color: #fff !important;
+}
+.custom-24h-dropdown .dropdown-item:hover small {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 /* Timing Bento Card Design */
@@ -1344,6 +1483,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Handle Form Cut-Off & Shift Mode via AJAX
+  const formCutoff = document.getElementById('formCutoff');
+  const btnSaveCutoff = document.getElementById('btnSaveCutoff');
+  if (formCutoff && btnSaveCutoff) {
+    formCutoff.addEventListener('submit', function(e) {
+      e.preventDefault();
+      btnSaveCutoff.disabled = true;
+      btnSaveCutoff.classList.add('is-loading');
+      btnSaveCutoff.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+
+      const formData = new FormData(formCutoff);
+      setTimeout(() => {
+        fetch(formCutoff.action, {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          },
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          btnSaveCutoff.disabled = false;
+          btnSaveCutoff.classList.remove('is-loading');
+          btnSaveCutoff.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Pengaturan';
+          if (data.status === 'success' || data.success) {
+            NexoraToast(data.message || 'Pengaturan jam cut-off operasional & mode shift berhasil diperbarui.', 'success');
+          } else {
+            NexoraToast(data.message || 'Gagal menyimpan pengaturan.', 'danger');
+          }
+        })
+        .catch(() => {
+          btnSaveCutoff.disabled = false;
+          btnSaveCutoff.classList.remove('is-loading');
+          btnSaveCutoff.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Pengaturan';
+          NexoraToast('Terjadi kesalahan saat menyimpan pengaturan.', 'danger');
+        });
+      }, 400);
+    });
+  }
+
   // Handle URL Hash navigation on page load (e.g. /admin/setting#tax or #shift)
   const hash = window.location.hash;
   if (hash) {
@@ -1452,6 +1632,42 @@ function selectShiftMode(mode) {
     radio.checked = true;
     radio.closest('.mode-box-card').classList.add('active');
   }
+}
+
+function setShiftPreset(startTime, endTime, defaultName, target = 'add') {
+  const prefix = target === 'edit' ? 'edit_' : 'add_';
+  const startInput = document.getElementById(prefix + 'start_time');
+  const endInput = document.getElementById(prefix + 'end_time');
+  const nameInput = document.getElementById(prefix + 'shift_name');
+
+  if (startInput) startInput.value = startTime;
+  if (endInput) endInput.value = endTime;
+  if (nameInput && (!nameInput.value.trim() || nameInput.value.toLowerCase().includes('shift') || nameInput.value === 'pagi')) {
+    nameInput.value = defaultName;
+  }
+}
+
+function formatTime24(input) {
+  let val = input.value.replace(/[^0-9]/g, '');
+  if (val.length >= 3) {
+    val = val.substring(0, 2) + ':' + val.substring(2, 4);
+  }
+  input.value = val;
+}
+
+function normalizeTime24(input) {
+  let val = input.value.trim().replace(/[^0-9:]/g, '');
+  if (!val) return;
+  if (/^\d{1,2}$/.test(val)) {
+    let h = Math.min(23, Math.max(0, parseInt(val, 10)));
+    val = (h < 10 ? '0' : '') + h + ':00';
+  } else if (/^\d{1,2}:\d{1,2}$/.test(val)) {
+    let parts = val.split(':');
+    let h = Math.min(23, Math.max(0, parseInt(parts[0], 10)));
+    let m = Math.min(59, Math.max(0, parseInt(parts[1], 10)));
+    val = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  input.value = val;
 }
 
 function editShift(shift) {

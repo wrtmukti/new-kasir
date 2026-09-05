@@ -79,6 +79,7 @@ use App\Http\Controllers\Admin\Keuangan\TaxServiceReportController;
 use App\Http\Controllers\Admin\Keuangan\InventoryReportController;
 use App\Http\Controllers\Admin\Keuangan\ShiftSettingController;
 use App\Http\Controllers\Admin\Keuangan\ShiftOperationalController;
+use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 use App\Http\Controllers\Admin\Owner\OwnerDashboardController;
@@ -221,10 +222,12 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
 
         // Dedicated Operasional Clock-In & Clock-Out Kasir & Buku Kas Laci
         Route::get('shift-operational', [ShiftOperationalController::class, 'index'])->name('shift-operational.index');
+        Route::get('shift-operational/live-status', [ShiftOperationalController::class, 'getLiveDrawerStatus'])->name('shift-operational.live-status');
         Route::post('shift-operational/open', [ShiftOperationalController::class, 'openShift'])->name('shift-operational.open');
         Route::post('shift-operational/close', [ShiftOperationalController::class, 'closeShift'])->name('shift-operational.close');
         Route::post('shift-operational/cash-in', [ShiftOperationalController::class, 'cashIn'])->name('shift-operational.cash-in');
         Route::post('shift-operational/cash-out', [ShiftOperationalController::class, 'cashOut'])->name('shift-operational.cash-out');
+        Route::get('shift-operational/{dailyClosing}/x-report', [ShiftOperationalController::class, 'xReport'])->name('shift-operational.x-report');
         Route::get('shift-operational/{dailyClosing}/z-report', [ShiftOperationalController::class, 'zReport'])->name('shift-operational.z-report');
 
         // Panduan Lengkap Arsitektur Finansial, HPP & Cash Flow (Plan B)

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Buka / Tutup Shift Kasir (Clock-In & Out)')
+@section('title', 'Buka / Tutup Kasir')
 
 @php $activeMenu = 'shift-operational' @endphp
 
@@ -8,11 +8,11 @@
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div>
-    <h1>Buka / Tutup Shift Kasir</h1>
+    <h1>Buka / Tutup Kasir</h1>
     <div class="breadcrumb-trail">
       <a href="{{ route('admin.dashboard') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Keuangan</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Clock In</span>
+      <span>Buka Kasir</span>
     </div>
   </div>
   <div class="d-flex align-items-center gap-2">
@@ -51,8 +51,8 @@
         <span class="status-dot live" style="width:12px; height:12px;"></span>
         <div>
           <div class="d-flex align-items-center gap-2">
-            <h6 class="mb-0 fw-bold" style="color: var(--text-primary);">Shift Aktif: {{ $activeShift->shift_name }}</h6>
-            <span class="badge badge-success">BERJALAN</span>
+            <h6 class="mb-0 fw-bold" style="color: var(--text-primary);">Kasir Aktif: {{ $activeShift->cashier?->name ?? 'Kasir Utama' }}</h6>
+            <span class="badge badge-success">BUKA</span>
           </div>
           <span class="text-muted-c" style="font-size:0.82rem;">
             Mulai: <strong>{{ \Carbon\Carbon::parse($activeShift->opened_at)->format('H:i') }} WIB</strong> &bull; 
@@ -83,7 +83,7 @@
           </div>
           <div class="stat-value">Rp {{ number_format($liveStats['starting_cash'], 0, ',', '.') }}</div>
           <div class="stat-label">Modal Awal Laci</div>
-          <span class="text-muted-c mt-1" style="font-size:0.75rem;">Saldo awal saat clock-in</span>
+          <span class="text-muted-c mt-1" style="font-size:0.75rem;">Saldo awal saat buka kasir</span>
         </div>
       </div>
     </div>
@@ -142,7 +142,7 @@
       <div class="card h-100">
         <div class="card-header-flex">
           <div>
-            <h6><i class="bi bi-box-arrow-right text-danger me-2"></i>Tutup Shift &amp; Handover Kasir (Clock-Out)</h6>
+            <h6><i class="bi bi-box-arrow-right text-danger me-2"></i>Tutup Kasir &amp; Setoran Laci</h6>
             <span class="text-muted-c" style="font-size:0.78rem;">Verifikasi uang fisik kasir dan alokasi setoran brankas</span>
           </div>
         </div>
@@ -159,7 +159,7 @@
                 </label>
                 <div class="input-group">
                   <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-                  <input type="number" name="actual_cash_counted" id="actual_cash_counted" class="form-control-modern fw-bold text-warning fs-5" value="{{ $liveStats['expected_cash'] }}" step="1000" min="0" oninput="calculateVariance()" required>
+                  <input type="number" name="actual_cash_counted" id="actual_cash_counted" class="form-control-modern fw-bold text-warning fs-5" value="{{ $liveStats['expected_cash'] }}" step="any" min="0" oninput="calculateVariance()" required>
                 </div>
                 <span class="text-muted-c" style="font-size:0.75rem;">Total seluruh lembaran uang &amp; koin di laci.</span>
               </div>
@@ -171,7 +171,7 @@
                 </label>
                 <div class="input-group">
                   <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-                  <input type="number" name="retained_cash_float" id="retained_cash_float" class="form-control-modern fw-bold text-info fs-5" value="{{ $liveStats['starting_cash'] }}" step="1000" min="0" oninput="calculateDeposit()">
+                  <input type="number" name="retained_cash_float" id="retained_cash_float" class="form-control-modern fw-bold text-info fs-5" value="{{ $liveStats['starting_cash'] }}" step="any" min="0" oninput="calculateDeposit()">
                 </div>
                 <span class="text-muted-c" style="font-size:0.75rem;">Modal kas awal untuk kasir shift selanjutnya.</span>
               </div>
@@ -285,68 +285,59 @@
 @else
 
   <div class="row g-3 mb-3 justify-content-center">
-    <div class="col-lg-8">
-      <div class="card">
-        <div class="card-header-flex">
-          <div>
-            <h6><i class="bi bi-play-circle text-success me-2"></i>Buka Shift Kasir (Clock-In)</h6>
-            <span class="text-muted-c" style="font-size:0.78rem;">Pilih shift dan tentukan modal awal kas laci sebelum melayani pesanan</span>
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header-flex py-3 px-4" style="border-bottom: 1px solid var(--border-subtle);">
+          <div class="d-flex align-items-center gap-2.5">
+            <div class="rounded-3 d-flex align-items-center justify-content-center bg-success-subtle text-success" style="width: 36px; height: 36px; font-size: 1.1rem;">
+              <i class="bi bi-shop"></i>
+            </div>
+            <div>
+              <h6 class="mb-0 fw-bold" style="font-size: 0.95rem;">Buka Kasir Baru</h6>
+              <span class="text-muted-c" style="font-size:0.75rem;">Masukkan modal uang kembalian laci sebelum mulai transaksi</span>
+            </div>
           </div>
-          <span class="badge badge-warning">SHIFT TUTUP</span>
+          <span class="badge badge-warning rounded-pill px-2.5 py-1">KASIR TUTUP</span>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4">
           <form action="{{ route('admin.keuangan.shift-operational.open') }}" method="POST" id="formOpenShift">
             @csrf
+            <input type="hidden" name="shift_name" id="shift_name" value="Sesi Kasir">
+            <input type="hidden" name="shift_number" id="shift_number" value="1">
 
-            <div class="row g-3">
-              <!-- Shift Selector -->
-              <div class="col-md-6">
-                <label class="form-label-modern">
-                  Pilih Master Shift / Nama Shift <span class="text-danger">*</span>
-                </label>
-                
-                @if($setting->shift_mode === 'auto_master' && $masterShifts->count() > 0)
-                  <select name="shift_name_select" id="shift_name_select" class="form-select-modern" onchange="onSelectMasterShift(this)" required>
-                    @foreach($masterShifts as $ms)
-                      <option value="{{ $ms->shift_name }}" data-number="{{ $ms->shift_number }}" data-cash="{{ $ms->default_starting_cash }}">
-                        Shift #{{ $ms->shift_number }} — {{ $ms->shift_name }} ({{ \Carbon\Carbon::parse($ms->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($ms->end_time)->format('H:i') }})
-                      </option>
-                    @endforeach
-                  </select>
-                  <input type="hidden" name="shift_name" id="shift_name" value="{{ $masterShifts->first()->shift_name }}">
-                  <input type="hidden" name="shift_number" id="shift_number" value="{{ $masterShifts->first()->shift_number }}">
-                @else
-                  <input type="text" name="shift_name" id="shift_name" class="form-control-modern" placeholder="Contoh: Shift Pagi Kasir" value="Shift Pagi Kasir" required>
-                  <input type="hidden" name="shift_number" id="shift_number" value="1">
-                @endif
+            <div class="mb-3">
+              <label for="starting_cash" class="form-label-modern fw-semibold mb-2">
+                Saldo Modal Awal Kas Laci (Rp) <span class="text-danger">*</span>
+              </label>
+              <div class="input-group input-group-lg mb-2.5">
+                <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold px-3">Rp</span>
+                <input type="number" 
+                       name="starting_cash" 
+                       id="starting_cash" 
+                       class="form-control-modern fs-4 fw-bold text-success" 
+                       value="{{ $masterShifts->first()->default_starting_cash ?? 200000 }}" 
+                       step="any" 
+                       min="0" 
+                       placeholder="0"
+                       required>
               </div>
+              
+              <!-- Quick Preset Cash Buttons -->
+              <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                <span class="text-muted-c me-1" style="font-size:0.75rem;">Pilihan Cepat:</span>
+                <button type="button" class="btn btn-outline-soft btn-sm py-1 px-2.5 rounded-pill" style="font-size:0.75rem;" onclick="setPresetCash(100000)">Rp 100.000</button>
+                <button type="button" class="btn btn-outline-soft btn-sm py-1 px-2.5 rounded-pill" style="font-size:0.75rem;" onclick="setPresetCash(200000)">Rp 200.000</button>
+                <button type="button" class="btn btn-outline-soft btn-sm py-1 px-2.5 rounded-pill" style="font-size:0.75rem;" onclick="setPresetCash(300000)">Rp 300.000</button>
+                <button type="button" class="btn btn-outline-soft btn-sm py-1 px-2.5 rounded-pill" style="font-size:0.75rem;" onclick="setPresetCash(500000)">Rp 500.000</button>
+              </div>
+            </div>
 
-              <!-- Starting Cash Input -->
-              <div class="col-md-6">
-                <label class="form-label-modern">
-                  Saldo Modal Awal Kas Laci (Rp) <span class="text-danger">*</span>
-                </label>
-                <div class="input-group mb-2">
-                  <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-                  <input type="number" name="starting_cash" id="starting_cash" class="form-control-modern fs-5 fw-bold text-success" value="{{ $masterShifts->first()->default_starting_cash ?? 200000 }}" step="1000" min="0" required>
-                </div>
-                
-                <!-- Quick Preset Cash Buttons -->
-                <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                  <span class="text-muted-c" style="font-size:0.75rem;">Preset:</span>
-                  <button type="button" class="btn btn-outline-soft btn-sm py-0 px-2" style="font-size:0.75rem;" onclick="setPresetCash(100000)">Rp 100rb</button>
-                  <button type="button" class="btn btn-outline-soft btn-sm py-0 px-2" style="font-size:0.75rem;" onclick="setPresetCash(200000)">Rp 200rb</button>
-                  <button type="button" class="btn btn-outline-soft btn-sm py-0 px-2" style="font-size:0.75rem;" onclick="setPresetCash(300000)">Rp 300rb</button>
-                  <button type="button" class="btn btn-outline-soft btn-sm py-0 px-2" style="font-size:0.75rem;" onclick="setPresetCash(500000)">Rp 500rb</button>
-                </div>
-              </div>
-
-              <div class="col-12 mt-4 text-end">
-                <button type="submit" class="btn btn-primary-grad px-4">
-                  <i class="bi bi-play-fill me-1"></i> Buka Shift Kasir Sekarang
-                </button>
-              </div>
+            <div class="pt-3 border-top mt-4" style="border-color: var(--border-subtle) !important;">
+              <button type="submit" class="btn btn-primary-grad px-4 py-2.5 fw-bold rounded-pill w-100 d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                <i class="bi bi-cash-stack fs-5"></i>
+                <span>Buka Kasir Sekarang</span>
+              </button>
             </div>
           </form>
         </div>
@@ -363,8 +354,8 @@
 <div class="card mt-3">
   <div class="card-header-flex">
     <div>
-      <h6><i class="bi bi-journal-check text-primary me-2"></i>Histori 5 Shift Closing Terakhir</h6>
-      <span class="text-muted-c" style="font-size:0.78rem;">Rekapitulasi 5 sesi penutupan shift kasir sebelumnya</span>
+      <h6><i class="bi bi-journal-check text-primary me-2"></i>Histori 5 Penutupan Kasir Terakhir</h6>
+      <span class="text-muted-c" style="font-size:0.78rem;">Rekapitulasi 5 sesi penutupan laci kasir sebelumnya</span>
     </div>
     <a href="{{ route('admin.reports.shifts') }}" class="btn btn-outline-soft btn-sm">
       Lihat Semua Audit <i class="bi bi-arrow-right ms-1"></i>
@@ -377,9 +368,9 @@
         <thead>
           <tr>
             <th>Tanggal</th>
-            <th>Nama Shift</th>
-            <th>Clock-In</th>
-            <th>Clock-Out</th>
+            <th>Petugas Kasir</th>
+            <th>Waktu Buka</th>
+            <th>Waktu Tutup</th>
             <th>Modal Awal</th>
             <th>Ekspektasi Kas</th>
             <th>Fisik Kasir</th>
@@ -395,7 +386,11 @@
                   {{ \Carbon\Carbon::parse($rc->business_date)->format('d/m/Y') }}
                 </span>
               </td>
-              <td>{{ $rc->shift_name }}</td>
+              <td>
+                <span class="fw-medium" style="color: var(--text-primary);">
+                  {{ $rc->cashier?->name ?? ($rc->shift_name ?: 'Kasir Utama') }}
+                </span>
+              </td>
               <td class="text-muted-c" style="font-size:0.82rem;">{{ \Carbon\Carbon::parse($rc->opened_at)->format('H:i') }} WIB</td>
               <td class="text-muted-c" style="font-size:0.82rem;">{{ $rc->closed_at ? \Carbon\Carbon::parse($rc->closed_at)->format('H:i') . ' WIB' : '-' }}</td>
               <td>Rp {{ number_format($rc->starting_cash, 0, ',', '.') }}</td>
@@ -450,7 +445,7 @@
             <label class="form-label-modern">Nominal Kas Masuk (Rp) <span class="text-danger">*</span></label>
             <div class="input-group">
               <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-              <input type="number" name="amount" class="form-control-modern fw-bold text-success fs-5" placeholder="Contoh: 150000" step="1000" min="1" required>
+              <input type="number" name="amount" class="form-control-modern fw-bold text-success fs-5" placeholder="Contoh: 150000" step="any" min="1" required>
             </div>
           </div>
 
@@ -495,7 +490,7 @@
             <label class="form-label-modern">Nominal Kas Keluar (Rp) <span class="text-danger">*</span></label>
             <div class="input-group">
               <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-              <input type="number" name="amount" class="form-control-modern fw-bold text-danger fs-5" placeholder="Contoh: 45000" step="1000" min="1" required>
+              <input type="number" name="amount" class="form-control-modern fw-bold text-danger fs-5" placeholder="Contoh: 45000" step="any" min="1" required>
             </div>
           </div>
 
@@ -524,19 +519,6 @@
 <script>
   function setPresetCash(amount) {
     document.getElementById('starting_cash').value = amount;
-  }
-
-  function onSelectMasterShift(selectEl) {
-    const selectedOption = selectEl.options[selectEl.selectedIndex];
-    const shiftName = selectedOption.value;
-    const shiftNumber = selectedOption.getAttribute('data-number');
-    const startingCash = selectedOption.getAttribute('data-cash');
-
-    document.getElementById('shift_name').value = shiftName;
-    document.getElementById('shift_number').value = shiftNumber;
-    if (startingCash) {
-      document.getElementById('starting_cash').value = startingCash;
-    }
   }
 
   function calculateVariance() {

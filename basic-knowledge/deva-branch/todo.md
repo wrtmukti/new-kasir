@@ -1,5 +1,7 @@
 > **Branch Context**: `deva-branch`
 > **Project Scope**: POS SaaS F&B MVP (Decoupled COGS + HPP Report + Master Tax & Service Charge + Shift Closing Kasir + Dedicated Cash Flow Plan B + Multi-Outlet Owner Executive Hub).
+> **Dokumen Milestone V1 (Cash Flow & Kasir)**: [`2026-09-04/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-04/milestone.md)
+> **Dokumen Milestone V2 (Frontline POS Shift HUD & Enterprise Closing)**: [`2026-09-04/milestone_v2.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-04/milestone_v2.md)
 > **Dokumen Arsitektur Alur Kas & Shift Closing (JSON)**: [`cash_flow_and_clock_in_out_architecture.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/cash_flow_and_clock_in_out_architecture.md)
 > **Dokumen Strategi Tiering SaaS & Benchmark Pasar**: [`../saas_tiering_strategy_and_market_benchmark.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/saas_tiering_strategy_and_market_benchmark.md)
 > **Dokumen Milestone Phase 3 (Owner Portal)**: [`2026-08-29/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/milestone.md)
@@ -49,6 +51,9 @@
 - [x] **2.2.12** Perbaikan Presisi Pengurutan Order & Transaksi: Mengubah pengurutan dari `latest()` (`created_at DESC`) menjadi `orderBy('order_id', 'desc')` & `orderBy('transaction_id', 'desc')` agar pesanan & transaksi terbaru SELALU berada paling atas No. 1
 - [x] **2.2.13** Penambahan Pop-Up Modal Error & Banner Alert Notifikasi Transparan saat simpan order gagal
 - [x] **2.2.14** Seeder `DailyClosingSeeder.php` & Update `OrderSeeder.php` & `TransactionSeeder.php` (Seed 26 hari histori shift & bind 273 order/trx)
+- [x] **2.2.15** POS Cashier Clock-In Gatekeeper (Hard Lock Laci Kasir Saat Shift Tutup): Backend validation & 422 JSON reject untuk pembayaran cash tanpa shift aktif, banner proteksi interaktif di katalog POS & order create, alert proteksi di layar payment, dan client-side guard dengan NexoraToast
+- [x] **2.2.16** Refactoring Terminologi F&B ("Clock-In / Clock-Out" → "Buka Kasir / Tutup Kasir"): Menyelaraskan seluruh UI kasir, sidebar, notifikasi, dan struk Z/X-Report agar menggunakan istilah Buka Kasir & Tutup Kasir
+- [x] **2.2.17** Penyederhanaan Siklus Kasir (Eliminasi Pilihan Shift ➔ Murni Buka & Tutup Kasir): Menghapus dropdown dan keharusan memilih "Shift 1 / Shift 2 / Shift 3" di layar Buka Kasir, menyederhanakan form jadi satu input Modal Awal Laci dengan preset cepat, dan otomatisasi nama kasir bertugas
 
 
 #### 💳 M3 — Report Dashboard Hub & 6 Detail Dedicated Laporan + Export Excel (Tahap 3) (COMPLETED 100%)
