@@ -8,6 +8,7 @@ use App\Models\Admin\Tax;
 use App\Models\Admin\ServiceCharge;
 use App\Models\Admin\ShiftSetting;
 use App\Models\Admin\Shift;
+use App\Models\Admin\DailyClosing;
 use App\Models\Admin\Outlet;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,19 +23,29 @@ class SettingController extends Controller
     {
         $activeOutletId = session('active_outlet_id') ?? session('outlet_id');
         $outlet = null;
-        if ($activeOutletId) {
-            $outlet = Outlet::where('outlet_id', $activeOutletId)->where('delete_status', 0)->first();
+        if (\Illuminate\Support\Facades\Schema::hasTable('outlets')) {
+            if ($activeOutletId) {
+                $outlet = Outlet::where('outlet_id', $activeOutletId)->where('delete_status', 0)->first();
+            }
+            if (!$outlet) {
+                $outlet = Outlet::where('delete_status', 0)->first();
+            }
+            if (!$outlet) {
+                $outlet = Outlet::create([
+                    'outlet_id' => (string) \Illuminate\Support\Str::ulid(),
+                    'outlet_name' => 'Restoran & Cafe',
+                    'outlet_code' => 'RESTO',
+                    'outlet_branch' => 'Pusat',
+                    'created_by' => 'admin',
+                ]);
+            }
         }
         if (!$outlet) {
-            $outlet = Outlet::where('delete_status', 0)->first();
-        }
-        if (!$outlet) {
-            $outlet = Outlet::create([
-                'outlet_id' => (string) \Illuminate\Support\Str::ulid(),
+            $outlet = new Outlet([
+                'outlet_id' => 'COMP-001',
                 'outlet_name' => 'Restoran & Cafe',
                 'outlet_code' => 'RESTO',
                 'outlet_branch' => 'Pusat',
-                'created_by' => 'admin',
             ]);
         }
         return $outlet;
@@ -47,33 +58,55 @@ class SettingController extends Controller
     {
         $outlet = $this->resolveActiveOutlet();
 
-        $setting = SettingOutlet::where('outlet_id', $outlet->outlet_id)
-            ->where('delete_status', 0)
-            ->first();
+        $setting = null;
+        if (\Illuminate\Support\Facades\Schema::hasTable('setting_outlets')) {
+            $setting = SettingOutlet::where('outlet_id', $outlet->outlet_id)
+                ->where('delete_status', 0)
+                ->first();
 
+            if (!$setting) {
+                $setting = SettingOutlet::create([
+                    'outlet_id' => $outlet->outlet_id,
+                    'outlet_name' => $outlet->outlet_name,
+                    'payment_timing' => 'post_payment',
+                    'theme' => config('app.guest_template', 'spicy_bites'),
+                    'created_by' => 'admin',
+                ]);
+            }
+        }
         if (!$setting) {
-            $setting = SettingOutlet::create([
+            $setting = new SettingOutlet([
                 'outlet_id' => $outlet->outlet_id,
                 'outlet_name' => $outlet->outlet_name,
                 'payment_timing' => 'post_payment',
                 'theme' => config('app.guest_template', 'spicy_bites'),
-                'created_by' => 'admin',
             ]);
         }
 
         // Data Master Pajak & Service Charge untuk Outlet Aktif
-        $tax = Tax::where('outlet_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? Tax::where('outlet_id', $outlet->outlet_id)->first() ?? Tax::first();
-        $service = ServiceCharge::where('outlet_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? ServiceCharge::where('outlet_id', $outlet->outlet_id)->first() ?? ServiceCharge::first();
+        $tax = Tax::where('company_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? Tax::where('company_id', $outlet->outlet_id)->first() ?? Tax::first();
+        $service = ServiceCharge::where('company_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? ServiceCharge::where('company_id', $outlet->outlet_id)->first() ?? ServiceCharge::first();
 
         // Data Master Shift & Cut-Off
         $outletId = $outlet->outlet_id;
-        $shiftSetting = ShiftSetting::where('outlet_id', $outletId)->first()
+        $shiftSetting = ShiftSetting::where('company_id', $outletId)->first()
             ?? ShiftSetting::first()
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
                 'shift_mode' => 'auto_master',
                 'auto_lock_unclosed' => 1,
             ]);
+
+        $primaryShift = Shift::where('company_id', $outletId)->first()
+            ?? Shift::first()
+            ?? new Shift([
+                'shift_name' => 'Jam Operasional Toko',
+                'start_time' => '08:00:00',
+                'end_time' => '22:00:00',
+                'default_starting_cash' => 300000,
+            ]);
+
+        $activeShift = DailyClosing::where('company_id', $outletId)->where('status', 'open')->latest()->first();
 
         $shifts = Shift::orderBy('shift_number', 'asc')->get();
 
@@ -144,7 +177,7 @@ class SettingController extends Controller
             ],
         ];
 
-        return view('admin.kasir.setting.index', compact('outlet', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts'));
+        return view('admin.kasir.setting.index', compact('outlet', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts', 'primaryShift', 'activeShift'));
     }
 
     /**

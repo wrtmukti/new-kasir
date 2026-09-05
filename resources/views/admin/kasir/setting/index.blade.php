@@ -47,8 +47,8 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link py-2.5 px-3 rounded-2" data-settings-target="#settings-shift">
-              <i class="bi bi-clock-history me-2 text-warning"></i>
-              <span class="nav-label-text fw-semibold">Shift & Cut-off</span>
+              <i class="bi bi-shop-window me-2 text-warning"></i>
+              <span class="nav-label-text fw-semibold">Buka Tutup & Kasir</span>
             </a>
           </li>
         </ul>
@@ -565,22 +565,22 @@
         </div>
       </div>
 
-      {{-- PANEL 5: MASTER SHIFT & JAM CUT-OFF RESTORAN --}}
+      {{-- PANEL 5: PENGATURAN JAM OPERASIONAL & BUKA TUTUP KASIR --}}
       <div id="settings-shift" class="settings-panel" style="display:none;">
-        <!-- CARD 1: PENGATURAN JAM CUT-OFF OPERASIONAL RESTO -->
+        <!-- CARD 1: PENGATURAN MODE BUKA TUTUP KASIR & JAM OPERASIONAL -->
         <div class="card mb-4 border-0 shadow-sm" style="border: 1px solid var(--border-subtle) !important; border-radius: 1rem;">
           <div class="card-header-flex py-3 px-4" style="border-bottom: 1px solid var(--border-subtle);">
             <div class="d-flex align-items-center gap-2">
-              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px; height:36px; background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
-                <i class="bi bi-clock-history fs-5"></i>
+              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:38px; height:38px; background: rgba(99, 102, 241, 0.15); color: var(--accent-1, #6366f1);">
+                <i class="bi bi-shop-window fs-5"></i>
               </div>
               <div>
-                <h6 class="mb-0 fw-bold">Pengaturan Cut-Off Operasional & Mode Shift</h6>
-                <small class="text-muted-c" style="font-size:0.75rem;">Menentukan batas tanggal bisnis dan cara kerja sesi kasir</small>
+                <h6 class="mb-0 fw-bold">Pengaturan Jam Operasional & Buka Tutup Kasir</h6>
+                <small class="text-muted-c" style="font-size:0.75rem;">Atur mode operasional kasir (Manual Bebas vs Terjadwal Otomatis), modal awal kasir, dan cut-off harian</small>
               </div>
             </div>
-            <span class="chip-tag px-3 py-1 rounded-pill" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.25); font-weight:600; font-size:0.75rem;">
-              <i class="bi bi-shield-lock me-1"></i>Audit & POS
+            <span class="chip-tag px-3 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); font-weight:600; font-size:0.75rem;">
+              <i class="bi bi-shield-check me-1"></i>Kasir & Tata Kelola Laci
             </span>
           </div>
 
@@ -588,57 +588,182 @@
             <form action="{{ route('admin.keuangan.setting-shift.update-cutoff') }}" method="POST" id="formCutoff">
               @csrf
               
-              <!-- Option Mode Shift Box -->
+              <!-- SECTION 1: PILIH MODE PENGOPERASIAN KASIR -->
               <div class="mb-4">
-                <label class="form-label-modern mb-2 fw-bold text-uppercase" style="font-size:0.8rem; letter-spacing:0.5px;">1. Pilih Mode Pengoperasian Shift Kasir</label>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <label class="form-label-modern mb-0 fw-bold text-uppercase" style="font-size:0.8rem; letter-spacing:0.5px;">1. Pilih Mode Pengoperasian Kasir</label>
+                  <span class="text-muted-c" style="font-size:0.75rem;">Pilih metode yang paling cocok dengan alur kerja toko Anda</span>
+                </div>
+
                 <div class="row g-3">
-                  
-                  <!-- Mode 1: Auto Master Shift -->
-                  <div class="col-md-4">
-                    <div class="mode-box-card @if(($shiftSetting->shift_mode ?? 'auto_master') === 'auto_master') active @endif" onclick="selectShiftMode('auto_master')">
-                      <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="mode-icon-circle" style="background: rgba(59,130,246,0.15); color:#3b82f6;">
-                          <i class="bi bi-calendar-range"></i>
-                        </div>
-                        <input type="radio" name="shift_mode" value="auto_master" id="mode_auto_master" class="form-check-input" @if(($shiftSetting->shift_mode ?? 'auto_master') === 'auto_master') checked @endif style="cursor: pointer;">
-                      </div>
-                      <div class="fw-bold mb-1">Terjadwal (Master Shift)</div>
-                      <p class="text-muted-c mb-0" style="font-size:0.82rem; line-height: 1.4;">Kasir memilih shift resmi dari daftar master. Jam kerja dan modal awal terisi otomatis sesuai template.</p>
-                    </div>
-                  </div>
-
-                  <!-- Mode 2: Manual Shift -->
-                  <div class="col-md-4">
+                  <!-- Mode 1: Manual (Buka & Tutup Bebas) -->
+                  <div class="col-md-6">
                     <div class="mode-box-card @if(($shiftSetting->shift_mode ?? 'auto_master') === 'manual') active @endif" onclick="selectShiftMode('manual')">
-                      <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="mode-icon-circle" style="background: rgba(245,158,11,0.15); color:#f59e0b;">
-                          <i class="bi bi-pencil-square"></i>
+                      <div class="d-flex align-items-center justify-content-between mb-2.5">
+                        <div class="mode-icon-circle" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                          <i class="bi bi-sliders"></i>
                         </div>
-                        <input type="radio" name="shift_mode" value="manual" id="mode_manual" class="form-check-input" @if(($shiftSetting->shift_mode ?? 'auto_master') === 'manual') checked @endif style="cursor: pointer;">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-0.5" style="font-size:0.68rem; font-weight:600;">
+                            Bebas & Fleksibel
+                          </span>
+                          <input type="radio" name="shift_mode" value="manual" id="mode_manual" class="form-check-input" @if(($shiftSetting->shift_mode ?? 'auto_master') === 'manual') checked @endif style="cursor: pointer;">
+                        </div>
                       </div>
-                      <div class="fw-bold mb-1">Manual / Dinamis</div>
-                      <p class="text-muted-c mb-0" style="font-size:0.82rem; line-height: 1.4;">Kasir bebas menginput nama shift dan modal kas awal secara fleksibel saat pertama kali bertugas.</p>
+                      <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Manual (Buka & Tutup Bebas)</div>
+                      <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Kasir buka dan tutup toko secara bebas sesuai jam riil user datang dan pulang tanpa batasan jadwal kaku.</p>
+                      <ul class="list-unstyled mb-0 text-muted-c" style="font-size:0.77rem; line-height: 1.65;">
+                        <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Buka & tutup kasir bebas jam berapa saja</li>
+                        <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Kasir mengisi modal kas awal setiap kali buka kasir</li>
+                        <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Pas closing, kasir isi uang fisik aktual di laci</li>
+                        <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Owner tinggal cek selisih fisik vs transaksi sistem</li>
+                      </ul>
                     </div>
                   </div>
 
-                  <!-- Mode 3: Single Daily Shift -->
-                  <div class="col-md-4">
-                    <div class="mode-box-card @if(($shiftSetting->shift_mode ?? 'auto_master') === 'single_daily') active @endif" onclick="selectShiftMode('single_daily')">
-                      <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="mode-icon-circle" style="background: rgba(16,185,129,0.15); color:#10b981;">
-                          <i class="bi bi-sun-fill"></i>
+                  <!-- Mode 2: Otomatis (Jadwal Tetap & Standar Modal) -->
+                  <div class="col-md-6">
+                    <div class="mode-box-card @if(($shiftSetting->shift_mode ?? 'auto_master') !== 'manual') active @endif" onclick="selectShiftMode('auto_master')">
+                      <div class="d-flex align-items-center justify-content-between mb-2.5">
+                        <div class="mode-icon-circle" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-1, #6366f1);">
+                          <i class="bi bi-shop"></i>
                         </div>
-                        <input type="radio" name="shift_mode" value="single_daily" id="mode_single_daily" class="form-check-input" @if(($shiftSetting->shift_mode ?? 'auto_master') === 'single_daily') checked @endif style="cursor: pointer;">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5" style="font-size:0.68rem; font-weight:600;">
+                            Terjadwal & Rekomendasi
+                          </span>
+                          <input type="radio" name="shift_mode" value="auto_master" id="mode_auto_master" class="form-check-input" @if(($shiftSetting->shift_mode ?? 'auto_master') !== 'manual') checked @endif style="cursor: pointer;">
+                        </div>
                       </div>
-                      <div class="fw-bold mb-1">Single Daily Shift (Full Day)</div>
-                      <p class="text-muted-c mb-0" style="font-size:0.82rem; line-height: 1.4;">Hanya 1 sesi shift per hari. Kasir buka 1x di pagi hari dan tutup 1x saat toko selesai beroperasi.</p>
+                      <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Otomatis (Jadwal Tetap & Standar Modal)</div>
+                      <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Jam operasional toko diset tetap. Modal kas awal sudah diset paten (misal Rp 300rb) dan otomatis selalu sama setiap hari.</p>
+                      <ul class="list-unstyled mb-0 text-muted-c" style="font-size:0.77rem; line-height: 1.65;">
+                        <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Setting jam buka dan tutup toko operasional</li>
+                        <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Modal kas awal otomatis terisi nominal tetap setiap hari</li>
+                        <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Periode transaksi dihitung otomatis by tanggal</li>
+                        <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Sistem otomatis hitung kebutuhan top-up modal kasir esok hari</li>
+                      </ul>
                     </div>
                   </div>
-
                 </div>
               </div>
 
-              <!-- Jam Cut-Off & Auto Lock -->
+              <!-- SECTION 2: DYNAMIC SETTINGS SESUAI MODE -->
+              <!-- BOX A: KONFIGURASI MODE OTOMATIS (TERJADWAL & MODAL TETAP) -->
+              <div id="autoScheduleBox" class="p-3.5 rounded-3 mb-4" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle); display: {{ (($shiftSetting->shift_mode ?? 'auto_master') !== 'manual') ? 'block' : 'none' }};">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-check text-primary fs-5"></i>
+                    <div>
+                      <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Konfigurasi Jadwal Toko & Modal Awal Kasir</h6>
+                      <small class="text-muted-c" style="font-size:0.74rem;">Jam operasional toko dan nominal kas laci yang selalu disiapkan</small>
+                    </div>
+                  </div>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Mode Otomatis Aktif</span>
+                </div>
+
+                <div class="row g-3 align-items-end">
+                  <!-- Jam Buka Toko -->
+                  <div class="col-md-3">
+                    <label for="open_time" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
+                      Jam Buka Kasir / Toko <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                      <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                        <i class="bi bi-door-open"></i>
+                      </span>
+                      <input type="text" name="open_time" id="open_time" 
+                             class="form-control form-control-modern border-start-0 font-monospace" 
+                             value="{{ \Carbon\Carbon::parse($primaryShift->start_time ?? '08:00')->format('H:i') }}" 
+                             placeholder="08:00" maxlength="5" 
+                             oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+                    </div>
+                  </div>
+
+                  <!-- Jam Tutup Toko -->
+                  <div class="col-md-3">
+                    <label for="close_time" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
+                      Jam Tutup Kasir / Toko <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                      <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
+                        <i class="bi bi-door-closed"></i>
+                      </span>
+                      <input type="text" name="close_time" id="close_time" 
+                             class="form-control form-control-modern border-start-0 font-monospace" 
+                             value="{{ \Carbon\Carbon::parse($primaryShift->end_time ?? '22:00')->format('H:i') }}" 
+                             placeholder="22:00" maxlength="5" 
+                             oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
+                    </div>
+                  </div>
+
+                  <!-- Modal Kas Awal Tetap -->
+                  <div class="col-md-6">
+                    <label for="default_starting_cash" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
+                      Modal Kas Awal Tetap Kasir (Rp) <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                      <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: #10b981; font-weight:bold;">
+                        Rp
+                      </span>
+                      <input type="number" name="default_starting_cash" id="default_starting_cash" 
+                             class="form-control form-control-modern border-start-0 font-monospace fw-bold" 
+                             value="{{ (int)($primaryShift->default_starting_cash ?? 300000) }}" 
+                             step="any" min="0" required style="color: var(--text-primary);">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Presets Cepat Jam & Modal -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-2.5 border-top" style="border-color: var(--border-subtle) !important;">
+                  <div class="d-flex flex-wrap gap-1.5 align-items-center">
+                    <span class="text-muted-c me-1" style="font-size:0.73rem;">Preset Jam:</span>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('00:00', '23:59')">
+                      <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('08:00', '22:00')">
+                      Pagi - Malam (08:00 - 22:00)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('10:00', '23:00')">
+                      Siang - Malam (10:00 - 23:00)
+                    </button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('16:30', '23:00')">
+                      Sore - Malam (16:30 - 23:00)
+                    </button>
+                  </div>
+                  <div class="d-flex flex-wrap gap-1.5 align-items-center">
+                    <span class="text-muted-c me-1" style="font-size:0.73rem;">Preset Modal:</span>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setStartingCashPreset(100000)">100rb</button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setStartingCashPreset(200000)">200rb</button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setStartingCashPreset(300000)">300rb</button>
+                    <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setStartingCashPreset(500000)">500rb</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BOX B: KONFIGURASI MODE MANUAL (BEBAS & FLEKSIBEL) -->
+              <div id="manualScheduleBox" class="p-3.5 rounded-3 mb-4" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle); display: {{ (($shiftSetting->shift_mode ?? 'auto_master') === 'manual') ? 'block' : 'none' }};">
+                <div class="d-flex align-items-center justify-content-between mb-2.5">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-info-circle-fill text-warning fs-5"></i>
+                    <div>
+                      <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Alur Pengoperasian Manual (Bebas)</h6>
+                      <small class="text-muted-c" style="font-size:0.74rem;">Kasir bebas menentukan waktu buka-tutup dan menginput modal kas awal saat bertugas</small>
+                    </div>
+                  </div>
+                  <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Mode Manual Aktif</span>
+                </div>
+                <div class="p-3 rounded-2" style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b;">
+                  <p class="mb-1 text-muted-c" style="font-size:0.8rem; line-height:1.5;">
+                    Pada <strong>Mode Manual</strong>, kasir tidak dibatasi oleh jam buka/tutup toko. Kasir dapat langsung mengklik menu <strong>"Buka Kasir"</strong> kapan saja dan menginput uang modal awal laci kasir secara langsung di layar kasir POS.
+                  </p>
+                  <small class="text-warning fw-semibold" style="font-size:0.75rem;">
+                    <i class="bi bi-lightbulb me-1"></i> Tips Owner: Saat tutup kasir (closing), kasir tetap wajib menghitung uang fisik aktual di laci agar owner dapat melihat selisih kas di laporan Z-Report.
+                  </small>
+                </div>
+              </div>
+
+              <!-- SECTION 3: JAM CUT-OFF OPERASIONAL & PERLINDUNGAN STRICT -->
               <div class="row g-4 align-items-end pt-2">
                 <div class="col-md-4">
                   <label for="daily_cutoff_time" class="form-label-modern mb-1 fw-semibold">
@@ -657,17 +782,17 @@
                   <div class="form-check form-switch pt-2">
                     <input class="form-check-input" type="checkbox" name="auto_lock_unclosed" id="auto_lock_unclosed" value="1" @if($shiftSetting->auto_lock_unclosed ?? 1) checked @endif style="width: 2.4em; height: 1.2em; cursor: pointer;">
                     <label class="form-check-label fw-semibold ms-2" for="auto_lock_unclosed">
-                      Auto-Lock Shift Kemarin (Strict Protection)
+                      Auto-Lock Kasir Kemarin (Strict Protection)
                     </label>
                   </div>
                   <div class="text-muted-c mt-1" style="font-size: 0.78rem;">
-                    Kunci layar POS jika shift hari kemarin belum di-close oleh kasir sebelumnya.
+                    Kunci layar POS kasir jika sesi hari kemarin belum di-close oleh kasir sebelumnya.
                   </div>
                 </div>
 
                 <div class="col-md-3 text-end">
                   <button type="submit" class="btn btn-primary-grad w-100 py-2.5 rounded-3 btn-loading" id="btnSaveCutoff">
-                    <i class="bi bi-save me-1"></i> Simpan Pengaturan
+                    <i class="bi bi-check-circle-fill me-1"></i> Simpan Pengaturan
                   </button>
                 </div>
               </div>
@@ -675,257 +800,155 @@
           </div>
         </div>
 
-        <!-- CARD 2: DAFTAR MASTER SHIFT RESTORAN -->
+        <!-- CARD 2: STATUS & PANDUAN ALUR KERJA KASIR SAAT INI -->
         <div class="card border-0 shadow-sm" style="border: 1px solid var(--border-subtle) !important; border-radius: 1rem;">
           <div class="card-header-flex py-3 px-4" style="border-bottom: 1px solid var(--border-subtle);">
-            <div>
-              <h6 class="mb-0 fw-bold"><i class="bi bi-list-stars text-primary me-2"></i>Daftar Master Shift Restoran</h6>
-              <div class="text-muted-c" style="font-size:0.75rem;">Template shift yang dipilih kasir saat membuka kasir di POS.</div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px; height:36px; background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                <i class="bi bi-activity fs-5"></i>
+              </div>
+              <div>
+                <h6 class="mb-0 fw-bold">Status & Panduan Operasional Kasir</h6>
+                <small class="text-muted-c" style="font-size:0.75rem;">Ringkasan konfigurasi aktif cabang dan panduan alur kerja kasir POS</small>
+              </div>
             </div>
-            <button type="button" class="btn btn-primary-grad btn-sm px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#modalAddShift">
-              <i class="bi bi-plus-lg me-1"></i>Tambah Master Shift
-            </button>
+            <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-sm btn-outline-primary rounded-3 px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5">
+              <i class="bi bi-cash-stack"></i>
+              <span>Ke Layar Buka / Tutup Kasir</span>
+            </a>
           </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0" style="font-size:0.88rem;">
-                <thead style="background: var(--bg-elevated); color: var(--text-primary); border-bottom: 2px solid var(--border-subtle);">
-                  <tr>
-                    <th style="width: 70px;" class="ps-4">No</th>
-                    <th>Nama Shift</th>
-                    <th>Jam Kerja Operasional</th>
-                    <th>Default Modal Awal Kasir</th>
-                    <th>Status Active</th>
-                    <th class="text-end pe-4" style="width: 140px;">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @forelse($shifts as $index => $shift)
-                    <tr style="border-bottom: 1px solid var(--border-subtle);">
-                      <td class="fw-bold text-secondary ps-4">#{{ $shift->shift_number }}</td>
-                      <td>
-                        <span class="fw-bold">{{ $shift->shift_name }}</span>
-                      </td>
-                      <td>
-                        @php
-                          $is24Hours = (
-                            \Carbon\Carbon::parse($shift->start_time)->format('H:i') === '00:00' && 
-                            in_array(\Carbon\Carbon::parse($shift->end_time)->format('H:i'), ['23:59', '00:00'])
-                          );
-                        @endphp
-                        @if($is24Hours)
-                          <span class="badge px-2.5 py-1 rounded-pill bg-warning-subtle text-warning border border-warning-subtle me-1">
-                            <i class="bi bi-lightning-charge-fill me-1"></i>24 Jam
-                          </span>
-                        @endif
-                        <span class="badge px-2.5 py-1 rounded-pill" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25);">
-                          <i class="bi bi-clock me-1"></i>
-                          {{ \Carbon\Carbon::parse($shift->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($shift->end_time)->format('H:i') }} WIB
-                        </span>
-                      </td>
-                      <td>
-                        <span class="fw-bold text-success">
-                          Rp {{ number_format($shift->default_starting_cash, 0, ',', '.') }}
-                        </span>
-                      </td>
-                      <td>
-                        @if($shift->is_active)
-                          <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill"><i class="bi bi-check-circle-fill me-1"></i>Aktif</span>
-                        @else
-                          <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 rounded-pill"><i class="bi bi-x-circle-fill me-1"></i>Non-Aktif</span>
-                        @endif
-                      </td>
-                      <td class="text-end pe-4">
-                        <button type="button" class="btn btn-sm btn-outline-warning rounded-2 me-1" title="Edit Shift" onclick="editShift({{ json_encode($shift) }})">
-                          <i class="bi bi-pencil-fill"></i>
-                        </button>
-                        <form action="{{ route('admin.keuangan.setting-shift.destroy-shift', $shift->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus Master Shift ini?')">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-outline-danger rounded-2" title="Hapus Shift">
-                            <i class="bi bi-trash-fill"></i>
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  @empty
-                    <tr>
-                      <td colspan="6" class="text-center py-4 text-muted-c">
-                        <i class="bi bi-exclamation-circle d-block fs-3 mb-2 text-secondary"></i>
-                        Belum ada data Master Shift. Klik tombol <strong>"Tambah Master Shift"</strong> di kanan atas.
-                      </td>
-                    </tr>
-                  @endforelse
-                </tbody>
-              </table>
+
+          <div class="card-body p-4">
+            <!-- LIVE OVERVIEW BAR -->
+            <div class="row g-3 mb-4">
+              <!-- Item 1: Status Sesi Kasir Hari Ini -->
+              <div class="col-md-3">
+                <div class="p-3 rounded-3 h-100" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+                  <span class="text-muted-c fw-semibold text-uppercase d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.4px;">Status Kasir Hari Ini</span>
+                  @if($activeShift)
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                        <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> KASIR BUKA
+                      </span>
+                    </div>
+                    <small class="text-muted-c d-block mt-1 text-truncate" style="font-size: 0.72rem;">
+                      {{ $activeShift->shift_name }} • {{ \Carbon\Carbon::parse($activeShift->opened_at)->format('H:i') }} WIB
+                    </small>
+                  @else
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">
+                        <i class="bi bi-dash-circle me-1"></i> KASIR TUTUP
+                      </span>
+                    </div>
+                    <small class="text-muted-c d-block mt-1" style="font-size: 0.72rem;">Belum ada sesi kasir aktif</small>
+                  @endif
+                </div>
+              </div>
+
+              <!-- Item 2: Mode Kasir Aktif -->
+              <div class="col-md-3">
+                <div class="p-3 rounded-3 h-100" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+                  <span class="text-muted-c fw-semibold text-uppercase d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.4px;">Mode Pengoperasian</span>
+                  <div class="fw-bold" style="font-size: 0.88rem; color: var(--text-primary);">
+                    <span id="modeSummaryBadge" class="badge {{ (($shiftSetting->shift_mode ?? 'auto_master') === 'manual') ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle' }} px-2.5 py-1 rounded-pill" style="font-size: 0.75rem;">
+                      <i class="bi {{ (($shiftSetting->shift_mode ?? 'auto_master') === 'manual') ? 'bi-sliders' : 'bi-shop' }} me-1"></i>
+                      {{ (($shiftSetting->shift_mode ?? 'auto_master') === 'manual') ? 'Manual (Buka Bebas)' : 'Otomatis (Terjadwal)' }}
+                    </span>
+                  </div>
+                  <small class="text-muted-c d-block mt-1" style="font-size: 0.72rem;">Sesuai konfigurasi toko aktif</small>
+                </div>
+              </div>
+
+              <!-- Item 3: Jam Operasional -->
+              <div class="col-md-3">
+                <div class="p-3 rounded-3 h-100" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+                  <span class="text-muted-c fw-semibold text-uppercase d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.4px;">Jam Operasional Toko</span>
+                  <div class="fw-bold font-monospace" id="scheduleSummaryText" style="font-size: 0.86rem; color: var(--text-primary);">
+                    @if(($shiftSetting->shift_mode ?? 'auto_master') === 'manual')
+                      Fleksibel (Bebas Kapan Saja)
+                    @else
+                      {{ \Carbon\Carbon::parse($primaryShift->start_time ?? '08:00')->format('H:i') }} - {{ \Carbon\Carbon::parse($primaryShift->end_time ?? '22:00')->format('H:i') }} WIB
+                    @endif
+                  </div>
+                  <small class="text-muted-c d-block mt-1" style="font-size: 0.72rem;">Cut-off: {{ \Carbon\Carbon::parse($shiftSetting->daily_cutoff_time ?? '03:00')->format('H:i') }} WIB</small>
+                </div>
+              </div>
+
+              <!-- Item 4: Modal Kas Awal Standar -->
+              <div class="col-md-3">
+                <div class="p-3 rounded-3 h-100" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+                  <span class="text-muted-c fw-semibold text-uppercase d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.4px;">Standar Modal Laci Kasir</span>
+                  <div class="fw-bold text-success font-monospace" id="modalSummaryText" style="font-size: 0.88rem;">
+                    @if(($shiftSetting->shift_mode ?? 'auto_master') === 'manual')
+                      Diinput Kasir Saat Buka
+                    @else
+                      Otomatis Rp {{ number_format($primaryShift->default_starting_cash ?? 300000, 0, ',', '.') }}
+                    @endif
+                  </div>
+                  <small class="text-muted-c d-block mt-1" style="font-size: 0.72rem;">Target laci kasir setiap hari</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANDUAN 4 LANGKAH ALUR BUKA TUTUP KASIR (SEDERHANA & TO THE POINT) -->
+            <div class="p-3.5 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.02)); border: 1px dashed var(--border-subtle);">
+              <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="font-size: 0.86rem; color: var(--text-primary);">
+                <i class="bi bi-info-circle text-primary"></i>
+                <span>Alur Kerja Buka Tutup Kasir Toko F&amp;B</span>
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <div class="p-2.5 rounded-2 h-100" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-1.5">
+                      <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:20px; height:20px; font-size:0.7rem;">1</span>
+                      <span class="fw-bold" style="font-size: 0.8rem; color: var(--text-primary);">Buka Kasir</span>
+                    </div>
+                    <p class="text-muted-c mb-0" style="font-size: 0.74rem; line-height: 1.4;">
+                      Kasir menghitung fisik modal laci kasir (misal Rp 300rb) dan menekan tombol Buka Kasir di awal jam kerja.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="p-2.5 rounded-2 h-100" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-1.5">
+                      <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:20px; height:20px; font-size:0.7rem;">2</span>
+                      <span class="fw-bold" style="font-size: 0.8rem; color: var(--text-primary);">Transaksi POS</span>
+                    </div>
+                    <p class="text-muted-c mb-0" style="font-size: 0.74rem; line-height: 1.4;">
+                      Sistem mencatat transaksi tunai & non-tunai. Pembayaran cash terkunci otomatis jika kasir belum dibuka.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="p-2.5 rounded-2 h-100" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-1.5">
+                      <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:20px; height:20px; font-size:0.7rem;">3</span>
+                      <span class="fw-bold" style="font-size: 0.8rem; color: var(--text-primary);">Tutup Kasir</span>
+                    </div>
+                    <p class="text-muted-c mb-0" style="font-size: 0.74rem; line-height: 1.4;">
+                      Di akhir hari, kasir menghitung seluruh uang fisik riil di laci dan menginput nominalnya pada form Tutup Kasir.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="p-2.5 rounded-2 h-100" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-1.5">
+                      <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:20px; height:20px; font-size:0.7rem;">4</span>
+                      <span class="fw-bold" style="font-size: 0.8rem; color: var(--text-primary);">Audit Selisih</span>
+                    </div>
+                    <p class="text-muted-c mb-0" style="font-size: 0.74rem; line-height: 1.4;">
+                      Sistem menghitung selisih kas fisik vs transaksi sistem di struk Z-Report; Owner memantau keakuratan kas.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- MODAL 1: TAMBAH MASTER SHIFT -->
-<div class="modal fade" id="modalAddShift" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content modal-content-modern" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 1rem; color: var(--text-primary);">
-      <div class="modal-header border-0 px-4 py-3" style="border-bottom: 1px solid var(--border-subtle) !important;">
-        <h5 class="modal-title fw-bold">
-          <i class="bi bi-plus-circle text-primary me-2"></i>Tambah Master Shift Baru
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{ route('admin.keuangan.setting-shift.store-shift') }}" method="POST">
-        @csrf
-        <div class="modal-body p-4">
-          <div class="mb-3">
-            <label for="add_shift_name" class="form-label-modern fw-semibold">Nama Shift <span class="text-danger">*</span></label>
-            <input type="text" name="shift_name" id="add_shift_name" class="form-control form-control-modern" placeholder="Contoh: Shift 1 Pagi / Shift 24 Jam" required>
-          </div>
-
-          <div class="row g-3 mb-2">
-            <div class="col-6">
-              <label for="add_start_time" class="form-label-modern fw-semibold">Jam Mulai (24 Jam) <span class="text-danger">*</span></label>
-              <div class="input-group">
-                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
-                  <i class="bi bi-clock"></i>
-                </span>
-                <input type="text" name="start_time" id="add_start_time" 
-                       class="form-control form-control-modern border-start-0 font-monospace" 
-                       value="08:00" placeholder="08:00" maxlength="5" required 
-                       oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
-              </div>
-            </div>
-            <div class="col-6">
-              <label for="add_end_time" class="form-label-modern fw-semibold">Jam Selesai (24 Jam) <span class="text-danger">*</span></label>
-              <div class="input-group">
-                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
-                  <i class="bi bi-clock"></i>
-                </span>
-                <input type="text" name="end_time" id="add_end_time" 
-                       class="form-control form-control-modern border-start-0 font-monospace" 
-                       value="16:00" placeholder="16:00" maxlength="5" required 
-                       oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
-              </div>
-            </div>
-          </div>
-
-          <!-- Pilihan Cepat Jam (Minimal & Adem di Mata) -->
-          <div class="mb-3">
-            <div class="d-flex flex-wrap gap-1.5 align-items-center">
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '23:59', 'Shift 24 Jam', 'add')">
-                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('08:00', '16:00', 'Shift Pagi', 'add')">
-                Pagi (08:00 - 16:00)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('16:00', '00:00', 'Shift Sore', 'add')">
-                Sore (16:00 - 00:00)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '08:00', 'Shift Malam', 'add')">
-                Malam (00:00 - 08:00)
-              </button>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="add_default_starting_cash" class="form-label-modern fw-semibold">Default Modal Awal Kasir (Rp) <span class="text-danger">*</span></label>
-            <input type="number" name="default_starting_cash" id="add_default_starting_cash" class="form-control form-control-modern" value="300000" step="any" min="0" required>
-          </div>
-          <div class="form-check form-switch pt-1">
-            <input class="form-check-input" type="checkbox" name="is_active" id="add_is_active" value="1" checked style="cursor: pointer; width:2.2em; height:1.1em;">
-            <label class="form-check-label fw-semibold ms-2" for="add_is_active">Aktifkan Shift Ini</label>
-          </div>
-        </div>
-        <div class="modal-footer border-0 px-4 py-3" style="border-top: 1px solid var(--border-subtle) !important;">
-          <button type="button" class="btn btn-outline-secondary rounded-3 px-3" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary-grad rounded-3 px-4 btn-loading">Simpan Shift</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL 2: EDIT MASTER SHIFT -->
-<div class="modal fade" id="modalEditShift" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content modal-content-modern" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 1rem; color: var(--text-primary);">
-      <div class="modal-header border-0 px-4 py-3" style="border-bottom: 1px solid var(--border-subtle) !important;">
-        <h5 class="modal-title fw-bold">
-          <i class="bi bi-pencil-square text-warning me-2"></i>Edit Master Shift
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="formEditShift" method="POST">
-        @csrf
-        <div class="modal-body p-4">
-          <div class="mb-3">
-            <label for="edit_shift_name" class="form-label-modern fw-semibold">Nama Shift <span class="text-danger">*</span></label>
-            <input type="text" name="shift_name" id="edit_shift_name" class="form-control form-control-modern" required>
-          </div>
-
-          <div class="row g-3 mb-2">
-            <div class="col-6">
-              <label for="edit_start_time" class="form-label-modern fw-semibold">Jam Mulai (24 Jam) <span class="text-danger">*</span></label>
-              <div class="input-group">
-                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
-                  <i class="bi bi-clock"></i>
-                </span>
-                <input type="text" name="start_time" id="edit_start_time" 
-                       class="form-control form-control-modern border-start-0 font-monospace" 
-                       required oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
-              </div>
-            </div>
-            <div class="col-6">
-              <label for="edit_end_time" class="form-label-modern fw-semibold">Jam Selesai (24 Jam) <span class="text-danger">*</span></label>
-              <div class="input-group">
-                <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
-                  <i class="bi bi-clock"></i>
-                </span>
-                <input type="text" name="end_time" id="edit_end_time" 
-                       class="form-control form-control-modern border-start-0 font-monospace" 
-                       required oninput="formatTime24(this)" onblur="normalizeTime24(this)" list="list24h">
-              </div>
-            </div>
-          </div>
-
-          <!-- Pilihan Cepat Jam (Minimal & Adem di Mata) -->
-          <div class="mb-3">
-            <div class="d-flex flex-wrap gap-1.5 align-items-center">
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '23:59', 'Shift 24 Jam', 'edit')">
-                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('08:00', '16:00', 'Shift Pagi', 'edit')">
-                Pagi (08:00 - 16:00)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('16:00', '00:00', 'Shift Sore', 'edit')">
-                Sore (16:00 - 00:00)
-              </button>
-              <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setShiftPreset('00:00', '08:00', 'Shift Malam', 'edit')">
-                Malam (00:00 - 08:00)
-              </button>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="edit_default_starting_cash" class="form-label-modern fw-semibold">Default Modal Awal Kasir (Rp) <span class="text-danger">*</span></label>
-            <input type="number" name="default_starting_cash" id="edit_default_starting_cash" class="form-control form-control-modern" step="any" min="0" required>
-          </div>
-          <div class="form-check form-switch pt-1">
-            <input class="form-check-input" type="checkbox" name="is_active" id="edit_is_active" value="1" style="cursor: pointer; width:2.2em; height:1.1em;">
-            <label class="form-check-label fw-semibold ms-2" for="edit_is_active">Aktifkan Shift Ini</label>
-          </div>
-        </div>
-        <div class="modal-footer border-0 px-4 py-3" style="border-top: 1px solid var(--border-subtle) !important;">
-          <button type="button" class="btn btn-outline-secondary rounded-3 px-3" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary-grad rounded-3 px-4 btn-loading">Update Shift</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <datalist id="list24h">
   <option value="00:00">00:00 (Tengah Malam)</option>
@@ -1632,18 +1655,60 @@ function selectShiftMode(mode) {
     radio.checked = true;
     radio.closest('.mode-box-card').classList.add('active');
   }
+
+  const autoBox = document.getElementById('autoScheduleBox');
+  const manualBox = document.getElementById('manualScheduleBox');
+  const modeSummaryBadge = document.getElementById('modeSummaryBadge');
+  const scheduleSummaryText = document.getElementById('scheduleSummaryText');
+  const modalSummaryText = document.getElementById('modalSummaryText');
+
+  if (mode === 'manual') {
+    if (autoBox) autoBox.style.display = 'none';
+    if (manualBox) manualBox.style.display = 'block';
+    if (modeSummaryBadge) {
+      modeSummaryBadge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill';
+      modeSummaryBadge.innerHTML = '<i class="bi bi-sliders me-1"></i> Manual (Buka Bebas)';
+    }
+    if (scheduleSummaryText) scheduleSummaryText.textContent = 'Fleksibel (Bebas Jam Berapa Saja)';
+    if (modalSummaryText) modalSummaryText.textContent = 'Diinput Kasir Saat Buka';
+  } else {
+    if (autoBox) autoBox.style.display = 'block';
+    if (manualBox) manualBox.style.display = 'none';
+    if (modeSummaryBadge) {
+      modeSummaryBadge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill';
+      modeSummaryBadge.innerHTML = '<i class="bi bi-shop me-1"></i> Otomatis (Terjadwal)';
+    }
+    if (scheduleSummaryText) {
+      const openVal = document.getElementById('open_time')?.value || '08:00';
+      const closeVal = document.getElementById('close_time')?.value || '22:00';
+      scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+    }
+    if (modalSummaryText) {
+      const cashVal = document.getElementById('default_starting_cash')?.value || '300000';
+      modalSummaryText.textContent = 'Otomatis Rp ' + Number(cashVal).toLocaleString('id-ID');
+    }
+  }
 }
 
-function setShiftPreset(startTime, endTime, defaultName, target = 'add') {
-  const prefix = target === 'edit' ? 'edit_' : 'add_';
-  const startInput = document.getElementById(prefix + 'start_time');
-  const endInput = document.getElementById(prefix + 'end_time');
-  const nameInput = document.getElementById(prefix + 'shift_name');
+function setOperationalPreset(openTime, closeTime) {
+  const openInput = document.getElementById('open_time');
+  const closeInput = document.getElementById('close_time');
+  if (openInput) openInput.value = openTime;
+  if (closeInput) closeInput.value = closeTime;
+  const scheduleSummaryText = document.getElementById('scheduleSummaryText');
+  if (scheduleSummaryText) scheduleSummaryText.textContent = openTime + ' - ' + closeTime + ' WIB';
+  if (typeof NexoraToast === 'function') {
+    NexoraToast({ title: 'Preset Terpilih', message: `Jam Operasional diset ke ${openTime} - ${closeTime}`, type: 'info' });
+  }
+}
 
-  if (startInput) startInput.value = startTime;
-  if (endInput) endInput.value = endTime;
-  if (nameInput && (!nameInput.value.trim() || nameInput.value.toLowerCase().includes('shift') || nameInput.value === 'pagi')) {
-    nameInput.value = defaultName;
+function setStartingCashPreset(amount) {
+  const cashInput = document.getElementById('default_starting_cash');
+  if (cashInput) cashInput.value = amount;
+  const modalSummaryText = document.getElementById('modalSummaryText');
+  if (modalSummaryText) modalSummaryText.textContent = 'Otomatis Rp ' + Number(amount).toLocaleString('id-ID');
+  if (typeof NexoraToast === 'function') {
+    NexoraToast({ title: 'Modal Terpilih', message: `Modal Awal diset ke Rp ${Number(amount).toLocaleString('id-ID')}`, type: 'info' });
   }
 }
 
@@ -1668,20 +1733,12 @@ function normalizeTime24(input) {
     val = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
   }
   input.value = val;
-}
-
-function editShift(shift) {
-  const form = document.getElementById('formEditShift');
-  form.action = `/admin/keuangan/setting-shift/${shift.id}/update`;
-
-  document.getElementById('edit_shift_name').value = shift.shift_name;
-  document.getElementById('edit_start_time').value = shift.start_time.substring(0, 5);
-  document.getElementById('edit_end_time').value = shift.end_time.substring(0, 5);
-  document.getElementById('edit_default_starting_cash').value = shift.default_starting_cash;
-  document.getElementById('edit_is_active').checked = (shift.is_active == 1);
-
-  const editModal = new bootstrap.Modal(document.getElementById('modalEditShift'));
-  editModal.show();
+  const scheduleSummaryText = document.getElementById('scheduleSummaryText');
+  const openVal = document.getElementById('open_time')?.value || '08:00';
+  const closeVal = document.getElementById('close_time')?.value || '22:00';
+  if (scheduleSummaryText && document.getElementById('mode_auto_master')?.checked) {
+    scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+  }
 }
 </script>
 @endpush

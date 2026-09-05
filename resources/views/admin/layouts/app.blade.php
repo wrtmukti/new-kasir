@@ -36,7 +36,9 @@
   $isOwnerPortal = request()->routeIs('owner.*');
   $userRole = auth()->user()?->role ?? 'kasir';
   $isOwnerUser = ($userRole === 'admin');
-  $availableOutlets = \App\Models\Admin\Outlet::where('delete_status', 0)->where('outlet_status', 1)->orderBy('outlet_name')->get();
+  $availableOutlets = \Illuminate\Support\Facades\Schema::hasTable('outlets')
+    ? \App\Models\Admin\Outlet::where('delete_status', 0)->where('outlet_status', 1)->orderBy('outlet_name')->get()
+    : collect();
   $activeOutletId = session('active_outlet_id') ?? session('outlet_id') ?? ($availableOutlets->first()?->outlet_id ?? '');
   $currentOutlet = $availableOutlets->firstWhere('outlet_id', $activeOutletId) ?? $availableOutlets->first();
 @endphp

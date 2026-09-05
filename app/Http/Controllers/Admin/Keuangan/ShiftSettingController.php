@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Keuangan;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\ShiftSetting;
 use App\Models\Admin\Shift;
+use App\Models\Admin\DailyClosing;
 use Illuminate\Http\Request;
 
 class ShiftSettingController extends Controller
@@ -14,9 +15,9 @@ class ShiftSettingController extends Controller
      */
     public function index()
     {
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
 
-        $setting = ShiftSetting::where('outlet_id', $companyId)->first() 
+        $setting = ShiftSetting::where('company_id', $companyId)->first()
             ?? ShiftSetting::first() 
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
@@ -24,15 +25,26 @@ class ShiftSettingController extends Controller
                 'auto_lock_unclosed' => 1,
             ]);
 
-        $shifts = Shift::where('outlet_id', $companyId)
+        $primaryShift = Shift::where('company_id', $companyId)->first()
+            ?? Shift::first()
+            ?? new Shift([
+                'shift_name' => 'Jam Operasional Toko',
+                'start_time' => '08:00:00',
+                'end_time' => '22:00:00',
+                'default_starting_cash' => 300000,
+            ]);
+
+        $activeShift = DailyClosing::where('company_id', $companyId)->where('status', 'open')->latest()->first();
+
+        $shifts = Shift::where('company_id', $companyId)
             ->orderBy('shift_number', 'asc')
             ->get();
 
-        return view('admin.kasir.keuangan.setting-shift.index', compact('setting', 'shifts'));
+        return view('admin.kasir.keuangan.setting-shift.index', compact('setting', 'shifts', 'primaryShift', 'activeShift'));
     }
 
     /**
-     * Update Pengaturan Jam Cut-Off & Mode Shift
+     * Update Pengaturan Jam Cut-Off & Mode Kasir (Manual vs Otomatis)
      */
     public function updateCutoff(Request $request)
     {
@@ -42,32 +54,67 @@ class ShiftSettingController extends Controller
         ], [
             'daily_cutoff_time.required' => 'Jam cut-off operasional wajib diisi.',
             'daily_cutoff_time.date_format' => 'Format jam cut-off tidak valid (HH:MM).',
-            'shift_mode.required' => 'Mode pengoperasian shift wajib dipilih.',
-            'shift_mode.in' => 'Mode shift tidak valid.',
+            'shift_mode.required' => 'Mode pengoperasian kasir wajib dipilih.',
+            'shift_mode.in' => 'Mode pengoperasian kasir tidak valid.',
         ]);
 
-        $companyId = session('outlet_id') ?? 'COMP-001';
-
+        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
         $cutoffTime = $request->daily_cutoff_time . ':00';
 
-        $setting = ShiftSetting::updateOrCreate(
-            ['outlet_id' => $companyId],
-            [
+        $setting = ShiftSetting::where('company_id', $companyId)->first();
+
+        if ($setting) {
+            $setting->update([
                 'daily_cutoff_time' => $cutoffTime,
                 'shift_mode' => $request->shift_mode,
                 'auto_lock_unclosed' => $request->has('auto_lock_unclosed') ? 1 : 0,
-            ]
-        );
+            ]);
+        } else {
+            $setting = ShiftSetting::create([
+                'company_id' => $companyId,
+                'daily_cutoff_time' => $cutoffTime,
+                'shift_mode' => $request->shift_mode,
+                'auto_lock_unclosed' => $request->has('auto_lock_unclosed') ? 1 : 0,
+            ]);
+        }
+
+        // Simpan / update jam operasional & modal awal kasir
+        $startingCash = (float) str_replace(['.', ','], ['', '.'], $request->input('default_starting_cash', 300000));
+        $openTime = $request->input('open_time', '08:00');
+        $closeTime = $request->input('close_time', '22:00');
+        if (strlen($openTime) == 5) $openTime .= ':00';
+        if (strlen($closeTime) == 5) $closeTime .= ':00';
+
+        $primaryShift = Shift::where('company_id', $companyId)->first();
+        if ($primaryShift) {
+            $primaryShift->update([
+                'shift_name' => 'Jam Operasional Toko',
+                'start_time' => $openTime,
+                'end_time' => $closeTime,
+                'default_starting_cash' => $startingCash,
+                'is_active' => 1,
+            ]);
+        } else {
+            Shift::create([
+                'company_id' => $companyId,
+                'shift_number' => 1,
+                'shift_name' => 'Jam Operasional Toko',
+                'start_time' => $openTime,
+                'end_time' => $closeTime,
+                'default_starting_cash' => $startingCash,
+                'is_active' => 1,
+            ]);
+        }
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'Pengaturan jam cut-off operasional & mode shift berhasil diperbarui.',
+                'message' => 'Pengaturan jam operasional & buka tutup kasir berhasil diperbarui.',
                 'data' => $setting,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Pengaturan jam cut-off operasional & mode shift berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Pengaturan jam operasional & buka tutup kasir berhasil diperbarui.');
     }
 
     /**
@@ -91,7 +138,7 @@ class ShiftSettingController extends Controller
 
         $companyId = session('outlet_id') ?? 'COMP-001';
 
-        $nextShiftNumber = Shift::where('outlet_id', $companyId)->max('shift_number') + 1;
+        $nextShiftNumber = Shift::where('company_id', $companyId)->max('shift_number') + 1;
 
         $startTime = strlen($request->start_time) == 5 ? $request->start_time . ':00' : $request->start_time;
         $endTime = strlen($request->end_time) == 5 ? $request->end_time . ':00' : $request->end_time;
@@ -99,7 +146,7 @@ class ShiftSettingController extends Controller
         if ($endTime === '24:00:00') $endTime = '23:59:00';
 
         $shift = Shift::create([
-            'outlet_id' => $companyId,
+            'company_id' => $companyId,
             'shift_number' => $nextShiftNumber,
             'shift_name' => $request->shift_name,
             'start_time' => $startTime,

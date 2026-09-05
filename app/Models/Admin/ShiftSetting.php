@@ -10,6 +10,7 @@ class ShiftSetting extends Model
 
     protected $fillable = [
         'outlet_id',
+        'company_id',
         'daily_cutoff_time',
         'shift_mode',
         'auto_lock_unclosed',
