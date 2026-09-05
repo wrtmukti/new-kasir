@@ -20,7 +20,7 @@ class TaxController extends Controller
         $tax = Tax::where('is_active', 1)->first() ?? Tax::first();
         $service = ServiceCharge::where('is_active', 1)->first() ?? ServiceCharge::first();
 
-        return view('admin.keuangan.setting-tax.index', compact('tax', 'service'));
+        return view('admin.kasir.keuangan.setting-tax.index', compact('tax', 'service'));
     }
 
     /**

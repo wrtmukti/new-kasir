@@ -44,7 +44,7 @@ class ReportDashboardController extends Controller
         $totalShifts = DailyClosing::whereBetween('business_date', [$startDate, $endDate])->count();
         $totalDifference = DailyClosing::whereBetween('business_date', [$startDate, $endDate])->sum('cash_difference');
 
-        return view('admin.keuangan.reports.dashboard', compact(
+        return view('admin.kasir.keuangan.reports.dashboard', compact(
             'startDate',
             'endDate',
             'grossSales',

@@ -47,7 +47,7 @@ class SalesReportController extends Controller
             ->whereBetween('transaction_date', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->sum('transaction_grand_total');
 
-        return view('admin.keuangan.reports.sales', compact(
+        return view('admin.kasir.keuangan.reports.sales', compact(
             'startDate',
             'endDate',
             'perPageInput',

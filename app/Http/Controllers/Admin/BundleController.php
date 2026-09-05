@@ -20,7 +20,7 @@ class BundleController extends Controller
             ->with('outlet', 'items.product')
             ->latest()
             ->paginate(10);
-        return view('admin.bundle.index', compact('bundles'));
+        return view('admin.kasir.bundle.index', compact('bundles'));
     }
 
     public function data(Request $request)
@@ -34,7 +34,7 @@ class BundleController extends Controller
         $bundles = $query->latest()->paginate($perPage);
 
         if ($request->ajax()) {
-            $partial = $view === 'card' ? 'admin.bundle._card' : 'admin.bundle._data';
+            $partial = $view === 'card' ? 'admin.kasir.bundle._card' : 'admin.kasir.bundle._data';
             return response()->json([
                 'html' => view($partial, compact('bundles'))->render(),
                 'pagination' => $bundles->links('vendor.pagination.modern')->toHtml(),
@@ -44,7 +44,7 @@ class BundleController extends Controller
             ]);
         }
 
-        return view('admin.bundle.index', compact('bundles'));
+        return view('admin.kasir.bundle.index', compact('bundles'));
     }
 
     public function productData(Request $request)
@@ -71,7 +71,7 @@ class BundleController extends Controller
         $products = $query->orderBy('product_name')->paginate($perPage);
 
         if ($request->ajax()) {
-            $partial = 'admin.bundle._product_card';
+            $partial = 'admin.kasir.bundle._product_card';
             return response()->json([
                 'html' => view($partial, compact('products'))->render(),
                 'pagination' => $products->links('vendor.pagination.modern')->toHtml(),
@@ -92,7 +92,7 @@ class BundleController extends Controller
             ->with('category')
             ->orderBy('product_name')
             ->get(['product_id', 'product_name', 'product_code', 'product_price', 'category_id']);
-        return view('admin.bundle.create', compact('outlets', 'categories', 'products'));
+        return view('admin.kasir.bundle.create', compact('outlets', 'categories', 'products'));
     }
 
     public function store(BundleRequest $request)
@@ -166,7 +166,7 @@ class BundleController extends Controller
     public function show(Bundle $bundle)
     {
         $bundle->load('outlet', 'items.product');
-        return view('admin.bundle.show', compact('bundle'));
+        return view('admin.kasir.bundle.show', compact('bundle'));
     }
 
     public function edit(Bundle $bundle)
@@ -178,7 +178,7 @@ class BundleController extends Controller
             ->orderBy('product_name')
             ->get(['product_id', 'product_name', 'product_code', 'product_price', 'category_id']);
         $bundle->load('items.product');
-        return view('admin.bundle.edit', compact('bundle', 'outlets', 'categories', 'products'));
+        return view('admin.kasir.bundle.edit', compact('bundle', 'outlets', 'categories', 'products'));
     }
 
     public function update(BundleRequest $request, Bundle $bundle)

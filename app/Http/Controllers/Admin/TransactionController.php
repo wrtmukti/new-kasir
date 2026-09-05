@@ -21,7 +21,7 @@ class TransactionController extends Controller
             $query->where('outlet_id', $activeOutletId);
         }
         $transactions = $query->orderBy('transaction_id', 'desc')->paginate(10);
-        return view('admin.transaction.index', compact('transactions'));
+        return view('admin.kasir.transaction.index', compact('transactions'));
     }
 
     public function data(Request $request)
@@ -36,7 +36,7 @@ class TransactionController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.transaction._data', compact('transactions'))->render(),
+                'html' => view('admin.kasir.transaction._data', compact('transactions'))->render(),
                 'pagination' => $transactions->links('vendor.pagination.modern')->toHtml(),
                 'total' => $transactions->total(),
                 'from' => $transactions->firstItem(),
@@ -44,7 +44,7 @@ class TransactionController extends Controller
             ]);
         }
 
-        return view('admin.transaction.index', compact('transactions'));
+        return view('admin.kasir.transaction.index', compact('transactions'));
     }
 
     public function show(Transaction $transaction)
@@ -55,6 +55,6 @@ class TransactionController extends Controller
         }
 
         $transaction->load('items', 'bundles.bundle.items.product');
-        return view('admin.transaction.show', compact('transaction'));
+        return view('admin.kasir.transaction.show', compact('transaction'));
     }
 }

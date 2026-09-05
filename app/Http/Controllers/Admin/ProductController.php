@@ -21,7 +21,7 @@ class ProductController extends Controller
             ->with('outlet', 'category', 'stocks')
             ->latest()
             ->paginate(10);
-        return view('admin.product.index', compact('products'));
+        return view('admin.kasir.product.index', compact('products'));
     }
 
     public function data(Request $request)
@@ -43,8 +43,8 @@ class ProductController extends Controller
 
             return response()->json([
                 'html' => $viewMode === 'card'
-                    ? view('admin.product._card', compact('products'))->render()
-                    : view('admin.product._data', compact('products'))->render(),
+                    ? view('admin.kasir.product._card', compact('products'))->render()
+                    : view('admin.kasir.product._data', compact('products'))->render(),
                 'pagination' => $products->links('vendor.pagination.modern')->toHtml(),
                 'total' => $products->total(),
                 'from' => $products->firstItem(),
@@ -52,7 +52,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('admin.product.index', compact('products'));
+        return view('admin.kasir.product.index', compact('products'));
     }
 
     public function create()
@@ -63,7 +63,7 @@ class ProductController extends Controller
             ->orderBy('stock_name')
             ->get(['stock_id', 'stock_name', 'stock_code', 'stock_unit', 'stock_price', 'stock_amount']);
         $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
-        return view('admin.product.create', compact('outlets', 'categories', 'stocks', 'discounts'));
+        return view('admin.kasir.product.create', compact('outlets', 'categories', 'stocks', 'discounts'));
     }
 
     public function store(ProductRequest $request)
@@ -130,7 +130,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load('outlet', 'category', 'stocks');
-        return view('admin.product.show', compact('product'));
+        return view('admin.kasir.product.show', compact('product'));
     }
 
     public function edit(Product $product)
@@ -144,7 +144,7 @@ class ProductController extends Controller
         $discounts = Discount::where('delete_status', 0)->where('discount_status', 1)->get();
         $activeDiscount = $product->activeDiscount()->first();
         $activeDiscountId = $activeDiscount?->id;
-        return view('admin.product.edit', compact('product', 'outlets', 'categories', 'stocks', 'discounts', 'activeDiscountId'));
+        return view('admin.kasir.product.edit', compact('product', 'outlets', 'categories', 'stocks', 'discounts', 'activeDiscountId'));
     }
 
     public function update(ProductRequest $request, Product $product)

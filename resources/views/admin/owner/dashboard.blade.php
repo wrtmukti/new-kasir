@@ -1,277 +1,248 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Konsolidasi Multi-Cabang — Portal Owner')
+@section('title', 'Dashboard — Portal Owner')
 
 @php $activeMenu = 'owner-dashboard' @endphp
-
-@push('styles')
-<style>
-  .owner-hero-card {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(59, 130, 246, 0.10) 100%);
-    border: 1.5px solid rgba(245, 158, 11, 0.35);
-    border-radius: 18px;
-    padding: 1.5rem 1.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .filter-panel-card {
-    background: var(--bg-surface, #1A1E27);
-    border: 1px solid var(--border-subtle, #2F3748);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-  .chart-card-custom {
-    background: var(--bg-surface, #1A1E27);
-    border: 1px solid var(--border-subtle, #2F3748);
-    border-radius: 16px;
-    padding: 1.5rem;
-  }
-</style>
-@endpush
 
 @section('content')
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div>
-    <h1>👑 Konsolidasi Eksekutif Multi-Cabang</h1>
+    <h1>Dashboard</h1>
     <div class="breadcrumb-trail">
-      <a href="{{ route('admin.dashboard') }}">Home</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Portal Owner</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Konsolidasi Semua Cabang</span>
+      <a href="{{ route('admin.dashboard') }}">Home</a>
+      <i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <span>Owner</span>
+      <i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+      <span>Dashboard</span>
     </div>
   </div>
   <div class="d-flex align-items-center gap-2">
-    <a href="{{ route('admin.owner.financial') }}" class="btn btn-outline-soft">
-      <i class="bi bi-pie-chart me-1"></i> Laba Rugi Holding
+    <a href="{{ route('owner.financial') }}" class="btn btn-outline-soft">
+      <i class="bi bi-pie-chart me-1"></i> Laba Rugi
     </a>
-    <a href="{{ route('admin.owner.financial.export', ['start_date' => $startDate, 'end_date' => $endDate, 'outlet_ids' => $selectedOutletIds]) }}" class="btn btn-primary">
-      <i class="bi bi-file-earmark-excel me-1"></i> Export Excel Konsolidasi
+    <a href="{{ route('owner.financial.export', ['start_date' => $startDate, 'end_date' => $endDate, 'outlet_ids' => $selectedOutletIds]) }}" class="btn btn-primary-grad">
+      <i class="bi bi-download me-1"></i> Ekspor Laporan
     </a>
   </div>
 </div>
 
-<!-- HERO BANNER -->
-<div class="owner-hero-card">
-  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-    <div>
-      <div class="d-flex align-items-center gap-2 mb-1">
-        <span class="badge badge-warning px-2.5 py-1 fw-bold">PORTAL OWNER EXECUTIVE</span>
-        <span class="text-muted-c small"><i class="bi bi-buildings text-warning me-1"></i>Menganalisis <strong>{{ $kpis['outlet_count_analyzed'] }}</strong> Cabang Aktif</span>
-      </div>
-      <h3 class="fw-bold mb-1" style="color: var(--text-primary);">Ringkasan Performa Seluruh Jaringan Restoran</h3>
-      <p class="text-secondary-c mb-0 small">
-        Periode: <strong>{{ \Carbon\Carbon::parse($startDate)->translatedFormat('d M Y') }}</strong> s/d <strong>{{ \Carbon\Carbon::parse($endDate)->translatedFormat('d M Y') }}</strong>
-      </p>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-      <div class="text-end d-none d-md-block">
-        <div class="text-muted-c small">Total Transaksi</div>
-        <h4 class="fw-bold mb-0 text-primary">{{ number_format($kpis['total_orders_count']) }} Struk</h4>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FILTER PANEL -->
-<div class="filter-panel-card">
-  <form method="GET" action="{{ route('admin.owner.dashboard') }}" class="row g-2 align-items-end">
-    <div class="col-md-3">
-      <label class="form-label small fw-bold text-secondary-c">Filter Cabang / Outlet:</label>
-      <select name="outlet_ids[]" class="form-select form-select-sm" style="background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-subtle);">
-        <option value="">-- Semua Cabang (Konsolidasi) --</option>
-        @foreach($activeOutlets as $ot)
-          <option value="{{ $ot->outlet_id }}" {{ in_array($ot->outlet_id, $selectedOutletIds) ? 'selected' : '' }}>
-            {{ $ot->outlet_name }} ({{ $ot->outlet_branch ?? 'Cabang' }})
-          </option>
-        @endforeach
-      </select>
-    </div>
-
-    <div class="col-md-3">
-      <label class="form-label small fw-bold text-secondary-c">Dari Tanggal:</label>
-      <input type="date" name="start_date" value="{{ $startDate }}" class="form-control form-control-sm" style="background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-subtle);">
-    </div>
-
-    <div class="col-md-3">
-      <label class="form-label small fw-bold text-secondary-c">Sampai Tanggal:</label>
-      <input type="date" name="end_date" value="{{ $endDate }}" class="form-control form-control-sm" style="background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-subtle);">
-    </div>
-
-    <div class="col-md-3 d-flex gap-2">
-      <button type="submit" class="btn btn-primary btn-sm flex-fill">
-        <i class="bi bi-funnel-fill me-1"></i> Terapkan
-      </button>
-      <a href="{{ route('admin.owner.dashboard') }}" class="btn btn-outline-soft btn-sm">
-        <i class="bi bi-arrow-counterclockwise"></i> Reset
-      </a>
-    </div>
-  </form>
-</div>
-
-<!-- 4 KARTU KPI KONSOLIDASI (NEXORA GLOW) -->
-<div class="row g-3 mb-4">
-  <!-- KPI 1: Total Omzet Konsolidasi -->
-  <div class="col-xl-3 col-md-6">
-    <div class="stat-card card-glow" style="--card-glow-color: rgba(59, 130, 246, 0.4);">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="text-secondary-c small fw-bold text-uppercase">Total Omzet Gabungan</span>
-        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <i class="bi bi-currency-dollar fs-5"></i>
+<!-- FILTER BAR -->
+<div class="card mb-3">
+  <div class="card-body py-2 px-3">
+    <form method="GET" action="{{ route('owner.dashboard') }}" class="row g-2 align-items-center">
+      <div class="col-lg-4 col-md-5 col-12">
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted-c small fw-medium text-nowrap"><i class="bi bi-shop me-1"></i>Cabang:</span>
+          <select name="outlet_ids[]" class="form-select-modern" style="padding: 0.4rem 2rem 0.4rem 0.75rem; font-size: 0.82rem;">
+            <option value="">Semua Cabang ({{ $activeOutlets->count() }})</option>
+            @foreach($activeOutlets as $ot)
+              <option value="{{ $ot->outlet_id }}" {{ in_array($ot->outlet_id, $selectedOutletIds) ? 'selected' : '' }}>
+                {{ $ot->outlet_name }} ({{ $ot->outlet_branch ?? 'Cabang' }})
+              </option>
+            @endforeach
+          </select>
         </div>
       </div>
-      <h3 class="fw-bold mb-1" style="color: var(--text-primary);">Rp {{ number_format($kpis['total_revenue'], 0, ',', '.') }}</h3>
-      <div class="text-muted-c small">
-        <span class="text-success"><i class="bi bi-receipt me-1"></i>{{ number_format($kpis['total_orders_count']) }}</span> transaksi sukses
+
+      <div class="col-lg-3 col-md-3 col-6">
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted-c small fw-medium text-nowrap"><i class="bi bi-calendar3 me-1"></i>Dari:</span>
+          <input type="date" name="start_date" value="{{ $startDate }}" class="form-control-modern" style="padding: 0.4rem 0.65rem; font-size: 0.82rem;">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-6">
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted-c small fw-medium text-nowrap">Sampai:</span>
+          <input type="date" name="end_date" value="{{ $endDate }}" class="form-control-modern" style="padding: 0.4rem 0.65rem; font-size: 0.82rem;">
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-1 col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary-grad btn-sm flex-fill" style="padding: 0.45rem 0.75rem;">
+          <i class="bi bi-funnel me-1"></i> Filter
+        </button>
+        <a href="{{ route('owner.dashboard') }}" class="btn btn-outline-soft btn-sm" title="Reset Filter" style="padding: 0.45rem 0.65rem;">
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- STAT CARDS (NEXORA GLOW) -->
+<div class="row g-3 mb-3">
+  <!-- KPI 1: Total Omzet -->
+  <div class="col-6 col-xl-3">
+    <div class="card card-glow h-100">
+      <div class="card-inner card-body stat-card">
+        <div class="stat-icon" style="background: rgba(99,102,241,0.12); color: var(--accent-1);">
+          <i class="bi bi-currency-dollar"></i>
+        </div>
+        <div class="stat-value">Rp {{ number_format($kpis['total_revenue'], 0, ',', '.') }}</div>
+        <div class="stat-label">Total Omzet</div>
+        <span class="stat-trend up mt-2">
+          <i class="bi bi-receipt"></i> {{ number_format($kpis['total_orders_count']) }} transaksi
+        </span>
       </div>
     </div>
   </div>
 
-  <!-- KPI 2: Total Laba Bersih Holding -->
-  <div class="col-xl-3 col-md-6">
-    <div class="stat-card card-glow" style="--card-glow-color: rgba(16, 185, 129, 0.4);">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="text-secondary-c small fw-bold text-uppercase">Laba Bersih Konsolidasi</span>
-        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <i class="bi bi-graph-up-arrow fs-5"></i>
+  <!-- KPI 2: Total Laba Bersih -->
+  <div class="col-6 col-xl-3">
+    <div class="card card-glow h-100">
+      <div class="card-inner card-body stat-card">
+        <div class="stat-icon" style="background: var(--success-bg); color: var(--success);">
+          <i class="bi bi-graph-up-arrow"></i>
         </div>
-      </div>
-      <h3 class="fw-bold mb-1 text-success">Rp {{ number_format($kpis['net_profit'], 0, ',', '.') }}</h3>
-      <div class="text-muted-c small">
-        Margin Bersih: <strong class="text-success">{{ number_format($kpis['net_margin_percent'], 1) }}%</strong>
+        <div class="stat-value" style="color: var(--success);">Rp {{ number_format($kpis['net_profit'], 0, ',', '.') }}</div>
+        <div class="stat-label">Laba Bersih</div>
+        <span class="stat-trend up mt-2">
+          <i class="bi bi-percent"></i> Margin {{ number_format($kpis['net_margin_percent'], 1) }}%
+        </span>
       </div>
     </div>
   </div>
 
   <!-- KPI 3: Setoran Brankas Kasir -->
-  <div class="col-xl-3 col-md-6">
-    <div class="stat-card card-glow" style="--card-glow-color: rgba(245, 158, 11, 0.4);">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="text-secondary-c small fw-bold text-uppercase">Kas Setoran Brankas</span>
-        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <i class="bi bi-safe fs-5"></i>
+  <div class="col-6 col-xl-3">
+    <div class="card card-glow h-100">
+      <div class="card-inner card-body stat-card">
+        <div class="stat-icon" style="background: var(--warning-bg); color: var(--warning);">
+          <i class="bi bi-safe"></i>
         </div>
-      </div>
-      <h3 class="fw-bold mb-1 text-warning">Rp {{ number_format($kpis['total_safe_deposit'], 0, ',', '.') }}</h3>
-      <div class="text-muted-c small">
-        <i class="bi bi-wallet2 text-warning me-1"></i>Kas fisik disetor kasir cabang
+        <div class="stat-value" style="color: var(--warning);">Rp {{ number_format($kpis['total_safe_deposit'], 0, ',', '.') }}</div>
+        <div class="stat-label">Setoran Kas</div>
+        <span class="stat-trend mt-2" style="background: var(--warning-bg); color: var(--warning);">
+          <i class="bi bi-wallet2"></i> Fisik Brankas
+        </span>
       </div>
     </div>
   </div>
 
   <!-- KPI 4: Hutang PO Supplier Tempo -->
-  <div class="col-xl-3 col-md-6">
-    <div class="stat-card card-glow" style="--card-glow-color: rgba(239, 68, 68, 0.4);">
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <span class="text-secondary-c small fw-bold text-uppercase">Hutang PO Supplier Tempo</span>
-        <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-          <i class="bi bi-clock-history fs-5"></i>
+  <div class="col-6 col-xl-3">
+    <div class="card card-glow h-100">
+      <div class="card-inner card-body stat-card">
+        <div class="stat-icon" style="background: var(--danger-bg); color: var(--danger);">
+          <i class="bi bi-clock-history"></i>
         </div>
-      </div>
-      <h3 class="fw-bold mb-1 text-danger">Rp {{ number_format($kpis['total_po_unpaid'], 0, ',', '.') }}</h3>
-      <div class="text-muted-c small">
-        <span class="text-danger fw-bold"><i class="bi bi-exclamation-circle me-1"></i>Tagihan Belum Lunas</span>
+        <div class="stat-value" style="color: var(--danger);">Rp {{ number_format($kpis['total_po_unpaid'], 0, ',', '.') }}</div>
+        <div class="stat-label">Hutang Pembelian</div>
+        <span class="stat-trend down mt-2">
+          <i class="bi bi-exclamation-circle"></i> Tempo Belum Lunas
+        </span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MULTI-BRANCH TREND CHART -->
-<div class="chart-card-custom mb-4">
-  <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+<!-- TREN PENJUALAN HARIAN -->
+<div class="card mb-3">
+  <div class="card-header-flex">
     <div>
-      <h5 class="fw-bold mb-1" style="color: var(--text-primary);"><i class="bi bi-graph-up me-2 text-primary"></i>Tren Omzet Komparatif Antar Cabang</h5>
-      <span class="text-muted-c small">Perbandingan volume penjualan harian di setiap outlet</span>
+      <h6>Tren Penjualan Harian</h6>
+      <span class="text-muted-c" style="font-size: 0.78rem;">Grafik perbandingan volume omzet harian antar cabang</span>
     </div>
-    <span class="badge badge-soft-primary">Multi-Series Real-Time</span>
+    <div class="d-flex align-items-center gap-2">
+      <span class="status-dot live"></span>
+      <span class="text-muted-c" style="font-size: 0.78rem;">Live</span>
+    </div>
   </div>
-  <div style="height: 320px; position: relative;">
+  <div class="card-body" style="height: 320px; position: relative;">
     <canvas id="multiBranchTrendChart"></canvas>
   </div>
 </div>
 
-<!-- LEADERBOARD CABANG -->
-<div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px;">
-  <div class="card-header bg-transparent d-flex align-items-center justify-content-between py-3" style="border-bottom: 1px solid var(--border-subtle);">
+<!-- PERINGKAT CABANG -->
+<div class="card">
+  <div class="card-header-flex">
     <div>
-      <h5 class="fw-bold mb-0" style="color: var(--text-primary);"><i class="bi bi-trophy-fill text-warning me-2"></i>Peringkat &amp; Performa Outlet (Leaderboard)</h5>
-      <span class="text-muted-c small">Diurutkan berdasarkan total omzet penjualan tertinggi</span>
+      <h6>Peringkat &amp; Performa Cabang</h6>
+      <span class="text-muted-c" style="font-size: 0.78rem;">Urutan performa berdasarkan total omzet penjualan tertinggi</span>
     </div>
-    <a href="{{ route('admin.owner.benchmark') }}" class="btn btn-sm btn-outline-soft">
-      Lihat Analitik Benchmark <i class="bi bi-arrow-right ms-1"></i>
+    <a href="{{ route('owner.benchmark') }}" class="btn btn-sm btn-outline-soft">
+      Detail Benchmark <i class="bi bi-arrow-right ms-1"></i>
     </a>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-custom mb-0">
-      <thead>
-        <tr>
-          <th style="width: 50px;">Rank</th>
-          <th>Nama Cabang</th>
-          <th class="text-end">Omzet</th>
-          <th class="text-center">Pesanan</th>
-          <th class="text-end">Modal HPP</th>
-          <th class="text-center">Gross Margin</th>
-          <th class="text-end">Kerugian Waste</th>
-          <th class="text-end">Laba Bersih</th>
-          <th class="text-center">Status Shift</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($leaderboard as $index => $row)
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table-modern striped mb-0">
+        <thead>
           <tr>
-            <td>
-              @if($index === 0)
-                <span class="badge badge-warning fw-bold">🥇 1</span>
-              @elseif($index === 1)
-                <span class="badge badge-secondary fw-bold">🥈 2</span>
-              @elseif($index === 2)
-                <span class="badge badge-danger fw-bold" style="background: #cd7f32; color: #fff;">🥉 3</span>
-              @else
-                <span class="text-muted-c fw-bold ms-2">{{ $index + 1 }}</span>
-              @endif
-            </td>
-            <td>
-              <strong style="color: var(--text-primary);">{{ $row['outlet_name'] }}</strong>
-              <div class="text-muted-c small">{{ $row['outlet_code'] }} &bull; {{ $row['outlet_branch'] }}</div>
-            </td>
-            <td class="text-end fw-bold" style="color: var(--text-primary);">
-              Rp {{ number_format($row['revenue'], 0, ',', '.') }}
-            </td>
-            <td class="text-center">
-              <span class="badge badge-soft-primary">{{ number_format($row['orders_count']) }}</span>
-            </td>
-            <td class="text-end text-secondary-c">
-              Rp {{ number_format($row['cogs'], 0, ',', '.') }}
-            </td>
-            <td class="text-center">
-              <span class="badge {{ $row['gross_margin_percent'] >= 60 ? 'badge-success' : ($row['gross_margin_percent'] >= 40 ? 'badge-info' : 'badge-warning') }}">
-                {{ number_format($row['gross_margin_percent'], 1) }}%
-              </span>
-            </td>
-            <td class="text-end text-danger">
-              Rp {{ number_format($row['waste_loss'], 0, ',', '.') }}
-            </td>
-            <td class="text-end fw-bold {{ $row['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
-              Rp {{ number_format($row['net_profit'], 0, ',', '.') }}
-              <div class="small text-muted-c">({{ number_format($row['net_margin_percent'], 1) }}%)</div>
-            </td>
-            <td class="text-center">
-              @if($row['has_active_shift'])
-                <span class="badge badge-success"><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>{{ $row['active_shift_name'] ?? 'Buka' }}</span>
-              @else
-                <span class="badge badge-secondary">Tutup</span>
-              @endif
-            </td>
+            <th style="width: 55px;" class="text-center">#</th>
+            <th>Cabang</th>
+            <th class="text-end">Omzet</th>
+            <th class="text-center">Pesanan</th>
+            <th class="text-end">HPP</th>
+            <th class="text-center">Margin</th>
+            <th class="text-end">Waste</th>
+            <th class="text-end">Laba Bersih</th>
+            <th class="text-center">Status</th>
           </tr>
-        @empty
-          <tr>
-            <td colspan="9" class="text-center py-4 text-muted-c">
-              Belum ada data cabang pada periode yang dipilih.
-            </td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @forelse($leaderboard as $index => $row)
+            <tr>
+              <td class="text-center">
+                @if($index === 0)
+                  <span class="pill pill-warning fw-bold">#1</span>
+                @elseif($index === 1)
+                  <span class="pill pill-secondary fw-bold">#2</span>
+                @elseif($index === 2)
+                  <span class="pill pill-danger fw-bold" style="background: rgba(205,127,50,0.15); color: #cd7f32; border: 1px solid rgba(205,127,50,0.3);">#3</span>
+                @else
+                  <span class="text-muted-c fw-semibold">{{ $index + 1 }}</span>
+                @endif
+              </td>
+              <td>
+                <div class="cell-primary">{{ $row['outlet_name'] }}</div>
+                <div class="text-muted-c" style="font-size: 0.75rem;">{{ $row['outlet_branch'] ?? $row['outlet_code'] }}</div>
+              </td>
+              <td class="text-end text-mono fw-bold" style="color: var(--text-primary);">
+                Rp {{ number_format($row['revenue'], 0, ',', '.') }}
+              </td>
+              <td class="text-center">
+                <span class="pill pill-primary text-mono">{{ number_format($row['orders_count']) }}</span>
+              </td>
+              <td class="text-end text-mono text-muted-c">
+                Rp {{ number_format($row['cogs'], 0, ',', '.') }}
+              </td>
+              <td class="text-center">
+                <span class="pill {{ $row['gross_margin_percent'] >= 60 ? 'pill-success' : ($row['gross_margin_percent'] >= 40 ? 'pill-info' : 'pill-warning') }} text-mono">
+                  {{ number_format($row['gross_margin_percent'], 1) }}%
+                </span>
+              </td>
+              <td class="text-end text-mono text-danger">
+                Rp {{ number_format($row['waste_loss'], 0, ',', '.') }}
+              </td>
+              <td class="text-end text-mono fw-bold {{ $row['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
+                Rp {{ number_format($row['net_profit'], 0, ',', '.') }}
+                <div class="text-muted-c" style="font-size: 0.72rem; font-weight: normal;">({{ number_format($row['net_margin_percent'], 1) }}%)</div>
+              </td>
+              <td class="text-center">
+                @if($row['has_active_shift'])
+                  <span class="pill pill-success d-inline-flex align-items-center gap-1">
+                    <span class="status-dot live" style="width: 6px; height: 6px;"></span>
+                    {{ $row['active_shift_name'] ?? 'Buka' }}
+                  </span>
+                @else
+                  <span class="pill pill-secondary">Tutup</span>
+                @endif
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="9" class="text-center py-4 text-muted-c">
+                Belum ada data transaksi pada periode yang dipilih.
+              </td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 @endsection
@@ -286,10 +257,19 @@
     const chartData = @json($trendChart);
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
     const textColor = isDark ? '#94a3b8' : '#64748b';
 
-    new Chart(ctx, {
+    // Enhance datasets with smooth curves and point styles
+    if (chartData.datasets) {
+      chartData.datasets.forEach((ds) => {
+        ds.tension = 0.35;
+        ds.pointRadius = 3;
+        ds.pointHoverRadius = 6;
+      });
+    }
+
+    const chartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: chartData.labels,
@@ -307,7 +287,9 @@
             position: 'top',
             labels: {
               color: textColor,
-              font: { weight: 600, size: 12 }
+              font: { weight: 600, size: 12 },
+              usePointStyle: true,
+              padding: 16
             }
           },
           tooltip: {
@@ -346,6 +328,25 @@
         }
       }
     });
+
+    // Auto update colors on theme toggle
+    const observer = new MutationObserver(() => {
+      const darkNow = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newGrid = darkNow ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+      const newText = darkNow ? '#94a3b8' : '#64748b';
+
+      chartInstance.options.scales.x.grid.color = newGrid;
+      chartInstance.options.scales.x.ticks.color = newText;
+      chartInstance.options.scales.y.grid.color = newGrid;
+      chartInstance.options.scales.y.ticks.color = newText;
+      chartInstance.options.plugins.legend.labels.color = newText;
+      chartInstance.options.plugins.tooltip.backgroundColor = darkNow ? '#1e293b' : '#ffffff';
+      chartInstance.options.plugins.tooltip.titleColor = darkNow ? '#ffffff' : '#0f172a';
+      chartInstance.options.plugins.tooltip.bodyColor = darkNow ? '#cbd5e1' : '#334155';
+      chartInstance.options.plugins.tooltip.borderColor = darkNow ? '#334155' : '#e2e8f0';
+      chartInstance.update();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   });
 </script>
 @endpush

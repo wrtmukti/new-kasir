@@ -35,7 +35,7 @@ class TableController extends Controller
             $query->where('outlet_id', $activeOutletId);
         }
         $tables = $query->latest()->paginate(10);
-        return view('admin.table.index', compact('tables', 'clientId'));
+        return view('admin.kasir.table.index', compact('tables', 'clientId'));
     }
 
     public function data(Request $request)
@@ -51,7 +51,7 @@ class TableController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.table._data', compact('tables', 'clientId'))->render(),
+                'html' => view('admin.kasir.table._data', compact('tables', 'clientId'))->render(),
                 'pagination' => $tables->links('vendor.pagination.modern')->toHtml(),
                 'total' => $tables->total(),
                 'from' => $tables->firstItem(),
@@ -59,13 +59,13 @@ class TableController extends Controller
             ]);
         }
 
-        return view('admin.table.index', compact('tables', 'clientId'));
+        return view('admin.kasir.table.index', compact('tables', 'clientId'));
     }
 
     public function create()
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.table.create', compact('outlets'));
+        return view('admin.kasir.table.create', compact('outlets'));
     }
 
     public function store(TableRequest $request)
@@ -84,13 +84,13 @@ class TableController extends Controller
     public function show(Table $table)
     {
         $table->load('outlet');
-        return view('admin.table.show', compact('table'));
+        return view('admin.kasir.table.show', compact('table'));
     }
 
     public function edit(Table $table)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.table.edit', compact('table', 'outlets'));
+        return view('admin.kasir.table.edit', compact('table', 'outlets'));
     }
 
     public function update(TableRequest $request, Table $table)

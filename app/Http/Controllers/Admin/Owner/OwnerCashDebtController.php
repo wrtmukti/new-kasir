@@ -21,7 +21,7 @@ class OwnerCashDebtController extends Controller
         $activeOutlets = $this->financialService->getActiveOutlets();
 
         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
 
         $rawOutletIds = $request->input('outlet_ids', []);
         $selectedOutletIds = is_array($rawOutletIds) ? array_filter($rawOutletIds) : ($rawOutletIds ? [$rawOutletIds] : []);

@@ -17,7 +17,7 @@ class CategoryController extends Controller
             ->with('outlet')
             ->latest()
             ->paginate(10);
-        return view('admin.category.index', compact('categories'));
+        return view('admin.kasir.category.index', compact('categories'));
     }
 
     public function data(Request $request)
@@ -30,7 +30,7 @@ class CategoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.category._data', compact('categories'))->render(),
+                'html' => view('admin.kasir.category._data', compact('categories'))->render(),
                 'pagination' => $categories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $categories->total(),
                 'from' => $categories->firstItem(),
@@ -38,13 +38,13 @@ class CategoryController extends Controller
             ]);
         }
 
-        return view('admin.category.index', compact('categories'));
+        return view('admin.kasir.category.index', compact('categories'));
     }
 
     public function create()
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.category.create', compact('outlets'));
+        return view('admin.kasir.category.create', compact('outlets'));
     }
 
     public function store(CategoryRequest $request)
@@ -69,13 +69,13 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $category->load('outlet');
-        return view('admin.category.show', compact('category'));
+        return view('admin.kasir.category.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.category.edit', compact('category', 'outlets'));
+        return view('admin.kasir.category.edit', compact('category', 'outlets'));
     }
 
     public function update(CategoryRequest $request, Category $category)

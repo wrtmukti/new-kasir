@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin\Owner;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Outlet;
 use App\Models\Admin\ShiftSetting;
+use App\Models\Admin\Transaction;
+use App\Models\Admin\DailyClosing;
+use App\Models\Admin\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,12 +17,68 @@ class OwnerBranchController extends Controller
     public function index()
     {
         $outlets = Outlet::where('delete_status', 0)
-            ->withCount(['products' => fn($q) => $q->where('delete_status', 0)])
             ->with(['shiftSetting'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('admin.owner.branches.index', compact('outlets'));
+        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+        $today = Carbon::now()->toDateString();
+
+        $totalMasterProducts = Product::where('delete_status', 0)->count();
+        $totalMonthlyRevenue = 0;
+        $totalMonthlyTransactions = 0;
+
+        foreach ($outlets as $branch) {
+            $monthlyRev = (float) Transaction::where('outlet_id', $branch->outlet_id)
+                ->where('transaction_status', 'success')
+                ->where('delete_status', 0)
+                ->whereBetween('transaction_date', [$startOfMonth, $today])
+                ->sum('transaction_grand_total');
+
+            $todayRev = (float) Transaction::where('outlet_id', $branch->outlet_id)
+                ->where('transaction_status', 'success')
+                ->where('delete_status', 0)
+                ->whereDate('transaction_date', $today)
+                ->sum('transaction_grand_total');
+
+            $monthlyTx = (int) Transaction::where('outlet_id', $branch->outlet_id)
+                ->where('transaction_status', 'success')
+                ->where('delete_status', 0)
+                ->whereBetween('transaction_date', [$startOfMonth, $today])
+                ->count();
+
+            $activeMenuCount = (int) Product::where('delete_status', 0)
+                ->where(function ($q) use ($branch) {
+                    $q->where('outlet_id', $branch->outlet_id)->orWhereNull('outlet_id');
+                })
+                ->count();
+
+            $latestClosing = DailyClosing::where('outlet_id', $branch->outlet_id)
+                ->latest('business_date')
+                ->latest('created_at')
+                ->first();
+
+            $branch->monthly_revenue = $monthlyRev;
+            $branch->today_revenue = $todayRev;
+            $branch->monthly_transactions_count = $monthlyTx;
+            $branch->active_menu_count = $activeMenuCount;
+            $branch->cashier_on_duty = $latestClosing?->cashier_name ?? 'Staf Kasir';
+            $branch->shift_name_on_duty = $latestClosing?->shift_name ?? 'Shift Operasional';
+            $branch->is_shift_open = ($latestClosing?->status === 'open');
+
+            $totalMonthlyRevenue += $monthlyRev;
+            $totalMonthlyTransactions += $monthlyTx;
+        }
+
+        $commonCutoff = $outlets->first()?->shiftSetting?->daily_cutoff_time ?? '02:00:00';
+
+        return view('admin.owner.branches.index', compact(
+            'outlets',
+            'totalMasterProducts',
+            'totalMonthlyRevenue',
+            'totalMonthlyTransactions',
+            'commonCutoff'
+        ));
     }
 
     public function store(Request $request)
@@ -62,7 +122,7 @@ class OwnerBranchController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.owner.branches.index')->with('success', 'Cabang ' . $outlet->outlet_name . ' berhasil ditambahkan!');
+        return redirect()->route('owner.branches.index')->with('success', 'Cabang ' . $outlet->outlet_name . ' berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
@@ -103,7 +163,7 @@ class OwnerBranchController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.owner.branches.index')->with('success', 'Data cabang ' . $outlet->outlet_name . ' berhasil diperbarui!');
+        return redirect()->route('owner.branches.index')->with('success', 'Data cabang ' . $outlet->outlet_name . ' berhasil diperbarui!');
     }
 
     public function destroy(Request $request, $id)
@@ -118,6 +178,6 @@ class OwnerBranchController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.owner.branches.index')->with('success', 'Cabang ' . $outlet->outlet_name . ' berhasil dinonaktifkan!');
+        return redirect()->route('owner.branches.index')->with('success', 'Cabang ' . $outlet->outlet_name . ' berhasil dinonaktifkan!');
     }
 }

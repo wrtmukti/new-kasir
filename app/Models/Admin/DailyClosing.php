@@ -74,4 +74,9 @@ class DailyClosing extends Model
     {
         return $this->belongsTo(\App\Models\SysAdmin\User::class, 'cashier_id', 'id');
     }
+
+    public function getCashierNameAttribute()
+    {
+        return $this->cashier?->name ?? 'Kasir Cabang';
+    }
 }

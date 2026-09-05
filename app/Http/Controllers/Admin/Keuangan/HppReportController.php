@@ -241,7 +241,7 @@ class HppReportController extends Controller
               ->whereMonth('receiving_date', $month);
         })->where('delete_status', 0)->sum('subtotal');
 
-        return view('admin.keuangan.hpp-report.index', compact(
+        return view('admin.kasir.keuangan.hpp-report.index', compact(
             'year', 'month', 'totalRevenue', 'totalCogsEstimated',
             'totalWasteCost', 'totalLaborCost', 'totalOverheadCost',
             'grossProfit', 'netProfit', 'grossMarginPercent', 'netMarginPercent',

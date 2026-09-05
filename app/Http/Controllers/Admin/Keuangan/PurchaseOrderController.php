@@ -26,7 +26,7 @@ class PurchaseOrderController extends Controller
             ->with('supplier', 'outlet')
             ->latest()
             ->paginate(10);
-        return view('admin.keuangan.purchase-order.index', compact('orders'));
+        return view('admin.kasir.keuangan.purchase-order.index', compact('orders'));
     }
 
     public function data(Request $request)
@@ -39,7 +39,7 @@ class PurchaseOrderController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.keuangan.purchase-order._data', compact('orders'))->render(),
+                'html' => view('admin.kasir.keuangan.purchase-order._data', compact('orders'))->render(),
                 'pagination' => $orders->links('vendor.pagination.modern')->toHtml(),
                 'total' => $orders->total(),
                 'from' => $orders->firstItem(),
@@ -47,14 +47,14 @@ class PurchaseOrderController extends Controller
             ]);
         }
 
-        return view('admin.keuangan.purchase-order.index', compact('orders'));
+        return view('admin.kasir.keuangan.purchase-order.index', compact('orders'));
     }
 
     public function create()
     {
         $suppliers = Supplier::where('delete_status', 0)->where('supplier_status', 1)->get();
         $rawMaterials = CogsRawMaterial::where('delete_status', 0)->get();
-        return view('admin.keuangan.purchase-order.create', compact('suppliers', 'rawMaterials'));
+        return view('admin.kasir.keuangan.purchase-order.create', compact('suppliers', 'rawMaterials'));
     }
 
     public function store(PurchaseOrderRequest $request)
@@ -119,7 +119,7 @@ class PurchaseOrderController extends Controller
                 return $logs->sum('amount');
             });
 
-        return view('admin.keuangan.purchase-order.show', compact('order', 'returnLogs'));
+        return view('admin.kasir.keuangan.purchase-order.show', compact('order', 'returnLogs'));
     }
 
     public function edit(PurchaseOrder $purchase_order)
@@ -133,7 +133,7 @@ class PurchaseOrderController extends Controller
         $order->load('items.cogsRawMaterial');
         $suppliers = Supplier::where('delete_status', 0)->where('supplier_status', 1)->get();
         $rawMaterials = CogsRawMaterial::where('delete_status', 0)->get();
-        return view('admin.keuangan.purchase-order.edit', compact('order', 'suppliers', 'rawMaterials'));
+        return view('admin.kasir.keuangan.purchase-order.edit', compact('order', 'suppliers', 'rawMaterials'));
     }
 
     public function update(PurchaseOrderRequest $request, PurchaseOrder $purchase_order)
@@ -349,7 +349,7 @@ class PurchaseOrderController extends Controller
         $nextNum = $lastReceiving ? ((int) substr($lastReceiving->receiving_code, -3)) + 1 : 1;
         $receivingCode = 'RCV-' . now()->format('Ymd') . '-' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
 
-        return view('admin.keuangan.purchase-receiving.create', compact('order', 'receivingCode'));
+        return view('admin.kasir.keuangan.purchase-receiving.create', compact('order', 'receivingCode'));
     }
 
     public function receivingStore(PurchaseReceivingRequest $request, PurchaseOrder $purchase_order)

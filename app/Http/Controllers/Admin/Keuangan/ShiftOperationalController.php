@@ -111,7 +111,7 @@ class ShiftOperationalController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.keuangan.shift-operational.index', compact(
+        return view('admin.kasir.shift.index', compact(
             'setting',
             'masterShifts',
             'activeShift',
@@ -187,7 +187,7 @@ class ShiftOperationalController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+        return redirect()->route('admin.shift.index')->with('success', $msg);
     }
 
     /**
@@ -207,7 +207,7 @@ class ShiftOperationalController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['status' => 'error', 'message' => $errMsg], 422);
             }
-            return redirect()->route('admin.keuangan.shift-operational.index')->with('error', $errMsg);
+            return redirect()->route('admin.shift.index')->with('error', $errMsg);
         }
 
         $request->validate([
@@ -246,7 +246,7 @@ class ShiftOperationalController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+        return redirect()->route('admin.shift.index')->with('success', $msg);
     }
 
     /**
@@ -266,7 +266,7 @@ class ShiftOperationalController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['status' => 'error', 'message' => $errMsg], 422);
             }
-            return redirect()->route('admin.keuangan.shift-operational.index')->with('error', $errMsg);
+            return redirect()->route('admin.shift.index')->with('error', $errMsg);
         }
 
         $request->validate([
@@ -305,7 +305,7 @@ class ShiftOperationalController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+        return redirect()->route('admin.shift.index')->with('success', $msg);
     }
 
     /**
@@ -396,11 +396,11 @@ class ShiftOperationalController extends Controller
                 'status' => 'success',
                 'message' => $msg,
                 'data' => $activeShift,
-                'z_report_url' => route('admin.keuangan.shift-operational.z-report', $activeShift->id),
+                'z_report_url' => route('admin.shift.z-report', $activeShift->id),
             ]);
         }
 
-        return redirect()->route('admin.keuangan.shift-operational.index')->with('success', $msg);
+        return redirect()->route('admin.shift.index')->with('success', $msg);
     }
 
     /**
@@ -411,7 +411,7 @@ class ShiftOperationalController extends Controller
         $orders = Order::where('daily_closing_id', $dailyClosing->id)->get();
         $transactions = Transaction::where('daily_closing_id', $dailyClosing->id)->get();
 
-        return view('admin.keuangan.shift-operational.z-report', compact('dailyClosing', 'orders', 'transactions'));
+        return view('admin.kasir.shift.z-report', compact('dailyClosing', 'orders', 'transactions'));
     }
 
     /**

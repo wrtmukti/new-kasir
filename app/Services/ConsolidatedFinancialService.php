@@ -57,13 +57,13 @@ class ConsolidatedFinancialService
         $totalSalesCash = (float) (clone $transactionsQuery)->where(function ($q) {
             $q->whereHas('payment', function ($p) {
                 $p->where('payment_metode', 'LIKE', '%cash%')
-                  ->orWhere('payment_metode', 'LIKE', '%tunai%');
+                    ->orWhere('payment_metode', 'LIKE', '%tunai%');
             })->orWhereDoesntHave('payment');
         })->sum('transaction_grand_total');
 
         $totalSalesNonCash = (float) (clone $transactionsQuery)->whereHas('payment', function ($p) {
             $p->where('payment_metode', 'NOT LIKE', '%cash%')
-              ->where('payment_metode', 'NOT LIKE', '%tunai%');
+                ->where('payment_metode', 'NOT LIKE', '%tunai%');
         })->sum('transaction_grand_total');
 
         // 2. Total COGS Resep Murni (Theoretical COGS)
@@ -84,7 +84,7 @@ class ConsolidatedFinancialService
             if (!$recipe && $prodName) {
                 $recipe = $allRecipes->first(function ($r) use ($prodName) {
                     return stripos($r->recipe_name, $prodName) !== false ||
-                           stripos($prodName, $r->recipe_name) !== false;
+                        stripos($prodName, $r->recipe_name) !== false;
                 });
             }
             if (!$recipe && $singleRecipe) {
@@ -105,15 +105,20 @@ class ConsolidatedFinancialService
             ->whereBetween('loss_date', [$startDate, $endDate])
             ->sum('waste_cost');
 
-        // 5. Operating Expenses (Labor & Overhead)
+        // 5. Operating Expenses (Labor & Overhead Prorated)
         $startCarbon = Carbon::parse($startDate);
+        $endCarbon = Carbon::parse($endDate);
+        $daysInRange = max(1, $startCarbon->diffInDays($endCarbon) + 1);
+        $daysInMonth = $startCarbon->daysInMonth ?: 30;
+        $prorateFactor = min(1.0, $daysInRange / $daysInMonth);
+
         $hppReports = HppFinancialReport::whereIn('outlet_id', $outletIds)
             ->where('year', $startCarbon->year)
             ->where('month', $startCarbon->month)
             ->get();
 
-        $totalLaborCost = (float) $hppReports->sum('total_labor_cost');
-        $totalOverheadCost = (float) $hppReports->sum('total_overhead_cost');
+        $totalLaborCost = (float) $hppReports->sum('total_labor_cost') * $prorateFactor;
+        $totalOverheadCost = (float) $hppReports->sum('total_overhead_cost') * $prorateFactor;
         $totalOperatingExpense = $totalLaborCost + $totalOverheadCost;
 
         // 6. Net Profit & Net Margin %
@@ -134,10 +139,10 @@ class ConsolidatedFinancialService
             ->where('payment_status', 'paid')
             ->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('payment_date', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
-                  ->orWhere(function ($q2) use ($startDate, $endDate) {
-                      $q2->whereNull('payment_date')
-                         ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
-                  });
+                    ->orWhere(function ($q2) use ($startDate, $endDate) {
+                        $q2->whereNull('payment_date')
+                            ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                    });
             })->sum('po_total_amount');
 
         // 10. Petty Cash Kasir Keluar
@@ -231,7 +236,7 @@ class ConsolidatedFinancialService
                 if (!$recipe && $prodName) {
                     $recipe = $allRecipes->first(function ($r) use ($prodName) {
                         return stripos($r->recipe_name, $prodName) !== false ||
-                               stripos($prodName, $r->recipe_name) !== false;
+                            stripos($prodName, $r->recipe_name) !== false;
                     });
                 }
                 if (!$recipe && $singleRecipe) {
@@ -251,15 +256,20 @@ class ConsolidatedFinancialService
                 ->whereBetween('loss_date', [$startDate, $endDate])
                 ->sum('waste_cost');
 
-            // Labor & Overhead
+            // Labor & Overhead (Prorated)
             $startCarbon = Carbon::parse($startDate);
+            $endCarbon = Carbon::parse($endDate);
+            $daysInRange = max(1, $startCarbon->diffInDays($endCarbon) + 1);
+            $daysInMonth = $startCarbon->daysInMonth ?: 30;
+            $prorateFactor = min(1.0, $daysInRange / $daysInMonth);
+
             $hppReport = HppFinancialReport::where('outlet_id', $outletId)
                 ->where('year', $startCarbon->year)
                 ->where('month', $startCarbon->month)
                 ->first();
 
-            $laborCost = (float) ($hppReport?->total_labor_cost ?? 0);
-            $overheadCost = (float) ($hppReport?->total_overhead_cost ?? 0);
+            $laborCost = (float) ($hppReport?->total_labor_cost ?? 0) * $prorateFactor;
+            $overheadCost = (float) ($hppReport?->total_overhead_cost ?? 0) * $prorateFactor;
             $netProfit = $grossProfit - $wasteLoss - ($laborCost + $overheadCost);
             $netMarginPercent = $revenue > 0 ? ($netProfit / $revenue) * 100 : 0;
 
@@ -392,19 +402,19 @@ class ConsolidatedFinancialService
 
                 $trxItems = TransactionItem::whereHas('transaction', function ($q) use ($outletId, $startDate, $endDate) {
                     $q->where('outlet_id', $outletId)
-                      ->where('transaction_status', 'success')
-                      ->where('delete_status', 0)
-                      ->whereBetween('transaction_date', [$startDate, $endDate]);
+                        ->where('transaction_status', 'success')
+                        ->where('delete_status', 0)
+                        ->whereBetween('transaction_date', [$startDate, $endDate]);
                 })
-                ->when($prodId, fn($q) => $q->where('product_id', $prodId))
-                ->when(!$prodId, fn($q) => $q->where('product_name', 'LIKE', '%' . $recipeName . '%'))
-                ->where('delete_status', 0)
-                ->get();
+                    ->when($prodId, fn($q) => $q->where('product_id', $prodId))
+                    ->when(!$prodId, fn($q) => $q->where('product_name', 'LIKE', '%' . $recipeName . '%'))
+                    ->where('delete_status', 0)
+                    ->get();
 
                 $qtySold = (int) $trxItems->sum('qty');
                 $revSold = (float) $trxItems->sum('subtotal');
                 $totalCogsSold = $qtySold * $unitCogs;
-                $avgPrice = $qtySold > 0 ? $revSold / $qtySold : (float) $recipe->target_selling_price;
+                $avgPrice = $qtySold > 0 ? $revSold / $qtySold : (float) ($recipe->suggested_price ?? $recipe->product?->product_price ?? 0);
                 $cogsPercent = $avgPrice > 0 ? ($unitCogs / $avgPrice) * 100 : 0;
 
                 $outletStats[$outletId] = [
@@ -436,7 +446,7 @@ class ConsolidatedFinancialService
                 'recipe_id' => $recipe->cogs_recipe_id,
                 'recipe_name' => $recipeName,
                 'standard_cogs' => $unitCogs,
-                'target_price' => (float) $recipe->target_selling_price,
+                'target_price' => (float) ($recipe->suggested_price ?? $recipe->product?->product_price ?? 0),
                 'is_anomaly' => $isAnomaly,
                 'anomaly_message' => $anomalyMessage,
                 'outlet_breakdown' => $outletStats,
@@ -454,7 +464,7 @@ class ConsolidatedFinancialService
         $outletIds = $this->normalizeOutletIds($selectedOutletIds);
 
         // 1. Audit Selisih Kasir saat Tutup Shift
-        $cashierClosings = DailyClosing::with('outlet')
+        $cashierClosings = DailyClosing::with(['outlet', 'cashier'])
             ->whereIn('outlet_id', $outletIds)
             ->where('status', 'closed')
             ->whereBetween('business_date', [$startDate, $endDate])
@@ -486,7 +496,7 @@ class ConsolidatedFinancialService
         $outletIds = $this->normalizeOutletIds($selectedOutletIds);
 
         // 1. Live Safe Deposits per Outlet
-        $safeDeposits = DailyClosing::with('outlet')
+        $safeDeposits = DailyClosing::with(['outlet', 'cashier'])
             ->whereIn('outlet_id', $outletIds)
             ->where('status', 'closed')
             ->whereBetween('business_date', [$startDate, $endDate])

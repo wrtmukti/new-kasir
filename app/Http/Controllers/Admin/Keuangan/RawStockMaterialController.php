@@ -36,7 +36,7 @@ class RawStockMaterialController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.keuangan.cogs-raw-material._data', compact('rawMaterials'))->render(),
+                'html' => view('admin.kasir.keuangan.cogs-raw-material._data', compact('rawMaterials'))->render(),
                 'pagination' => $rawMaterials->links('vendor.pagination.modern')->toHtml(),
                 'total' => $rawMaterials->total(),
                 'from' => $rawMaterials->firstItem(),
@@ -44,12 +44,12 @@ class RawStockMaterialController extends Controller
             ]);
         }
 
-        return view('admin.keuangan.cogs-raw-material.index', compact('rawMaterials'));
+        return view('admin.kasir.keuangan.cogs-raw-material.index', compact('rawMaterials'));
     }
 
     public function create()
     {
-        return view('admin.keuangan.cogs-raw-material.create');
+        return view('admin.kasir.keuangan.cogs-raw-material.create');
     }
 
     public function store(CogsRawMaterialRequest $request)
@@ -104,7 +104,7 @@ class RawStockMaterialController extends Controller
 
         $cogsRawMaterial->load('histories');
 
-        return view('admin.keuangan.cogs-raw-material.show', compact('cogsRawMaterial'));
+        return view('admin.kasir.keuangan.cogs-raw-material.show', compact('cogsRawMaterial'));
     }
 
     public function edit($id)
@@ -115,7 +115,7 @@ class RawStockMaterialController extends Controller
                 ->with('error', 'Bahan mentah tidak ditemukan.');
         }
 
-        return view('admin.keuangan.cogs-raw-material.edit', compact('cogsRawMaterial'));
+        return view('admin.kasir.keuangan.cogs-raw-material.edit', compact('cogsRawMaterial'));
     }
 
     public function update(CogsRawMaterialRequest $request, $id)

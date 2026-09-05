@@ -11,10 +11,20 @@ class PurchaseOrder extends Model
     protected $primaryKey = 'po_id';
 
     protected $fillable = [
-        'outlet_id', 'po_code', 'po_date', 'supplier_id',
-        'po_status', 'payment_status', 'payment_date', 'payment_method', 'due_date',
-        'po_total_amount', 'po_notes',
-        'created_by', 'updated_by', 'delete_status',
+        'outlet_id',
+        'po_code',
+        'po_date',
+        'supplier_id',
+        'po_status',
+        'payment_status',
+        'payment_date',
+        'payment_method',
+        'due_date',
+        'po_total_amount',
+        'po_notes',
+        'created_by',
+        'updated_by',
+        'delete_status',
     ];
 
     protected $casts = [
@@ -53,5 +63,10 @@ class PurchaseOrder extends Model
     public function scopeUnpaid($query)
     {
         return $query->where('payment_status', 'unpaid');
+    }
+
+    public function getPoNumberAttribute()
+    {
+        return $this->po_code;
     }
 }

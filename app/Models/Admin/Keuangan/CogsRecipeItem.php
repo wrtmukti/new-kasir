@@ -15,7 +15,6 @@ class CogsRecipeItem extends Model
     protected $fillable = [
         'cogs_recipe_id',
         'raw_stock_material_id',
-        'cogs_raw_material_id',
         'ingredient_qty',
         'ingredient_cost',
     ];

@@ -24,14 +24,27 @@ class AuthController extends Controller
         if ($clientDb) {
             $connected = ClientDatabaseManager::connectToClient($clientDb);
             if ($connected && Auth::guard('web')->check()) {
-                return redirect()->route('admin.dashboard');
+                $authUser = Auth::guard('web')->user();
+                if ($authUser && $authUser->role === 'admin') {
+                    return redirect()->route('owner.dashboard');
+                }
+                return redirect()->route('admin.order.index');
             }
 
             if (!$connected) {
                 session()->forget([
-                    'client_database', 'client_id', 'client_name', 'client_code', 'business_name',
-                    'tenant_database', 'tenant_client_id', 'tenant_client_name', 'tenant_business_name',
-                    'is_impersonating', 'impersonated_client_id', 'impersonated_client_name',
+                    'client_database',
+                    'client_id',
+                    'client_name',
+                    'client_code',
+                    'business_name',
+                    'tenant_database',
+                    'tenant_client_id',
+                    'tenant_client_name',
+                    'tenant_business_name',
+                    'is_impersonating',
+                    'impersonated_client_id',
+                    'impersonated_client_name',
                 ]);
                 Auth::guard('web')->logout();
                 ClientDatabaseManager::connectToCentral();
@@ -117,15 +130,36 @@ class AuthController extends Controller
 
             $user = Auth::guard('web')->user();
 
+            // Tentukan target redirect & inisialisasi outlet aktif
+            if ($user->role === 'admin') {
+                $targetUrl = route('owner.dashboard');
+            } else {
+                // Untuk kasir: kunci sesi ke cabang outlet yang ditugaskan
+                if ($user->outlet_id) {
+                    session([
+                        'active_outlet_id' => $user->outlet_id,
+                        'outlet_id' => $user->outlet_id,
+                    ]);
+                    $outlet = DB::connection('client')->table('outlets')->where('outlet_id', $user->outlet_id)->first();
+                    if ($outlet) {
+                        session([
+                            'active_outlet_name' => $outlet->outlet_name,
+                            'current_outlet_name' => $outlet->outlet_name,
+                        ]);
+                    }
+                }
+                $targetUrl = route('admin.order.index');
+            }
+
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => "Selamat datang kembali, {$user->name}!",
-                    'redirect_url' => route('admin.dashboard'),
+                    'redirect_url' => $targetUrl,
                 ]);
             }
 
-            return redirect()->intended(route('admin.dashboard'))
+            return redirect()->intended($targetUrl)
                 ->with('success', "Selamat datang kembali, {$user->name}!");
         }
 

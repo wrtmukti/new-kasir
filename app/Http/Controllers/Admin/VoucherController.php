@@ -17,7 +17,7 @@ class VoucherController extends Controller
             ->with('outlet')
             ->latest()
             ->paginate(10);
-        return view('admin.voucher.index', compact('vouchers'));
+        return view('admin.kasir.voucher.index', compact('vouchers'));
     }
 
     public function data(Request $request)
@@ -30,7 +30,7 @@ class VoucherController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.voucher._data', compact('vouchers'))->render(),
+                'html' => view('admin.kasir.voucher._data', compact('vouchers'))->render(),
                 'pagination' => $vouchers->links('vendor.pagination.modern')->toHtml(),
                 'total' => $vouchers->total(),
                 'from' => $vouchers->firstItem(),
@@ -38,13 +38,13 @@ class VoucherController extends Controller
             ]);
         }
 
-        return view('admin.voucher.index', compact('vouchers'));
+        return view('admin.kasir.voucher.index', compact('vouchers'));
     }
 
     public function create()
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.voucher.create', compact('outlets'));
+        return view('admin.kasir.voucher.create', compact('outlets'));
     }
 
     public function store(VoucherRequest $request)
@@ -91,7 +91,7 @@ class VoucherController extends Controller
     public function edit(Voucher $voucher)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.voucher.edit', compact('voucher', 'outlets'));
+        return view('admin.kasir.voucher.edit', compact('voucher', 'outlets'));
     }
 
     public function update(VoucherRequest $request, Voucher $voucher)

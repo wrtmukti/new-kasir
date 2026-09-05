@@ -28,7 +28,7 @@ class ShiftSettingController extends Controller
             ->orderBy('shift_number', 'asc')
             ->get();
 
-        return view('admin.keuangan.setting-shift.index', compact('setting', 'shifts'));
+        return view('admin.kasir.keuangan.setting-shift.index', compact('setting', 'shifts'));
     }
 
     /**
