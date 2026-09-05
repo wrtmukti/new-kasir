@@ -35,7 +35,7 @@ class InventoryReportController extends Controller
         $totalWaste = CogsWasteLog::sum('waste_cost');
         $totalPo = PurchaseOrder::where('po_status', 'completed')->sum('po_total_amount');
 
-        return view('admin.keuangan.reports.inventory', compact(
+        return view('admin.kasir.keuangan.reports.inventory', compact(
             'perPageInput',
             'search',
             'materials',

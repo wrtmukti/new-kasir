@@ -63,6 +63,7 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\HistoryController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\Keuangan\ShiftClosingReportController;
 
 use App\Http\Controllers\Admin\Keuangan\CogsRawMaterialController;
 use App\Http\Controllers\Admin\Keuangan\CogsRecipeController;
@@ -95,10 +96,33 @@ Route::middleware('guest:web')->group(function () {
 });
 Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-// ===================== ADMIN POS (CRUD & Operations) =====================
+// ===================== PORTAL OWNER (Multi-Outlet Executive Suite) =====================
+Route::prefix('owner')->name('owner.')->middleware(['client', 'auth:web', 'role:admin'])->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('owner.dashboard');
+    });
+
+    Route::get('dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('financial', [OwnerFinancialController::class, 'index'])->name('financial');
+    Route::get('financial/export', [OwnerFinancialController::class, 'export'])->name('financial.export');
+
+    Route::get('benchmark', [OwnerBenchmarkController::class, 'index'])->name('benchmark');
+    Route::get('audit', [OwnerAuditController::class, 'index'])->name('audit');
+    Route::get('cash-debt', [OwnerCashDebtController::class, 'index'])->name('cash-debt');
+
+    Route::get('branches', [OwnerBranchController::class, 'index'])->name('branches.index');
+    Route::post('branches', [OwnerBranchController::class, 'store'])->name('branches.store');
+    Route::post('branches/{id}/update', [OwnerBranchController::class, 'update'])->name('branches.update');
+    Route::delete('branches/{id}', [OwnerBranchController::class, 'destroy'])->name('branches.destroy');
+});
+
+// ===================== ADMIN POS & KASIR (CRUD & Operations) =====================
 Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->group(function () {
-    // Dashboard & Analitik (Landing Utama Admin)
-    Route::get('/', [MenuAnalyticsController::class, 'index'])->name('dashboard');
+    // Dashboard & Analitik (Landing Utama Admin / Kasir)
+    Route::get('/', function (\Illuminate\Http\Request $request) {
+        return app(MenuAnalyticsController::class)->index($request);
+    })->name('dashboard');
     Route::get('dashboard', [MenuAnalyticsController::class, 'index'])->name('dashboard.index');
 
     Route::get('stock/data', [StockController::class, 'data'])->name('stock.data');
@@ -229,7 +253,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
 
         // Panduan Lengkap Arsitektur Finansial, HPP & Cash Flow (Plan B)
         Route::get('financial-guide', function () {
-            return view('admin.keuangan.guide.index');
+            return view('admin.kasir.keuangan.guide.index');
         })->name('financial-guide.index');
     });
 
@@ -238,7 +262,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
     // Modul Laporan SaaS POS (Level 1 Hub & Level 2 Detail Reports)
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [ReportDashboardController::class, 'index'])->name('dashboard');
-        
+
         Route::get('sales', [SalesReportController::class, 'index'])->name('sales');
         Route::get('sales/export', [SalesReportController::class, 'export'])->name('sales.export');
 
@@ -258,22 +282,7 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
         Route::get('shifts/export', [ShiftClosingReportController::class, 'export'])->name('shifts.export');
     });
 
-    // ===================== PORTAL OWNER (Multi-Outlet Executive Suite) =====================
-    Route::prefix('owner')->name('owner.')->group(function () {
-        Route::get('dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
-        
-        Route::get('financial', [OwnerFinancialController::class, 'index'])->name('financial');
-        Route::get('financial/export', [OwnerFinancialController::class, 'export'])->name('financial.export');
-        
-        Route::get('benchmark', [OwnerBenchmarkController::class, 'index'])->name('benchmark');
-        Route::get('audit', [OwnerAuditController::class, 'index'])->name('audit');
-        Route::get('cash-debt', [OwnerCashDebtController::class, 'index'])->name('cash-debt');
-        
-        Route::get('branches', [OwnerBranchController::class, 'index'])->name('branches.index');
-        Route::post('branches', [OwnerBranchController::class, 'store'])->name('branches.store');
-        Route::post('branches/{id}/update', [OwnerBranchController::class, 'update'])->name('branches.update');
-        Route::delete('branches/{id}', [OwnerBranchController::class, 'destroy'])->name('branches.destroy');
-    });
+    // (Portal Owner telah dipindahkan ke top-level prefix: Route::prefix('owner'))
 
 
 
@@ -287,13 +296,12 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
     Route::post('setting/profile', [SettingController::class, 'updateCompanyProfile'])->name('setting.update-profile');
 
     Route::get('guide', function () {
-        return view('admin.guide.index');
+        return view('admin.kasir.guide.index');
     })->name('guide.index');
 
     Route::get('manual-book', function () {
-        return view('admin.guide.index');
+        return view('admin.kasir.guide.index');
     })->name('manual-book.index');
-
 });
 
 // ===================== SYSTEM ADMIN (Platform Multi-Client) =====================

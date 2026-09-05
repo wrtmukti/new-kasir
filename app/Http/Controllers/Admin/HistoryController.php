@@ -19,7 +19,7 @@ class HistoryController extends Controller
         $totalBundle = DB::table('bundle_histories')->where('delete_status', 0)->count();
         $totalAll = $totalStock + $totalProduct + $totalDiscount + $totalVoucher + $totalBundle;
 
-        return view('admin.history.index', compact(
+        return view('admin.kasir.history.index', compact(
             'totalStock',
             'totalProduct',
             'totalDiscount',
@@ -48,7 +48,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('admin.history.stock.show', compact('history', 'previous'));
+        return view('admin.kasir.history.stock.show', compact('history', 'previous'));
     }
 
     public function stockIndex()
@@ -58,7 +58,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.history.stock.index', compact('histories'));
+        return view('admin.kasir.history.stock.index', compact('histories'));
     }
 
     public function stockData(Request $request)
@@ -76,7 +76,7 @@ class HistoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.history.stock._data', compact('histories'))->render(),
+                'html' => view('admin.kasir.history.stock._data', compact('histories'))->render(),
                 'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $histories->total(),
                 'from' => $histories->firstItem(),
@@ -84,7 +84,7 @@ class HistoryController extends Controller
             ]);
         }
 
-        return view('admin.history.stock.index', compact('histories'));
+        return view('admin.kasir.history.stock.index', compact('histories'));
     }
 
     // ============ PRODUCT HISTORY ============
@@ -106,7 +106,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('admin.history.product.show', compact('history', 'previous'));
+        return view('admin.kasir.history.product.show', compact('history', 'previous'));
     }
 
     public function productIndex()
@@ -116,7 +116,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.history.product.index', compact('histories'));
+        return view('admin.kasir.history.product.index', compact('histories'));
     }
 
     public function productData(Request $request)
@@ -134,7 +134,7 @@ class HistoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.history.product._data', compact('histories'))->render(),
+                'html' => view('admin.kasir.history.product._data', compact('histories'))->render(),
                 'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $histories->total(),
                 'from' => $histories->firstItem(),
@@ -142,7 +142,7 @@ class HistoryController extends Controller
             ]);
         }
 
-        return view('admin.history.product.index', compact('histories'));
+        return view('admin.kasir.history.product.index', compact('histories'));
     }
 
     // ============ VOUCHER HISTORY ============
@@ -163,7 +163,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('admin.history.voucher.show', compact('history', 'previous'));
+        return view('admin.kasir.history.voucher.show', compact('history', 'previous'));
     }
 
     public function voucherIndex()
@@ -173,7 +173,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.history.voucher.index', compact('histories'));
+        return view('admin.kasir.history.voucher.index', compact('histories'));
     }
 
     public function voucherData(Request $request)
@@ -191,7 +191,7 @@ class HistoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.history.voucher._data', compact('histories'))->render(),
+                'html' => view('admin.kasir.history.voucher._data', compact('histories'))->render(),
                 'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $histories->total(),
                 'from' => $histories->firstItem(),
@@ -199,7 +199,7 @@ class HistoryController extends Controller
             ]);
         }
 
-        return view('admin.history.voucher.index', compact('histories'));
+        return view('admin.kasir.history.voucher.index', compact('histories'));
     }
 
     // ============ DISCOUNT HISTORY ============
@@ -220,7 +220,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('admin.history.discount.show', compact('history', 'previous'));
+        return view('admin.kasir.history.discount.show', compact('history', 'previous'));
     }
 
     public function discountIndex()
@@ -230,7 +230,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.history.discount.index', compact('histories'));
+        return view('admin.kasir.history.discount.index', compact('histories'));
     }
 
     public function discountData(Request $request)
@@ -248,7 +248,7 @@ class HistoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.history.discount._data', compact('histories'))->render(),
+                'html' => view('admin.kasir.history.discount._data', compact('histories'))->render(),
                 'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $histories->total(),
                 'from' => $histories->firstItem(),
@@ -256,7 +256,7 @@ class HistoryController extends Controller
             ]);
         }
 
-        return view('admin.history.discount.index', compact('histories'));
+        return view('admin.kasir.history.discount.index', compact('histories'));
     }
 
     // ============ BUNDLE HISTORY ============
@@ -277,7 +277,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('admin.history.bundle.show', compact('history', 'previous'));
+        return view('admin.kasir.history.bundle.show', compact('history', 'previous'));
     }
 
     public function bundleIndex()
@@ -287,7 +287,7 @@ class HistoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.history.bundle.index', compact('histories'));
+        return view('admin.kasir.history.bundle.index', compact('histories'));
     }
 
     public function bundleData(Request $request)
@@ -305,7 +305,7 @@ class HistoryController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.history.bundle._data', compact('histories'))->render(),
+                'html' => view('admin.kasir.history.bundle._data', compact('histories'))->render(),
                 'pagination' => $histories->links('vendor.pagination.modern')->toHtml(),
                 'total' => $histories->total(),
                 'from' => $histories->firstItem(),
@@ -313,6 +313,6 @@ class HistoryController extends Controller
             ]);
         }
 
-        return view('admin.history.bundle.index', compact('histories'));
+        return view('admin.kasir.history.bundle.index', compact('histories'));
     }
 }

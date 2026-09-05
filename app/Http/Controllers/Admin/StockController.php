@@ -26,7 +26,7 @@ class StockController extends Controller
             $query->where('outlet_id', $activeOutletId);
         }
         $stocks = $query->latest()->paginate(10);
-        return view('admin.stock.index', compact('stocks'));
+        return view('admin.kasir.stock.index', compact('stocks'));
     }
 
     public function data(Request $request)
@@ -41,7 +41,7 @@ class StockController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.stock._data', compact('stocks'))->render(),
+                'html' => view('admin.kasir.stock._data', compact('stocks'))->render(),
                 'pagination' => $stocks->links('vendor.pagination.modern')->toHtml(),
                 'total' => $stocks->total(),
                 'from' => $stocks->firstItem(),
@@ -49,7 +49,7 @@ class StockController extends Controller
             ]);
         }
 
-        return view('admin.stock.index', compact('stocks'));
+        return view('admin.kasir.stock.index', compact('stocks'));
     }
 
     public function jsonList(Request $request)
@@ -71,7 +71,7 @@ class StockController extends Controller
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
-        return view('admin.stock.create', compact('outlets', 'cogsRawMaterials'));
+        return view('admin.kasir.stock.create', compact('outlets', 'cogsRawMaterials'));
     }
 
     public function store(StockRequest $request)
@@ -123,14 +123,14 @@ class StockController extends Controller
     public function show(Stock $stock)
     {
         $stock->load('outlet');
-        return view('admin.stock.show', compact('stock'));
+        return view('admin.kasir.stock.show', compact('stock'));
     }
 
     public function edit(Stock $stock)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
         $cogsRawMaterials = CogsRawMaterial::where('delete_status', 0)->orderBy('name')->get();
-        return view('admin.stock.edit', compact('stock', 'outlets', 'cogsRawMaterials'));
+        return view('admin.kasir.stock.edit', compact('stock', 'outlets', 'cogsRawMaterials'));
     }
 
     public function update(StockRequest $request, Stock $stock)

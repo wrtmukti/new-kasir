@@ -42,7 +42,7 @@ class OrderController extends Controller
             });
         }
         $products = $query->latest()->paginate(10);
-        return view('admin.order.index', compact('products'));
+        return view('admin.kasir.order.index', compact('products'));
     }
 
     public function data(Request $request)
@@ -71,8 +71,8 @@ class OrderController extends Controller
 
             return response()->json([
                 'html' => $viewMode === 'card'
-                    ? view('admin.order._card', compact('products'))->render()
-                    : view('admin.order._data', compact('products'))->render(),
+                    ? view('admin.kasir.order._card', compact('products'))->render()
+                    : view('admin.kasir.order._data', compact('products'))->render(),
                 'pagination' => $products->links('vendor.pagination.modern')->toHtml(),
                 'total' => $products->total(),
                 'from' => $products->firstItem(),
@@ -80,7 +80,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return view('admin.order.index', compact('products'));
+        return view('admin.kasir.order.index', compact('products'));
     }
 
     // ——— Bundle data (AJAX) ———
@@ -103,7 +103,7 @@ class OrderController extends Controller
         $bundles = $query->latest()->paginate($perPage);
 
         if ($request->ajax()) {
-            $partial = $view === 'list' ? 'admin.order._bundle_data' : 'admin.order._bundle_card';
+            $partial = $view === 'list' ? 'admin.kasir.order._bundle_data' : 'admin.kasir.order._bundle_card';
             return response()->json([
                 'html' => view($partial, compact('bundles'))->render(),
                 'pagination' => $bundles->links('vendor.pagination.modern')->toHtml(),
@@ -128,7 +128,7 @@ class OrderController extends Controller
         }
 
         $orders = $query->orderBy('order_id', 'desc')->paginate(10);
-        return view('admin.order.list', compact('orders'));
+        return view('admin.kasir.order.list', compact('orders'));
     }
 
     public function listData(Request $request)
@@ -155,7 +155,7 @@ class OrderController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.order._list_data', compact('orders'))->render(),
+                'html' => view('admin.kasir.order._list_data', compact('orders'))->render(),
                 'pagination' => $orders->links('vendor.pagination.modern')->toHtml(),
                 'total' => $orders->total(),
                 'from' => $orders->firstItem(),
@@ -163,7 +163,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return view('admin.order.list', compact('orders'));
+        return view('admin.kasir.order.list', compact('orders'));
     }
 
     // ——— Halaman Pembayaran Kasir ———
@@ -238,7 +238,7 @@ class OrderController extends Controller
         }
         $totalSubtotal += $bundleSubtotal;
 
-        return view('admin.order.payment', compact('order', 'table', 'customer', 'outlet', 'items', 'totalSubtotal'));
+        return view('admin.kasir.order.payment', compact('order', 'table', 'customer', 'outlet', 'items', 'totalSubtotal'));
     }
 
     // ——— Proses Simpan Pembayaran Kasir ———
@@ -638,7 +638,7 @@ class OrderController extends Controller
 
         $outlet = Outlet::where('delete_status', 0)->first();
 
-        return view('admin.order.receipt', compact('order', 'transaction', 'table', 'outlet'));
+        return view('admin.kasir.order.receipt', compact('order', 'transaction', 'table', 'outlet'));
     }
 
     // ——— Detail pesanan ———
@@ -677,7 +677,7 @@ class OrderController extends Controller
         $setting = \App\Models\Admin\SettingOutlet::where('delete_status', 0)->first();
         $paymentTiming = $setting?->payment_timing ?? 'post_payment';
 
-        return view('admin.order.show', compact('order', 'table', 'customer', 'transaction', 'transactionItems', 'setting', 'paymentTiming'));
+        return view('admin.kasir.order.show', compact('order', 'table', 'customer', 'transaction', 'transactionItems', 'setting', 'paymentTiming'));
     }
 
     public function storeCart(Request $request)
@@ -754,7 +754,7 @@ class OrderController extends Controller
             ->get(['customer_id', 'customer_name', 'customer_phone']);
         $vouchers = Voucher::active()->get();
 
-        return view('admin.order.create', compact('cart', 'tables', 'customers', 'vouchers'));
+        return view('admin.kasir.order.create', compact('cart', 'tables', 'customers', 'vouchers'));
     }
 
     public function store(Request $request)

@@ -16,7 +16,7 @@ class SupplierController extends Controller
             ->with('outlet')
             ->latest()
             ->paginate(10);
-        return view('admin.supplier.index', compact('suppliers'));
+        return view('admin.kasir.supplier.index', compact('suppliers'));
     }
 
     public function data(Request $request)
@@ -29,7 +29,7 @@ class SupplierController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.supplier._data', compact('suppliers'))->render(),
+                'html' => view('admin.kasir.supplier._data', compact('suppliers'))->render(),
                 'pagination' => $suppliers->links('vendor.pagination.modern')->toHtml(),
                 'total' => $suppliers->total(),
                 'from' => $suppliers->firstItem(),
@@ -37,13 +37,13 @@ class SupplierController extends Controller
             ]);
         }
 
-        return view('admin.supplier.index', compact('suppliers'));
+        return view('admin.kasir.supplier.index', compact('suppliers'));
     }
 
     public function create()
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.supplier.create', compact('outlets'));
+        return view('admin.kasir.supplier.create', compact('outlets'));
     }
 
     public function store(SupplierRequest $request)
@@ -60,13 +60,13 @@ class SupplierController extends Controller
     public function show(Supplier $supplier)
     {
         $supplier->load('outlet');
-        return view('admin.supplier.show', compact('supplier'));
+        return view('admin.kasir.supplier.show', compact('supplier'));
     }
 
     public function edit(Supplier $supplier)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.supplier.edit', compact('supplier', 'outlets'));
+        return view('admin.kasir.supplier.edit', compact('supplier', 'outlets'));
     }
 
     public function update(SupplierRequest $request, Supplier $supplier)

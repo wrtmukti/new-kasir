@@ -39,7 +39,7 @@ class CogsWasteLogController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.keuangan.cogs-waste._data', compact('wasteLogs'))->render(),
+                'html' => view('admin.kasir.keuangan.cogs-waste._data', compact('wasteLogs'))->render(),
                 'pagination' => $wasteLogs->links('vendor.pagination.modern')->toHtml(),
                 'total' => $wasteLogs->total(),
                 'from' => $wasteLogs->firstItem(),
@@ -47,13 +47,13 @@ class CogsWasteLogController extends Controller
             ]);
         }
 
-        return view('admin.keuangan.cogs-waste.index', compact('wasteLogs'));
+        return view('admin.kasir.keuangan.cogs-waste.index', compact('wasteLogs'));
     }
 
     public function create()
     {
         $rawMaterials = CogsRawMaterial::where('delete_status', 0)->get();
-        return view('admin.keuangan.cogs-waste.create', compact('rawMaterials'));
+        return view('admin.kasir.keuangan.cogs-waste.create', compact('rawMaterials'));
     }
 
     public function store(CogsWasteLogRequest $request)

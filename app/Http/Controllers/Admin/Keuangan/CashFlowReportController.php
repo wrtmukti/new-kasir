@@ -80,7 +80,7 @@ class CashFlowReportController extends Controller
         // Net Cash Flow Aktual (Arus Kas Bersih yang benar-benar cair & keluar)
         $netCashFlow = $totalCashIn - $totalOperatingOutflow;
 
-        return view('admin.keuangan.reports.cashflow', compact(
+        return view('admin.kasir.keuangan.reports.cashflow', compact(
             'startDate',
             'endDate',
             'totalSalesCash',

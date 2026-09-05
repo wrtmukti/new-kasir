@@ -18,7 +18,7 @@ class DiscountController extends Controller
             ->with('outlet')
             ->latest()
             ->paginate(10);
-        return view('admin.discount.index', compact('discounts'));
+        return view('admin.kasir.discount.index', compact('discounts'));
     }
 
     public function data(Request $request)
@@ -31,7 +31,7 @@ class DiscountController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.discount._data', compact('discounts'))->render(),
+                'html' => view('admin.kasir.discount._data', compact('discounts'))->render(),
                 'pagination' => $discounts->links('vendor.pagination.modern')->toHtml(),
                 'total' => $discounts->total(),
                 'from' => $discounts->firstItem(),
@@ -39,13 +39,13 @@ class DiscountController extends Controller
             ]);
         }
 
-        return view('admin.discount.index', compact('discounts'));
+        return view('admin.kasir.discount.index', compact('discounts'));
     }
 
     public function create()
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.discount.create', compact('outlets'));
+        return view('admin.kasir.discount.create', compact('outlets'));
     }
 
     public function store(DiscountRequest $request)
@@ -86,13 +86,13 @@ class DiscountController extends Controller
             ->orderBy('product_name')
             ->get();
 
-        return view('admin.discount.show', compact('discount', 'products'));
+        return view('admin.kasir.discount.show', compact('discount', 'products'));
     }
 
     public function edit(Discount $discount)
     {
         $outlets = Outlet::where('delete_status', 0)->where('outlet_status', 1)->get();
-        return view('admin.discount.edit', compact('discount', 'outlets'));
+        return view('admin.kasir.discount.edit', compact('discount', 'outlets'));
     }
 
     public function update(DiscountRequest $request, Discount $discount)

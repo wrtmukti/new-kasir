@@ -737,7 +737,10 @@ class KopiSenjaSeeder extends Seeder
                 $grandTotal = $itemsTotal + $taxAmount + $serviceAmount;
                 $isYesterday = ($i <= 10 && $currentOutlet->outlet_id === $jkt->outlet_id);
                 $closingId = $isYesterday ? $shiftYesterday->id : ($currentOutlet->outlet_id === $jkt->outlet_id ? $shiftToday->id : null);
-                $txDate = $isYesterday ? now()->subDay() : now()->subDays(rand(0, 7))->subHours(rand(1, 8));
+                $isTodayOrRecent = ($i % 2 === 0);
+                $txDate = $isTodayOrRecent
+                    ? now()->subDays(rand(0, 4))->subHours(rand(1, 8))
+                    : now()->subDays(rand(6, 14))->subHours(rand(1, 8));
 
                 // Create Order
                 $order = Order::create([

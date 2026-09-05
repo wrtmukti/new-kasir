@@ -46,7 +46,7 @@ class TaxServiceReportController extends Controller
             ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->sum('service_charge_amount');
 
-        return view('admin.keuangan.reports.tax-service', compact(
+        return view('admin.kasir.keuangan.reports.tax-service', compact(
             'startDate',
             'endDate',
             'perPageInput',

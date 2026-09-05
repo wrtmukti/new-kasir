@@ -67,8 +67,8 @@ class SettingController extends Controller
 
         // Data Master Shift & Cut-Off
         $outletId = $outlet->outlet_id;
-        $shiftSetting = ShiftSetting::where('outlet_id', $outletId)->first() 
-            ?? ShiftSetting::first() 
+        $shiftSetting = ShiftSetting::where('outlet_id', $outletId)->first()
+            ?? ShiftSetting::first()
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
                 'shift_mode' => 'auto_master',
@@ -144,7 +144,7 @@ class SettingController extends Controller
             ],
         ];
 
-        return view('admin.setting.index', compact('outlet', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts'));
+        return view('admin.kasir.setting.index', compact('outlet', 'setting', 'themes', 'tax', 'service', 'shiftSetting', 'shifts'));
     }
 
     /**
@@ -267,6 +267,10 @@ class SettingController extends Controller
      */
     public function switchOutlet(Request $request, $outlet_id = null)
     {
+        if (auth()->user()?->role === 'kasir') {
+            return back()->with('error', 'Akses ditolak: Akun kasir hanya dapat bertugas pada cabang yang telah ditentukan.');
+        }
+
         $targetOutletId = $request->input('outlet_id') ?? $outlet_id ?? $request->query('outlet_id');
 
         if (!$targetOutletId) {
@@ -285,6 +289,15 @@ class SettingController extends Controller
                 'current_outlet_name' => $outlet->outlet_name,
             ]);
 
+            $previousUrl = url()->previous();
+            $redirectTo = $request->input('redirect_to');
+            $isFromOwner = str_contains($previousUrl, '/owner') || $redirectTo === 'store';
+
+            if ($isFromOwner) {
+                return redirect()->route('admin.dashboard')
+                    ->with('success', "Berhasil masuk ke toko cabang: {$outlet->outlet_name}");
+            }
+
             return back()->with('success', "Berhasil beralih ke cabang: {$outlet->outlet_name}");
         }
 
@@ -299,7 +312,7 @@ class SettingController extends Controller
         $currentOutlets = Outlet::where('delete_status', 0)->get();
         $suggestedBrand = session('client_name') ?? session('business_name') ?? 'Outlet';
 
-        return view('admin.setting.create_outlet', [
+        return view('admin.kasir.setting.create_outlet', [
             'currentOutlets' => $currentOutlets,
             'suggestedBrand' => $suggestedBrand,
         ]);

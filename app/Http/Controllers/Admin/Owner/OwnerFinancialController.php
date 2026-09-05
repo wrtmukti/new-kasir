@@ -22,7 +22,7 @@ class OwnerFinancialController extends Controller
         $activeOutlets = $this->financialService->getActiveOutlets();
 
         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
 
         $rawOutletIds = $request->input('outlet_ids', []);
         $selectedOutletIds = is_array($rawOutletIds) ? array_filter($rawOutletIds) : ($rawOutletIds ? [$rawOutletIds] : []);
@@ -63,7 +63,7 @@ class OwnerFinancialController extends Controller
 
         return response()->stream(function () use ($kpis, $leaderboard, $startDate, $endDate) {
             $handle = fopen('php://output', 'w');
-            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
 
             // Header Laporan
             fputcsv($handle, ['LAPORAN KEUANGAN KONSOLIDASI & ARUS KAS HOLDING (MULTI-CABANG)']);

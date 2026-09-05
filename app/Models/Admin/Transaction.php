@@ -60,7 +60,7 @@ class Transaction extends Model
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class, 'payment_id', 'payment_id');
+        return $this->hasOne(Payment::class, 'transaction_id', 'transaction_id');
     }
 
     public function bundles()
@@ -69,4 +69,3 @@ class Transaction extends Model
             ->where('delete_status', 0);
     }
 }
-

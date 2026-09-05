@@ -38,7 +38,7 @@ class CogsRecipeController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.keuangan.cogs-recipe._data', compact('recipes'))->render(),
+                'html' => view('admin.kasir.keuangan.cogs-recipe._data', compact('recipes'))->render(),
                 'pagination' => $recipes->links('vendor.pagination.modern')->toHtml(),
                 'total' => $recipes->total(),
                 'from' => $recipes->firstItem(),
@@ -46,7 +46,7 @@ class CogsRecipeController extends Controller
             ]);
         }
 
-        return view('admin.keuangan.cogs-recipe.index', compact('recipes'));
+        return view('admin.kasir.keuangan.cogs-recipe.index', compact('recipes'));
     }
 
     public function create()
@@ -54,7 +54,7 @@ class CogsRecipeController extends Controller
         $products = Product::where('delete_status', 0)->get();
         $rawMaterials = CogsRawMaterial::where('delete_status', 0)->get();
 
-        return view('admin.keuangan.cogs-recipe.create', compact('products', 'rawMaterials'));
+        return view('admin.kasir.keuangan.cogs-recipe.create', compact('products', 'rawMaterials'));
     }
 
     public function store(CogsRecipeRequest $request)
@@ -128,7 +128,7 @@ class CogsRecipeController extends Controller
 
         $cogsRecipe->load('product', 'items.rawMaterial', 'histories');
 
-        return view('admin.keuangan.cogs-recipe.show', compact('cogsRecipe'));
+        return view('admin.kasir.keuangan.cogs-recipe.show', compact('cogsRecipe'));
     }
 
     public function edit($id)
@@ -143,7 +143,7 @@ class CogsRecipeController extends Controller
         $rawMaterials = CogsRawMaterial::where('delete_status', 0)->get();
         $cogsRecipe->load('items.rawMaterial');
 
-        return view('admin.keuangan.cogs-recipe.edit', compact('cogsRecipe', 'products', 'rawMaterials'));
+        return view('admin.kasir.keuangan.cogs-recipe.edit', compact('cogsRecipe', 'products', 'rawMaterials'));
     }
 
     public function update(CogsRecipeRequest $request, $id)

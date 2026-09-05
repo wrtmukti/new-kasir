@@ -11,12 +11,45 @@ use Illuminate\Http\Request;
 
 class MenuAnalyticsController extends Controller
 {
-    public function index(Request $request)
+    public function index(?Request $request = null)
     {
-        $month = sprintf('%02d', $request->input('month', date('m')));
-        $year = (int) $request->input('year', date('Y'));
+        $request = $request ?? request();
 
         $activeOutletId = session('active_outlet_id') ?? session('outlet_id');
+
+        // Jika user memilih bulan & tahun secara eksplisit via filter, gunakan input tersebut
+        if ($request->filled('month') && $request->filled('year')) {
+            $month = sprintf('%02d', $request->input('month'));
+            $year = (int) $request->input('year');
+        } else {
+            // Cek apakah bulan berjalan memiliki transaksi aktif
+            $hasCurrentMonth = Transaction::whereYear('transaction_date', date('Y'))
+                ->whereMonth('transaction_date', date('m'))
+                ->where('transaction_status', 'success')
+                ->where('delete_status', 0)
+                ->when($activeOutletId, fn($q) => $q->where('outlet_id', $activeOutletId))
+                ->exists();
+
+            if ($hasCurrentMonth) {
+                $month = sprintf('%02d', date('m'));
+                $year = (int) date('Y');
+            } else {
+                // Fallback otomatis ke bulan terakhir yang memiliki transaksi aktif
+                $latestTx = Transaction::where('transaction_status', 'success')
+                    ->where('delete_status', 0)
+                    ->when($activeOutletId, fn($q) => $q->where('outlet_id', $activeOutletId))
+                    ->latest('transaction_date')
+                    ->first();
+
+                if ($latestTx && $latestTx->transaction_date) {
+                    $month = \Carbon\Carbon::parse($latestTx->transaction_date)->format('m');
+                    $year = (int) \Carbon\Carbon::parse($latestTx->transaction_date)->format('Y');
+                } else {
+                    $month = sprintf('%02d', date('m'));
+                    $year = (int) date('Y');
+                }
+            }
+        }
 
         // Query Paid Transactions in selected month/year
         $transactions = Transaction::whereYear('transaction_date', $year)
@@ -139,13 +172,14 @@ class MenuAnalyticsController extends Controller
         $chartCategoryLabels = array_keys($categoryMap);
         $chartCategoryData = array_values($categoryMap);
 
-        // Daily Trend for Line Chart
+        // Daily Trend for Line Chart (Stop at today if viewing current month)
         $daysInMonth = \Carbon\Carbon::create($year, (int)$month)->daysInMonth;
+        $maxDay = ($year == (int)date('Y') && (int)$month == (int)date('m')) ? min((int)date('j'), $daysInMonth) : $daysInMonth;
         $dailyTrendLabels = [];
         $dailyTrendOmzet = [];
 
         $monthName = \Carbon\Carbon::createFromDate($year, (int)$month, 1)->translatedFormat('M');
-        for ($d = 1; $d <= $daysInMonth; $d++) {
+        for ($d = 1; $d <= $maxDay; $d++) {
             $dateStr = sprintf('%04d-%02d-%02d', $year, (int)$month, $d);
             $dayTxs = $transactions->filter(function ($t) use ($dateStr) {
                 return \Carbon\Carbon::parse($t->transaction_date)->format('Y-m-d') === $dateStr;
@@ -158,12 +192,22 @@ class MenuAnalyticsController extends Controller
         $topProduct1 = $rankedItems->first();
         $topCategoryName = !empty($categoryMap) ? array_search(max($categoryMap), $categoryMap) : '-';
 
-        return view('admin.keuangan.menu-analytics.index', compact(
-            'year', 'month', 'totalRevenue', 'totalItemsSold', 'totalPaidTransactions',
-            'topProduct1', 'topCategoryName', 'rankedItems',
-            'chartBarLabels', 'chartBarQtyData', 'chartBarOmzetData',
-            'chartCategoryLabels', 'chartCategoryData',
-            'dailyTrendLabels', 'dailyTrendOmzet'
+        return view('admin.kasir.keuangan.menu-analytics.index', compact(
+            'year',
+            'month',
+            'totalRevenue',
+            'totalItemsSold',
+            'totalPaidTransactions',
+            'topProduct1',
+            'topCategoryName',
+            'rankedItems',
+            'chartBarLabels',
+            'chartBarQtyData',
+            'chartBarOmzetData',
+            'chartCategoryLabels',
+            'chartCategoryData',
+            'dailyTrendLabels',
+            'dailyTrendOmzet'
         ));
     }
 }

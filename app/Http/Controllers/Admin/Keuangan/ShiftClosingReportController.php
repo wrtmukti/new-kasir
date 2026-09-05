@@ -38,7 +38,7 @@ class ShiftClosingReportController extends Controller
         $totalDifference = DailyClosing::whereBetween('business_date', [$startDate, $endDate])
             ->sum('cash_difference');
 
-        return view('admin.keuangan.reports.shifts', compact(
+        return view('admin.kasir.keuangan.reports.shifts', compact(
             'startDate',
             'endDate',
             'perPageInput',

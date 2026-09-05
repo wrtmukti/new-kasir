@@ -35,7 +35,7 @@ class ProductReportController extends Controller
             ->orderByDesc('total_qty')
             ->paginate($perPage);
 
-        return view('admin.keuangan.reports.products', compact('startDate', 'endDate', 'perPageInput', 'search', 'items'));
+        return view('admin.kasir.keuangan.reports.products', compact('startDate', 'endDate', 'perPageInput', 'search', 'items'));
     }
 
     public function export(Request $request)
