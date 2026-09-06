@@ -163,7 +163,7 @@
       <span class="text-muted-c" style="font-size: 0.78rem;">Urutan performa berdasarkan total omzet penjualan tertinggi</span>
     </div>
     <a href="{{ route('owner.benchmark') }}" class="btn btn-sm btn-outline-soft">
-      Detail Benchmark <i class="bi bi-arrow-right ms-1"></i>
+      Leaderboard Lengkap <i class="bi bi-arrow-right ms-1"></i>
     </a>
   </div>
 

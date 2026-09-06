@@ -22,7 +22,27 @@ class ConsolidatedFinancialService
      */
     public function getActiveOutlets(): Collection
     {
-        return Outlet::where('delete_status', 0)->orderBy('outlet_name', 'asc')->get();
+        if (\Illuminate\Support\Facades\Schema::hasTable('outlets')) {
+            return Outlet::where('delete_status', 0)->orderBy('outlet_name', 'asc')->get();
+        }
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('companies')) {
+            return \App\Models\SysAdmin\Company::where('delete_status', 0)
+                ->orderBy('company_name', 'asc')
+                ->get()
+                ->map(function ($c) {
+                    return (object)[
+                        'outlet_id' => $c->company_id,
+                        'outlet_name' => $c->company_name,
+                        'outlet_code' => $c->company_code,
+                        'outlet_branch' => $c->company_branch ?? 'Pusat',
+                        'outlet_address' => $c->company_address,
+                        'outlet_phone' => $c->company_phone,
+                    ];
+                });
+        }
+
+        return collect([]);
     }
 
     /**
@@ -34,7 +54,21 @@ class ConsolidatedFinancialService
         if (!empty($filtered)) {
             return array_values($filtered);
         }
-        return Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+        if (\Illuminate\Support\Facades\Schema::hasTable('outlets')) {
+            return Outlet::where('delete_status', 0)->pluck('outlet_id')->toArray();
+        }
+        if (\Illuminate\Support\Facades\Schema::hasTable('companies')) {
+            return \App\Models\SysAdmin\Company::where('delete_status', 0)->pluck('company_id')->toArray();
+        }
+        return [];
+    }
+
+    /**
+     * Helper nama kolom cabang/perusahaan fisik
+     */
+    protected function branchCol(string $table): string
+    {
+        return \Illuminate\Support\Facades\Schema::hasColumn($table, 'outlet_id') ? 'outlet_id' : 'company_id';
     }
 
     /**
@@ -201,20 +235,25 @@ class ConsolidatedFinancialService
     public function getOutletLeaderboard(string $startDate, string $endDate, array $selectedOutletIds = []): array
     {
         $outletIds = $this->normalizeOutletIds($selectedOutletIds);
-        $outlets = Outlet::where('delete_status', 0)
-            ->whereIn('outlet_id', $outletIds)
-            ->get();
+        $outlets = $this->getActiveOutlets()->filter(function ($ot) use ($outletIds) {
+            return in_array($ot->outlet_id, $outletIds);
+        });
 
-        $allRecipes = CogsRecipe::with('items.rawMaterial')->where('delete_status', 0)->get();
+        $allRecipes = \Illuminate\Support\Facades\Schema::hasTable('cogs_recipes')
+            ? CogsRecipe::with('items.rawMaterial')->where('delete_status', 0)->get()
+            : collect([]);
         $singleRecipe = $allRecipes->count() === 1 ? $allRecipes->first() : null;
 
         $leaderboard = [];
+
+        $trxCol = $this->branchCol('transactions');
+        $closeCol = $this->branchCol('daily_closings');
 
         foreach ($outlets as $outlet) {
             $outletId = $outlet->outlet_id;
 
             // Omzet & Transaksi
-            $transactions = Transaction::where('outlet_id', $outletId)
+            $transactions = Transaction::where($trxCol, $outletId)
                 ->where('transaction_status', 'success')
                 ->where('delete_status', 0)
                 ->whereBetween('transaction_date', [$startDate, $endDate])
@@ -251,10 +290,14 @@ class ConsolidatedFinancialService
             $grossMarginPercent = $revenue > 0 ? ($grossProfit / $revenue) * 100 : 0;
 
             // Waste
-            $wasteLoss = (float) CogsWasteLog::where('outlet_id', $outletId)
-                ->where('delete_status', 0)
-                ->whereBetween('loss_date', [$startDate, $endDate])
-                ->sum('waste_cost');
+            $wasteLoss = 0;
+            if (\Illuminate\Support\Facades\Schema::hasTable('cogs_waste_logs')) {
+                $wasteCol = $this->branchCol('cogs_waste_logs');
+                $wasteLoss = (float) CogsWasteLog::where($wasteCol, $outletId)
+                    ->where('delete_status', 0)
+                    ->whereBetween('loss_date', [$startDate, $endDate])
+                    ->sum('waste_cost');
+            }
 
             // Labor & Overhead (Prorated)
             $startCarbon = Carbon::parse($startDate);
@@ -263,24 +306,37 @@ class ConsolidatedFinancialService
             $daysInMonth = $startCarbon->daysInMonth ?: 30;
             $prorateFactor = min(1.0, $daysInRange / $daysInMonth);
 
-            $hppReport = HppFinancialReport::where('outlet_id', $outletId)
-                ->where('year', $startCarbon->year)
-                ->where('month', $startCarbon->month)
-                ->first();
+            $laborCost = 0;
+            $overheadCost = 0;
+            if (\Illuminate\Support\Facades\Schema::hasTable('hpp_financial_reports')) {
+                $hppCol = $this->branchCol('hpp_financial_reports');
+                $hppReport = HppFinancialReport::where($hppCol, $outletId)
+                    ->where('year', $startCarbon->year)
+                    ->where('month', $startCarbon->month)
+                    ->first();
 
-            $laborCost = (float) ($hppReport?->total_labor_cost ?? 0) * $prorateFactor;
-            $overheadCost = (float) ($hppReport?->total_overhead_cost ?? 0) * $prorateFactor;
+                $laborCost = (float) ($hppReport?->total_labor_cost ?? 0) * $prorateFactor;
+                $overheadCost = (float) ($hppReport?->total_overhead_cost ?? 0) * $prorateFactor;
+            }
             $netProfit = $grossProfit - $wasteLoss - ($laborCost + $overheadCost);
             $netMarginPercent = $revenue > 0 ? ($netProfit / $revenue) * 100 : 0;
 
             // Setoran Brankas
-            $safeDeposit = (float) DailyClosing::where('outlet_id', $outletId)
-                ->where('status', 'closed')
-                ->whereBetween('business_date', [$startDate, $endDate])
-                ->sum('cash_deposit_to_safe');
+            $safeDeposit = 0;
+            if (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'cash_deposit_to_safe')) {
+                $safeDeposit = (float) DailyClosing::where($closeCol, $outletId)
+                    ->where('status', 'closed')
+                    ->whereBetween('business_date', [$startDate, $endDate])
+                    ->sum('cash_deposit_to_safe');
+            } elseif (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'actual_cash_counted')) {
+                $safeDeposit = (float) DailyClosing::where($closeCol, $outletId)
+                    ->where('status', 'closed')
+                    ->whereBetween('business_date', [$startDate, $endDate])
+                    ->sum('actual_cash_counted');
+            }
 
             // Status Shift Terkini
-            $activeShift = DailyClosing::where('outlet_id', $outletId)
+            $activeShift = DailyClosing::where($closeCol, $outletId)
                 ->where('status', 'open')
                 ->first();
 

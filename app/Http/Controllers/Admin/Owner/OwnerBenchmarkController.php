@@ -27,15 +27,13 @@ class OwnerBenchmarkController extends Controller
         $selectedOutletIds = is_array($rawOutletIds) ? array_filter($rawOutletIds) : ($rawOutletIds ? [$rawOutletIds] : []);
 
         $leaderboard = $this->financialService->getOutletLeaderboard($startDate, $endDate, $selectedOutletIds);
-        $benchmarkRecipes = $this->financialService->getCrossBranchHppBenchmark($startDate, $endDate, $selectedOutletIds);
 
         return view('admin.owner.benchmark', compact(
             'activeOutlets',
             'startDate',
             'endDate',
             'selectedOutletIds',
-            'leaderboard',
-            'benchmarkRecipes'
+            'leaderboard'
         ));
     }
 }

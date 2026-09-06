@@ -114,7 +114,7 @@
           <li class="nav-item @if(($activeMenu ?? '') === 'owner-benchmark') active @endif">
             <a href="{{ route('owner.benchmark') }}" class="nav-link">
               <i class="bi bi-trophy-fill"></i>
-              <span class="nav-label-text">Leaderboard &amp; Benchmark</span>
+              <span class="nav-label-text">Leaderboard Cabang</span>
             </a>
           </li>
           <li class="nav-item @if(($activeMenu ?? '') === 'owner-audit') active @endif">
