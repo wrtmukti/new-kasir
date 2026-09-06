@@ -52,6 +52,22 @@ class SettingController extends Controller
     }
 
     /**
+     * Resolusi nama kolom relasi cabang fisik (outlet_id vs company_id) pada model
+     */
+    private function resolveBranchColumn(\Illuminate\Database\Eloquent\Model $model): ?string
+    {
+        $table = $model->getTable();
+        $conn = $model->getConnectionName() ?: config('database.default');
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'outlet_id')) {
+            return 'outlet_id';
+        }
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'company_id')) {
+            return 'company_id';
+        }
+        return null;
+    }
+
+    /**
      * Tampilkan halaman utama Setting Outlet & Kasir.
      */
     public function index()
@@ -83,32 +99,48 @@ class SettingController extends Controller
             ]);
         }
 
+        // Resolusi nama kolom relasi cabang fisik (outlet_id vs company_id)
+        $taxCol = $this->resolveBranchColumn(new Tax());
+        $serviceCol = $this->resolveBranchColumn(new ServiceCharge());
+        $shiftSettingCol = $this->resolveBranchColumn(new ShiftSetting());
+        $shiftCol = $this->resolveBranchColumn(new Shift());
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
+
         // Data Master Pajak & Service Charge untuk Outlet Aktif
-        $tax = Tax::where('company_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? Tax::where('company_id', $outlet->outlet_id)->first() ?? Tax::first();
-        $service = ServiceCharge::where('company_id', $outlet->outlet_id)->where('is_active', 1)->first() ?? ServiceCharge::where('company_id', $outlet->outlet_id)->first() ?? ServiceCharge::first();
+        $outletId = $outlet->outlet_id;
+        $tax = null;
+        if ($taxCol) {
+            $tax = Tax::where($taxCol, $outletId)->where('is_active', 1)->first()
+                ?? Tax::where($taxCol, $outletId)->first();
+        }
+        $tax = $tax ?? Tax::first();
+
+        $service = null;
+        if ($serviceCol) {
+            $service = ServiceCharge::where($serviceCol, $outletId)->where('is_active', 1)->first()
+                ?? ServiceCharge::where($serviceCol, $outletId)->first();
+        }
+        $service = $service ?? ServiceCharge::first();
 
         // Data Master Shift & Cut-Off
-        $outletId = $outlet->outlet_id;
-        $shiftSetting = ShiftSetting::where('company_id', $outletId)->first()
-            ?? ShiftSetting::first()
-            ?? new ShiftSetting([
-                'daily_cutoff_time' => '03:00:00',
-                'shift_mode' => 'auto_master',
-                'auto_lock_unclosed' => 1,
-            ]);
+        $shiftSetting = $shiftSettingCol ? ShiftSetting::where($shiftSettingCol, $outletId)->first() : null;
+        $shiftSetting = $shiftSetting ?? ShiftSetting::first() ?? new ShiftSetting([
+            'daily_cutoff_time' => '03:00:00',
+            'shift_mode' => 'auto_master',
+            'auto_lock_unclosed' => 1,
+        ]);
 
-        $primaryShift = Shift::where('company_id', $outletId)->first()
-            ?? Shift::first()
-            ?? new Shift([
-                'shift_name' => 'Jam Operasional Toko',
-                'start_time' => '08:00:00',
-                'end_time' => '22:00:00',
-                'default_starting_cash' => 300000,
-            ]);
+        $primaryShift = $shiftCol ? Shift::where($shiftCol, $outletId)->first() : null;
+        $primaryShift = $primaryShift ?? Shift::first() ?? new Shift([
+            'shift_name' => 'Jam Operasional Toko',
+            'start_time' => '08:00:00',
+            'end_time' => '22:00:00',
+            'default_starting_cash' => 300000,
+        ]);
 
-        $activeShift = DailyClosing::where('company_id', $outletId)->where('status', 'open')->latest()->first();
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $outletId)->where('status', 'open')->latest()->first() : null;
 
-        $shifts = Shift::orderBy('shift_number', 'asc')->get();
+        $shifts = $shiftCol ? Shift::where($shiftCol, $outletId)->orderBy('shift_number', 'asc')->get() : Shift::orderBy('shift_number', 'asc')->get();
 
         // Daftar 7 Tema Guest QR Ordering beserta metadata UI
         $themes = [

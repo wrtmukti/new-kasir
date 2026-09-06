@@ -11,22 +11,42 @@ use Illuminate\Http\Request;
 class ShiftSettingController extends Controller
 {
     /**
+     * Resolusi nama kolom relasi cabang fisik (outlet_id vs company_id) pada model
+     */
+    private function resolveBranchColumn(\Illuminate\Database\Eloquent\Model $model): ?string
+    {
+        $table = $model->getTable();
+        $conn = $model->getConnectionName() ?: config('database.default');
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'outlet_id')) {
+            return 'outlet_id';
+        }
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'company_id')) {
+            return 'company_id';
+        }
+        return null;
+    }
+
+    /**
      * Tampilan utama Master Setting Shift & Jam Cut-Off Restoran
      */
     public function index()
     {
-        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
+        $outletId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
 
-        $setting = ShiftSetting::where('company_id', $companyId)->first()
-            ?? ShiftSetting::first() 
+        $shiftSettingCol = $this->resolveBranchColumn(new ShiftSetting());
+        $shiftCol = $this->resolveBranchColumn(new Shift());
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
+
+        $setting = $shiftSettingCol ? ShiftSetting::where($shiftSettingCol, $outletId)->first() : null;
+        $setting = $setting ?? ShiftSetting::first() 
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
                 'shift_mode' => 'auto_master',
                 'auto_lock_unclosed' => 1,
             ]);
 
-        $primaryShift = Shift::where('company_id', $companyId)->first()
-            ?? Shift::first()
+        $primaryShift = $shiftCol ? Shift::where($shiftCol, $outletId)->first() : null;
+        $primaryShift = $primaryShift ?? Shift::first()
             ?? new Shift([
                 'shift_name' => 'Jam Operasional Toko',
                 'start_time' => '08:00:00',
@@ -34,11 +54,9 @@ class ShiftSettingController extends Controller
                 'default_starting_cash' => 300000,
             ]);
 
-        $activeShift = DailyClosing::where('company_id', $companyId)->where('status', 'open')->latest()->first();
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $outletId)->where('status', 'open')->latest()->first() : null;
 
-        $shifts = Shift::where('company_id', $companyId)
-            ->orderBy('shift_number', 'asc')
-            ->get();
+        $shifts = $shiftCol ? Shift::where($shiftCol, $outletId)->orderBy('shift_number', 'asc')->get() : Shift::orderBy('shift_number', 'asc')->get();
 
         return view('admin.kasir.keuangan.setting-shift.index', compact('setting', 'shifts', 'primaryShift', 'activeShift'));
     }
@@ -58,24 +76,25 @@ class ShiftSettingController extends Controller
             'shift_mode.in' => 'Mode pengoperasian kasir tidak valid.',
         ]);
 
-        $companyId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
+        $outletId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
         $cutoffTime = $request->daily_cutoff_time . ':00';
 
-        $setting = ShiftSetting::where('company_id', $companyId)->first();
+        $shiftSettingCol = $this->resolveBranchColumn(new ShiftSetting());
+        $setting = $shiftSettingCol ? ShiftSetting::where($shiftSettingCol, $outletId)->first() : ShiftSetting::first();
+
+        $attributes = [
+            'daily_cutoff_time' => $cutoffTime,
+            'shift_mode' => $request->shift_mode,
+            'auto_lock_unclosed' => $request->has('auto_lock_unclosed') ? 1 : 0,
+        ];
+        if ($shiftSettingCol) {
+            $attributes[$shiftSettingCol] = $outletId;
+        }
 
         if ($setting) {
-            $setting->update([
-                'daily_cutoff_time' => $cutoffTime,
-                'shift_mode' => $request->shift_mode,
-                'auto_lock_unclosed' => $request->has('auto_lock_unclosed') ? 1 : 0,
-            ]);
+            $setting->update($attributes);
         } else {
-            $setting = ShiftSetting::create([
-                'company_id' => $companyId,
-                'daily_cutoff_time' => $cutoffTime,
-                'shift_mode' => $request->shift_mode,
-                'auto_lock_unclosed' => $request->has('auto_lock_unclosed') ? 1 : 0,
-            ]);
+            $setting = ShiftSetting::create($attributes);
         }
 
         // Simpan / update jam operasional & modal awal kasir
@@ -85,25 +104,25 @@ class ShiftSettingController extends Controller
         if (strlen($openTime) == 5) $openTime .= ':00';
         if (strlen($closeTime) == 5) $closeTime .= ':00';
 
-        $primaryShift = Shift::where('company_id', $companyId)->first();
+        $shiftCol = $this->resolveBranchColumn(new Shift());
+        $primaryShift = $shiftCol ? Shift::where($shiftCol, $outletId)->first() : Shift::first();
+
+        $shiftData = [
+            'shift_name' => 'Jam Operasional Toko',
+            'start_time' => $openTime,
+            'end_time' => $closeTime,
+            'default_starting_cash' => $startingCash,
+            'is_active' => 1,
+        ];
+        if ($shiftCol) {
+            $shiftData[$shiftCol] = $outletId;
+        }
+
         if ($primaryShift) {
-            $primaryShift->update([
-                'shift_name' => 'Jam Operasional Toko',
-                'start_time' => $openTime,
-                'end_time' => $closeTime,
-                'default_starting_cash' => $startingCash,
-                'is_active' => 1,
-            ]);
+            $primaryShift->update($shiftData);
         } else {
-            Shift::create([
-                'company_id' => $companyId,
-                'shift_number' => 1,
-                'shift_name' => 'Jam Operasional Toko',
-                'start_time' => $openTime,
-                'end_time' => $closeTime,
-                'default_starting_cash' => $startingCash,
-                'is_active' => 1,
-            ]);
+            $shiftData['shift_number'] = 1;
+            Shift::create($shiftData);
         }
 
         if ($request->expectsJson() || $request->ajax()) {
@@ -124,8 +143,8 @@ class ShiftSettingController extends Controller
     {
         $request->validate([
             'shift_name' => 'required|string|max:50',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
             'default_starting_cash' => 'required|numeric|min:0',
         ], [
             'shift_name.required' => 'Nama shift wajib diisi.',
@@ -136,24 +155,29 @@ class ShiftSettingController extends Controller
             'default_starting_cash.numeric' => 'Default modal awal harus berupa angka.',
         ]);
 
-        $companyId = session('outlet_id') ?? 'COMP-001';
+        $outletId = session('active_outlet_id') ?? session('outlet_id') ?? 'COMP-001';
+        $shiftCol = $this->resolveBranchColumn(new Shift());
 
-        $nextShiftNumber = Shift::where('company_id', $companyId)->max('shift_number') + 1;
+        $nextShiftNumber = ($shiftCol ? Shift::where($shiftCol, $outletId) : Shift::query())->max('shift_number') + 1;
 
         $startTime = strlen($request->start_time) == 5 ? $request->start_time . ':00' : $request->start_time;
         $endTime = strlen($request->end_time) == 5 ? $request->end_time . ':00' : $request->end_time;
         if ($startTime === '24:00:00') $startTime = '00:00:00';
         if ($endTime === '24:00:00') $endTime = '23:59:00';
 
-        $shift = Shift::create([
-            'company_id' => $companyId,
+        $shiftData = [
             'shift_number' => $nextShiftNumber,
             'shift_name' => $request->shift_name,
             'start_time' => $startTime,
             'end_time' => $endTime,
             'default_starting_cash' => $request->default_starting_cash,
             'is_active' => $request->has('is_active') ? 1 : 0,
-        ]);
+        ];
+        if ($shiftCol) {
+            $shiftData[$shiftCol] = $outletId;
+        }
+
+        $shift = Shift::create($shiftData);
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
