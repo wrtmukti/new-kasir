@@ -259,6 +259,10 @@ Route::prefix('admin')->name('admin.')->middleware(['client', 'auth:web'])->grou
         })->name('financial-guide.index');
     });
 
+    // Route Aliases untuk Shift Operasional Kasir (Kompatibilitas Penuh)
+    Route::get('shift', [ShiftOperationalController::class, 'index'])->name('shift.index');
+    Route::get('shift/{dailyClosing}/z-report', [ShiftOperationalController::class, 'zReport'])->name('shift.z-report');
+
 
 
     // Modul Laporan SaaS POS (Level 1 Hub & Level 2 Detail Reports)
