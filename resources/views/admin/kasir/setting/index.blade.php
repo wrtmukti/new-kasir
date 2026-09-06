@@ -582,11 +582,11 @@
 
             <div class="d-flex align-items-center gap-2.5">
               @if($activeShift)
-                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.72rem; cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#drawerStatusKasir" title="Klik untuk lihat Status Kasir">
                   <i class="bi bi-circle-fill me-1" style="font-size: 0.45rem;"></i> KASIR BUKA
                 </span>
               @else
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.72rem;">
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.72rem; cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#drawerStatusKasir" title="Klik untuk lihat Status Kasir">
                   <i class="bi bi-dash-circle me-1"></i> KASIR TUTUP
                 </span>
               @endif
@@ -820,11 +820,11 @@
   <span class="pulse-dot"></span>
   <i class="bi bi-activity text-primary fs-6"></i>
   <span class="tab-text fw-bold">Status Kasir</span>
-  <i class="bi bi-chevron-right text-muted-c ms-0.5" style="font-size: 0.65rem;"></i>
+  <i class="bi bi-chevron-left text-muted-c ms-0.5" style="font-size: 0.65rem;"></i>
 </div>
 
 <!-- OFFCANVAS SIDEBAR KIRI: STATUS LIVE & PANDUAN KASIR (SLIDE-OVER ON HOVER/CLICK) -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="drawerStatusKasir" aria-labelledby="drawerStatusKasirLabel" style="width: 410px; max-width: 90vw; background: var(--bg-surface, #1e293b); color: var(--text-primary); border-right: 1px solid var(--border-subtle); z-index: 1085;">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="drawerStatusKasir" aria-labelledby="drawerStatusKasirLabel" style="width: 410px; max-width: 90vw; background: var(--bg-surface, #1e293b); color: var(--text-primary); border-left: 1px solid var(--border-subtle); z-index: 1085;">
   <div class="offcanvas-header py-3 px-3.5 border-bottom" style="border-color: var(--border-subtle) !important;">
     <div class="d-flex align-items-center gap-2">
       <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:34px; height:34px; background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
@@ -1405,19 +1405,20 @@
   font-size: 1.35rem;
 }
 
-/* Drawer Trigger Floating Tab */
+/* Drawer Trigger Floating Tab on RIGHT EDGE */
 .kasir-drawer-tab {
   position: fixed;
-  left: 260px;
-  top: 42%;
+  right: 0;
+  left: auto;
+  top: 45%;
   transform: translateY(-50%);
   z-index: 1040;
   background: var(--bg-surface, #1e293b);
   border: 1.5px solid var(--border-subtle, rgba(255, 255, 255, 0.15));
-  border-left: none;
-  border-radius: 0 12px 12px 0;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
   padding: 10px 14px;
-  box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: -4px 6px 20px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--text-primary, #f8fafc);
@@ -1425,22 +1426,22 @@
 }
 @media (max-width: 991.98px) {
   .kasir-drawer-tab {
-    left: 0;
+    right: 0;
     top: 55%;
   }
 }
 .kasir-drawer-tab:hover {
   background: var(--bg-elevated, #334155);
   border-color: #3b82f6;
-  box-shadow: 6px 8px 25px rgba(59, 130, 246, 0.3);
-  transform: translateY(-50%) translateX(4px);
+  box-shadow: -6px 8px 25px rgba(59, 130, 246, 0.3);
+  transform: translateY(-50%) translateX(-4px);
   color: #3b82f6;
 }
 [data-theme="light"] .kasir-drawer-tab {
   background: #ffffff;
   border-color: #cbd5e1;
   color: #1e293b;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: -4px 6px 15px rgba(0, 0, 0, 0.08);
 }
 [data-theme="light"] .kasir-drawer-tab:hover {
   background: #eff6ff;
@@ -1941,51 +1942,24 @@ function normalizeTime24(input) {
   }
 }
 
-  // Drawer Status Kasir Hover & Tab Integration
+  // Drawer Status Kasir: Click trigger & Tab Integration
   const drawerTriggerTab = document.getElementById("drawerTriggerTab");
-  const drawerTriggerBtn = document.getElementById("btnToggleStatusDrawer");
   const drawerStatusKasirEl = document.getElementById("drawerStatusKasir");
 
-  if (drawerStatusKasirEl) {
-    const getBsDrawer = () => bootstrap.Offcanvas.getOrCreateInstance(drawerStatusKasirEl);
-    let openTimer = null;
-    let closeTimer = null;
-
-    [drawerTriggerTab, drawerTriggerBtn].forEach(el => {
-      if (!el) return;
-      el.addEventListener("mouseenter", function() {
-        clearTimeout(closeTimer);
-        openTimer = setTimeout(() => {
-          getBsDrawer().show();
-        }, 120);
-      });
-      el.addEventListener("mouseleave", function() {
-        clearTimeout(openTimer);
-      });
-    });
-
-    drawerStatusKasirEl.addEventListener("mouseleave", function(e) {
-      if (!e.relatedTarget || !drawerStatusKasirEl.contains(e.relatedTarget)) {
-        closeTimer = setTimeout(() => {
-          const modal = document.getElementById("modalPanduanKasir");
-          if (!modal || !modal.classList.contains("show")) {
-            getBsDrawer().hide();
-          }
-        }, 350);
-      }
-    });
-
-    drawerStatusKasirEl.addEventListener("mouseenter", function() {
-      clearTimeout(closeTimer);
-    });
-  }
-
-  // Toggle drawerTriggerTab visibility on tab switch
+  // Tab Menu Switching integration: Muncul di Kanan saat menu "Buka Tutup & Kasir" di-klik
   document.querySelectorAll(".settings-menu .nav-link[data-settings-target]").forEach(link => {
     link.addEventListener("click", function() {
       const target = this.getAttribute("data-settings-target");
-      if (drawerTriggerTab) {
-        drawerTriggerTab.style.display = (target === "#settings-shift") ? "flex" : "none";
+      if (target === "#settings-shift") {
+        if (drawerTriggerTab) drawerTriggerTab.style.display = "flex";
+        if (drawerStatusKasirEl) {
+          bootstrap.Offcanvas.getOrCreateInstance(drawerStatusKasirEl).show();
+        }
+      } else {
+        if (drawerTriggerTab) drawerTriggerTab.style.display = "none";
+        if (drawerStatusKasirEl) {
+          bootstrap.Offcanvas.getOrCreateInstance(drawerStatusKasirEl).hide();
+        }
       }
     });
   });
