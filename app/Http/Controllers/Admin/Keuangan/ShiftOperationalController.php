@@ -18,10 +18,37 @@ class ShiftOperationalController extends Controller
      */
     private function resolveOutletId(): string
     {
-        return session('active_outlet_id') 
-            ?? session('outlet_id') 
-            ?? \App\Models\Admin\Outlet::where('delete_status', 0)->value('outlet_id') 
-            ?? 'COMP-001';
+        $id = session('active_outlet_id') ?? session('outlet_id');
+        if ($id) return (string) $id;
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('outlets')) {
+            $id = \App\Models\Admin\Outlet::where('delete_status', 0)->value('outlet_id');
+            if ($id) return (string) $id;
+        }
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('companies')) {
+            $id = \Illuminate\Support\Facades\DB::table('companies')->value('company_id')
+                ?? \Illuminate\Support\Facades\DB::table('companies')->value('id');
+            if ($id) return (string) $id;
+        }
+
+        return 'COMP-001';
+    }
+
+    /**
+     * Resolusi nama kolom relasi cabang fisik (outlet_id vs company_id) pada model
+     */
+    private function resolveBranchColumn(\Illuminate\Database\Eloquent\Model $model): ?string
+    {
+        $table = $model->getTable();
+        $conn = $model->getConnectionName() ?: config('database.default');
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'outlet_id')) {
+            return 'outlet_id';
+        }
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn($table, 'company_id')) {
+            return 'company_id';
+        }
+        return null;
     }
 
     /**
@@ -30,9 +57,12 @@ class ShiftOperationalController extends Controller
     public function index()
     {
         $companyId = $this->resolveOutletId();
+        $shiftSettingCol = $this->resolveBranchColumn(new ShiftSetting());
+        $shiftCol = $this->resolveBranchColumn(new Shift());
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
 
         // Ambil Shift Settings
-        $setting = ShiftSetting::where('outlet_id', $companyId)->first()
+        $setting = ($shiftSettingCol ? ShiftSetting::where($shiftSettingCol, $companyId)->first() : null)
             ?? ShiftSetting::first()
             ?? new ShiftSetting([
                 'daily_cutoff_time' => '03:00:00',
@@ -41,16 +71,16 @@ class ShiftOperationalController extends Controller
             ]);
 
         // Ambil Daftar Master Shift yang Aktif
-        $masterShifts = Shift::where('outlet_id', $companyId)
+        $masterShifts = $shiftCol ? Shift::where($shiftCol, $companyId)
             ->where('is_active', 1)
             ->orderBy('shift_number', 'asc')
-            ->get();
+            ->get() : Shift::where('is_active', 1)->orderBy('shift_number', 'asc')->get();
 
         // Cek Sesi Shift yang Sedang AKTIF (Status = open)
-        $activeShift = DailyClosing::where('outlet_id', $companyId)
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
             ->latest()
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->latest()->first();
 
         $liveStats = null;
         $drawerLogs = collect();
@@ -80,8 +110,17 @@ class ShiftOperationalController extends Controller
             }
 
             // Hitung Uang Masuk / Keluar Laci Realtime
-            $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'in')->sum('amount');
-            $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'out')->sum('amount');
+            if (\Illuminate\Support\Facades\Schema::hasTable('cash_drawer_logs')) {
+                $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'in')->sum('amount');
+                $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'out')->sum('amount');
+                $drawerLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)
+                    ->latest()
+                    ->get();
+            } else {
+                $drawerCashIn = (float) ($activeShift->cash_in_amount ?? 0);
+                $drawerCashOut = (float) ($activeShift->cash_out_amount ?? 0);
+                $drawerLogs = collect();
+            }
 
             $orderCount = Order::where('daily_closing_id', $activeShift->id)->count();
 
@@ -98,18 +137,14 @@ class ShiftOperationalController extends Controller
                 'expected_cash' => $expectedCash,
                 'runtime_duration' => Carbon::parse($activeShift->opened_at)->diffForHumans(null, true),
             ];
-
-            $drawerLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)
-                ->latest()
-                ->get();
         }
 
         // Histori 5 Shift Closing Terakhir
-        $recentClosings = DailyClosing::where('outlet_id', $companyId)
+        $recentClosings = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'closed')
             ->orderBy('closed_at', 'desc')
             ->take(5)
-            ->get();
+            ->get() : DailyClosing::where('status', 'closed')->orderBy('closed_at', 'desc')->take(5)->get();
 
         return view('admin.kasir.shift.index', compact(
             'setting',
@@ -127,11 +162,13 @@ class ShiftOperationalController extends Controller
     public function openShift(Request $request)
     {
         $companyId = $this->resolveOutletId();
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
+        $shiftSettingCol = $this->resolveBranchColumn(new ShiftSetting());
 
         // Cek apakah sudah ada shift yang sedang OPEN
-        $existingActive = DailyClosing::where('outlet_id', $companyId)
+        $existingActive = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->first();
 
         if ($existingActive) {
             $msg = 'Gagal Buka Kasir: Masih ada sesi kasir yang berstatus AKTIF (' . $existingActive->shift_name . '). Harap Tutup Kasir terlebih dahulu.';
@@ -150,7 +187,7 @@ class ShiftOperationalController extends Controller
         ]);
 
         // Hitung Tanggal Bisnis berdasarkan Cut-Off Time Resto
-        $setting = ShiftSetting::where('outlet_id', $companyId)->first();
+        $setting = ($shiftSettingCol ? ShiftSetting::where($shiftSettingCol, $companyId)->first() : null) ?? ShiftSetting::first();
         $cutoffTime = $setting ? $setting->daily_cutoff_time : '03:00:00';
         $businessDate = $this->calculateBusinessDate($cutoffTime);
 
@@ -158,8 +195,7 @@ class ShiftOperationalController extends Controller
         $cashierName = auth()->user()?->name ?? 'Kasir Utama';
         $shiftName = $request->filled('shift_name') ? $request->shift_name : ('Kasir ' . $cashierName);
 
-        $dailyClosing = DailyClosing::create([
-            'outlet_id' => $companyId,
+        $closingData = [
             'cashier_id' => auth()->id() ?? 1,
             'shift_number' => $shiftNumber,
             'shift_name' => $shiftName,
@@ -175,9 +211,13 @@ class ShiftOperationalController extends Controller
             'cash_difference' => 0,
             'notes' => 'Buka Kasir dimulai pada ' . now()->format('d/m/Y H:i:s'),
             'status' => 'open',
-        ]);
+        ];
+        if ($closingCol) {
+            $closingData[$closingCol] = $companyId;
+        }
+        $dailyClosing = DailyClosing::create($closingData);
 
-        $msg = 'Buka Kasir Berhasil! Sesi kasir (' . $dailyClosing->shift_name . ') telah dibuka dengan modal awal Rp ' . number_format($dailyClosing->starting_cash, 0, ',', '.') . '.';
+        $msg = 'Buka Kasir Berhasil! Kasir telah dibuka dengan modal awal Rp ' . number_format($dailyClosing->starting_cash, 0, ',', '.') . '.';
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
@@ -196,14 +236,15 @@ class ShiftOperationalController extends Controller
     public function cashIn(Request $request)
     {
         $companyId = $this->resolveOutletId();
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
 
-        $activeShift = DailyClosing::where('outlet_id', $companyId)
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
             ->latest()
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->latest()->first();
 
         if (!$activeShift) {
-            $errMsg = 'Tidak ada sesi shift yang sedang aktif.';
+            $errMsg = 'Kasir belum dibuka.';
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['status' => 'error', 'message' => $errMsg], 422);
             }
@@ -219,16 +260,22 @@ class ShiftOperationalController extends Controller
         $amount = (float) $request->amount;
         $category = $request->input('category') ?: 'Top-up Owner';
 
-        \App\Models\Admin\CashDrawerLog::create([
-            'outlet_id' => $companyId,
-            'daily_closing_id' => $activeShift->id,
-            'cashier_id' => auth()->id() ?? 1,
-            'type' => 'in',
-            'category' => $category,
-            'amount' => $amount,
-            'reason' => $request->reason,
-            'created_by' => auth()->user()->name ?? 'Kasir',
-        ]);
+        if (\Illuminate\Support\Facades\Schema::hasTable('cash_drawer_logs')) {
+            $drawerLogCol = $this->resolveBranchColumn(new \App\Models\Admin\CashDrawerLog());
+            $logData = [
+                'daily_closing_id' => $activeShift->id,
+                'cashier_id' => auth()->id() ?? 1,
+                'type' => 'in',
+                'category' => $category,
+                'amount' => $amount,
+                'reason' => $request->reason,
+                'created_by' => auth()->user()->name ?? 'Kasir',
+            ];
+            if ($drawerLogCol) {
+                $logData[$drawerLogCol] = $companyId;
+            }
+            \App\Models\Admin\CashDrawerLog::create($logData);
+        }
 
         $activeShift->increment('cash_in_amount', $amount);
         $activeShift->update([
@@ -255,14 +302,15 @@ class ShiftOperationalController extends Controller
     public function cashOut(Request $request)
     {
         $companyId = $this->resolveOutletId();
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
 
-        $activeShift = DailyClosing::where('outlet_id', $companyId)
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
             ->latest()
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->latest()->first();
 
         if (!$activeShift) {
-            $errMsg = 'Tidak ada sesi shift yang sedang aktif.';
+            $errMsg = 'Kasir belum dibuka.';
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['status' => 'error', 'message' => $errMsg], 422);
             }
@@ -278,16 +326,22 @@ class ShiftOperationalController extends Controller
         $amount = (float) $request->amount;
         $category = $request->input('category') ?: 'Petty Cash';
 
-        \App\Models\Admin\CashDrawerLog::create([
-            'outlet_id' => $companyId,
-            'daily_closing_id' => $activeShift->id,
-            'cashier_id' => auth()->id() ?? 1,
-            'type' => 'out',
-            'category' => $category,
-            'amount' => $amount,
-            'reason' => $request->reason,
-            'created_by' => auth()->user()->name ?? 'Kasir',
-        ]);
+        if (\Illuminate\Support\Facades\Schema::hasTable('cash_drawer_logs')) {
+            $drawerLogCol = $this->resolveBranchColumn(new \App\Models\Admin\CashDrawerLog());
+            $outLogData = [
+                'daily_closing_id' => $activeShift->id,
+                'cashier_id' => auth()->id() ?? 1,
+                'type' => 'out',
+                'category' => $category,
+                'amount' => $amount,
+                'reason' => $request->reason,
+                'created_by' => auth()->user()->name ?? 'Kasir',
+            ];
+            if ($drawerLogCol) {
+                $outLogData[$drawerLogCol] = $companyId;
+            }
+            \App\Models\Admin\CashDrawerLog::create($outLogData);
+        }
 
         $activeShift->increment('cash_out_amount', $amount);
         $activeShift->update([
@@ -314,14 +368,15 @@ class ShiftOperationalController extends Controller
     public function closeShift(Request $request)
     {
         $companyId = $this->resolveOutletId();
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
 
-        $activeShift = DailyClosing::where('outlet_id', $companyId)
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
             ->latest()
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->latest()->first();
 
         if (!$activeShift) {
-            $msg = 'Gagal Tutup Kasir: Tidak ditemukan sesi kasir yang sedang AKTIF.';
+            $msg = 'Gagal Tutup Kasir: Kasir belum dibuka.';
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['status' => 'error', 'message' => $msg], 422);
             }
@@ -375,21 +430,46 @@ class ShiftOperationalController extends Controller
             $notes .= ' [Audit Selisih: ' . $diffType . ' Rp ' . number_format(abs($difference), 0, ',', '.') . ']';
         }
 
-        $activeShift->update([
+        $updateData = [
             'closed_at' => now(),
             'system_cash_sales' => $cashSales,
             'system_non_cash_sales' => $nonCashSales,
             'system_expected_cash' => $expectedCash,
             'actual_cash_counted' => $actualCash,
-            'retained_cash_float' => $retainedFloat,
-            'cash_deposit_to_safe' => $depositToSafe,
             'cash_difference' => $difference,
-            'notes' => trim($notes),
-            'cashier_note' => $request->cashier_note,
             'status' => 'closed',
-        ]);
+        ];
 
-        $msg = 'Tutup Kasir Berhasil! Sesi kasir (' . $activeShift->shift_name . ') telah ditutup. Setor brankas: Rp ' . number_format($depositToSafe, 0, ',', '.') . ' (Sisa laci: Rp ' . number_format($retainedFloat, 0, ',', '.') . '). Selisih: Rp ' . number_format($difference, 0, ',', '.') . '.';
+        // Audit catatan terpadu
+        $auditNotes = [];
+        if ($notes) {
+            $auditNotes[] = $notes;
+        }
+        if ($retainedFloat > 0) {
+            $auditNotes[] = '[Sisa Laci: Rp ' . number_format($retainedFloat, 0, ',', '.') . ']';
+        }
+        if ($depositToSafe > 0) {
+            $auditNotes[] = '[Setor Brankas: Rp ' . number_format($depositToSafe, 0, ',', '.') . ']';
+        }
+        if ($request->filled('cashier_note')) {
+            $auditNotes[] = '[Catatan Kasir: ' . $request->cashier_note . ']';
+        }
+        $updateData['notes'] = trim(implode(' ', $auditNotes));
+
+        $conn = (new DailyClosing())->getConnectionName() ?: config('database.default');
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn('daily_closings', 'retained_cash_float')) {
+            $updateData['retained_cash_float'] = $retainedFloat;
+        }
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn('daily_closings', 'cash_deposit_to_safe')) {
+            $updateData['cash_deposit_to_safe'] = $depositToSafe;
+        }
+        if (\Illuminate\Support\Facades\Schema::connection($conn)->hasColumn('daily_closings', 'cashier_note')) {
+            $updateData['cashier_note'] = $request->cashier_note;
+        }
+
+        $activeShift->update($updateData);
+
+        $msg = 'Tutup Kasir Berhasil! Kasir telah ditutup. Setor brankas: Rp ' . number_format($depositToSafe, 0, ',', '.') . ' (Sisa modal laci: Rp ' . number_format($retainedFloat, 0, ',', '.') . '). Selisih kas: Rp ' . number_format($difference, 0, ',', '.') . '.';
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
@@ -445,13 +525,18 @@ class ShiftOperationalController extends Controller
             $nonCashSales = (float) $dailyClosing->system_non_cash_sales;
         }
 
-        $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->where('type', 'in')->sum('amount');
-        $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->where('type', 'out')->sum('amount');
+        if (\Illuminate\Support\Facades\Schema::hasTable('cash_drawer_logs')) {
+            $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->where('type', 'in')->sum('amount');
+            $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->where('type', 'out')->sum('amount');
+            $drawerLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->latest()->get();
+        } else {
+            $drawerCashIn = (float) ($dailyClosing->cash_in_amount ?? 0);
+            $drawerCashOut = (float) ($dailyClosing->cash_out_amount ?? 0);
+            $drawerLogs = collect();
+        }
         $expectedCash = $dailyClosing->starting_cash + $cashSales + $drawerCashIn - $drawerCashOut;
 
-        $drawerLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $dailyClosing->id)->latest()->get();
-
-        return view('admin.keuangan.shift-operational.x-report', compact(
+        return view('admin.kasir.shift.x-report', compact(
             'dailyClosing',
             'orders',
             'transactions',
@@ -467,20 +552,22 @@ class ShiftOperationalController extends Controller
     /**
      * API JSON Live Status Drawer untuk Topbar HUD & Offcanvas Slide-over
      */
-    public function getLiveDrawerStatus(Request $request)
+    public function getLiveDrawerStatus(?Request $request = null)
     {
+        $request = $request ?? request();
         $companyId = $this->resolveOutletId();
+        $closingCol = $this->resolveBranchColumn(new DailyClosing());
 
-        $activeShift = DailyClosing::where('outlet_id', $companyId)
+        $activeShift = $closingCol ? DailyClosing::where($closingCol, $companyId)
             ->where('status', 'open')
             ->latest()
-            ->first();
+            ->first() : DailyClosing::where('status', 'open')->latest()->first();
 
         if (!$activeShift) {
             return response()->json([
                 'status' => 'inactive',
                 'has_active_shift' => false,
-                'message' => 'Belum ada sesi shift yang aktif.',
+                'message' => 'Kasir belum dibuka.',
                 'data' => null,
             ]);
         }
@@ -508,28 +595,34 @@ class ShiftOperationalController extends Controller
             $nonCashSales = (float) $activeShift->system_non_cash_sales;
         }
 
-        $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'in')->sum('amount');
-        $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'out')->sum('amount');
+        if (\Illuminate\Support\Facades\Schema::hasTable('cash_drawer_logs')) {
+            $drawerCashIn = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'in')->sum('amount');
+            $drawerCashOut = (float) \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)->where('type', 'out')->sum('amount');
+            $recentLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)
+                ->latest()
+                ->take(5)
+                ->get()
+                ->map(function ($log) {
+                    return [
+                        'id' => $log->id,
+                        'type' => $log->type,
+                        'category' => $log->category,
+                        'amount' => (float) $log->amount,
+                        'amount_formatted' => 'Rp ' . number_format($log->amount, 0, ',', '.'),
+                        'reason' => $log->reason,
+                        'created_by' => $log->created_by,
+                        'time_formatted' => $log->created_at ? $log->created_at->format('H:i') : '-',
+                    ];
+                });
+        } else {
+            $drawerCashIn = (float) ($activeShift->cash_in_amount ?? 0);
+            $drawerCashOut = (float) ($activeShift->cash_out_amount ?? 0);
+            $recentLogs = collect();
+        }
+
         $orderCount = Order::where('daily_closing_id', $activeShift->id)->count();
 
         $expectedCash = (float) ($activeShift->starting_cash + $cashSales + $drawerCashIn - $drawerCashOut);
-
-        $recentLogs = \App\Models\Admin\CashDrawerLog::where('daily_closing_id', $activeShift->id)
-            ->latest()
-            ->take(5)
-            ->get()
-            ->map(function ($log) {
-                return [
-                    'id' => $log->id,
-                    'type' => $log->type,
-                    'category' => $log->category,
-                    'amount' => (float) $log->amount,
-                    'amount_formatted' => 'Rp ' . number_format($log->amount, 0, ',', '.'),
-                    'reason' => $log->reason,
-                    'created_by' => $log->created_by,
-                    'time_formatted' => $log->created_at ? $log->created_at->format('H:i') : '-',
-                ];
-            });
 
         $cashierUser = \App\Models\SysAdmin\User::find($activeShift->cashier_id);
         $cashierName = ($cashierUser && isset($cashierUser->name)) ? $cashierUser->name : 'Kasir POS';

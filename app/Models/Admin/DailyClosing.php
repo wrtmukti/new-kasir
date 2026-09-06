@@ -13,6 +13,7 @@ class DailyClosing extends Model
 
     protected $fillable = [
         'outlet_id',
+        'company_id',
         'cashier_id',
         'shift_number',
         'shift_name',
@@ -78,5 +79,20 @@ class DailyClosing extends Model
     public function getCashierNameAttribute()
     {
         return $this->cashier?->name ?? 'Kasir Cabang';
+    }
+
+    public function getRetainedCashFloatAttribute()
+    {
+        return (float) ($this->attributes['retained_cash_float'] ?? 0);
+    }
+
+    public function getCashDepositToSafeAttribute()
+    {
+        return (float) ($this->attributes['cash_deposit_to_safe'] ?? max(0, ($this->actual_cash_counted ?? 0) - ($this->retained_cash_float ?? 0)));
+    }
+
+    public function getCashierNoteAttribute()
+    {
+        return $this->attributes['cashier_note'] ?? null;
     }
 }

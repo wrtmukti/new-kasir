@@ -1,5 +1,7 @@
 > **Branch Context**: `deva-branch`
 > **Project Scope**: POS SaaS F&B MVP (Decoupled COGS + HPP Report + Master Tax & Service Charge + Shift Closing Kasir + Dedicated Cash Flow Plan B + Multi-Outlet Owner Executive Hub).
+> **Dokumen Milestone V4 (Seeder Multi-Cabang & Master Katalog)**: [`2026-09-07/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-07/milestone.md)
+> **Dokumen Rencana Perbaikan Detail (V4)**: [`2026-09-07/rencana_perbaikan.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-07/rencana_perbaikan.md)
 > **Dokumen Milestone V1 (Cash Flow & Kasir)**: [`2026-09-04/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-04/milestone.md)
 > **Dokumen Milestone V2 (Frontline POS Shift HUD & Enterprise Closing)**: [`2026-09-04/milestone_v2.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-09-04/milestone_v2.md)
 > **Dokumen Arsitektur Alur Kas & Shift Closing (JSON)**: [`cash_flow_and_clock_in_out_architecture.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/cash_flow_and_clock_in_out_architecture.md)
@@ -7,7 +9,7 @@
 > **Dokumen Milestone Phase 3 (Owner Portal)**: [`2026-08-29/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/milestone.md)
 > **Dokumen Task Tracker Phase 3**: [`2026-08-29/todo.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/todo.md)
 > **Dokumen Milestone Plan B**: [`2026-08-28/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-28/milestone.md)
-> **Status**: **Phase 1 & Phase 2 COMPLETED 100% | Phase 3 (Owner Multi-Branch Consolidated Hub) APPROVED & READY**
+> **Status**: **Phase 1, 2, 3 COMPLETED 100% | Phase 4 (Penyempurnaan Seeder Multi-Cabang) PLANNED**
 
 ---
 
@@ -67,9 +69,73 @@
 - [x] **2.3.8** Pendaftaran 13 Route Laporan pada `routes/web.php` & Verifikasi Caching Blade Template (100% Success)
 
 
+
+---
+
+### 🛠️ PHASE 4 — Penyempurnaan Seeder Multi-Cabang & Sinkronisasi Katalog Master (PENDING EXECUTION)
+
+#### 📦 M4.1 — Perbaikan Seeder Klien (`GeprekGambosSeeder.php` & `KopiSenjaSeeder.php`)
+- [ ] **4.1.1** **Katalog Menu Terpusat (Kategori & Produk)**: Set `outlet_id => null` pada `Category::create()` dan `Product::create()` agar berlaku otomatis untuk semua cabang (Jakarta, Bogor, Jogja, Surabaya).
+- [ ] **4.1.2** **Relasi Pivot `product_stock`**: Hubungkan produk dengan stok fisik cabang via `$prod->stocks()->attach($stock->stock_id, ['quantity' => 1])` agar kolom Bahan Baku tidak kosong dan auto-decrement transaksi berjalan.
+- [ ] **4.1.3** **Sesi Kasir (`DailyClosing` & `CashDrawerLog`) Multi-Cabang**: Buat loop sesi kasir (1 sesi kemarin `closed`, 1 sesi hari ini `open` dengan modal laci Rp 250.000) untuk seluruh 4 cabang, ditugaskan ke masing-masing kasir cabang.
+- [ ] **4.1.4** **Binding `daily_closing_id` Transaksi Non-Jakarta**: Hubungkan transaksi & order Bogor, Jogja, dan Surabaya ke ID closing cabang masing-masing (tidak lagi `null`).
+- [ ] **4.1.5** **Master Supplier & Bahan Mentah (`RawStockMaterial`)**: Jadikan bahan mentah dan PO dapat diakses atau di-seed per cabang.
+- [ ] **4.1.6** **Simulasi Kerugian Dapur (`CogsWasteLog`)**: Seed 2-3 log bahan makanan rusak/basi di dapur agar tabel Audit Waste di Portal Owner terisi realistis.
+- [ ] **4.1.7** **Laporan Laba Rugi Bulanan (`HppFinancialReport`)**: Buat data laporan bulanan untuk semua cabang agar performa laba rugi holding lengkap.
+- [ ] **4.1.8** **Paket Bundle & Diskon Promo**: Tambahkan seeder untuk paket bundle dan diskon aktif agar tab "Bundel" di POS Kasir tidak kosong.
+
+---
+
+## 🧪 Panduan Manual Testing di Browser (Untuk Dijalankan User)
+
+### 1. Uji Coba Pindah Cabang (Multi-Branch Switcher)
+- [ ] Masuk ke header atas, klik dropdown cabang aktif: **Surabaya Gubeng**.
+- [ ] Pastikan badge cabang berubah menjadi `Geprek Gambos - Surabaya (Surabaya Gubeng)`.
+
+### 2. Uji Coba Kasir POS (`/admin/kasir/order`)
+- [ ] Buka menu **Transaksi Toko > Kasir POS**.
+- [ ] **Cek Produk**: Pastikan ke-10 produk ayam geprek muncul lengkap dengan foto placeholder/ikon, harga, dan tombol `+ Pesan`.
+- [ ] **Cek Tab Kategori**: Klik tab *Semua*, *Ayam Geprek Spesial*, *Paket Hemat Lengkap*, *Side Dishes & Ekstra*, dan *Minuman Segar*. Pastikan filter kategori bekerja instan.
+- [ ] **Cek Tab Bundel**: Klik tab *Bundel*, pastikan paket hemat komplit muncul.
+- [ ] **Cek Status Laci**: Pastikan banner kuning peringatan *"Laci Kasir Belum Dibuka"* hilang karena kasir Surabaya sudah memiliki sesi aktif.
+
+### 3. Uji Coba Order & Transaksi Pembayaran
+- [ ] Klik `+ Pesan` pada 2-3 menu (misal: *Ayam Geprek Mozzarella* + *Es Teh Manis Jumbo*).
+- [ ] Klik tombol **Keranjang** di kanan atas.
+- [ ] Pilih nomor meja (misal: *Meja 1 Surabaya*).
+- [ ] Klik simpan pesanan dan lanjutkan ke pembayaran.
+- [ ] Pilih metode pembayaran (*Tunai / QRIS*), selesaikan pembayaran.
+- [ ] Pastikan redirect berhasil dan struk transaksi tercatat rapi.
+
+### 4. Uji Coba Verifikasi Pemotongan Stok (`/admin/kasir/stock`)
+- [ ] Masuk ke menu **Master Data Cabang > Stok Bahan**.
+- [ ] Pastikan jumlah porsi produk yang baru saja dibeli berkurang sesuai kuantitas transaksi.
+
+### 5. Uji Coba Buka / Tutup Kasir (`/admin/kasir/shift`)
+- [ ] Buka menu **Main Toko > Buka Kasir**.
+- [ ] Cek status kasir: Kasir aktif atas nama **Eko Prasetyo (Kasir Surabaya)**.
+- [ ] Cek Modal Laci Kasir: Tercatat Rp 250.000.
+- [ ] Cek Buku Kas Laci Hari Ini: Pemasukan dari transaksi baru masuk ke total uang laci.
+
+### 6. Uji Coba Portal Owner Multi-Cabang (`/admin/owner/dashboard`)
+- [ ] Klik tombol **👑 Kembali ke Portal Owner** di pojok kiri atas sidebar.
+- [ ] **Dashboard Konsolidasi**: Cek leaderboard 4 cabang (*Jakarta, Bogor, Jogja, Surabaya*). Pastikan omzet dan transaksi masing-masing kota tampil.
+- [ ] **Laba Rugi & Arus Kas** (`/admin/owner/financial`): Cek komparasi omzet, COGS HPP resep, laba kotor, dan laba bersih 4 cabang.
+- [ ] **Audit Selisih & Waste** (`/admin/owner/audit`): Cek tabel selisih kas kasir dan log bahan terbuang di dapur.
+- [ ] **Pusat Setoran & Hutang PO** (`/admin/owner/cash-debt`): Cek setoran brankas kasir dan tagihan supplier.
+
+---
+
+## 🎯 Rencana Kerja Hari Ini (What To Do Today)
+1. **Review TODO**: Periksa daftar perbaikan M4.1 di atas.
+2. **Persetujuan Rencana**: Berikan instruksi apakah Anda ingin AI mulai mengupdate kode seeder `GeprekGambosSeeder.php` dan `KopiSenjaSeeder.php`.
+3. **Eksekusi Seeder (Oleh User)**: Setelah seeder diperbaiki, user dapat menjalankan perintah seeder (atau biarkan AI yang menjalankan setelah izin).
+4. **Verifikasi Manual**: Jalankan checklist 6 poin manual testing di atas di browser.
+
 ---
 
 ## ⚠️ Aturan Kerja Khusus Branch `deva-branch`:
 1. **Branch Lock**: Jangan pernah commit atau ubah langsung di branch `main`/`master` — seluruh pengerjaan wajib di `deva-branch`.
 2. **Log Code Mandatory**: Setiap selesai buat/update file, langsung catat di `basic-knowledge/log_code.md`.
 3. **Konfirmasi TODO**: Sebelum mulai pengerjaan sesi, selalu cek file ini (`basic-knowledge/deva-branch/todo.md`) dan berikan kabar branch aktif ke user.
+

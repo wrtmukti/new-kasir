@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Z-Report Shift Closing #{{ $dailyClosing->id }}</title>
+  <title>Z-Report Tutup Kasir #{{ $dailyClosing->id }}</title>
   <style>
     body {
       font-family: 'Courier New', Courier, monospace;
@@ -29,14 +29,14 @@
 
   <div class="text-center">
     <div class="bold" style="font-size: 15px;">STRUK REKAP Z-REPORT</div>
-    <div>SESSION SHIFT CLOSING</div>
+    <div>LAPORAN PENUTUPAN KASIR</div>
     <div class="bold" style="font-size: 13px; margin-top: 4px;">GEPREK GAMBUS RESTO</div>
   </div>
 
   <div class="divider"></div>
 
   <div class="flex-between">
-    <span>ID Sesi Shift:</span>
+    <span>ID Tutup Kasir:</span>
     <span class="bold">#{{ $dailyClosing->id }}</span>
   </div>
   <div class="flex-between">
@@ -44,7 +44,7 @@
     <span>{{ \Carbon\Carbon::parse($dailyClosing->business_date)->format('d/m/Y') }}</span>
   </div>
   <div class="flex-between">
-    <span>Sesi Kasir:</span>
+    <span>Jam Buka Kasir:</span>
     <span class="bold">{{ $dailyClosing->shift_name }}</span>
   </div>
   <div class="flex-between">
@@ -117,7 +117,7 @@
     <span>Rp {{ number_format($dailyClosing->system_non_cash_sales, 0, ',', '.') }}</span>
   </div>
   <div class="flex-between bold">
-    <span>TOTAL OMZET SHIFT:</span>
+    <span>TOTAL OMZET PENJUALAN:</span>
     <span>Rp {{ number_format($dailyClosing->system_cash_sales + $dailyClosing->system_non_cash_sales, 0, ',', '.') }}</span>
   </div>
 
@@ -129,7 +129,7 @@
   <div class="divider"></div>
 
   <div class="text-center" style="margin-top: 15px;">
-    <div>*** SHIFT CLOSING VERIFIED ***</div>
+    <div>*** TUTUP KASIR TERVERIFIKASI ***</div>
     <div style="font-size: 10px; color: #555;">Dicetak pada {{ date('d/m/Y H:i:s') }}</div>
   </div>
 

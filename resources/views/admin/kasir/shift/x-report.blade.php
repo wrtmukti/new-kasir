@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>X-Report Interim Shift #{{ $dailyClosing->id }}</title>
+  <title>X-Report Interim Kasir #{{ $dailyClosing->id }}</title>
   <style>
     body {
       font-family: 'Courier New', Courier, monospace;
@@ -37,14 +37,14 @@
 
   <div class="text-center">
     <div class="bold" style="font-size: 15px;">STRUK REKAP X-REPORT</div>
-    <div class="badge-interim">*** INTERIM AUDIT (SHIFT BERJALAN) ***</div>
+    <div class="badge-interim">*** INTERIM AUDIT (KASIR BERJALAN) ***</div>
     <div class="bold" style="font-size: 13px; margin-top: 4px;">{{ session('active_outlet_name') ?? 'KASIR POS' }}</div>
   </div>
 
   <div class="divider"></div>
 
   <div class="flex-between">
-    <span>ID Sesi Shift:</span>
+    <span>ID Sesi Kasir:</span>
     <span class="bold">#{{ $dailyClosing->id }}</span>
   </div>
   <div class="flex-between">
@@ -52,7 +52,7 @@
     <span>{{ \Carbon\Carbon::parse($dailyClosing->business_date)->format('d/m/Y') }}</span>
   </div>
   <div class="flex-between">
-    <span>Sesi Kasir:</span>
+    <span>Jam Buka Kasir:</span>
     <span class="bold">{{ $dailyClosing->shift_name }}</span>
   </div>
   <div class="flex-between">
@@ -71,7 +71,7 @@
     <span class="bold">{{ now()->format('d/m/Y H:i:s') }}</span>
   </div>
   <div class="flex-between">
-    <span>Durasi Shift:</span>
+    <span>Durasi Kasir Buka:</span>
     <span>{{ \Carbon\Carbon::parse($dailyClosing->opened_at)->diffForHumans(null, true) }}</span>
   </div>
 
@@ -142,7 +142,7 @@
   <div class="text-center" style="margin-top: 15px; font-size: 11px;">
     <div>*** PERHATIAN ***</div>
     <div>Ini adalah laporan audit sementara (X-Report).</div>
-    <div>Bukan bukti penutupan shift (Z-Report).</div>
+    <div>Bukan bukti penutupan kasir final (Z-Report).</div>
     <div>Sesi kasir MASIH AKTIF.</div>
     <div style="margin-top: 6px;">Dicetak oleh: {{ auth()->user()->name ?? 'Kasir' }}</div>
     <div style="margin-top: 8px;">================================</div>

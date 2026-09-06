@@ -108,7 +108,7 @@ class ShiftSettingController extends Controller
         $primaryShift = $shiftCol ? Shift::where($shiftCol, $outletId)->first() : Shift::first();
 
         $shiftData = [
-            'shift_name' => 'Jam Operasional Toko',
+            'shift_name' => 'Jam Buka Kasir',
             'start_time' => $openTime,
             'end_time' => $closeTime,
             'default_starting_cash' => $startingCash,
@@ -128,12 +128,12 @@ class ShiftSettingController extends Controller
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'Pengaturan jam operasional & buka tutup kasir berhasil diperbarui.',
+                'message' => 'Pengaturan jam buka kasir & modal laci berhasil diperbarui.',
                 'data' => $setting,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Pengaturan jam operasional & buka tutup kasir berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Pengaturan jam buka kasir & modal laci berhasil diperbarui.');
     }
 
     /**

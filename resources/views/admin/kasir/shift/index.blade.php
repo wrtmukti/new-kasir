@@ -17,10 +17,10 @@
   </div>
   <div class="d-flex align-items-center gap-2">
     <a href="{{ route('admin.keuangan.setting-shift.index') }}" class="btn btn-outline-soft">
-      <i class="bi bi-sliders me-1"></i> Pengaturan Shift
+      <i class="bi bi-sliders me-1"></i> Pengaturan Jam Buka Kasir
     </a>
     <a href="{{ route('admin.reports.shifts') }}" class="btn btn-outline-soft">
-      <i class="bi bi-journal-text me-1"></i> Audit Shift
+      <i class="bi bi-journal-text me-1"></i> Audit Kasir (Z-Report)
     </a>
   </div>
 </div>
@@ -173,7 +173,7 @@
                   <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
                   <input type="number" name="retained_cash_float" id="retained_cash_float" class="form-control-modern fw-bold text-info fs-5" value="{{ $liveStats['starting_cash'] }}" step="any" min="0" oninput="calculateDeposit()">
                 </div>
-                <span class="text-muted-c" style="font-size:0.75rem;">Modal kas awal untuk kasir shift selanjutnya.</span>
+                <span class="text-muted-c" style="font-size:0.75rem;">Modal uang kembalian untuk buka kasir esok hari / berikutnya.</span>
               </div>
 
               <!-- 3. Uang Setor ke Brankas / Owner -->
@@ -202,14 +202,14 @@
 
               <!-- 5. Catatan Kasir -->
               <div class="col-12">
-                <label for="cashier_note" class="form-label-modern">Catatan Kasir / Kendala Shift (Opsional)</label>
-                <input type="text" name="cashier_note" id="cashier_note" class="form-control-modern" placeholder="Tuliskan catatan selisih kas atau informasi serah terima shift..." value="{{ $activeShift->notes }}">
+                <label for="cashier_note" class="form-label-modern">Catatan Kasir (Opsional)</label>
+                <input type="text" name="cashier_note" id="cashier_note" class="form-control-modern" placeholder="Tuliskan catatan selisih kas atau informasi penutupan kasir..." value="{{ $activeShift->notes }}">
               </div>
 
               <!-- 6. Action Submit Button -->
               <div class="col-12 mt-3">
                 <button type="submit" class="btn btn-danger-grad w-100 py-2.5 fw-semibold" id="btnCloseShift">
-                  <i class="bi bi-stop-circle-fill me-1"></i> Tutup Shift &amp; Cetak Z-Report
+                  <i class="bi bi-stop-circle-fill me-1"></i> Tutup Kasir &amp; Cetak Z-Report
                 </button>
               </div>
             </div>
@@ -223,7 +223,7 @@
       <div class="card h-100">
         <div class="card-header-flex">
           <div>
-            <h6><i class="bi bi-journal-text text-primary me-2"></i>Buku Kas Laci Shift Ini</h6>
+            <h6><i class="bi bi-journal-text text-primary me-2"></i>Buku Kas Laci Kasir Hari Ini</h6>
             <span class="text-muted-c" style="font-size:0.78rem;">Riwayat kas masuk &amp; keluar laci</span>
           </div>
           <span class="badge badge-primary">{{ $drawerLogs->count() }} Mutasi</span>
@@ -269,7 +269,7 @@
           @else
             <div class="text-center py-5 text-muted-c">
               <i class="bi bi-inbox fs-2 d-block mb-2 opacity-50"></i>
-              <p class="mb-0" style="font-size:0.85rem;">Belum ada mutasi kas masuk/keluar laci pada shift ini.</p>
+              <p class="mb-0" style="font-size:0.85rem;">Belum ada mutasi kas masuk/keluar laci saat ini.</p>
               <span style="font-size:0.75rem;">Gunakan tombol <strong>+ Kas Masuk</strong> atau <strong>- Kas Keluar</strong> di atas jika ada top-up atau petty cash.</span>
             </div>
           @endif
@@ -303,7 +303,7 @@
         <div class="card-body p-4">
           <form action="{{ route('admin.keuangan.shift-operational.open') }}" method="POST" id="formOpenShift">
             @csrf
-            <input type="hidden" name="shift_name" id="shift_name" value="Sesi Kasir">
+            <input type="hidden" name="shift_name" id="shift_name" value="Kasir Utama">
             <input type="hidden" name="shift_number" id="shift_number" value="1">
 
             <div class="mb-3">
@@ -355,7 +355,7 @@
   <div class="card-header-flex">
     <div>
       <h6><i class="bi bi-journal-check text-primary me-2"></i>Histori 5 Penutupan Kasir Terakhir</h6>
-      <span class="text-muted-c" style="font-size:0.78rem;">Rekapitulasi 5 sesi penutupan laci kasir sebelumnya</span>
+      <span class="text-muted-c" style="font-size:0.78rem;">Rekapitulasi 5 penutupan laci kasir sebelumnya</span>
     </div>
     <a href="{{ route('admin.reports.shifts') }}" class="btn btn-outline-soft btn-sm">
       Lihat Semua Audit <i class="bi bi-arrow-right ms-1"></i>
@@ -414,7 +414,7 @@
           @empty
             <tr>
               <td colspan="9" class="text-center py-4 text-muted-c">
-                Belum ada histori shift closing.
+                Belum ada histori penutupan kasir.
               </td>
             </tr>
           @endforelse

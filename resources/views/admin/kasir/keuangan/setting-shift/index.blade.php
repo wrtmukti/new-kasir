@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Pengaturan Jam Operasional & Buka Tutup Kasir')
+@section('title', 'Pengaturan Jam Buka Kasir & Modal Laci')
 
 @php $activeMenu = 'setting-shift' @endphp
 
@@ -130,11 +130,11 @@
 @section('content')
 <div class="page-header">
   <div>
-    <h1>Pengaturan Jam Operasional & Buka Tutup Kasir</h1>
+    <h1>Pengaturan Jam Buka Kasir & Modal Laci</h1>
     <div class="breadcrumb-trail">
       <a href="{{ route('admin.dashboard') }}">Beranda</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
       <span>Keuangan & Setting</span><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Buka Tutup & Kasir</span>
+      <span>Jam Buka Kasir</span>
     </div>
   </div>
   <div class="d-flex align-items-center gap-2">
@@ -142,7 +142,7 @@
       <i class="bi bi-cash-stack me-1"></i> Buka / Tutup Kasir
     </a>
     <a href="{{ route('admin.reports.shifts') }}" class="btn btn-outline-secondary rounded-pill px-3 py-2 btn-sm">
-      <i class="bi bi-shield-lock me-1"></i> Audit Closing (Z-Report)
+      <i class="bi bi-shield-lock me-1"></i> Audit Buka-Tutup (Z-Report)
     </a>
   </div>
 </div>
@@ -163,8 +163,8 @@
         <i class="bi bi-shop-window fs-5"></i>
       </div>
       <div>
-        <h6 class="mb-0 fw-bold">Konfigurasi Jam Operasional &amp; Mode Kasir</h6>
-        <small class="text-muted-c" style="font-size:0.75rem;">Atur metode kerja kasir (Manual vs Otomatis), modal awal, dan cut-off harian</small>
+        <h6 class="mb-0 fw-bold">Pengaturan Jam Buka Kasir &amp; Modal Laci</h6>
+        <small class="text-muted-c" style="font-size:0.75rem;">Atur jam buka kasir (24 jam nonstop atau jam tertentu), modal uang kembalian di laci, dan cut-off harian</small>
       </div>
     </div>
 
@@ -190,15 +190,40 @@
     <form action="{{ route('admin.keuangan.setting-shift.update-cutoff') }}" method="POST" id="formCutoff">
       @csrf
       
-      <!-- SECTION 1: PILIH MODE PENGOPERASIAN KASIR -->
+      <!-- SECTION 1: PILIH JAM OPERASIONAL KASIR -->
       <div class="mb-4">
         <div class="d-flex align-items-center justify-content-between mb-2">
-          <label class="form-label-modern mb-0 fw-bold text-uppercase" style="font-size:0.8rem; letter-spacing:0.5px;">1. Pilih Mode Pengoperasian Kasir</label>
-          <span class="text-muted-c" style="font-size:0.75rem;">Pilih alur kerja kasir yang paling cocok untuk outlet Anda</span>
+          <label class="form-label-modern mb-0 fw-bold text-uppercase" style="font-size:0.8rem; letter-spacing:0.5px;">1. Pilih Jam Operasional Kasir</label>
+          <span class="text-muted-c" style="font-size:0.75rem;">Pilih model jam buka kasir yang paling sesuai untuk toko / resto Anda</span>
         </div>
 
         <div class="row g-3">
-          <!-- Mode 1: Manual (Buka & Tutup Bebas) -->
+          <!-- Mode 1: Terjadwal / 24 Jam -->
+          <div class="col-md-6">
+            <div class="mode-box-card @if(($setting->shift_mode ?? 'auto_master') !== 'manual') active @endif" onclick="selectShiftMode('auto_master')">
+              <div class="d-flex align-items-center justify-content-between mb-2.5">
+                <div class="mode-icon-circle" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-1, #6366f1);">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5" style="font-size:0.68rem; font-weight:600;">
+                    24 Jam / Jam Tertentu
+                  </span>
+                  <input type="radio" name="shift_mode" value="auto_master" id="mode_auto_master" class="form-check-input" @if(($setting->shift_mode ?? 'auto_master') !== 'manual') checked @endif style="cursor: pointer;">
+                </div>
+              </div>
+              <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Jam Buka Terjadwal / 24 Jam</div>
+              <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Kasir buka 24 jam nonstop atau diatur dari jam berapa sampai jam berapa, modal kembalian siap otomatis.</p>
+              <ul class="list-unstyled mb-0 text-muted-c" style="font-size:0.77rem; line-height: 1.65;">
+                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Bisa diset untuk <strong>Toko 24 Jam</strong> (00:00 - 23:59)</li>
+                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Bisa diset jam buka tertentu (contoh: <strong>08:00 - 22:00</strong>)</li>
+                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Modal uang kembalian otomatis disiapkan setiap hari</li>
+                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Sistem otomatis menghitung kebutuhan setoran saat tutup kasir</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mode 2: Manual (Buka Bebas) -->
           <div class="col-md-6">
             <div class="mode-box-card @if(($setting->shift_mode ?? 'auto_master') === 'manual') active @endif" onclick="selectShiftMode('manual')">
               <div class="d-flex align-items-center justify-content-between mb-2.5">
@@ -212,38 +237,13 @@
                   <input type="radio" name="shift_mode" value="manual" id="mode_manual" class="form-check-input" @if(($setting->shift_mode ?? 'auto_master') === 'manual') checked @endif style="cursor: pointer;">
                 </div>
               </div>
-              <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Manual (Buka Bebas)</div>
-              <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Kasir buka dan tutup toko secara bebas sesuai jam riil user tanpa batasan jadwal kaku.</p>
+              <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Buka Bebas (Manual)</div>
+              <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Kasir buka dan tutup toko secara bebas sesuai jam riil user tanpa jadwal operasional tetap.</p>
               <ul class="list-unstyled mb-0 text-muted-c" style="font-size:0.77rem; line-height: 1.65;">
-                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Buka &amp; tutup kasir bebas kapan saja</li>
-                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Kasir menginput modal awal setiap kali buka kasir</li>
-                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Pas closing, kasir mengisi uang fisik aktual di laci</li>
+                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Buka &amp; tutup kasir bebas kapan saja saat mulai jualan</li>
+                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Kasir menginput modal uang kembalian saat buka kasir</li>
+                <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Saat tutup kasir, kasir menghitung uang fisik di laci</li>
                 <li><i class="bi bi-check-circle-fill text-warning me-1.5"></i>Owner memantau selisih fisik kas vs sistem di Z-Report</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Mode 2: Otomatis (Jadwal Tetap & Standar Modal) -->
-          <div class="col-md-6">
-            <div class="mode-box-card @if(($setting->shift_mode ?? 'auto_master') !== 'manual') active @endif" onclick="selectShiftMode('auto_master')">
-              <div class="d-flex align-items-center justify-content-between mb-2.5">
-                <div class="mode-icon-circle" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-1, #6366f1);">
-                  <i class="bi bi-shop"></i>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5" style="font-size:0.68rem; font-weight:600;">
-                    Terjadwal (Standar F&amp;B)
-                  </span>
-                  <input type="radio" name="shift_mode" value="auto_master" id="mode_auto_master" class="form-check-input" @if(($setting->shift_mode ?? 'auto_master') !== 'manual') checked @endif style="cursor: pointer;">
-                </div>
-              </div>
-              <div class="fw-bold mb-1 fs-6" style="color: var(--text-primary);">Otomatis (Jadwal Tetap)</div>
-              <p class="text-muted-c mb-2.5" style="font-size:0.82rem; line-height: 1.4;">Jam operasional toko dan modal awal diset tetap (misal Rp 300rb) otomatis setiap hari.</p>
-              <ul class="list-unstyled mb-0 text-muted-c" style="font-size:0.77rem; line-height: 1.65;">
-                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Setting jam buka dan tutup toko operasional</li>
-                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Modal kas awal otomatis terisi nominal tetap setiap hari</li>
-                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Periode transaksi teratur dalam rentang jam buka</li>
-                <li><i class="bi bi-check-circle-fill text-primary me-1.5"></i>Sistem otomatis kalkulasi kebutuhan top-up kasir esok hari</li>
               </ul>
             </div>
           </div>
@@ -251,24 +251,24 @@
       </div>
 
       <!-- SECTION 2: DYNAMIC SETTINGS SESUAI MODE -->
-      <!-- BOX A: KONFIGURASI MODE OTOMATIS (TERJADWAL & MODAL TETAP) -->
+      <!-- BOX A: KONFIGURASI JAM BUKA TERJADWAL / 24 JAM -->
       <div id="autoScheduleBox" class="p-3.5 rounded-3 mb-4" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle); display: {{ (($setting->shift_mode ?? 'auto_master') !== 'manual') ? 'block' : 'none' }};">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-calendar-check text-primary fs-5"></i>
             <div>
-              <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Konfigurasi Jadwal Toko &amp; Modal Awal Kasir</h6>
-              <small class="text-muted-c" style="font-size:0.74rem;">Jam operasional toko dan nominal kas laci yang selalu disiapkan</small>
+              <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Pengaturan Jam Buka Kasir &amp; Modal Kembalian</h6>
+              <small class="text-muted-c" style="font-size:0.74rem;">Atur apakah kasir buka 24 jam nonstop atau dari jam berapa sampai jam berapa kasir buka</small>
             </div>
           </div>
-          <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Mode Otomatis Aktif</span>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Jadwal Jam Buka Aktif</span>
         </div>
 
         <div class="row g-3 align-items-end">
-          <!-- Jam Buka Toko -->
+          <!-- Jam Buka Kasir -->
           <div class="col-md-3">
             <label for="open_time" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
-              Jam Buka Kasir / Toko <span class="text-danger">*</span>
+              Jam Buka Kasir <span class="text-danger">*</span>
             </label>
             <div class="input-group">
               <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
@@ -282,10 +282,10 @@
             </div>
           </div>
 
-          <!-- Jam Tutup Toko -->
+          <!-- Jam Tutup Kasir -->
           <div class="col-md-3">
             <label for="close_time" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
-              Jam Tutup Kasir / Toko <span class="text-danger">*</span>
+              Jam Tutup Kasir <span class="text-danger">*</span>
             </label>
             <div class="input-group">
               <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: var(--text-secondary);">
@@ -302,7 +302,7 @@
           <!-- Modal Kas Awal Tetap -->
           <div class="col-md-6">
             <label for="default_starting_cash" class="form-label-modern mb-1 fw-semibold" style="font-size: 0.8rem;">
-              Modal Kas Awal Tetap Kasir (Rp) <span class="text-danger">*</span>
+              Modal Uang Kembalian Kasir (Rp) <span class="text-danger">*</span>
             </label>
             <div class="input-group">
               <span class="input-group-text border-end-0" style="background: var(--bg-surface, rgba(255,255,255,0.04)); border-color: var(--border-subtle); color: #10b981; font-weight:bold;">
@@ -319,9 +319,9 @@
         <!-- Presets Cepat Jam & Modal -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-2.5 border-top" style="border-color: var(--border-subtle) !important;">
           <div class="d-flex flex-wrap gap-1.5 align-items-center">
-            <span class="text-muted-c me-1" style="font-size:0.73rem;">Preset Jam:</span>
-            <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('00:00', '23:59')">
-              <i class="bi bi-lightning-charge-fill text-warning me-1"></i>24 Jam (00:00 - 23:59)
+            <span class="text-muted-c me-1" style="font-size:0.73rem;">Pilihan Cepat Jam:</span>
+            <button type="button" class="btn btn-sm btn-subtle-preset fw-bold text-warning border-warning-subtle" onclick="setOperationalPreset('00:00', '23:59')">
+              <i class="bi bi-lightning-charge-fill text-warning me-1"></i>Toko 24 Jam (00:00 - 23:59)
             </button>
             <button type="button" class="btn btn-sm btn-subtle-preset" onclick="setOperationalPreset('08:00', '22:00')">
               Pagi - Malam (08:00 - 22:00)
@@ -349,15 +349,15 @@
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-sliders text-warning fs-5"></i>
             <div>
-              <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Alur Pengoperasian Manual (Bebas)</h6>
-              <small class="text-muted-c" style="font-size:0.74rem;">Kasir bebas menentukan waktu buka-tutup dan menginput modal kas awal saat bertugas</small>
+              <h6 class="mb-0 fw-bold" style="font-size: 0.92rem;">Alur Pengoperasian Buka Bebas (Manual)</h6>
+              <small class="text-muted-c" style="font-size:0.74rem;">Kasir bebas menentukan kapan buka kasir dan langsung memasukkan uang modal kembalian di laci</small>
             </div>
           </div>
-          <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Mode Manual Aktif</span>
+          <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill" style="font-size:0.7rem;">Mode Bebas Aktif</span>
         </div>
         <div class="p-3 rounded-2" style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b;">
           <p class="mb-1 text-muted-c" style="font-size:0.8rem; line-height:1.5;">
-            Pada <strong>Mode Manual</strong>, kasir tidak dibatasi oleh jam buka/tutup toko. Kasir dapat langsung mengklik menu <strong>"Buka Kasir"</strong> kapan saja dan menginput uang modal awal laci kasir secara langsung di layar kasir POS.
+            Pada <strong>Mode Bebas</strong>, kasir tidak dibatasi oleh jam operasional tetap. Kasir dapat langsung menekan tombol <strong>"Buka Kasir"</strong> kapan saja saat mulai jualan dan mengetikkan uang modal kembalian di laci secara langsung di layar POS.
           </p>
           <small class="text-warning fw-semibold" style="font-size:0.75rem;">
             <i class="bi bi-lightbulb me-1"></i> Tips Owner: Saat tutup kasir (closing), kasir tetap wajib menghitung uang fisik aktual di laci agar owner dapat melihat selisih kas di laporan Z-Report.
@@ -376,7 +376,7 @@
             <input type="time" name="daily_cutoff_time" id="daily_cutoff_time" class="form-control form-control-modern" value="{{ \Carbon\Carbon::parse($setting->daily_cutoff_time ?? '03:00')->format('H:i') }}" required>
           </div>
           <div class="text-muted-c mt-1" style="font-size: 0.76rem;">
-            Transaksi setelah jam ini dianggap sebagai <strong>Tanggal Bisnis Baru</strong> (Rekomendasi resto: <code>03:00</code> Pagi).
+            Untuk toko 24 jam maupun resto yang buka sampai larut/subuh, transaksi setelah jam ini otomatis dihitung sebagai <strong>Tanggal Bisnis Baru</strong> (Rekomendasi resto: <code>03:00</code> Subuh).
           </div>
         </div>
 
@@ -384,17 +384,17 @@
           <div class="form-check form-switch pt-1 mb-2">
             <input class="form-check-input" type="checkbox" name="auto_lock_unclosed" id="auto_lock_unclosed" value="1" @if($setting->auto_lock_unclosed ?? 1) checked @endif style="width: 2.4em; height: 1.2em; cursor: pointer;">
             <label class="form-check-label fw-semibold ms-2" for="auto_lock_unclosed">
-              Auto-Lock Kasir Kemarin (Strict Protection)
+              Auto-Lock Kasir Kemarin (Cegah Lupa Tutup Kasir)
             </label>
           </div>
           <div class="text-muted-c" style="font-size: 0.76rem;">
-            Kunci layar POS kasir jika sesi hari kemarin belum di-close oleh kasir sebelumnya.
+            Kunci layar POS kasir jika kasir hari kemarin belum melakukan penutupan kasir.
           </div>
         </div>
 
         <div class="col-12 text-end pt-2">
           <button type="submit" class="btn btn-primary-grad px-4 py-2.5 rounded-3 btn-loading" id="btnSaveCutoff">
-            <i class="bi bi-check-circle-fill me-1"></i> Simpan Pengaturan Buka Tutup
+            <i class="bi bi-check-circle-fill me-1"></i> Simpan Pengaturan Jam Buka Kasir
           </button>
         </div>
       </div>
@@ -440,16 +440,16 @@
     <!-- 1. LIVE MONITORING KASIR CARD -->
     <div class="card border-0 shadow-sm mb-3.5" style="background: var(--bg-elevated, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle) !important; border-radius: 0.85rem;">
       <div class="card-body p-3">
-        <!-- Sesi Details -->
+        <!-- Kasir Details -->
         <div class="mb-2.5 p-2 rounded-2" style="background: var(--bg-elevated-2, rgba(255,255,255,0.02)); border: 1px solid var(--border-subtle);">
           <div class="d-flex justify-content-between align-items-center mb-1">
-            <span class="text-muted-c small" style="font-size:0.75rem;">Sesi Bertugas</span>
+            <span class="text-muted-c small" style="font-size:0.75rem;">Kasir Bertugas</span>
             <span class="fw-semibold text-truncate" style="font-size:0.8rem; max-width:180px; color:var(--text-primary);">
-              {{ $activeShift ? $activeShift->shift_name : 'Belum Ada Sesi' }}
+              {{ $activeShift ? ($activeShift->cashier?->name ?? ($activeShift->shift_name ?: 'Kasir Utama')) : 'Kasir Belum Dibuka' }}
             </span>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted-c small" style="font-size:0.75rem;">Waktu Buka</span>
+            <span class="text-muted-c small" style="font-size:0.75rem;">Waktu Buka Kasir</span>
             <span class="fw-bold font-monospace text-success" style="font-size:0.8rem;">
               {{ $activeShift ? \Carbon\Carbon::parse($activeShift->opened_at)->format('H:i') . ' WIB' : '-' }}
             </span>
@@ -459,19 +459,21 @@
         <!-- Mode & Parameters -->
         <div class="d-flex flex-column gap-2 mb-3">
           <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted-c small" style="font-size:0.78rem;">Mode Operasi:</span>
+            <span class="text-muted-c small" style="font-size:0.78rem;">Mode Kasir:</span>
             <span id="modeSummaryBadge" class="badge {{ (($setting->shift_mode ?? 'auto_master') === 'manual') ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle' }} px-2 py-0.5 rounded-pill" style="font-size: 0.72rem;">
-              <i class="bi {{ (($setting->shift_mode ?? 'auto_master') === 'manual') ? 'bi-sliders' : 'bi-shop' }} me-1"></i>
-              {{ (($setting->shift_mode ?? 'auto_master') === 'manual') ? 'Manual (Buka Bebas)' : 'Otomatis (Jadwal)' }}
+              <i class="bi {{ (($setting->shift_mode ?? 'auto_master') === 'manual') ? 'bi-sliders' : 'bi-clock-history' }} me-1"></i>
+              {{ (($setting->shift_mode ?? 'auto_master') === 'manual') ? 'Buka Bebas (Manual)' : 'Terjadwal / 24 Jam' }}
             </span>
           </div>
 
           <div class="d-flex justify-content-between align-items-start">
-            <span class="text-muted-c small" style="font-size:0.78rem;">Jam Toko:</span>
+            <span class="text-muted-c small" style="font-size:0.78rem;">Jam Buka:</span>
             <div class="text-end">
               <span class="fw-bold font-monospace" id="scheduleSummaryText" style="font-size: 0.8rem; color: var(--text-primary);">
                 @if(($setting->shift_mode ?? 'auto_master') === 'manual')
-                  Fleksibel (Bebas Jam Berapa Saja)
+                  Fleksibel (Buka Bebas Kapan Saja)
+                @elseif(($primaryShift->start_time ?? '') == '00:00:00' && ($primaryShift->end_time ?? '') >= '23:59:00')
+                  24 Jam Nonstop (00:00 - 23:59)
                 @else
                   {{ \Carbon\Carbon::parse($primaryShift->start_time ?? '08:00')->format('H:i') }} - {{ \Carbon\Carbon::parse($primaryShift->end_time ?? '22:00')->format('H:i') }} WIB
                 @endif
@@ -504,7 +506,7 @@
       <div class="card-header-flex py-2 px-3 border-bottom" style="border-color: var(--border-subtle) !important;">
         <span class="fw-bold small d-flex align-items-center gap-1.5" style="color:var(--text-primary); font-size:0.82rem;">
           <i class="bi bi-diagram-3-fill text-primary"></i>
-          <span>Alur Buka Tutup F&amp;B</span>
+          <span>Alur Buka Tutup Kasir</span>
         </span>
         <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none text-primary fw-semibold" style="font-size:0.75rem;" data-bs-toggle="modal" data-bs-target="#modalPanduanKasir">
           Detail SOP <i class="bi bi-box-arrow-up-right ms-0.5" style="font-size:0.65rem;"></i>
@@ -518,7 +520,7 @@
             <div class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5" style="width:20px; height:20px; font-size:0.68rem;">1</div>
             <div>
               <div class="fw-bold" style="font-size: 0.78rem; color: var(--text-primary);">Buka Kasir</div>
-              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Kasir hitung modal laci (misal Rp 300rb) dan tekan Buka Kasir.</small>
+              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Kasir siapkan modal uang kembalian di laci dan tekan Buka Kasir.</small>
             </div>
           </div>
 
@@ -527,7 +529,7 @@
             <div class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5" style="width:20px; height:20px; font-size:0.68rem;">2</div>
             <div>
               <div class="fw-bold" style="font-size: 0.78rem; color: var(--text-primary);">Transaksi POS</div>
-              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Pencatatan pesanan. Pembayaran cash terkunci jika belum buka.</small>
+              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Pencatatan pesanan. Pembayaran cash terkunci jika kasir belum buka.</small>
             </div>
           </div>
 
@@ -536,7 +538,7 @@
             <div class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5" style="width:20px; height:20px; font-size:0.68rem;">3</div>
             <div>
               <div class="fw-bold" style="font-size: 0.78rem; color: var(--text-primary);">Tutup Kasir</div>
-              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Di akhir hari, kasir hitung fisik uang di laci dan input nominalnya.</small>
+              <small class="text-muted-c" style="font-size: 0.71rem; line-height: 1.3; display:block;">Di akhir hari / jam tutup, kasir hitung fisik uang di laci dan ketik nominalnya.</small>
             </div>
           </div>
 
@@ -552,7 +554,7 @@
 
         <button type="button" class="btn btn-outline-primary w-100 py-2 mt-2.5 rounded-3 fw-semibold d-flex align-items-center justify-content-center gap-2" style="font-size:0.8rem;" data-bs-toggle="modal" data-bs-target="#modalPanduanKasir">
           <i class="bi bi-journal-check"></i>
-          <span>Buka Panduan SOP Modal (Besar)</span>
+          <span>Buka Panduan Buka &amp; Tutup Kasir</span>
         </button>
       </div>
     </div>
@@ -561,117 +563,135 @@
 
 <!-- MODAL PANDUAN LENGKAP ALUR KERJA KASIR F&B (LEBAR, BESAR & JELAS) -->
 <div class="modal fade" id="modalPanduanKasir" tabindex="-1" aria-labelledby="modalPanduanKasirLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-    <div class="modal-content" style="background: var(--bg-surface, #1e293b); border: 1px solid var(--border-subtle); border-radius: 1.25rem; color: var(--text-primary); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);">
-      <div class="modal-header py-3 px-4" style="border-bottom: 1px solid var(--border-subtle);">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" style="max-width: 840px;">
+    <div class="modal-content" style="background: var(--bg-surface, #1e293b); border: 1px solid var(--border-subtle); border-radius: 1.35rem; color: var(--text-primary); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5);">
+      
+      <!-- Modal Header dengan Padding Nyaman -->
+      <div class="modal-header py-3.5 px-4 px-md-5" style="border-bottom: 1px solid var(--border-subtle);">
         <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-size: 1.4rem;">
-            <i class="bi bi-journal-check"></i>
+          <div class="rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 46px; height: 46px; background: rgba(59, 130, 246, 0.14); color: #3b82f6; font-size: 1.4rem;">
+            <i class="bi bi-journal-bookmark-fill"></i>
           </div>
           <div>
-            <h5 class="modal-title fw-bold mb-0" id="modalPanduanKasirLabel">Panduan Alur Buka Tutup Kasir Toko F&amp;B</h5>
-            <small class="text-muted-c">Standar Operasional Prosedur (SOP) Pengelolaan Uang Kas &amp; Laci Kasir POS</small>
+            <h5 class="modal-title fw-bold mb-0.5" id="modalPanduanKasirLabel" style="font-size: 1.15rem; letter-spacing: -0.01em;">Panduan Praktis Buka &amp; Tutup Kasir (24 Jam &amp; Jam Tertentu)</h5>
+            <div class="text-muted-c" style="font-size: 0.84rem;">4 Langkah mudah kelola uang di laci kasir agar selalu pas, rapi, dan transparan tanpa ribet</div>
           </div>
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body p-4">
-        <!-- Banner Penjelasan Singkat -->
-        <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3" style="background: rgba(59, 130, 246, 0.08); border-left: 4px solid #3b82f6;">
-          <i class="bi bi-info-circle-fill text-primary fs-4 flex-shrink-0"></i>
-          <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
-            Alur buka-tutup kasir dirancang agar <strong>uang fisik kas riil di laci</strong> selalu sinkron dengan <strong>catatan transaksi sistem</strong>, mencegah kebocoran uang kasir, serta memudahkan Owner memantau selisih harian.
+      <!-- Modal Body dengan Padding Luas & Tata Letak Ergonomis -->
+      <div class="modal-body px-4 px-md-5 py-4">
+        
+        <!-- Banner Penjelasan Konsep Awam (Kenapa harus Buka Tutup?) -->
+        <div class="p-3.5 p-md-4 rounded-3 mb-4 d-flex align-items-start gap-3.5" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.22); border-left: 5px solid #3b82f6;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5" style="width: 36px; height: 36px; background: rgba(59, 130, 246, 0.18); color: #3b82f6; font-size: 1.15rem;">
+            <i class="bi bi-lightbulb-fill"></i>
+          </div>
+          <div style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);">
+            <strong class="d-block mb-1 text-primary" style="font-size: 0.94rem;">Kenapa Toko Perlu Buka &amp; Tutup Kasir?</strong>
+            Supaya <strong>uang tunai di laci kasir</strong> selalu cocok dengan <strong>total transaksi di aplikasi kasir</strong>. Baik toko Anda beroperasi <strong>24 jam nonstop</strong> maupun <strong>jam buka tertentu</strong> (misal 08:00 - 22:00), kasir cukup buka kasir di awal dan tutup kasir di akhir hari. Kasir tidak pusing mencari uang kembalian, dan Owner bisa tenang karena selisih uang langsung ketahuan otomatis.
           </div>
         </div>
 
-        <!-- 4 Langkah SOP Lengkap -->
+        <!-- 4 Langkah SOP Lengkap (Bahasa Ramah Pengguna & Padding Lapang) -->
         <div class="d-flex flex-column gap-3.5">
-          <!-- Step 1 -->
-          <div class="p-3.5 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2.5">
-                <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 0.85rem;">1</span>
-                <h6 class="mb-0 fw-bold fs-6" style="color: var(--text-primary);">Langkah 1: Buka Kasir (Awal Jam Kerja)</h6>
+          
+          <!-- Langkah 1 -->
+          <div class="p-3.5 p-md-4 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center justify-content-between mb-2.5">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.9rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">1</span>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.98rem; color: var(--text-primary);">Buka Kasir &amp; Siapkan Uang Kembalian</h6>
               </div>
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; font-weight: 600;">Pagi / Awal Shift</span>
+              <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 0.74rem; font-weight: 600;">
+                <i class="bi bi-sun me-1"></i> Mulai Jualan
+              </span>
             </div>
-            <p class="text-muted-c mb-2" style="font-size: 0.85rem; line-height: 1.5;">
-              Sebelum kasir melayani transaksi pertama, kasir mengambil uang modal laci (uang kembalian) dari brankas, menghitung jumlah fisiknya di depan mesin kasir, lalu menekan tombol <strong>"Buka Kasir"</strong> di menu POS.
+            <p class="text-muted-c mb-3" style="font-size: 0.88rem; line-height: 1.65;">
+              Sebelum mulai melayani pembeli pertama, kasir menyiapkan uang modal (uang receh pecahan kecil untuk kembalian) ke dalam laci kasir, lalu menekan tombol <strong>"Buka Kasir"</strong> di aplikasi dan mengetikkan jumlah uang modalnya.
             </p>
-            <div class="p-2.5 rounded-2 d-flex align-items-center gap-2" style="background: rgba(16, 185, 129, 0.08); border: 1px dashed rgba(16, 185, 129, 0.3);">
-              <i class="bi bi-check-circle-fill text-success fs-6"></i>
-              <small class="text-success fw-semibold" style="font-size: 0.78rem;">
-                Jika menggunakan <strong>Mode Otomatis</strong>, modal kas awal (misal Rp 300.000) terisi otomatis dari template master shift toko.
-              </small>
+            <div class="p-3 rounded-3 d-flex align-items-center gap-2.5" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);">
+              <i class="bi bi-check-circle-fill text-success fs-5 flex-shrink-0"></i>
+              <div class="text-success fw-medium" style="font-size: 0.82rem; line-height: 1.5;">
+                <strong>Tips Praktis:</strong> Jika toko menggunakan <strong>Mode Jam Buka Terjadwal / 24 Jam</strong>, nominal uang modal (misal Rp 300.000) sudah langsung terisi di layar, kasir cukup mencocokkan uang fisiknya saja.
+              </div>
             </div>
           </div>
 
-          <!-- Step 2 -->
-          <div class="p-3.5 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2.5">
-                <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 0.85rem;">2</span>
-                <h6 class="mb-0 fw-bold fs-6" style="color: var(--text-primary);">Langkah 2: Transaksi Penjualan POS</h6>
+          <!-- Langkah 2 -->
+          <div class="p-3.5 p-md-4 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center justify-content-between mb-2.5">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.9rem; background: linear-gradient(135deg, #06b6d4, #0284c7);">2</span>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.98rem; color: var(--text-primary);">Layani Pembeli &amp; Catat Transaksi</h6>
               </div>
-              <span class="badge bg-info-subtle text-info border border-info-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; font-weight: 600;">Sepanjang Hari</span>
+              <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(6, 182, 212, 0.12); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.25); font-size: 0.74rem; font-weight: 600;">
+                <i class="bi bi-clock-history me-1"></i> Sepanjang Hari
+              </span>
             </div>
-            <p class="text-muted-c mb-2" style="font-size: 0.85rem; line-height: 1.5;">
-              Kasir melayani pesanan tamu, mencatat pembayaran tunai (cash) maupun non-tunai (QRIS, Kartu Debit/Kredit, Transfer). Seluruh arus kas masuk otomatis dihitung ke dalam ekspektasi kas laci.
+            <p class="text-muted-c mb-3" style="font-size: 0.88rem; line-height: 1.65;">
+              Kasir melayani pesanan pembeli seperti biasa — baik yang membayar tunai, QRIS, kartu debit, maupun transfer. Aplikasi akan otomatis mencatat dan menjumlahkan semua uang yang seharusnya terkumpul di laci kasir.
             </p>
-            <div class="p-2.5 rounded-2 d-flex align-items-center gap-2" style="background: rgba(59, 130, 246, 0.08); border: 1px dashed rgba(59, 130, 246, 0.3);">
-              <i class="bi bi-shield-lock-fill text-primary fs-6"></i>
-              <small class="text-primary fw-semibold" style="font-size: 0.78rem;">
-                <strong>Sistem Hard-Lock Kas:</strong> Pembayaran tunai otomatis ditolak sistem jika kasir belum melakukan sesi Buka Kasir.
-              </small>
+            <div class="p-3 rounded-3 d-flex align-items-center gap-2.5" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25);">
+              <i class="bi bi-shield-check text-primary fs-5 flex-shrink-0"></i>
+              <div class="text-primary fw-medium" style="font-size: 0.82rem; line-height: 1.5;">
+                <strong>Penting untuk Kasir:</strong> Pembayaran tunai tidak bisa diproses sebelum kasir klik "Buka Kasir", agar semua uang masuk selalu terlacak sejak awal dan tidak ada yang tercecer.
+              </div>
             </div>
           </div>
 
-          <!-- Step 3 -->
-          <div class="p-3.5 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2.5">
-                <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 0.85rem;">3</span>
-                <h6 class="mb-0 fw-bold fs-6" style="color: var(--text-primary);">Langkah 3: Tutup Kasir &amp; Hitung Fisik Laci (Closing)</h6>
+          <!-- Langkah 3 -->
+          <div class="p-3.5 p-md-4 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center justify-content-between mb-2.5">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.9rem; background: linear-gradient(135deg, #f59e0b, #d97706);">3</span>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.98rem; color: var(--text-primary);">Tutup Kasir &amp; Hitung Uang di Laci</h6>
               </div>
-              <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; font-weight: 600;">Malam / Selesai Operasional</span>
+              <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); font-size: 0.74rem; font-weight: 600;">
+                <i class="bi bi-moon-stars me-1"></i> Malam / Tutup Kasir
+              </span>
             </div>
-            <p class="text-muted-c mb-2" style="font-size: 0.85rem; line-height: 1.5;">
-              Saat toko selesai beroperasi, kasir menghitung seluruh uang fisik riil di laci kasir (pecahan uang kertas &amp; koin). Kasir memasukkan total uang fisik riil tersebut pada form <strong>Tutup Kasir</strong>.
+            <p class="text-muted-c mb-3" style="font-size: 0.88rem; line-height: 1.65;">
+              Saat toko selesai berjualan (atau saat waktu cut-off di toko 24 jam), kasir mengeluarkan dan menghitung seluruh uang tunai yang tersisa di laci (kertas &amp; koin). Setelah dihitung, kasir membuka menu <strong>"Tutup Kasir"</strong> dan mengetik total uang fisiknya.
             </p>
-            <div class="p-2.5 rounded-2 d-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.3);">
-              <i class="bi bi-eye-slash-fill text-warning fs-6"></i>
-              <small class="text-warning fw-semibold" style="font-size: 0.78rem;">
-                <strong>Blind Closing:</strong> Kasir menghitung fisik secara jujur dan objektif tanpa dipandu angka ekspektasi sistem terlebih dahulu.
-              </small>
+            <div class="p-3 rounded-3 d-flex align-items-center gap-2.5" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
+              <i class="bi bi-coin text-warning fs-5 flex-shrink-0"></i>
+              <div class="text-warning fw-medium" style="font-size: 0.82rem; line-height: 1.5;">
+                <strong>Hitung Apa Adanya:</strong> Kasir cukup ketik jumlah uang tunai yang dihitung secara jujur. Jangan khawatir, sistem yang akan menghitung perbandingannya dengan total penjualan.
+              </div>
             </div>
           </div>
 
-          <!-- Step 4 -->
-          <div class="p-3.5 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="d-flex align-items-center gap-2.5">
-                <span class="badge bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 28px; height: 28px; font-size: 0.85rem;">4</span>
-                <h6 class="mb-0 fw-bold fs-6" style="color: var(--text-primary);">Langkah 4: Rekonsiliasi &amp; Audit Selisih (Z-Report)</h6>
+          <!-- Langkah 4 -->
+          <div class="p-3.5 p-md-4 rounded-3" style="background: var(--bg-elevated-2, rgba(255,255,255,0.03)); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center justify-content-between mb-2.5">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.9rem; background: linear-gradient(135deg, #8b5cf6, #6d28d9);">4</span>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.98rem; color: var(--text-primary);">Cetak Laporan &amp; Cek Selisih Uang (Z-Report)</h6>
               </div>
-              <span class="badge bg-purple-subtle text-purple border border-purple-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; font-weight: 600;">Audit Owner / Spv</span>
+              <span class="badge px-3 py-1.5 rounded-pill" style="background: rgba(139, 92, 246, 0.12); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.25); font-size: 0.74rem; font-weight: 600;">
+                <i class="bi bi-file-earmark-check me-1"></i> Laporan Selesai &amp; Setor
+              </span>
             </div>
-            <p class="text-muted-c mb-2" style="font-size: 0.85rem; line-height: 1.5;">
-              Sistem mencetak struk Z-Report final yang merinci total penjualan, pembayaran non-tunai, uang fisik kasir, dan <strong>Selisih Kas (Selisih Lebih / Kurang)</strong>. Owner dapat langsung mengecek akurasi kasir dari portal laporan.
+            <p class="text-muted-c mb-3" style="font-size: 0.88rem; line-height: 1.65;">
+              Aplikasi langsung mencetak struk ringkasan harian (Z-Report). Di sini langsung terlihat jika ada uang pas, lebih, atau kurang. Kasir dan Owner juga bisa melihat berapa uang yang harus disetor ke brankas dan berapa yang disisakan di laci untuk modal besok.
             </p>
-            <div class="p-2.5 rounded-2 d-flex align-items-center gap-2" style="background: rgba(139, 92, 246, 0.08); border: 1px dashed rgba(139, 92, 246, 0.3);">
-              <i class="bi bi-bank2 text-purple fs-6"></i>
-              <small class="text-purple fw-semibold" style="font-size: 0.78rem;">
-                Jika kas kurang dari modal standar (misal tersisa Rp 200rb), Owner mentransfer Rp 100rb ke kasir agar modal besok tetap mulai dari Rp 300rb.
-              </small>
+            <div class="p-3 rounded-3 d-flex align-items-center gap-2.5" style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.25);">
+              <i class="bi bi-safe2-fill text-purple fs-5 flex-shrink-0"></i>
+              <div class="text-purple fw-medium" style="font-size: 0.82rem; line-height: 1.5;">
+                <strong>Contoh Setoran:</strong> Jika uang di laci ada Rp 1.500.000 dan modal besok Rp 300.000, maka Rp 1.200.000 disetor ke brankas toko, dan Rp 300.000 ditinggal di laci kasir untuk modal jualan esok pagi.
+              </div>
             </div>
           </div>
+
         </div>
       </div>
 
-      <div class="modal-footer py-3 px-4 d-flex justify-content-between align-items-center" style="border-top: 1px solid var(--border-subtle);">
-        <button type="button" class="btn btn-outline-secondary rounded-3 px-3 py-2" data-bs-dismiss="modal">Tutup</button>
-        <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-primary-grad rounded-3 px-4 py-2 fw-semibold d-flex align-items-center gap-2">
+      <!-- Modal Footer -->
+      <div class="modal-footer py-3.5 px-4 px-md-5 d-flex justify-content-between align-items-center" style="border-top: 1px solid var(--border-subtle);">
+        <button type="button" class="btn btn-outline-secondary rounded-3 px-4 py-2.5" data-bs-dismiss="modal">Tutup</button>
+        <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-primary-grad rounded-3 px-4 py-2.5 fw-semibold d-flex align-items-center gap-2 shadow-sm">
           <span>Ke Layar Buka / Tutup Kasir</span>
           <i class="bi bi-arrow-right"></i>
         </a>
@@ -721,25 +741,29 @@
       if (manualBox) manualBox.style.display = 'block';
       if (modeSummaryBadge) {
         modeSummaryBadge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1 rounded-pill';
-        modeSummaryBadge.innerHTML = '<i class="bi bi-sliders me-1"></i> Manual (Buka Bebas)';
+        modeSummaryBadge.innerHTML = '<i class="bi bi-sliders me-1"></i> Buka Bebas (Manual)';
       }
-      if (scheduleSummaryText) scheduleSummaryText.textContent = 'Fleksibel (Bebas Jam Berapa Saja)';
+      if (scheduleSummaryText) scheduleSummaryText.textContent = 'Fleksibel (Buka Bebas Kapan Saja)';
       if (modalSummaryText) modalSummaryText.textContent = 'Diinput Kasir Saat Buka';
     } else {
       if (autoBox) autoBox.style.display = 'block';
       if (manualBox) manualBox.style.display = 'none';
       if (modeSummaryBadge) {
         modeSummaryBadge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill';
-        modeSummaryBadge.innerHTML = '<i class="bi bi-shop me-1"></i> Otomatis (Terjadwal)';
+        modeSummaryBadge.innerHTML = '<i class="bi bi-clock-history me-1"></i> Terjadwal / 24 Jam';
       }
       if (scheduleSummaryText) {
         const openVal = document.getElementById('open_time')?.value || '08:00';
         const closeVal = document.getElementById('close_time')?.value || '22:00';
-        scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+        if (openVal === '00:00' && (closeVal === '23:59' || closeVal === '24:00')) {
+          scheduleSummaryText.textContent = '24 Jam Nonstop (00:00 - 23:59)';
+        } else {
+          scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+        }
       }
       if (modalSummaryText) {
         const cashVal = document.getElementById('default_starting_cash')?.value || '300000';
-        modalSummaryText.textContent = 'Otomatis Rp ' + Number(cashVal).toLocaleString('id-ID');
+        modalSummaryText.textContent = 'Rp ' + Number(cashVal).toLocaleString('id-ID');
       }
     }
   }
@@ -750,9 +774,13 @@
     if (openInput) openInput.value = openTime;
     if (closeInput) closeInput.value = closeTime;
     const scheduleSummaryText = document.getElementById('scheduleSummaryText');
-    if (scheduleSummaryText) scheduleSummaryText.textContent = openTime + ' - ' + closeTime + ' WIB';
+    const is24h = (openTime === '00:00' && (closeTime === '23:59' || closeTime === '24:00'));
+    if (scheduleSummaryText) {
+      scheduleSummaryText.textContent = is24h ? '24 Jam Nonstop (00:00 - 23:59)' : (openTime + ' - ' + closeTime + ' WIB');
+    }
     if (typeof NexoraToast === 'function') {
-      NexoraToast({ title: 'Preset Terpilih', message: `Jam Operasional diset ke ${openTime} - ${closeTime}`, type: 'info' });
+      const msg = is24h ? 'Jam Buka Kasir diset Toko 24 Jam (00:00 - 23:59)' : `Jam Buka Kasir diset ${openTime} - ${closeTime}`;
+      NexoraToast({ title: 'Jam Buka Terpilih', message: msg, type: 'info' });
     }
   }
 
@@ -760,9 +788,9 @@
     const cashInput = document.getElementById('default_starting_cash');
     if (cashInput) cashInput.value = amount;
     const modalSummaryText = document.getElementById('modalSummaryText');
-    if (modalSummaryText) modalSummaryText.textContent = 'Otomatis Rp ' + Number(amount).toLocaleString('id-ID');
+    if (modalSummaryText) modalSummaryText.textContent = 'Rp ' + Number(amount).toLocaleString('id-ID');
     if (typeof NexoraToast === 'function') {
-      NexoraToast({ title: 'Modal Terpilih', message: `Modal Awal diset ke Rp ${Number(amount).toLocaleString('id-ID')}`, type: 'info' });
+      NexoraToast({ title: 'Modal Terpilih', message: `Modal Uang Kembalian diset ke Rp ${Number(amount).toLocaleString('id-ID')}`, type: 'info' });
     }
   }
 
@@ -791,7 +819,11 @@
     const openVal = document.getElementById('open_time')?.value || '08:00';
     const closeVal = document.getElementById('close_time')?.value || '22:00';
     if (scheduleSummaryText && document.getElementById('mode_auto_master')?.checked) {
-      scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+      if (openVal === '00:00' && (closeVal === '23:59' || closeVal === '24:00')) {
+        scheduleSummaryText.textContent = '24 Jam Nonstop (00:00 - 23:59)';
+      } else {
+        scheduleSummaryText.textContent = openVal + ' - ' + closeVal + ' WIB';
+      }
     }
   }
 

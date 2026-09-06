@@ -244,7 +244,7 @@
             <span class="fw-bold" style="font-size: 0.78rem; color: var(--text-primary);">
               <i class="bi bi-clock-history me-1 text-primary"></i>5 Mutasi Laci Terakhir
             </span>
-            <span class="text-muted-c" style="font-size: 0.7rem;">Shift Ini</span>
+            <span class="text-muted-c" style="font-size: 0.7rem;">Hari Ini</span>
           </div>
           <div id="hudRecentLogsContainer" class="d-flex flex-column gap-1.5">
             <!-- Rendered by JavaScript -->

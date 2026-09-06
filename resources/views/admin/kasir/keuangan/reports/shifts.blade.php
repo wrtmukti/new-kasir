@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Audit Shift Closing Kasir')
+@section('title', 'Audit Buka Tutup Kasir')
 
 @php $activeMenu = 'reports-shifts' @endphp
 
@@ -8,10 +8,10 @@
 <!-- Page Header -->
 <div class="page-header no-print">
   <div>
-    <h1 class="h3 fw-bold mb-1" style="color: var(--text-primary);">🔐 Audit Shift Closing Kasir & Cash Balancing</h1>
+    <h1 class="h3 fw-bold mb-1" style="color: var(--text-primary);">🔐 Audit Buka Tutup Kasir & Cash Balancing</h1>
     <div class="breadcrumb-trail">
       <a href="{{ route('admin.reports.dashboard') }}">Dashboard Laporan</a><i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
-      <span>Audit Shift Closing</span>
+      <span>Audit Buka Tutup Kasir</span>
     </div>
   </div>
 
@@ -27,7 +27,7 @@
 
 <!-- Title Print Header -->
 <div class="print-only mb-4 text-center">
-  <h2 class="fw-bold">AUDIT SHIFT CLOSING KASIR & CASH BALANCING</h2>
+  <h2 class="fw-bold">AUDIT BUKA TUTUP KASIR & CASH BALANCING</h2>
   <p class="text-muted-c">Periode: {{ date('d/m/Y', strtotime($startDate)) }} s.d {{ date('d/m/Y', strtotime($endDate)) }} | Dicetak: {{ date('d F Y, H:i') }} WIB</p>
   <hr style="border-color: var(--border-subtle);">
 </div>
@@ -46,8 +46,8 @@
       </div>
 
       <div class="col-md-5">
-        <label class="form-label-modern mb-1">Pencarian Shift:</label>
-        <input type="text" name="search" class="form-control-modern" placeholder="Cari nama shift atau status..." value="{{ $search }}">
+        <label class="form-label-modern mb-1">Pencarian:</label>
+        <input type="text" name="search" class="form-control-modern" placeholder="Cari nama kasir atau status..." value="{{ $search }}">
       </div>
 
       <div class="col-md-3 d-flex align-items-end justify-content-md-end gap-2">
@@ -87,7 +87,7 @@
 <!-- Table Card (Nexora Category-Style Table) -->
 <div class="card">
   <div class="card-header-flex">
-    <h6>Audit Sesi Shift Closing Kasir</h6>
+    <h6>Audit Buka Tutup Kasir & Laci Kas</h6>
     <div class="d-flex align-items-center gap-2 no-print">
       <label class="form-label-modern mb-0" style="font-size:0.85rem;">Tampilkan</label>
       <form action="{{ route('admin.reports.shifts') }}" method="GET" id="perPageForm">
@@ -112,11 +112,11 @@
       <table class="table-modern">
         <thead>
           <tr>
-            <th>ID SHIFT</th>
+            <th>ID CLOSING</th>
             <th>TANGGAL BISNIS</th>
-            <th>NAMA SHIFT</th>
+            <th>JAM BUKA KASIR</th>
             <th class="text-end">MODAL AWAL</th>
-            <th class="text-end">TUNAI SYSTEM</th>
+            <th class="text-end">TUNAI SISTEM</th>
             <th class="text-end">NON-CASH</th>
             <th class="text-end">HITUNGAN FISIK</th>
             <th class="text-end">SELISIH</th>
@@ -126,7 +126,7 @@
         <tbody>
           @forelse($closings as $c)
             <tr>
-              <td class="fw-bold" style="color: var(--accent-1);">#SHIFT-{{ $c->id }}</td>
+              <td class="fw-bold" style="color: var(--accent-1);">#CLOSING-{{ $c->id }}</td>
               <td style="color: var(--text-secondary);">{{ $c->business_date->format('Y-m-d') }}</td>
               <td>
                 <span class="chip-tag" style="background: rgba(34, 211, 238, 0.15); color: #22d3ee; font-weight: 600;">
@@ -148,7 +148,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="9" class="text-center py-4 text-muted-c">Belum ada sesi shift closing pada rentang tanggal ini.</td>
+              <td colspan="9" class="text-center py-4 text-muted-c">Belum ada data penutupan kasir pada rentang tanggal ini.</td>
             </tr>
           @endforelse
         </tbody>
