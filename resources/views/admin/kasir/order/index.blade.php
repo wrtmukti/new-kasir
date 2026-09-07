@@ -167,9 +167,18 @@
       <div class="modal-body p-0">
         @if(!$hasActiveShift)
           <div class="px-3 pt-3">
-            <div class="alert alert-warning border-0 rounded-3 p-2.5 mb-0 d-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; font-size: 0.78rem;">
-              <i class="bi bi-exclamation-triangle-fill text-warning flex-shrink-0"></i>
-              <span><strong>Perhatian:</strong> Laci kasir belum dibuka. Anda wajib melakukan Buka Kasir sebelum menerima pembayaran tunai.</span>
+            <div class="alert alert-warning border-0 rounded-3 p-3 mb-0 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24; font-size: 0.82rem;">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-shield-lock-fill text-warning flex-shrink-0 fs-5"></i>
+                <div>
+                  <strong class="d-block" style="color: #f59e0b;">Laci Kasir Belum Dibuka!</strong>
+                  <span style="font-size: 0.76rem; color: var(--text-secondary);">Tombol pesanan dikunci. Kasir wajib Buka Kasir dan masukkan modal awal laci terlebih dahulu.</span>
+                </div>
+              </div>
+              <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-warning btn-sm text-dark fw-bold rounded-pill px-3 py-1.5 flex-shrink-0 d-inline-flex align-items-center gap-1 shadow-sm">
+                <i class="bi bi-cash-stack"></i>
+                <span>Buka Kasir</span>
+              </a>
             </div>
           </div>
         @endif
@@ -199,10 +208,22 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Lanjut</button>
-        <button type="button" class="btn btn-primary-grad" id="checkoutBtn" disabled>
-          <i class="bi bi-check-lg me-1"></i>Buat Pesanan
-        </button>
+        <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Lanjut Belanja</button>
+        @if(!$hasActiveShift)
+          <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="btn btn-warning text-dark fw-bold d-inline-flex align-items-center gap-1.5 shadow-sm">
+            <i class="bi bi-cash-stack"></i>
+            <span>Buka Kasir Sekarang</span>
+          </a>
+        @endif
+        @if(!$hasActiveShift)
+          <button type="button" class="btn btn-primary-grad disabled" id="checkoutBtn" disabled style="opacity: 0.5; pointer-events: none; cursor: not-allowed;" title="Laci kasir belum dibuka. Anda wajib Buka Kasir sebelum memproses pesanan.">
+            <i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka
+          </button>
+        @else
+          <button type="button" class="btn btn-primary-grad" id="checkoutBtn" disabled>
+            <i class="bi bi-check-lg me-1"></i>Buat Pesanan
+          </button>
+        @endif
       </div>
     </div>
   </div>
@@ -238,6 +259,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // ===== CART =====
+  const hasActiveShift = {{ $hasActiveShift ? 'true' : 'false' }};
   let cart = [];
   function count() { return cart.reduce((s,i) => s+i.qty, 0); }
   function discAmount(i) {
@@ -263,11 +285,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalD = document.getElementById('cartTotalDisplay');
     const checkoutBtn = document.getElementById('checkoutBtn');
 
+    if (!hasActiveShift) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.classList.add('disabled');
+      checkoutBtn.style.pointerEvents = 'none';
+      checkoutBtn.style.opacity = '0.5';
+      checkoutBtn.style.cursor = 'not-allowed';
+      checkoutBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka';
+      checkoutBtn.title = 'Laci kasir belum dibuka. Anda wajib Buka Kasir sebelum memproses pesanan.';
+    } else if (!cart.length) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.classList.remove('disabled');
+      checkoutBtn.style.pointerEvents = '';
+      checkoutBtn.style.opacity = '';
+      checkoutBtn.style.cursor = '';
+      checkoutBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+      checkoutBtn.title = 'Keranjang masih kosong';
+    } else {
+      checkoutBtn.disabled = false;
+      checkoutBtn.classList.remove('disabled');
+      checkoutBtn.style.pointerEvents = '';
+      checkoutBtn.style.opacity = '';
+      checkoutBtn.style.cursor = '';
+      checkoutBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+      checkoutBtn.title = '';
+    }
+
     if (!cart.length) {
-      empty.style.display = ''; table.style.display = 'none'; foot.style.display = 'none'; checkoutBtn.disabled = true;
+      empty.style.display = ''; table.style.display = 'none'; foot.style.display = 'none';
       return;
     }
-    empty.style.display = 'none'; table.style.display = ''; foot.style.display = ''; checkoutBtn.disabled = false;
+    empty.style.display = 'none'; table.style.display = ''; foot.style.display = '';
 
     let html = '';
     cart.forEach((item, idx) => {
@@ -329,7 +377,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ===== Checkout: cart → halaman create order =====
-  document.getElementById('checkoutBtn').addEventListener('click', function() {
+  document.getElementById('checkoutBtn').addEventListener('click', function(e) {
+    if (!hasActiveShift) {
+      e.preventDefault();
+      e.stopPropagation();
+      NexoraToast('Laci kasir belum dibuka! Silakan lakukan Buka Kasir terlebih dahulu.', 'warning');
+      return false;
+    }
     if (!cart.length) return;
     const btn = this;
     btn.disabled = true;
@@ -339,23 +393,38 @@ document.addEventListener('DOMContentLoaded', function() {
       headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' },
       body: JSON.stringify({ cart: cart, _token: '{{ csrf_token() }}' })
     })
-    .then(r => r.json())
-    .then(d => {
-      if (d.ok) {
+    .then(r => r.json().then(data => ({ status: r.status, body: data })))
+    .then(res => {
+      if (res.status === 200 && res.body.ok) {
         // Tutup modal
         var modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
         if (modal) modal.hide();
         window.location.href = '{{ route("admin.order.create") }}';
       } else {
-        NexoraToast('Gagal menyimpan keranjang.', 'danger');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+        const msg = (res.body && res.body.message) ? res.body.message : 'Gagal menyimpan keranjang.';
+        NexoraToast(msg, 'danger');
+        if (!hasActiveShift) {
+          btn.disabled = true;
+          btn.classList.add('disabled');
+          btn.innerHTML = '<i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka';
+        } else {
+          btn.disabled = false;
+          btn.classList.remove('disabled');
+          btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+        }
       }
     })
     .catch(() => {
-      NexoraToast('Gagal menyimpan keranjang.', 'danger');
-      btn.disabled = false;
-      btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+      NexoraToast('Gagal memproses keranjang.', 'danger');
+      if (!hasActiveShift) {
+        btn.disabled = true;
+        btn.classList.add('disabled');
+        btn.innerHTML = '<i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka';
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('disabled');
+        btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Buat Pesanan';
+      }
     });
   });
 
@@ -569,6 +638,15 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCart();
     NexoraToast(btn.dataset.bundleName + ' ditambahkan', 'success');
   });
+
+  // Render cart state awal & listener modal cart
+  renderCart();
+  const cartModalEl = document.getElementById('cartModal');
+  if (cartModalEl) {
+    cartModalEl.addEventListener('show.bs.modal', function() {
+      renderCart();
+    });
+  }
 });
 </script>
 @endpush

@@ -249,9 +249,15 @@
             <a href="{{ route('admin.order.show', $order) }}" class="btn btn-outline-soft">
               <i class="bi bi-arrow-left me-1"></i>Kembali
             </a>
-            <button type="submit" class="btn btn-success-grad btn-lg px-4 btn-loading" id="submitPaymentBtn">
-              <i class="bi bi-check2-circle me-1"></i>Proses & Selesaikan Pembayaran
-            </button>
+            @if(!$hasActiveShift)
+              <button type="submit" class="btn btn-success-grad btn-lg px-4 btn-loading disabled" id="submitPaymentBtn" disabled style="opacity:0.5; pointer-events:none; cursor:not-allowed;" title="Laci kasir belum dibuka. Anda wajib Buka Kasir sebelum memproses pembayaran tunai.">
+                <i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka
+              </button>
+            @else
+              <button type="submit" class="btn btn-success-grad btn-lg px-4 btn-loading" id="submitPaymentBtn">
+                <i class="bi bi-check2-circle me-1"></i>Proses & Selesaikan Pembayaran
+              </button>
+            @endif
           </div>
         </form>
       </div>
@@ -285,6 +291,8 @@
 
 @push('scripts')
 <script>
+const hasActiveShift = @json($hasActiveShift ?? false);
+
 // Global function untuk switch metode pembayaran
 function selectPaymentMethod(method) {
   const grandTotal = parseFloat(document.getElementById('displayGrandTotal').dataset.value) || 0;
@@ -307,6 +315,12 @@ function selectPaymentMethod(method) {
     sectionCash.classList.add('d-none');
     actualPaymentAmount.value = grandTotal;
     submitPaymentBtn.disabled = false;
+    submitPaymentBtn.classList.remove('disabled');
+    submitPaymentBtn.style.pointerEvents = '';
+    submitPaymentBtn.style.opacity = '';
+    submitPaymentBtn.style.cursor = '';
+    submitPaymentBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Proses & Selesaikan Pembayaran';
+    submitPaymentBtn.title = '';
     setTimeout(() => paymentReference.focus(), 100);
   } else {
     methodCashCard.classList.add('active');
@@ -317,6 +331,23 @@ function selectPaymentMethod(method) {
     actualPaymentAmount.value = rawVal;
     if (typeof window.updateChangeDisplay === 'function') {
       window.updateChangeDisplay(rawVal);
+    }
+    if (!hasActiveShift) {
+      submitPaymentBtn.disabled = true;
+      submitPaymentBtn.classList.add('disabled');
+      submitPaymentBtn.style.pointerEvents = 'none';
+      submitPaymentBtn.style.opacity = '0.5';
+      submitPaymentBtn.style.cursor = 'not-allowed';
+      submitPaymentBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka';
+      submitPaymentBtn.title = 'Laci kasir belum dibuka. Anda wajib Buka Kasir sebelum memproses pembayaran tunai.';
+    } else {
+      submitPaymentBtn.disabled = false;
+      submitPaymentBtn.classList.remove('disabled');
+      submitPaymentBtn.style.pointerEvents = '';
+      submitPaymentBtn.style.opacity = '';
+      submitPaymentBtn.style.cursor = '';
+      submitPaymentBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Proses & Selesaikan Pembayaran';
+      submitPaymentBtn.title = '';
     }
   }
 }

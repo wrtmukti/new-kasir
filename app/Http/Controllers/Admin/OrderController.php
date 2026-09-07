@@ -705,6 +705,17 @@ class OrderController extends Controller
 
     public function storeCart(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
+        $companyId = $activeOutletId ?? Outlet::where('delete_status', 0)->value('outlet_id');
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+
+        if (!$activeShift) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Laci kasir belum dibuka. Anda wajib melakukan Buka Kasir sebelum memproses pesanan.'
+            ], 422);
+        }
+
         $cart = $request->input('cart', []);
         if (empty($cart)) {
             return response()->json(['ok' => false, 'message' => 'Cart kosong']);
@@ -762,6 +773,16 @@ class OrderController extends Controller
 
     public function create()
     {
+        $activeOutletId = $this->getActiveOutletId();
+        $companyId = $activeOutletId ?? Outlet::where('delete_status', 0)->value('outlet_id');
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+        $hasActiveShift = (bool) $activeShift;
+
+        if (!$hasActiveShift) {
+            return redirect()->route('admin.order.index')
+                ->with('error', 'Laci kasir belum dibuka. Anda wajib melakukan Buka Kasir sebelum membuat pesanan.');
+        }
+
         $cart = session('order_cart', []);
         if (empty($cart)) {
             return redirect()->route('admin.order.index')
@@ -776,15 +797,21 @@ class OrderController extends Controller
             ->orderBy('customer_name')
             ->get(['customer_id', 'customer_name', 'customer_phone']);
         $vouchers = Voucher::active()->get();
-        $companyId = Outlet::where('delete_status', 0)->value('outlet_id');
-        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
-        $hasActiveShift = (bool) $activeShift;
 
         return view('admin.kasir.order.create', compact('cart', 'tables', 'customers', 'vouchers', 'hasActiveShift', 'activeShift'));
     }
 
     public function store(Request $request)
     {
+        $activeOutletId = $this->getActiveOutletId();
+        $companyId = $activeOutletId ?? Outlet::where('delete_status', 0)->value('outlet_id');
+        $activeShift = DailyClosing::where('outlet_id', $companyId)->where('status', 'open')->latest()->first();
+
+        if (!$activeShift) {
+            return redirect()->route('admin.order.index')
+                ->with('error', 'Laci kasir belum dibuka. Anda wajib melakukan Buka Kasir sebelum memproses pesanan.');
+        }
+
         $validated = $request->validate([
             'order_type' => 'required|string|in:dine_in,take_away,delivery',
             'order_table_id' => 'nullable',
@@ -811,8 +838,6 @@ class OrderController extends Controller
         if (empty($validated['items'] ?? []) && empty($validated['bundles'] ?? [])) {
             return back()->withErrors(['items' => 'Minimal satu item produk atau bundle.'])->withInput();
         }
-
-        $companyId = Outlet::where('delete_status', 0)->value('outlet_id');
 
         // Hitung grand total include diskon produk
         $grandTotal = 0;

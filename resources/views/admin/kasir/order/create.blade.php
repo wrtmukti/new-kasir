@@ -285,9 +285,15 @@
   {{-- Tombol --}}
   <div class="d-flex justify-content-end gap-2">
     <a href="{{ route('admin.order.index') }}" class="btn btn-outline-soft">Kembali</a>
-    <button type="button" class="btn btn-primary-grad" id="confirmBtn">
-      <i class="bi bi-check-lg me-1"></i>Konfirmasi Pesanan
-    </button>
+    @if(!$hasActiveShift)
+      <button type="button" class="btn btn-primary-grad disabled" id="confirmBtn" disabled style="opacity:0.5; pointer-events:none; cursor:not-allowed;" title="Laci kasir belum dibuka. Anda wajib Buka Kasir sebelum membuat pesanan.">
+        <i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka
+      </button>
+    @else
+      <button type="button" class="btn btn-primary-grad" id="confirmBtn">
+        <i class="bi bi-check-lg me-1"></i>Konfirmasi Pesanan
+      </button>
+    @endif
   </div>
 </form>
 
@@ -322,9 +328,15 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Cek Lagi</button>
-        <button type="button" class="btn btn-primary-grad" id="submitBtn">
-          <i class="bi bi-check-lg me-1"></i>Ya, Buat Pesanan
-        </button>
+        @if(!$hasActiveShift)
+          <button type="button" class="btn btn-primary-grad disabled" id="submitBtn" disabled style="opacity:0.5; pointer-events:none; cursor:not-allowed;">
+            <i class="bi bi-shield-lock-fill me-1"></i>Laci Belum Dibuka
+          </button>
+        @else
+          <button type="button" class="btn btn-primary-grad" id="submitBtn">
+            <i class="bi bi-check-lg me-1"></i>Ya, Buat Pesanan
+          </button>
+        @endif
       </div>
     </div>
   </div>
@@ -352,15 +364,26 @@ document.addEventListener('DOMContentLoaded', function() {
   const modalVoucherAmount = document.getElementById('modalVoucherAmount');
   const modalGrandTotal = document.getElementById('modalGrandTotal');
 
+  const hasActiveShift = {{ $hasActiveShift ? 'true' : 'false' }};
   let grandTotal = {{ $grandTotal }};
   let voucherAmount = 0;
 
-  confirmBtn.addEventListener('click', function() {
+  confirmBtn.addEventListener('click', function(e) {
+    if (!hasActiveShift) {
+      e.preventDefault();
+      NexoraToast('Laci kasir belum dibuka! Silakan lakukan Buka Kasir terlebih dahulu.', 'warning');
+      return false;
+    }
     var modal = new bootstrap.Modal(document.getElementById('confirmModal'));
     modal.show();
   });
 
-  submitBtn.addEventListener('click', function() {
+  submitBtn.addEventListener('click', function(e) {
+    if (!hasActiveShift) {
+      e.preventDefault();
+      NexoraToast('Laci kasir belum dibuka! Silakan lakukan Buka Kasir terlebih dahulu.', 'warning');
+      return false;
+    }
     const btn = this;
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memproses...';
