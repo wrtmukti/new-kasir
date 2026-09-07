@@ -812,8 +812,11 @@
               </div>
             </form>
           </div>
-        </div>
       </div>
+    </div>
+  </div>
+</div>
+</div>
 
 <!-- FLOATING DRAWER TAB ON LEFT EDGE (HOVER / CLICK TO SLIDE DRAWER) -->
 <div id="drawerTriggerTab" class="kasir-drawer-tab d-flex align-items-center gap-2" data-bs-toggle="offcanvas" data-bs-target="#drawerStatusKasir" title="Arahkan kursor atau klik untuk melihat Status Kasir" style="display:none;">

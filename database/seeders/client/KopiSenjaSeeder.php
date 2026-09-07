@@ -15,6 +15,8 @@ use App\Models\Admin\Table;
 use App\Models\Admin\Customer;
 use App\Models\Admin\Voucher;
 use App\Models\Admin\Discount;
+use App\Models\Admin\Bundle;
+use App\Models\Admin\BundleItem;
 use App\Models\Admin\Order;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
@@ -31,6 +33,7 @@ use App\Models\Admin\Keuangan\RawStockMaterialHistory;
 use App\Models\Admin\Keuangan\CogsRecipe;
 use App\Models\Admin\Keuangan\CogsRecipeItem;
 use App\Models\Admin\Keuangan\CogsRecipeHistory;
+use App\Models\Admin\Keuangan\CogsWasteLog;
 use App\Models\Admin\Keuangan\HppFinancialReport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -40,6 +43,7 @@ class KopiSenjaSeeder extends Seeder
 {
     /**
      * Run database seeds khusus client PT Kopi Senja Indonesia.
+     * Katalog Terpusat (Master Catalog), Stok Multi-Cabang, Shift Kasir Lengkap, Bundel & Diskon.
      */
     public function run(string $clientId): void
     {
@@ -126,7 +130,7 @@ class KopiSenjaSeeder extends Seeder
         $yog = $outlets['kopi-senja-yogyakarta'];
 
         // ==========================================
-        // 2. USERS (Lengkap client_id & outlet_id)
+        // 2. USERS (Lengkap client_id & outlet_id per Cabang)
         // ==========================================
         $users = [
             [
@@ -172,7 +176,13 @@ class KopiSenjaSeeder extends Seeder
         ];
 
         DB::connection('client')->table('users')->insert($users);
-        $cashierUser = DB::connection('client')->table('users')->where('role', 'kasir')->first();
+
+        $cashiersByOutlet = [
+            $jkt->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir@kopisenja.com')->first(),
+            $bdg->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir.bandung@kopisenja.com')->first(),
+            $yog->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir.jogja@kopisenja.com')->first(),
+        ];
+        $cashierUser = $cashiersByOutlet[$jkt->outlet_id];
 
         // ==========================================
         // 3. MEJA PER CABANG
@@ -190,7 +200,7 @@ class KopiSenjaSeeder extends Seeder
             Table::create([
                 'outlet_id' => $bdg->outlet_id,
                 'table_number' => $i,
-                'table_capacity' => ($i % 2 == 0) ? 4 : 2,
+                'table_capacity' => 4,
                 'table_status' => 'active',
                 'table_description' => "Meja {$i} Area Outdoor Dago",
             ]);
@@ -206,11 +216,11 @@ class KopiSenjaSeeder extends Seeder
         }
 
         // ==========================================
-        // 4. KATEGORI & PRODUK CAFE
+        // 4. KATEGORI & PRODUK CAFE (Master Catalog: outlet_id = null)
         // ==========================================
-        $catCoffee = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Coffee & Espresso', 'category_slug' => 'coffee-espresso', 'category_status' => 1]);
-        $catNonCoffee = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Non-Coffee & Mocktails', 'category_slug' => 'non-coffee-mocktails', 'category_status' => 1]);
-        $catFood = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Pastry & Toast', 'category_slug' => 'pastry-toast', 'category_status' => 1]);
+        $catCoffee = Category::create(['outlet_id' => null, 'category_name' => 'Coffee & Espresso', 'category_slug' => 'coffee-espresso', 'category_status' => 1]);
+        $catNonCoffee = Category::create(['outlet_id' => null, 'category_name' => 'Non-Coffee & Mocktails', 'category_slug' => 'non-coffee-mocktails', 'category_status' => 1]);
+        $catFood = Category::create(['outlet_id' => null, 'category_name' => 'Pastry & Toast', 'category_slug' => 'pastry-toast', 'category_status' => 1]);
 
         $productsData = [
             ['name' => 'Kopi Susu Senja (Aren)', 'cat' => $catCoffee, 'price' => 22000, 'cost' => 8500, 'sku' => 'KS-001', 'desc' => 'Espresso house blend dengan gula aren asli dan creamy fresh milk'],
@@ -228,7 +238,7 @@ class KopiSenjaSeeder extends Seeder
         $products = [];
         foreach ($productsData as $p) {
             $prod = Product::create([
-                'outlet_id' => $jkt->outlet_id,
+                'outlet_id' => null, // Master Catalog terpusat holding
                 'category_id' => $p['cat']->category_id,
                 'product_name' => $p['name'],
                 'product_slug' => Str::slug($p['name']),
@@ -239,25 +249,33 @@ class KopiSenjaSeeder extends Seeder
             ]);
             $products[] = $prod;
 
+            // Buat Stok Fisik per Cabang dan Hubungkan ke Pivot product_stock
             foreach ([$jkt, $bdg, $yog] as $ot) {
-                Stock::create([
+                $stk = Stock::create([
                     'outlet_id' => $ot->outlet_id,
-                    'stock_code' => 'STK-' . $p['sku'],
-                    'stock_name' => $prod->product_name,
+                    'stock_code' => 'STK-' . $p['sku'] . '-' . $ot->outlet_code,
+                    'stock_name' => $prod->product_name . ' (' . $ot->outlet_branch . ')',
                     'stock_slug' => Str::slug($prod->product_name . '-' . $ot->outlet_branch),
                     'stock_unit' => 'pcs',
                     'stock_amount' => rand(50, 200),
                     'stock_price' => $prod->product_price,
                     'stock_status' => 1,
                 ]);
+
+                $prod->stocks()->attach($stk->stock_id, [
+                    'outlet_id' => $ot->outlet_id,
+                    'quantity' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
         }
 
         // ==========================================
-        // 5. MASTER SUPPLIER
+        // 5. MASTER SUPPLIER (Terpusat)
         // ==========================================
         $supGayo = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-COFFEE-01',
             'supplier_name' => 'CV Gayo Highland Coffee',
             'supplier_contact' => 'Bpk. Faisal Gayo',
@@ -265,7 +283,7 @@ class KopiSenjaSeeder extends Seeder
             'supplier_address' => 'Takengon, Aceh Tengah',
         ]);
         $supDairy = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-DAIRY-01',
             'supplier_name' => 'PT Diamond Fresh Milk & Dairy',
             'supplier_contact' => 'Ibu Linda',
@@ -273,7 +291,7 @@ class KopiSenjaSeeder extends Seeder
             'supplier_address' => 'Kawasan Industri Pulogadung, Jakarta Timur',
         ]);
         $supPack = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-PACK-01',
             'supplier_name' => 'Mitra Packaging Solusindo',
             'supplier_contact' => 'Hendra Setiawan',
@@ -289,53 +307,44 @@ class KopiSenjaSeeder extends Seeder
                 'raw_material_code' => 'RAW-COFFEE-GAYO',
                 'name' => 'Biji Kopi Arabica Gayo (Roasted Beans)',
                 'unit' => 'gram',
-                'amount' => 15000.0, // 15 kg
+                'amount' => 15000.0,
                 'min_amount' => 2000.0,
-                'price_per_unit' => 280, // Rp 280 / gram (Rp 280.000 / kg)
+                'price_per_unit' => 280,
                 'loss_percent' => 5.0,
             ],
             [
                 'raw_material_code' => 'RAW-FRESH-MILK',
                 'name' => 'Fresh Milk UHT Full Cream',
                 'unit' => 'ml',
-                'amount' => 50000.0, // 50 Liter
+                'amount' => 50000.0,
                 'min_amount' => 10000.0,
-                'price_per_unit' => 22, // Rp 22 / ml (Rp 22.000 / Liter)
+                'price_per_unit' => 22,
                 'loss_percent' => 2.0,
             ],
             [
                 'raw_material_code' => 'RAW-GULA-AREN',
                 'name' => 'Gula Aren Organik Cair',
                 'unit' => 'ml',
-                'amount' => 20000.0, // 20 Liter
+                'amount' => 20000.0,
                 'min_amount' => 3000.0,
-                'price_per_unit' => 35, // Rp 35 / ml (Rp 35.000 / Liter)
+                'price_per_unit' => 35,
                 'loss_percent' => 1.0,
             ],
             [
                 'raw_material_code' => 'RAW-CARAMEL-SYRUP',
                 'name' => 'Sirup Karamel Premium Monin',
                 'unit' => 'ml',
-                'amount' => 10000.0, // 10 Liter
+                'amount' => 10000.0,
                 'min_amount' => 1500.0,
-                'price_per_unit' => 150, // Rp 150 / ml
+                'price_per_unit' => 120,
                 'loss_percent' => 1.0,
             ],
             [
-                'raw_material_code' => 'RAW-MATCHA-POWDER',
-                'name' => 'Matcha Powder Grade Uji',
-                'unit' => 'gram',
-                'amount' => 5000.0, // 5 kg
-                'min_amount' => 500.0,
-                'price_per_unit' => 450, // Rp 450 / gram
-                'loss_percent' => 2.0,
-            ],
-            [
-                'raw_material_code' => 'RAW-CUP-PAPER',
-                'name' => 'Cup Gelas Kertas Senja 12oz + Tutup',
+                'raw_material_code' => 'RAW-CUP-16OZ',
+                'name' => 'Paper Cup Hot/Cold 16oz + Lid',
                 'unit' => 'pcs',
                 'amount' => 1200.0,
-                'min_amount' => 200.0,
+                'min_amount' => 300.0,
                 'price_per_unit' => 850,
                 'loss_percent' => 0.0,
             ],
@@ -344,7 +353,7 @@ class KopiSenjaSeeder extends Seeder
         $rawStockMap = [];
         foreach ($rawMaterialsData as $rm) {
             $raw = RawStockMaterial::create([
-                'outlet_id' => $jkt->outlet_id,
+                'outlet_id' => null,
                 'raw_material_code' => $rm['raw_material_code'],
                 'name' => $rm['name'],
                 'slug' => Str::slug($rm['name']),
@@ -380,39 +389,39 @@ class KopiSenjaSeeder extends Seeder
         // ==========================================
         // 7. COGS RECIPES & RECIPE ITEMS
         // ==========================================
-        // Resep Kopi Susu Senja
-        $pSenja = $products[0];
-        $recipe1 = CogsRecipe::create([
-            'outlet_id' => $jkt->outlet_id,
-            'product_id' => $pSenja->product_id,
-            'recipe_name' => 'Resep Standard Kopi Susu Senja 12oz',
-            'target_food_cost' => 37.05,
-            'estimated_cogs' => 8150,
-            'suggested_price' => $pSenja->product_price,
-            'notes' => 'Resep andalan Kopi Susu Senja',
+        $pKopiSusu = $products[0];
+        $recipeKopiSusu = CogsRecipe::create([
+            'outlet_id' => null,
+            'product_id' => $pKopiSusu->product_id,
+            'recipe_name' => 'Resep Standar Kopi Susu Senja 16oz',
+            'target_food_cost' => 38.64,
+            'estimated_cogs' => 8400,
+            'suggested_price' => $pKopiSusu->product_price,
+            'notes' => 'Resep signature house blend espresso + fresh milk + gula aren',
             'created_by' => 'KopiSenjaSeeder',
         ]);
+
         CogsRecipeItem::create([
-            'cogs_recipe_id' => $recipe1->cogs_recipe_id,
+            'cogs_recipe_id' => $recipeKopiSusu->cogs_recipe_id,
             'raw_stock_material_id' => $rawStockMap['RAW-COFFEE-GAYO']->raw_stock_material_id,
-            'ingredient_qty' => 18, // 18g espresso
+            'ingredient_qty' => 18, // 18 gram espresso dose
             'ingredient_cost' => 18 * $rawStockMap['RAW-COFFEE-GAYO']->effective_price,
         ]);
         CogsRecipeItem::create([
-            'cogs_recipe_id' => $recipe1->cogs_recipe_id,
+            'cogs_recipe_id' => $recipeKopiSusu->cogs_recipe_id,
             'raw_stock_material_id' => $rawStockMap['RAW-FRESH-MILK']->raw_stock_material_id,
-            'ingredient_qty' => 100, // 100ml susu
-            'ingredient_cost' => 100 * $rawStockMap['RAW-FRESH-MILK']->effective_price,
+            'ingredient_qty' => 120, // 120 ml susu
+            'ingredient_cost' => 120 * $rawStockMap['RAW-FRESH-MILK']->effective_price,
         ]);
         CogsRecipeItem::create([
-            'cogs_recipe_id' => $recipe1->cogs_recipe_id,
+            'cogs_recipe_id' => $recipeKopiSusu->cogs_recipe_id,
             'raw_stock_material_id' => $rawStockMap['RAW-GULA-AREN']->raw_stock_material_id,
-            'ingredient_qty' => 20, // 20ml aren
-            'ingredient_cost' => 20 * $rawStockMap['RAW-GULA-AREN']->effective_price,
+            'ingredient_qty' => 25, // 25 ml gula aren cair
+            'ingredient_cost' => 25 * $rawStockMap['RAW-GULA-AREN']->effective_price,
         ]);
         CogsRecipeItem::create([
-            'cogs_recipe_id' => $recipe1->cogs_recipe_id,
-            'raw_stock_material_id' => $rawStockMap['RAW-CUP-PAPER']->raw_stock_material_id,
+            'cogs_recipe_id' => $recipeKopiSusu->cogs_recipe_id,
+            'raw_stock_material_id' => $rawStockMap['RAW-CUP-16OZ']->raw_stock_material_id,
             'ingredient_qty' => 1,
             'ingredient_cost' => 850,
         ]);
@@ -420,9 +429,8 @@ class KopiSenjaSeeder extends Seeder
         // ==========================================
         // 8. PURCHASE ORDERS & CASH FLOW DISBURSEMENTS
         // ==========================================
-        // PO 1: Lunas Transfer (Biji Kopi Gayo)
-        $po1Date = now()->subDays(12);
-        $po1Total = 5600000; // 20 kg x 280.000
+        $po1Date = now()->subDays(7);
+        $po1Total = 4200000;
         $po1 = PurchaseOrder::create([
             'outlet_id' => $jkt->outlet_id,
             'po_code' => 'PO-KS-2026-001',
@@ -431,43 +439,43 @@ class KopiSenjaSeeder extends Seeder
             'po_status' => 'completed',
             'payment_status' => 'paid',
             'payment_date' => $po1Date->copy()->addHours(2),
-            'payment_method' => 'transfer_bank',
-            'due_date' => $po1Date->copy()->addDays(14)->toDateString(),
+            'payment_method' => 'cash',
+            'due_date' => $po1Date->copy()->addDays(7)->toDateString(),
             'po_total_amount' => $po1Total,
-            'po_notes' => 'Restock biji kopi Arabica Gayo batch bulanan',
+            'po_notes' => 'Pasokan Biji Kopi Gayo 15 kg - Lunas cash di tempat',
             'created_by' => 'KopiSenjaSeeder',
         ]);
         $poItem1 = PurchaseOrderItem::create([
             'po_id' => $po1->po_id,
             'raw_stock_material_id' => $rawStockMap['RAW-COFFEE-GAYO']->raw_stock_material_id,
-            'qty' => 20000, // 20.000 gram
+            'qty' => 15000,
             'price' => 280,
             'subtotal' => $po1Total,
-            'received_qty' => 20000,
+            'received_qty' => 15000,
             'created_by' => 'KopiSenjaSeeder',
         ]);
         $rcv1 = PurchaseReceiving::create([
             'outlet_id' => $jkt->outlet_id,
             'po_id' => $po1->po_id,
             'receiving_code' => 'RCV-KS-2026-001',
-            'receiving_date' => $po1Date->copy()->addHours(4),
+            'receiving_date' => $po1Date->copy()->addHours(3),
             'po_code' => $po1->po_code,
             'receiving_status' => 'completed',
-            'receiving_notes' => 'Biji kopi diterima dengan kualitas roasting sangat baik',
+            'receiving_notes' => 'Biji kopi gayo diterima dalam kondisi roasted fresh',
             'received_by' => 'Siti Rahma',
         ]);
         PurchaseReceivingItem::create([
             'receiving_id' => $rcv1->receiving_id,
             'po_item_id' => $poItem1->po_item_id,
             'raw_stock_material_id' => $rawStockMap['RAW-COFFEE-GAYO']->raw_stock_material_id,
-            'received_qty' => 20000,
+            'received_qty' => 15000,
             'received_price' => 280,
             'subtotal' => $po1Total,
         ]);
 
-        // PO 2: Belum Lunas (Tempo 14 Hari) - Fresh Milk
+        // PO 2: Belum Lunas (Tempo 14 Hari) - Fresh Milk 50L
         $po2Date = now()->subDays(3);
-        $po2Total = 1320000; // 60 Liter x 22.000
+        $po2Total = 1100000;
         $po2 = PurchaseOrder::create([
             'outlet_id' => $jkt->outlet_id,
             'po_code' => 'PO-KS-2026-002',
@@ -479,44 +487,47 @@ class KopiSenjaSeeder extends Seeder
             'payment_method' => null,
             'due_date' => $po2Date->copy()->addDays(14)->toDateString(),
             'po_total_amount' => $po2Total,
-            'po_notes' => 'Pengiriman susu UHT karton Diamond - Tempo jatuh tempo 14 hari',
+            'po_notes' => 'Pasokan rutin Fresh Milk 50 Liter - Tempo 14 hari',
             'created_by' => 'KopiSenjaSeeder',
         ]);
         $poItem2 = PurchaseOrderItem::create([
             'po_id' => $po2->po_id,
             'raw_stock_material_id' => $rawStockMap['RAW-FRESH-MILK']->raw_stock_material_id,
-            'qty' => 60000,
+            'qty' => 50000,
             'price' => 22,
             'subtotal' => $po2Total,
-            'received_qty' => 60000,
+            'received_qty' => 50000,
             'created_by' => 'KopiSenjaSeeder',
         ]);
         $rcv2 = PurchaseReceiving::create([
             'outlet_id' => $jkt->outlet_id,
             'po_id' => $po2->po_id,
             'receiving_code' => 'RCV-KS-2026-002',
-            'receiving_date' => $po2Date->copy()->addHours(3),
+            'receiving_date' => $po2Date->copy()->addHours(1),
             'po_code' => $po2->po_code,
             'receiving_status' => 'completed',
-            'receiving_notes' => 'Susu dingin 60L diterima di chiller',
+            'receiving_notes' => 'Susu karton masuk ke dalam chiller cafe',
             'received_by' => 'Siti Rahma',
         ]);
         PurchaseReceivingItem::create([
             'receiving_id' => $rcv2->receiving_id,
             'po_item_id' => $poItem2->po_item_id,
             'raw_stock_material_id' => $rawStockMap['RAW-FRESH-MILK']->raw_stock_material_id,
-            'received_qty' => 60000,
+            'received_qty' => 50000,
             'received_price' => 22,
             'subtotal' => $po2Total,
         ]);
 
         // ==========================================
-        // 9. SHIFT OPERASIONAL & CASH DRAWER LOGS (Plan B)
+        // 9. SHIFT OPERASIONAL & CASH DRAWER LOGS (Multi-Cabang)
         // ==========================================
-        // Shift Kemarin (Closed)
+        $closingsYesterday = [];
+        $closingsToday = [];
+
+        // Jakarta Sesi Kemarin (Closed)
         $shiftYesterday = DailyClosing::create([
             'outlet_id' => $jkt->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
+            'cashier_id' => $cashiersByOutlet[$jkt->outlet_id]?->id ?? 1,
             'shift_number' => 1,
             'shift_name' => 'Shift Pagi - Sore',
             'business_date' => now()->subDay()->toDateString(),
@@ -525,23 +536,23 @@ class KopiSenjaSeeder extends Seeder
             'starting_cash' => 300000,
             'system_cash_sales' => 1250000,
             'system_non_cash_sales' => 2100000,
-            'cash_in_amount' => 200000,  // Owner Top-up
-            'cash_out_amount' => 35000,  // Beli Es Batu & Snack Kasir
-            'system_expected_cash' => 1715000, // 300k + 1250k + 200k - 35k
+            'cash_in_amount' => 200000,
+            'cash_out_amount' => 35000,
+            'system_expected_cash' => 1715000,
             'actual_cash_counted' => 1715000,
-            'retained_cash_float' => 300000,  // Modal shift berikutnya
-            'cash_deposit_to_safe' => 1415000, // Setor ke brankas/owner
+            'retained_cash_float' => 300000,
+            'cash_deposit_to_safe' => 1415000,
             'cash_difference' => 0,
             'status' => 'closed',
             'notes' => 'Shift lancar, kas fisik klop pas dengan sistem POS.',
             'cashier_note' => 'Kasir Siti Rahma - Uang setoran Rp 1.415.000 sudah dimasukkan ke brankas.',
         ]);
+        $closingsYesterday[$jkt->outlet_id] = $shiftYesterday;
 
-        // Cash In log (Owner Top-up)
         CashDrawerLog::create([
             'outlet_id' => $jkt->outlet_id,
             'daily_closing_id' => $shiftYesterday->id,
-            'cashier_id' => $cashierUser?->id ?? 1,
+            'cashier_id' => $cashiersByOutlet[$jkt->outlet_id]?->id ?? 1,
             'type' => 'in',
             'category' => 'owner_topup',
             'amount' => 200000,
@@ -550,11 +561,10 @@ class KopiSenjaSeeder extends Seeder
             'created_at' => now()->subDay()->setTime(8, 0),
         ]);
 
-        // Cash Out log (Petty Cash Es Batu)
         CashDrawerLog::create([
             'outlet_id' => $jkt->outlet_id,
             'daily_closing_id' => $shiftYesterday->id,
-            'cashier_id' => $cashierUser?->id ?? 1,
+            'cashier_id' => $cashiersByOutlet[$jkt->outlet_id]?->id ?? 1,
             'type' => 'out',
             'category' => 'petty_cash',
             'amount' => 35000,
@@ -563,34 +573,10 @@ class KopiSenjaSeeder extends Seeder
             'created_at' => now()->subDay()->setTime(11, 30),
         ]);
 
-        // Shift Hari Ini Jakarta (Open / Running)
-        $shiftToday = DailyClosing::create([
-            'outlet_id' => $jkt->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
-            'shift_number' => 1,
-            'shift_name' => 'Shift Pagi - Sore',
-            'business_date' => now()->toDateString(),
-            'opened_at' => now()->setTime(8, 0),
-            'closed_at' => null,
-            'starting_cash' => 300000,
-            'system_cash_sales' => 0,
-            'system_non_cash_sales' => 0,
-            'cash_in_amount' => 0,
-            'cash_out_amount' => 0,
-            'system_expected_cash' => 300000,
-            'actual_cash_counted' => 0,
-            'retained_cash_float' => 0,
-            'cash_deposit_to_safe' => 0,
-            'cash_difference' => 0,
-            'status' => 'open',
-            'notes' => 'Shift pagi Jakarta sedang berlangsung',
-            'cashier_note' => null,
-        ]);
-
-        // Shift Kemarin Bandung (Closed)
+        // Bandung Sesi Kemarin (Closed)
         $shiftBdg = DailyClosing::create([
             'outlet_id' => $bdg->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
+            'cashier_id' => $cashiersByOutlet[$bdg->outlet_id]?->id ?? 1,
             'shift_number' => 1,
             'shift_name' => 'Shift Full Day',
             'business_date' => now()->subDay()->toDateString(),
@@ -610,11 +596,24 @@ class KopiSenjaSeeder extends Seeder
             'notes' => 'Shift Bandung berjalan lancar tanpa selisih',
             'cashier_note' => 'Setoran Bandung Rp 925.000 diserahkan ke brankas',
         ]);
+        $closingsYesterday[$bdg->outlet_id] = $shiftBdg;
 
-        // Shift Kemarin Yogyakarta (Closed - ada selisih minus 5rb)
+        CashDrawerLog::create([
+            'outlet_id' => $bdg->outlet_id,
+            'daily_closing_id' => $shiftBdg->id,
+            'cashier_id' => $cashiersByOutlet[$bdg->outlet_id]?->id ?? 1,
+            'type' => 'in',
+            'category' => 'owner_topup',
+            'amount' => 100000,
+            'reason' => 'Modal kembalian kasir shift pagi Bandung',
+            'created_by' => 'Rian Ardiansyah',
+            'created_at' => now()->subDay()->setTime(8, 15),
+        ]);
+
+        // Yogyakarta Sesi Kemarin (Closed - selisih minus 5rb)
         $shiftYog = DailyClosing::create([
             'outlet_id' => $yog->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
+            'cashier_id' => $cashiersByOutlet[$yog->outlet_id]?->id ?? 1,
             'shift_number' => 1,
             'shift_name' => 'Shift Full Day',
             'business_date' => now()->subDay()->toDateString(),
@@ -634,32 +633,39 @@ class KopiSenjaSeeder extends Seeder
             'notes' => 'Terdapat selisih kas kecil minus Rp 5.000 uang receh koin',
             'cashier_note' => 'Setoran Jogja Rp 725.000 masuk brankas',
         ]);
+        $closingsYesterday[$yog->outlet_id] = $shiftYog;
 
-        // Waste Logs Multi-Cabang
-        \App\Models\Admin\Keuangan\CogsWasteLog::create([
-            'outlet_id' => $jkt->outlet_id,
-            'raw_stock_material_id' => $rawStockMap['RAW-FRESH-MILK']->raw_stock_material_id,
-            'loss_date' => now()->subDays(2)->toDateString(),
-            'qty_lost' => 3000, // 3 Liter
-            'waste_cost' => 66000,
-            'reason' => 'Basi - Chiller mati mendadak saat perbaikan listrik PLN',
-            'notes' => 'Susu Fresh Milk Basi',
-            'created_by' => 'Head Barista',
-        ]);
-
-        \App\Models\Admin\Keuangan\CogsWasteLog::create([
-            'outlet_id' => $bdg->outlet_id,
-            'raw_stock_material_id' => $rawStockMap['RAW-COFFEE-GAYO']->raw_stock_material_id,
-            'loss_date' => now()->subDay()->toDateString(),
-            'qty_lost' => 500, // 500 Gram
-            'waste_cost' => 140000,
-            'reason' => 'Tumpah - Toples biji kopi jatuh saat kalibrasi grinder',
-            'notes' => 'Biji Kopi Tercecer / Tumpah',
-            'created_by' => 'Barista Bandung',
-        ]);
+        // Sesi Hari Ini Buka untuk Jakarta, Bandung, dan Jogja
+        foreach ([$jkt, $bdg, $yog] as $ot) {
+            $cashier = $cashiersByOutlet[$ot->outlet_id] ?? $cashierUser;
+            $startCash = ($ot->outlet_id === $jkt->outlet_id) ? 300000 : 200000;
+            $shiftToday = DailyClosing::create([
+                'outlet_id' => $ot->outlet_id,
+                'cashier_id' => $cashier?->id ?? 1,
+                'shift_number' => 1,
+                'shift_name' => 'Shift Pagi - Sore',
+                'business_date' => now()->toDateString(),
+                'opened_at' => now()->setTime(8, 0),
+                'closed_at' => null,
+                'starting_cash' => $startCash,
+                'system_cash_sales' => 0,
+                'system_non_cash_sales' => 0,
+                'cash_in_amount' => 0,
+                'cash_out_amount' => 0,
+                'system_expected_cash' => $startCash,
+                'actual_cash_counted' => 0,
+                'retained_cash_float' => 0,
+                'cash_deposit_to_safe' => 0,
+                'cash_difference' => 0,
+                'status' => 'open',
+                'notes' => "Shift operasional {$ot->outlet_branch} sedang berlangsung aktif",
+                'cashier_note' => null,
+            ]);
+            $closingsToday[$ot->outlet_id] = $shiftToday;
+        }
 
         // ==========================================
-        // 10. CUSTOMERS & VOUCHERS
+        // 10. CUSTOMERS, VOUCHERS, BUNDLES & PROMO
         // ==========================================
         $customersData = [
             ['customer_name' => 'Budi Santoso', 'customer_phone' => '081234567891', 'customer_email' => 'budi@gmail.com'],
@@ -670,12 +676,12 @@ class KopiSenjaSeeder extends Seeder
         ];
         $customers = [];
         foreach ($customersData as $c) {
-            $cust = Customer::create(array_merge($c, ['outlet_id' => $jkt->outlet_id]));
+            $cust = Customer::create(array_merge($c, ['outlet_id' => null]));
             $customers[] = $cust;
         }
 
         Voucher::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'voucher_code' => 'SENJABARU20',
             'voucher_name' => 'Diskon Pelanggan Baru 20%',
             'voucher_type' => 'percentage',
@@ -686,17 +692,50 @@ class KopiSenjaSeeder extends Seeder
             'created_by' => 'KopiSenjaSeeder',
         ]);
 
-        Discount::create([
-            'outlet_id' => $jkt->outlet_id,
+        // Master Bundle untuk POS Kasir Tab "Bundel"
+        $bundleNgopi = Bundle::create([
+            'outlet_id' => null,
+            'bundle_code' => 'BND-NGOPI',
+            'bundle_name' => 'Paket Ngopi Senja Hemat',
+            'bundle_slug' => 'paket-ngopi-senja-hemat',
+            'bundle_description' => 'Kopi Susu Senja (Aren) + Butter Croissant Premium French Butter',
+            'bundle_price' => 40000,
+            'bundle_status' => 1,
+            'created_by' => 'KopiSenjaSeeder',
+        ]);
+        BundleItem::create([
+            'bundle_id' => $bundleNgopi->bundle_id,
+            'product_id' => $products[0]->product_id, // Kopi Susu Senja
+            'quantity' => 1,
+            'price_snapshot' => $products[0]->product_price,
+            'created_by' => 'KopiSenjaSeeder',
+        ]);
+        BundleItem::create([
+            'bundle_id' => $bundleNgopi->bundle_id,
+            'product_id' => $products[7]->product_id, // Butter Croissant Premium
+            'quantity' => 1,
+            'price_snapshot' => $products[7]->product_price,
+            'created_by' => 'KopiSenjaSeeder',
+        ]);
+
+        // Promo Diskon Happy Hour Senja 15%
+        $discSenja = Discount::create([
+            'outlet_id' => null,
             'discount_name' => 'Happy Hour Senja 15%',
             'discount_type' => 'percentage',
             'discount_value' => 15,
             'discount_status' => 1,
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => now()->addDays(25)->toDateString(),
             'created_by' => 'KopiSenjaSeeder',
+        ]);
+        $products[0]->discounts()->attach($discSenja->discount_id, [
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => null,
         ]);
 
         // ==========================================
-        // 11. TRANSACTIONS & ORDERS (Lengkap Shift ID)
+        // 11. TRANSACTIONS & ORDERS (Lengkap Shift ID per Cabang)
         // ==========================================
         $branchConfigs = [
             ['outlet' => $jkt, 'count' => 20, 'prefix' => 'JKT'],
@@ -735,8 +774,13 @@ class KopiSenjaSeeder extends Seeder
                 $taxAmount = round($itemsTotal * 0.10, 2);
                 $serviceAmount = round($itemsTotal * 0.05, 2);
                 $grandTotal = $itemsTotal + $taxAmount + $serviceAmount;
-                $isYesterday = ($i <= 10 && $currentOutlet->outlet_id === $jkt->outlet_id);
-                $closingId = $isYesterday ? $shiftYesterday->id : ($currentOutlet->outlet_id === $jkt->outlet_id ? $shiftToday->id : null);
+
+                // Tautkan ke DailyClosing cabang yang bersangkutan
+                $isYesterday = ($i <= intdiv($b['count'], 2));
+                $closingId = $isYesterday
+                    ? ($closingsYesterday[$currentOutlet->outlet_id]->id ?? null)
+                    : ($closingsToday[$currentOutlet->outlet_id]->id ?? null);
+
                 $isTodayOrRecent = ($i % 2 === 0);
                 $txDate = $isTodayOrRecent
                     ? now()->subDays(rand(0, 4))->subHours(rand(1, 8))
@@ -814,23 +858,67 @@ class KopiSenjaSeeder extends Seeder
         }
 
         // ==========================================
-        // 12. HPP & LABA RUGI FINANCIAL REPORTS
+        // 12. COGS WASTE LOGS (Multi-Cabang)
         // ==========================================
-        HppFinancialReport::create([
+        CogsWasteLog::create([
             'outlet_id' => $jkt->outlet_id,
-            'year' => (int) date('Y'),
-            'month' => (int) date('m'),
-            'total_revenue' => 48500000,
-            'total_cogs_estimated' => 17460000,
-            'total_waste_cost' => 450000,
-            'total_labor_cost' => 8500000,
-            'total_overhead_cost' => 4200000,
-            'gross_profit' => 30590000,
-            'gross_margin_percent' => 63.07,
-            'net_profit_estimated' => 17890000,
-            'net_margin_percent' => 36.89,
-            'notes' => 'Laporan Laba Rugi Eksekutif Kopi Senja Jakarta (Plan B)',
-            'created_by' => 'KopiSenjaSeeder',
+            'raw_stock_material_id' => $rawStockMap['RAW-FRESH-MILK']->raw_stock_material_id,
+            'loss_date' => now()->subDays(2)->toDateString(),
+            'qty_lost' => 3000,
+            'waste_cost' => 66000,
+            'reason' => 'Basi - Chiller mati mendadak saat perbaikan listrik PLN',
+            'notes' => 'Susu Fresh Milk Basi di Jakarta',
+            'created_by' => 'Head Barista',
         ]);
+
+        CogsWasteLog::create([
+            'outlet_id' => $bdg->outlet_id,
+            'raw_stock_material_id' => $rawStockMap['RAW-COFFEE-GAYO']->raw_stock_material_id,
+            'loss_date' => now()->subDay()->toDateString(),
+            'qty_lost' => 500,
+            'waste_cost' => 140000,
+            'reason' => 'Tumpah - Toples biji kopi jatuh saat kalibrasi grinder',
+            'notes' => 'Biji Kopi Tercecer / Tumpah di Bandung',
+            'created_by' => 'Barista Bandung',
+        ]);
+
+        CogsWasteLog::create([
+            'outlet_id' => $yog->outlet_id,
+            'raw_stock_material_id' => $rawStockMap['RAW-GULA-AREN']->raw_stock_material_id,
+            'loss_date' => now()->subDays(3)->toDateString(),
+            'qty_lost' => 1000,
+            'waste_cost' => 35000,
+            'reason' => 'Fermentasi - Botol gula aren terbuka terlalu lama di meja racik',
+            'notes' => 'Gula Aren Berbusa & Berbau Asam di Jogja',
+            'created_by' => 'Barista Jogja',
+        ]);
+
+        // ==========================================
+        // 13. HPP & LABA RUGI FINANCIAL REPORTS (Multi-Cabang)
+        // ==========================================
+        $reports = [
+            ['outlet' => $jkt, 'rev' => 48500000, 'cogs' => 17460000, 'waste' => 450000, 'labor' => 8500000, 'ovh' => 4200000, 'gp' => 30590000, 'np' => 17890000, 'gm' => 63.07, 'nm' => 36.89],
+            ['outlet' => $bdg, 'rev' => 36200000, 'cogs' => 13032000, 'waste' => 320000, 'labor' => 6500000, 'ovh' => 3200000, 'gp' => 22848000, 'np' => 13148000, 'gm' => 63.12, 'nm' => 36.32],
+            ['outlet' => $yog, 'rev' => 29800000, 'cogs' => 10728000, 'waste' => 260000, 'labor' => 5200000, 'ovh' => 2800000, 'gp' => 18812000, 'np' => 10812000, 'gm' => 63.13, 'nm' => 36.28],
+        ];
+
+        foreach ($reports as $rep) {
+            HppFinancialReport::create([
+                'outlet_id' => $rep['outlet']->outlet_id,
+                'year' => (int) date('Y'),
+                'month' => (int) date('m'),
+                'total_revenue' => $rep['rev'],
+                'total_cogs_estimated' => $rep['cogs'],
+                'total_waste_cost' => $rep['waste'],
+                'total_labor_cost' => $rep['labor'],
+                'total_overhead_cost' => $rep['ovh'],
+                'gross_profit' => $rep['gp'],
+                'gross_margin_percent' => $rep['gm'],
+                'net_profit_estimated' => $rep['np'],
+                'net_margin_percent' => $rep['nm'],
+                'notes' => 'Laporan Laba Rugi Eksekutif Kopi Senja ' . $rep['outlet']->outlet_branch,
+                'created_by' => 'KopiSenjaSeeder',
+            ]);
+        }
     }
 }

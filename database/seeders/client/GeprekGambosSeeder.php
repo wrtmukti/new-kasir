@@ -14,6 +14,9 @@ use App\Models\Admin\Stock;
 use App\Models\Admin\Table;
 use App\Models\Admin\Customer;
 use App\Models\Admin\Voucher;
+use App\Models\Admin\Bundle;
+use App\Models\Admin\BundleItem;
+use App\Models\Admin\Discount;
 use App\Models\Admin\Order;
 use App\Models\Admin\Transaction;
 use App\Models\Admin\TransactionItem;
@@ -29,6 +32,7 @@ use App\Models\Admin\Keuangan\RawStockMaterial;
 use App\Models\Admin\Keuangan\RawStockMaterialHistory;
 use App\Models\Admin\Keuangan\CogsRecipe;
 use App\Models\Admin\Keuangan\CogsRecipeItem;
+use App\Models\Admin\Keuangan\CogsWasteLog;
 use App\Models\Admin\Keuangan\HppFinancialReport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -38,6 +42,7 @@ class GeprekGambosSeeder extends Seeder
 {
     /**
      * Run database seeds khusus client PT Geprek Gambos Indonesia.
+     * Katalog Terpusat (Master Catalog), Stok Multi-Cabang, Shift Kasir Lengkap, Bundel & Diskon.
      */
     public function run(string $clientId): void
     {
@@ -135,7 +140,7 @@ class GeprekGambosSeeder extends Seeder
         $sby = $outlets['geprek-gambos-surabaya'];
 
         // ==========================================
-        // 2. USERS (Lengkap client_id & outlet_id)
+        // 2. USERS (Lengkap client_id & outlet_id per Cabang)
         // ==========================================
         $users = [
             [
@@ -191,7 +196,14 @@ class GeprekGambosSeeder extends Seeder
         ];
 
         DB::connection('client')->table('users')->insert($users);
-        $cashierUser = DB::connection('client')->table('users')->where('role', 'kasir')->first();
+
+        $cashiersByOutlet = [
+            $jkt->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir@geprekgambos.com')->first(),
+            $bgr->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir.bogor@geprekgambos.com')->first(),
+            $yog->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir.jogja@geprekgambos.com')->first(),
+            $sby->outlet_id => DB::connection('client')->table('users')->where('email', 'kasir.surabaya@geprekgambos.com')->first(),
+        ];
+        $cashierUser = $cashiersByOutlet[$jkt->outlet_id];
 
         // ==========================================
         // 3. MEJA PER CABANG
@@ -234,12 +246,12 @@ class GeprekGambosSeeder extends Seeder
         }
 
         // ==========================================
-        // 4. KATEGORI & PRODUK AYAM GEPREK
+        // 4. KATEGORI & PRODUK AYAM GEPREK (Master Catalog: outlet_id = null)
         // ==========================================
-        $catAyam = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Ayam Geprek Spesial', 'category_slug' => 'ayam-geprek-spesial', 'category_status' => 1]);
-        $catPaket = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Paket Hemat Lengkap', 'category_slug' => 'paket-hemat-lengkap', 'category_status' => 1]);
-        $catSide = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Side Dishes & Ekstra', 'category_slug' => 'side-dishes-ekstra', 'category_status' => 1]);
-        $catDrink = Category::create(['outlet_id' => $jkt->outlet_id, 'category_name' => 'Minuman Segar', 'category_slug' => 'minuman-segar', 'category_status' => 1]);
+        $catAyam = Category::create(['outlet_id' => null, 'category_name' => 'Ayam Geprek Spesial', 'category_slug' => 'ayam-geprek-spesial', 'category_status' => 1]);
+        $catPaket = Category::create(['outlet_id' => null, 'category_name' => 'Paket Hemat Lengkap', 'category_slug' => 'paket-hemat-lengkap', 'category_status' => 1]);
+        $catSide = Category::create(['outlet_id' => null, 'category_name' => 'Side Dishes & Ekstra', 'category_slug' => 'side-dishes-ekstra', 'category_status' => 1]);
+        $catDrink = Category::create(['outlet_id' => null, 'category_name' => 'Minuman Segar', 'category_slug' => 'minuman-segar', 'category_status' => 1]);
 
         $productsData = [
             ['name' => 'Ayam Geprek Original Sambal Korek', 'cat' => $catAyam, 'price' => 17000, 'cost' => 8000, 'sku' => 'GG-001', 'desc' => 'Ayam goreng renyah digeprek dengan sambal korek bawang pedas nendang'],
@@ -257,7 +269,7 @@ class GeprekGambosSeeder extends Seeder
         $products = [];
         foreach ($productsData as $p) {
             $prod = Product::create([
-                'outlet_id' => $jkt->outlet_id,
+                'outlet_id' => null, // Master Catalog terpusat holding
                 'category_id' => $p['cat']->category_id,
                 'product_name' => $p['name'],
                 'product_slug' => Str::slug($p['name']),
@@ -268,25 +280,34 @@ class GeprekGambosSeeder extends Seeder
             ]);
             $products[] = $prod;
 
+            // Buat Stok Fisik per Cabang dan Tautkan ke Pivot product_stock
             foreach ([$jkt, $bgr, $yog, $sby] as $ot) {
-                Stock::create([
+                $stk = Stock::create([
                     'outlet_id' => $ot->outlet_id,
-                    'stock_code' => 'STK-' . $p['sku'],
-                    'stock_name' => $prod->product_name,
+                    'stock_code' => 'STK-' . $p['sku'] . '-' . $ot->outlet_code,
+                    'stock_name' => $prod->product_name . ' (' . $ot->outlet_branch . ')',
                     'stock_slug' => Str::slug($prod->product_name . '-' . $ot->outlet_branch),
                     'stock_unit' => 'porsi',
                     'stock_amount' => rand(80, 300),
                     'stock_price' => $prod->product_price,
                     'stock_status' => 1,
                 ]);
+
+                // Binding pivot product_stock
+                $prod->stocks()->attach($stk->stock_id, [
+                    'outlet_id' => $ot->outlet_id,
+                    'quantity' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
         }
 
         // ==========================================
-        // 5. MASTER SUPPLIER
+        // 5. MASTER SUPPLIER (Terpusat)
         // ==========================================
         $supUnggas = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-AYAM-01',
             'supplier_name' => 'PT Unggas Makmur Sejahtera',
             'supplier_contact' => 'H. Suwarno',
@@ -294,7 +315,7 @@ class GeprekGambosSeeder extends Seeder
             'supplier_address' => 'Kawasan Rumah Potong Ayam Cakung, Jakarta Timur',
         ]);
         $supPasar = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-BUMBU-01',
             'supplier_name' => 'UD Berkah Bumbu Pasar Induk Kramat Jati',
             'supplier_contact' => 'Bang Jayadi',
@@ -302,7 +323,7 @@ class GeprekGambosSeeder extends Seeder
             'supplier_address' => 'Pasar Induk Kramat Jati Blok C No. 14, Jakarta Timur',
         ]);
         $supSembako = Supplier::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'supplier_code' => 'SUP-SEMBAKO-01',
             'supplier_name' => 'CV Sumber Rezeki Sembako (Beras & Minyak)',
             'supplier_contact' => 'Koh Awi',
@@ -318,10 +339,10 @@ class GeprekGambosSeeder extends Seeder
                 'raw_material_code' => 'RAW-AYAM-BROILER',
                 'name' => 'Daging Ayam Broiler Utuh Karkas 1.2kg',
                 'unit' => 'kg',
-                'amount' => 120.0, // 120 kg
+                'amount' => 120.0,
                 'min_amount' => 25.0,
                 'price_per_unit' => 38000,
-                'loss_percent' => 15.0, // Potong lemak & jeroan -> yield 85%
+                'loss_percent' => 15.0,
             ],
             [
                 'raw_material_code' => 'RAW-CABAI-RAWIT',
@@ -330,7 +351,7 @@ class GeprekGambosSeeder extends Seeder
                 'amount' => 45.0,
                 'min_amount' => 8.0,
                 'price_per_unit' => 48000,
-                'loss_percent' => 8.0, // Petik tangkai -> yield 92%
+                'loss_percent' => 8.0,
             ],
             [
                 'raw_material_code' => 'RAW-BERAS-PULEN',
@@ -364,7 +385,7 @@ class GeprekGambosSeeder extends Seeder
         $rawStockMap = [];
         foreach ($rawMaterialsData as $rm) {
             $raw = RawStockMaterial::create([
-                'outlet_id' => $jkt->outlet_id,
+                'outlet_id' => null,
                 'raw_material_code' => $rm['raw_material_code'],
                 'name' => $rm['name'],
                 'slug' => Str::slug($rm['name']),
@@ -402,7 +423,7 @@ class GeprekGambosSeeder extends Seeder
         // ==========================================
         $pGeprek = $products[0];
         $recipeGeprek = CogsRecipe::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'product_id' => $pGeprek->product_id,
             'recipe_name' => 'Resep Ayam Geprek Original Sambal Korek',
             'target_food_cost' => 46.18,
@@ -439,7 +460,7 @@ class GeprekGambosSeeder extends Seeder
         // ==========================================
         // 8. PURCHASE ORDERS & CASH FLOW DISBURSEMENTS
         // ==========================================
-        // PO 1: Lunas Cash (Ayam Segar 100kg)
+        // PO 1: Lunas Cash Jakarta (Ayam Segar 100kg)
         $po1Date = now()->subDays(8);
         $po1Total = 3800000;
         $po1 = PurchaseOrder::create([
@@ -453,7 +474,7 @@ class GeprekGambosSeeder extends Seeder
             'payment_method' => 'cash',
             'due_date' => $po1Date->copy()->addDays(7)->toDateString(),
             'po_total_amount' => $po1Total,
-            'po_notes' => 'Pasokan ayam segar 100 kg - Lunas bayar tunai di lokasi',
+            'po_notes' => 'Pasokan ayam segar 100 kg Rawamangun - Lunas bayar tunai di lokasi',
             'created_by' => 'GeprekGambosSeeder',
         ]);
         $poItem1 = PurchaseOrderItem::create([
@@ -484,7 +505,7 @@ class GeprekGambosSeeder extends Seeder
             'subtotal' => $po1Total,
         ]);
 
-        // PO 2: Belum Lunas (Tempo 10 Hari) - Beras & Minyak
+        // PO 2: Belum Lunas Jakarta (Tempo 10 Hari) - Beras & Minyak
         $po2Date = now()->subDays(2);
         $po2Total = 4675000;
         $po2 = PurchaseOrder::create([
@@ -546,81 +567,137 @@ class GeprekGambosSeeder extends Seeder
             'subtotal' => 1575000,
         ]);
 
-        // ==========================================
-        // 9. SHIFT OPERASIONAL & CASH DRAWER LOGS (Plan B)
-        // ==========================================
-        $shiftYesterday = DailyClosing::create([
-            'outlet_id' => $jkt->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
-            'shift_number' => 1,
-            'shift_name' => 'Shift Full Day Gambos',
-            'business_date' => now()->subDay()->toDateString(),
-            'opened_at' => now()->subDay()->setTime(9, 0),
-            'closed_at' => now()->subDay()->setTime(21, 30),
-            'starting_cash' => 250000,
-            'system_cash_sales' => 1850000,
-            'system_non_cash_sales' => 2900000,
-            'cash_in_amount' => 150000, // Topup kas
-            'cash_out_amount' => 45000, // Beli gas LPG & es batu darurat
-            'system_expected_cash' => 2205000,
-            'actual_cash_counted' => 2205000,
-            'retained_cash_float' => 250000,
-            'cash_deposit_to_safe' => 1955000,
-            'cash_difference' => 0,
-            'status' => 'closed',
-            'notes' => 'Shift ramai jam makan siang dan makan malam, kas klop.',
-            'cashier_note' => 'Uang tunai Rp 1.955.000 diserahkan ke brankas Resto.',
+        // PO 3: Cabang Surabaya (Hutang Dagang / Unpaid Ayam 80kg)
+        $po3Date = now()->subDays(3);
+        $po3Total = 3040000;
+        $po3 = PurchaseOrder::create([
+            'outlet_id' => $sby->outlet_id,
+            'po_code' => 'PO-GGB-2026-003',
+            'po_date' => $po3Date,
+            'supplier_id' => $supUnggas->supplier_id,
+            'po_status' => 'completed',
+            'payment_status' => 'unpaid',
+            'payment_date' => null,
+            'due_date' => $po3Date->copy()->addDays(14)->toDateString(),
+            'po_total_amount' => $po3Total,
+            'po_notes' => 'Pasokan ayam segar 80 kg Cabang Surabaya Gubeng - Tempo 14 hari',
+            'created_by' => 'GeprekGambosSeeder',
         ]);
-
-        CashDrawerLog::create([
-            'outlet_id' => $jkt->outlet_id,
-            'daily_closing_id' => $shiftYesterday->id,
-            'cashier_id' => $cashierUser?->id ?? 1,
-            'type' => 'in',
-            'category' => 'owner_topup',
-            'amount' => 150000,
-            'reason' => 'Pecahan uang kembalian 2.000 & 5.000 dari supervisor',
-            'created_by' => 'Rina Marlina',
-            'created_at' => now()->subDay()->setTime(9, 30),
+        $poItem3 = PurchaseOrderItem::create([
+            'po_id' => $po3->po_id,
+            'raw_stock_material_id' => $rawStockMap['RAW-AYAM-BROILER']->raw_stock_material_id,
+            'qty' => 80,
+            'price' => 38000,
+            'subtotal' => $po3Total,
+            'received_qty' => 80,
+            'created_by' => 'GeprekGambosSeeder',
         ]);
-
-        CashDrawerLog::create([
-            'outlet_id' => $jkt->outlet_id,
-            'daily_closing_id' => $shiftYesterday->id,
-            'cashier_id' => $cashierUser?->id ?? 1,
-            'type' => 'out',
-            'category' => 'petty_cash',
-            'amount' => 45000,
-            'reason' => 'Beli es batu kristal 2 bal warung sebelah',
-            'created_by' => 'Rina Marlina',
-            'created_at' => now()->subDay()->setTime(12, 15),
+        $rcv3 = PurchaseReceiving::create([
+            'outlet_id' => $sby->outlet_id,
+            'po_id' => $po3->po_id,
+            'receiving_code' => 'RCV-GGB-2026-003',
+            'receiving_date' => $po3Date->copy()->addHours(2),
+            'po_code' => $po3->po_code,
+            'receiving_status' => 'completed',
+            'receiving_notes' => 'Ayam karkas segar 80kg masuk freezer Surabaya',
+            'received_by' => 'Eko Prasetyo',
         ]);
-
-        $shiftToday = DailyClosing::create([
-            'outlet_id' => $jkt->outlet_id,
-            'cashier_id' => $cashierUser?->id ?? 1,
-            'shift_number' => 1,
-            'shift_name' => 'Shift Full Day Gambos',
-            'business_date' => now()->toDateString(),
-            'opened_at' => now()->setTime(9, 0),
-            'closed_at' => null,
-            'starting_cash' => 250000,
-            'system_cash_sales' => 0,
-            'system_non_cash_sales' => 0,
-            'cash_in_amount' => 0,
-            'cash_out_amount' => 0,
-            'system_expected_cash' => 250000,
-            'actual_cash_counted' => 0,
-            'retained_cash_float' => 0,
-            'cash_deposit_to_safe' => 0,
-            'cash_difference' => 0,
-            'status' => 'open',
-            'notes' => 'Shift siang sedang berjalan',
-            'cashier_note' => null,
+        PurchaseReceivingItem::create([
+            'receiving_id' => $rcv3->receiving_id,
+            'po_item_id' => $poItem3->po_item_id,
+            'raw_stock_material_id' => $rawStockMap['RAW-AYAM-BROILER']->raw_stock_material_id,
+            'received_qty' => 80,
+            'received_price' => 38000,
+            'subtotal' => $po3Total,
         ]);
 
         // ==========================================
-        // 10. CUSTOMERS & VOUCHERS
+        // 9. SHIFT OPERASIONAL & CASH DRAWER LOGS (Lengkap 4 Cabang)
+        // ==========================================
+        $closingsYesterday = [];
+        $closingsToday = [];
+
+        foreach ([$jkt, $bgr, $yog, $sby] as $ot) {
+            $cashier = $cashiersByOutlet[$ot->outlet_id] ?? $cashierUser;
+            $cashierName = explode(' ', $cashier->name)[0] . ' ' . (explode(' ', $cashier->name)[1] ?? '');
+
+            // 1. Sesi Kemarin (Tutup / Closed - Z-Report Selesai)
+            $shiftYesterday = DailyClosing::create([
+                'outlet_id' => $ot->outlet_id,
+                'cashier_id' => $cashier?->id ?? 1,
+                'shift_number' => 1,
+                'shift_name' => 'Shift Full Day ' . $ot->outlet_branch,
+                'business_date' => now()->subDay()->toDateString(),
+                'opened_at' => now()->subDay()->setTime(9, 0),
+                'closed_at' => now()->subDay()->setTime(21, 30),
+                'starting_cash' => 250000,
+                'system_cash_sales' => 1850000,
+                'system_non_cash_sales' => 2900000,
+                'cash_in_amount' => 150000, // Topup kas kembalian
+                'cash_out_amount' => 45000, // Pengeluaran darurat
+                'system_expected_cash' => 2205000,
+                'actual_cash_counted' => 2205000,
+                'retained_cash_float' => 250000,
+                'cash_deposit_to_safe' => 1955000,
+                'cash_difference' => 0,
+                'status' => 'closed',
+                'notes' => 'Shift kemarin berjalan tertib, kas fisik klop pas dengan sistem POS.',
+                'cashier_note' => "Uang setoran kasir {$cashierName} Rp 1.955.000 diserahkan ke brankas Resto.",
+            ]);
+            $closingsYesterday[$ot->outlet_id] = $shiftYesterday;
+
+            CashDrawerLog::create([
+                'outlet_id' => $ot->outlet_id,
+                'daily_closing_id' => $shiftYesterday->id,
+                'cashier_id' => $cashier?->id ?? 1,
+                'type' => 'in',
+                'category' => 'owner_topup',
+                'amount' => 150000,
+                'reason' => 'Pecahan uang kembalian 2.000 & 5.000 dari supervisor',
+                'created_by' => $cashierName,
+                'created_at' => now()->subDay()->setTime(9, 30),
+            ]);
+
+            CashDrawerLog::create([
+                'outlet_id' => $ot->outlet_id,
+                'daily_closing_id' => $shiftYesterday->id,
+                'cashier_id' => $cashier?->id ?? 1,
+                'type' => 'out',
+                'category' => 'petty_cash',
+                'amount' => 45000,
+                'reason' => 'Beli es batu kristal 2 bal warung sebelah',
+                'created_by' => $cashierName,
+                'created_at' => now()->subDay()->setTime(12, 15),
+            ]);
+
+            // 2. Sesi Hari Ini (Buka / Open - Menghilangkan Alert Kuning POS)
+            $shiftToday = DailyClosing::create([
+                'outlet_id' => $ot->outlet_id,
+                'cashier_id' => $cashier?->id ?? 1,
+                'shift_number' => 1,
+                'shift_name' => 'Shift Full Day ' . $ot->outlet_branch,
+                'business_date' => now()->toDateString(),
+                'opened_at' => now()->setTime(8, 30),
+                'closed_at' => null,
+                'starting_cash' => 250000,
+                'system_cash_sales' => 0,
+                'system_non_cash_sales' => 0,
+                'cash_in_amount' => 0,
+                'cash_out_amount' => 0,
+                'system_expected_cash' => 250000,
+                'actual_cash_counted' => 0,
+                'retained_cash_float' => 0,
+                'cash_deposit_to_safe' => 0,
+                'cash_difference' => 0,
+                'status' => 'open',
+                'notes' => "Shift operasional {$ot->outlet_branch} sedang aktif berjalan",
+                'cashier_note' => null,
+            ]);
+            $closingsToday[$ot->outlet_id] = $shiftToday;
+        }
+
+        // ==========================================
+        // 10. CUSTOMERS, VOUCHERS, BUNDLES & PROMO
         // ==========================================
         $customersData = [
             ['customer_name' => 'Agus Prasetyo', 'customer_phone' => '081298765431', 'customer_email' => 'agus@gmail.com'],
@@ -630,12 +707,12 @@ class GeprekGambosSeeder extends Seeder
         ];
         $customers = [];
         foreach ($customersData as $c) {
-            $cust = Customer::create(array_merge($c, ['outlet_id' => $jkt->outlet_id]));
+            $cust = Customer::create(array_merge($c, ['outlet_id' => null]));
             $customers[] = $cust;
         }
 
         Voucher::create([
-            'outlet_id' => $jkt->outlet_id,
+            'outlet_id' => null,
             'voucher_code' => 'GAMBOSPEDAS',
             'voucher_name' => 'Diskon Sambal Meledak Rp 5.000',
             'voucher_type' => 'nominal',
@@ -646,8 +723,57 @@ class GeprekGambosSeeder extends Seeder
             'created_by' => 'GeprekGambosSeeder',
         ]);
 
+        // Master Bundle untuk POS Kasir Tab "Bundel"
+        $bundleKomplit = Bundle::create([
+            'outlet_id' => null, // Berlaku seluruh cabang
+            'bundle_code' => 'BND-KOMPLIT',
+            'bundle_name' => 'Paket Geprek Kenyang Komplit',
+            'bundle_slug' => 'paket-geprek-kenyang-komplit',
+            'bundle_description' => 'Ayam Geprek Original + Es Teh Manis Jumbo + Kulit Ayam Crispy Gurih',
+            'bundle_price' => 32000,
+            'bundle_status' => 1,
+            'created_by' => 'GeprekGambosSeeder',
+        ]);
+        BundleItem::create([
+            'bundle_id' => $bundleKomplit->bundle_id,
+            'product_id' => $products[0]->product_id, // Ayam Geprek Original
+            'quantity' => 1,
+            'price_snapshot' => $products[0]->product_price,
+            'created_by' => 'GeprekGambosSeeder',
+        ]);
+        BundleItem::create([
+            'bundle_id' => $bundleKomplit->bundle_id,
+            'product_id' => $products[8]->product_id, // Es Teh Manis Jumbo
+            'quantity' => 1,
+            'price_snapshot' => $products[8]->product_price,
+            'created_by' => 'GeprekGambosSeeder',
+        ]);
+        BundleItem::create([
+            'bundle_id' => $bundleKomplit->bundle_id,
+            'product_id' => $products[5]->product_id, // Kulit Crispy
+            'quantity' => 1,
+            'price_snapshot' => $products[5]->product_price,
+            'created_by' => 'GeprekGambosSeeder',
+        ]);
+
+        // Promo Diskon Mozzarella 10%
+        $discMozza = Discount::create([
+            'outlet_id' => null,
+            'discount_name' => 'Promo Diskon Mozzarella 10%',
+            'discount_type' => 'percentage',
+            'discount_value' => 10,
+            'discount_status' => 1,
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => now()->addDays(25)->toDateString(),
+            'created_by' => 'GeprekGambosSeeder',
+        ]);
+        $products[1]->discounts()->attach($discMozza->discount_id, [
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => null,
+        ]);
+
         // ==========================================
-        // 11. TRANSACTIONS & ORDERS (Lengkap Shift ID)
+        // 11. TRANSACTIONS & ORDERS (Lengkap Shift ID per Cabang)
         // ==========================================
         $branchConfigs = [
             ['outlet' => $jkt, 'count' => 25, 'prefix' => 'JKT'],
@@ -687,8 +813,13 @@ class GeprekGambosSeeder extends Seeder
                 $taxAmount = round($itemsTotal * 0.10, 2);
                 $serviceAmount = 0;
                 $grandTotal = $itemsTotal + $taxAmount + $serviceAmount;
-                $isYesterday = ($i <= 12 && $currentOutlet->outlet_id === $jkt->outlet_id);
-                $closingId = $isYesterday ? $shiftYesterday->id : ($currentOutlet->outlet_id === $jkt->outlet_id ? $shiftToday->id : null);
+
+                // Tautkan ke DailyClosing cabang yang bersangkutan
+                $isYesterday = ($i <= intdiv($b['count'], 2));
+                $closingId = $isYesterday
+                    ? ($closingsYesterday[$currentOutlet->outlet_id]->id ?? null)
+                    : ($closingsToday[$currentOutlet->outlet_id]->id ?? null);
+
                 $isTodayOrRecent = ($i % 2 === 0);
                 $txDate = $isTodayOrRecent
                     ? now()->subDays(rand(0, 4))->subHours(rand(1, 8))
@@ -766,23 +897,58 @@ class GeprekGambosSeeder extends Seeder
         }
 
         // ==========================================
-        // 12. HPP & LABA RUGI FINANCIAL REPORTS
+        // 12. COGS WASTE LOGS (Multi-Cabang Audit Selisih & Waste)
         // ==========================================
-        HppFinancialReport::create([
-            'outlet_id' => $jkt->outlet_id,
-            'year' => (int) date('Y'),
-            'month' => (int) date('m'),
-            'total_revenue' => 62300000,
-            'total_cogs_estimated' => 28658000,
-            'total_waste_cost' => 620000,
-            'total_labor_cost' => 11000000,
-            'total_overhead_cost' => 5500000,
-            'gross_profit' => 33022000,
-            'gross_margin_percent' => 53.00,
-            'net_profit_estimated' => 16522000,
-            'net_margin_percent' => 26.52,
-            'notes' => 'Laporan Laba Rugi Eksekutif Geprek Gambos Rawamangun (Plan B)',
-            'created_by' => 'GeprekGambosSeeder',
-        ]);
+        foreach ([$jkt, $bgr, $yog, $sby] as $ot) {
+            CogsWasteLog::create([
+                'outlet_id' => $ot->outlet_id,
+                'raw_stock_material_id' => $rawStockMap['RAW-AYAM-BROILER']->raw_stock_material_id,
+                'qty_lost' => 1.5,
+                'waste_cost' => 1.5 * 38000,
+                'reason' => 'Bahan rusak suhu freezer drop saat pemadaman bergilir',
+                'loss_date' => now()->subDays(rand(1, 4))->toDateString(),
+                'notes' => 'Ayam karkas rusak suhu drop di ' . $ot->outlet_branch,
+                'created_by' => 'Chef ' . $ot->outlet_branch,
+            ]);
+            CogsWasteLog::create([
+                'outlet_id' => $ot->outlet_id,
+                'raw_stock_material_id' => $rawStockMap['RAW-CABAI-RAWIT']->raw_stock_material_id,
+                'qty_lost' => 0.8,
+                'waste_cost' => 0.8 * 48000,
+                'reason' => 'Cabai membusuk terkena tetesan air kondensasi chiller',
+                'loss_date' => now()->subDays(rand(1, 3))->toDateString(),
+                'notes' => 'Sortir cabai basah di ' . $ot->outlet_branch,
+                'created_by' => 'Staff Kitchen ' . $ot->outlet_branch,
+            ]);
+        }
+
+        // ==========================================
+        // 13. HPP & LABA RUGI FINANCIAL REPORTS (Multi-Cabang)
+        // ==========================================
+        $reports = [
+            ['outlet' => $jkt, 'rev' => 62300000, 'cogs' => 28658000, 'waste' => 620000, 'labor' => 11000000, 'ovh' => 5500000, 'gp' => 33022000, 'np' => 16522000, 'gm' => 53.00, 'nm' => 26.52],
+            ['outlet' => $bgr, 'rev' => 45200000, 'cogs' => 20792000, 'waste' => 450000, 'labor' => 8500000, 'ovh' => 4200000, 'gp' => 23958000, 'np' => 11258000, 'gm' => 53.00, 'nm' => 24.91],
+            ['outlet' => $yog, 'rev' => 38900000, 'cogs' => 17894000, 'waste' => 380000, 'labor' => 7000000, 'ovh' => 3800000, 'gp' => 20626000, 'np' => 9826000, 'gm' => 53.02, 'nm' => 25.26],
+            ['outlet' => $sby, 'rev' => 51400000, 'cogs' => 23644000, 'waste' => 510000, 'labor' => 9500000, 'ovh' => 4800000, 'gp' => 27246000, 'np' => 12946000, 'gm' => 53.01, 'nm' => 25.19],
+        ];
+
+        foreach ($reports as $rep) {
+            HppFinancialReport::create([
+                'outlet_id' => $rep['outlet']->outlet_id,
+                'year' => (int) date('Y'),
+                'month' => (int) date('m'),
+                'total_revenue' => $rep['rev'],
+                'total_cogs_estimated' => $rep['cogs'],
+                'total_waste_cost' => $rep['waste'],
+                'total_labor_cost' => $rep['labor'],
+                'total_overhead_cost' => $rep['ovh'],
+                'gross_profit' => $rep['gp'],
+                'gross_margin_percent' => $rep['gm'],
+                'net_profit_estimated' => $rep['np'],
+                'net_margin_percent' => $rep['nm'],
+                'notes' => 'Laporan Laba Rugi Eksekutif Geprek Gambos ' . $rep['outlet']->outlet_branch,
+                'created_by' => 'GeprekGambosSeeder',
+            ]);
+        }
     }
 }

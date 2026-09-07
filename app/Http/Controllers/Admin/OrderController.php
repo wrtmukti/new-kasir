@@ -440,6 +440,7 @@ class OrderController extends Controller
                     $orderQty = (int) $product->pivot->quantity;
                     $product->load('stocks');
                     foreach ($product->stocks as $stock) {
+                        if ($stock->outlet_id && $companyId && $stock->outlet_id != $companyId) continue;
                         $bomQty = (int) $stock->pivot->quantity;
                         $deductQty = $bomQty * $orderQty;
                         if ($deductQty <= 0) continue;
@@ -457,6 +458,7 @@ class OrderController extends Controller
                         if (!$product) continue;
                         $orderQty = (int) $bi->quantity * (int) $ob->quantity;
                         foreach ($product->stocks as $stock) {
+                            if ($stock->outlet_id && $companyId && $stock->outlet_id != $companyId) continue;
                             $bomQty = (int) $stock->pivot->quantity;
                             $deductQty = $bomQty * $orderQty;
                             if ($deductQty <= 0) continue;
@@ -984,6 +986,7 @@ class OrderController extends Controller
                     $orderQty = $item['qty'];
 
                     foreach ($product->stocks as $stock) {
+                        if ($stock->outlet_id && $companyId && $stock->outlet_id != $companyId) continue;
                         $bomQty = (int) $stock->pivot->quantity;
                         $deductQty = $bomQty * $orderQty;
 
@@ -1003,6 +1006,7 @@ class OrderController extends Controller
                         $orderQty = $bi['quantity'] * $bd['qty'];
 
                         foreach ($product->stocks as $stock) {
+                            if ($stock->outlet_id && $companyId && $stock->outlet_id != $companyId) continue;
                             $bomQty = (int) $stock->pivot->quantity;
                             $deductQty = $bomQty * $orderQty;
 

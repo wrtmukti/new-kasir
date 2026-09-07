@@ -9,7 +9,7 @@
 > **Dokumen Milestone Phase 3 (Owner Portal)**: [`2026-08-29/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/milestone.md)
 > **Dokumen Task Tracker Phase 3**: [`2026-08-29/todo.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-29/todo.md)
 > **Dokumen Milestone Plan B**: [`2026-08-28/milestone.md`](file:///c:/xampp812/htdocs/newpost/new-kasir/basic-knowledge/deva-branch/2026-08-28/milestone.md)
-> **Status**: **Phase 1, 2, 3 COMPLETED 100% | Phase 4 (Penyempurnaan Seeder Multi-Cabang) PLANNED**
+> **Status**: **Phase 1, 2, 3, 4 COMPLETED 100% | Siap Pengujian Manual Browser oleh User**
 
 ---
 
@@ -72,17 +72,17 @@
 
 ---
 
-### 🛠️ PHASE 4 — Penyempurnaan Seeder Multi-Cabang & Sinkronisasi Katalog Master (PENDING EXECUTION)
+### 🛠️ PHASE 4 — Penyempurnaan Seeder Multi-Cabang & Sinkronisasi Katalog Master (COMPLETED 100%)
 
-#### 📦 M4.1 — Perbaikan Seeder Klien (`GeprekGambosSeeder.php` & `KopiSenjaSeeder.php`)
-- [ ] **4.1.1** **Katalog Menu Terpusat (Kategori & Produk)**: Set `outlet_id => null` pada `Category::create()` dan `Product::create()` agar berlaku otomatis untuk semua cabang (Jakarta, Bogor, Jogja, Surabaya).
-- [ ] **4.1.2** **Relasi Pivot `product_stock`**: Hubungkan produk dengan stok fisik cabang via `$prod->stocks()->attach($stock->stock_id, ['quantity' => 1])` agar kolom Bahan Baku tidak kosong dan auto-decrement transaksi berjalan.
-- [ ] **4.1.3** **Sesi Kasir (`DailyClosing` & `CashDrawerLog`) Multi-Cabang**: Buat loop sesi kasir (1 sesi kemarin `closed`, 1 sesi hari ini `open` dengan modal laci Rp 250.000) untuk seluruh 4 cabang, ditugaskan ke masing-masing kasir cabang.
-- [ ] **4.1.4** **Binding `daily_closing_id` Transaksi Non-Jakarta**: Hubungkan transaksi & order Bogor, Jogja, dan Surabaya ke ID closing cabang masing-masing (tidak lagi `null`).
-- [ ] **4.1.5** **Master Supplier & Bahan Mentah (`RawStockMaterial`)**: Jadikan bahan mentah dan PO dapat diakses atau di-seed per cabang.
-- [ ] **4.1.6** **Simulasi Kerugian Dapur (`CogsWasteLog`)**: Seed 2-3 log bahan makanan rusak/basi di dapur agar tabel Audit Waste di Portal Owner terisi realistis.
-- [ ] **4.1.7** **Laporan Laba Rugi Bulanan (`HppFinancialReport`)**: Buat data laporan bulanan untuk semua cabang agar performa laba rugi holding lengkap.
-- [ ] **4.1.8** **Paket Bundle & Diskon Promo**: Tambahkan seeder untuk paket bundle dan diskon aktif agar tab "Bundel" di POS Kasir tidak kosong.
+#### 📦 M4.1 — Perbaikan Seeder Klien (`GeprekGambosSeeder.php` & `KopiSenjaSeeder.php`) (COMPLETED 100%)
+- [x] **4.1.1** **Katalog Menu Terpusat (Kategori & Produk)**: Set `outlet_id => null` pada `Category::create()` dan `Product::create()` agar berlaku otomatis untuk semua cabang (Jakarta, Bogor, Jogja, Surabaya).
+- [x] **4.1.2** **Relasi Pivot `product_stock`**: Hubungkan produk dengan stok fisik cabang via `$prod->stocks()->attach($stock->stock_id, ['quantity' => 1])` agar kolom Bahan Baku tidak kosong dan auto-decrement transaksi berjalan.
+- [x] **4.1.3** **Sesi Kasir (`DailyClosing` & `CashDrawerLog`) Multi-Cabang**: Buat loop sesi kasir (1 sesi kemarin `closed`, 1 sesi hari ini `open` dengan modal laci Rp 250.000) untuk seluruh 4 cabang, ditugaskan ke masing-masing kasir cabang.
+- [x] **4.1.4** **Binding `daily_closing_id` Transaksi Non-Jakarta**: Hubungkan transaksi & order Bogor, Jogja, dan Surabaya ke ID closing cabang masing-masing (tidak lagi `null`).
+- [x] **4.1.5** **Master Supplier & Bahan Mentah (`RawStockMaterial`)**: Jadikan bahan mentah dan PO dapat diakses atau di-seed per cabang.
+- [x] **4.1.6** **Simulasi Kerugian Dapur (`CogsWasteLog`)**: Seed 2-3 log bahan makanan rusak/basi di dapur agar tabel Audit Waste di Portal Owner terisi realistis.
+- [x] **4.1.7** **Laporan Laba Rugi Bulanan (`HppFinancialReport`)**: Buat data laporan bulanan untuk semua cabang agar performa laba rugi holding lengkap.
+- [x] **4.1.8** **Paket Bundle & Diskon Promo**: Tambahkan seeder untuk paket bundle dan diskon aktif agar tab "Bundel" di POS Kasir tidak kosong.
 
 ---
 

@@ -52,6 +52,8 @@
         </div>
       </div>
     </div>
+  </div>
+@endif
 @if(!$hasActiveShift)
   <div class="alert alert-warning border-0 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 p-3.5 rounded-3" 
        style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24;">

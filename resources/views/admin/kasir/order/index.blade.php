@@ -21,6 +21,7 @@
     <i class="bi bi-cart-fill me-1"></i>Keranjang
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartBadge" style="font-size:0.65rem;display:none;">0</span>
   </button>
+</div>
 @if(!$hasActiveShift)
   <div class="alert alert-warning border-0 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 p-3.5 rounded-3" 
        style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.35) !important; color: #fbbf24;">
@@ -164,8 +165,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-0">
-        <div class="text-center text-muted-c py-5" id="cartEmpty">
-          <i class="bi bi-cart" style="font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.4;"></i>
         @if(!$hasActiveShift)
           <div class="px-3 pt-3">
             <div class="alert alert-warning border-0 rounded-3 p-2.5 mb-0 d-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; font-size: 0.78rem;">
@@ -174,6 +173,10 @@
             </div>
           </div>
         @endif
+        <div class="text-center text-muted-c py-5" id="cartEmpty">
+          <i class="bi bi-cart" style="font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.4;"></i>
+          <div>Keranjang masih kosong</div>
+        </div>
         <table class="table-modern" id="cartTable" style="display:none;">
           <thead>
             <tr>
