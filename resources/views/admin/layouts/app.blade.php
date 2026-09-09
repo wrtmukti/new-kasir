@@ -41,6 +41,19 @@
     : collect();
   $activeOutletId = session('active_outlet_id') ?? session('outlet_id') ?? ($availableOutlets->first()?->outlet_id ?? '');
   $currentOutlet = $availableOutlets->firstWhere('outlet_id', $activeOutletId) ?? $availableOutlets->first();
+
+  $isShiftOpen = false;
+  if (\Illuminate\Support\Facades\Schema::hasTable('daily_closings')) {
+    $shiftQuery = \App\Models\Admin\DailyClosing::where('status', 'open');
+    if ($activeOutletId) {
+      if (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'outlet_id')) {
+        $shiftQuery->where('outlet_id', $activeOutletId);
+      } elseif (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'company_id')) {
+        $shiftQuery->where('company_id', $activeOutletId);
+      }
+    }
+    $isShiftOpen = $shiftQuery->exists();
+  }
 @endphp
 
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -88,7 +101,7 @@
       </div>
     @endif
 
-    <nav class="sidebar-nav scroll-thin">
+    <nav class="sidebar-nav scroll-thin" id="appSidebarNav">
       @if($isOwnerPortal)
         {{-- ================= MENU KHUSUS PORTAL OWNER ================= --}}
         <div class="nav-section-title">Owner Menu</div>
@@ -149,7 +162,15 @@
             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i><span class="nav-label-text">Dashboard Toko</span></a>
           </li>
           <li class="nav-item @if(($activeMenu ?? '') === 'shift-operational') active @endif">
-            <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link"><i class="bi bi-cash-stack"></i><span class="nav-label-text">Buka Kasir</span></a>
+            <a href="{{ route('admin.keuangan.shift-operational.index') }}" class="nav-link">
+              <i class="bi {{ $isShiftOpen ? 'bi-door-closed' : 'bi-cash-stack' }}" id="navIconShiftOperational"></i>
+              <span class="nav-label-text" id="navTextShiftOperational">{{ $isShiftOpen ? 'Tutup Kasir' : 'Buka Kasir' }}</span>
+              @if($isShiftOpen)
+                <span class="badge bg-success-subtle text-success ms-auto fw-bold nav-badge" id="navBadgeShiftOperational" style="font-size: 0.62rem; padding: 2px 6px;">Aktif</span>
+              @else
+                <span class="badge bg-secondary-subtle text-muted-c ms-auto fw-bold nav-badge" id="navBadgeShiftOperational" style="font-size: 0.62rem; padding: 2px 6px;">Tutup</span>
+              @endif
+            </a>
           </li>
         </ul>
 
@@ -238,6 +259,19 @@
         </ul>
       @endif
 
+      <script>
+        (function() {
+          try {
+            var p = window.location.pathname;
+            var k = p.startsWith('/sys-admin') ? 'nexora-sidebar-scroll-sys' : (p.startsWith('/owner') ? 'nexora-sidebar-scroll-owner' : 'nexora-sidebar-scroll-admin');
+            var s = sessionStorage.getItem(k);
+            var n = document.getElementById('appSidebarNav') || (document.currentScript && document.currentScript.parentElement);
+            if (s !== null && n) {
+              n.scrollTop = parseInt(s, 10);
+            }
+          } catch(e) {}
+        })();
+      </script>
     </nav>
   </aside>
 
@@ -440,22 +474,31 @@
           <i class="bi bi-bell-fill"></i>
           <span class="dot-badge"></span>
         </button>
-        <div class="dropdown">
-          <div class="user-chip" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-            <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'AD', 0, 2)) }}</div>
-            <div class="d-none d-md-block">
-              <div class="user-chip-name">{{ auth()->user()->name ?? 'Admin POS' }}</div>
-              <div class="user-chip-role">{{ ucfirst(auth()->user()->role ?? 'Kasir') }}</div>
+        <div class="dropdown ms-1">
+          <div class="user-chip d-flex align-items-center gap-2 px-2.5 py-1 rounded-3" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; transition: all 0.2s ease;">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="line-height: 1;">
+              <div class="user-avatar" style="width: 28px; height: 28px; font-size: 0.68rem; margin-bottom: 4px;">
+                {{ strtoupper(substr(auth()->user()->name ?? 'AD', 0, 2)) }}
+              </div>
+              <span class="user-chip-role fw-semibold text-center" style="font-size: 0.62rem; line-height: 1; letter-spacing: 0.3px; color: var(--text-secondary); margin-top: 1px;">
+                {{ $isOwnerUser ? 'Owner' : ucfirst(auth()->user()->role ?? 'Kasir') }}
+              </span>
             </div>
-            <i class="bi bi-chevron-down" style="font-size:0.7rem; color:var(--text-muted);"></i>
+            <i class="bi bi-chevron-down ms-1" style="font-size: 0.65rem; color: var(--text-muted);"></i>
           </div>
-          <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm rounded-3 border-0" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle) !important; min-width: 240px;">
-            <li class="px-3 py-2 border-bottom" style="border-color: var(--border-subtle) !important;">
-              <small class="text-muted-c d-block" style="font-size:0.75rem;">Login sebagai:</small>
-              <div class="fw-semibold text-truncate" style="font-size:0.85rem; color:var(--text-primary);">{{ auth()->user()->email ?? 'admin@gmail.com' }}</div>
-              <div class="d-flex align-items-center gap-1 mt-1 text-muted-c" style="font-size: 0.72rem;">
-                <i class="bi bi-shop text-primary"></i>
-                <span class="text-truncate">{{ $currentOutlet?->outlet_name ?? 'Cabang Utama' }}</span>
+          <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-sm rounded-3 border-0" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle) !important; min-width: 250px;">
+            <li class="px-3 py-2.5 border-bottom" style="border-color: var(--border-subtle) !important;">
+              <small class="text-muted-c d-block" style="font-size:0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Akun Pengguna</small>
+              <div class="fw-bold text-wrap mt-1" style="font-size:0.92rem; color:var(--text-primary); line-height: 1.3;">
+                {{ auth()->user()->name ?? 'Admin POS' }}
+              </div>
+              <div class="text-muted-c text-truncate mt-0.5" style="font-size:0.78rem;">{{ auth()->user()->email ?? 'admin@gmail.com' }}</div>
+              <div class="d-flex align-items-center gap-1.5 mt-2 pt-1.5 border-top" style="border-color: var(--border-subtle) !important; font-size: 0.72rem;">
+                <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-0.5 rounded-pill">
+                  {{ $isOwnerUser ? 'Owner' : ucfirst(auth()->user()->role ?? 'Kasir') }}
+                </span>
+                <span class="text-muted-c">•</span>
+                <span class="text-muted-c text-truncate"><i class="bi bi-shop me-1 text-primary"></i>{{ $currentOutlet?->outlet_name ?? 'Cabang Utama' }}</span>
               </div>
             </li>
 

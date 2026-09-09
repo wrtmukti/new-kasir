@@ -14,6 +14,7 @@ use App\Models\Admin\Table;
 use App\Models\Admin\Voucher;
 use App\Models\Admin\SettingOutlet;
 use App\Models\Admin\Outlet;
+use App\Models\Admin\DailyClosing;
 use App\Models\SysAdmin\Client;
 use App\Services\Client\ClientDatabaseManager;
 use Illuminate\Http\JsonResponse;
@@ -107,6 +108,31 @@ class OrderController extends Controller
     }
 
     /**
+     * Cek apakah toko / cabang sedang buka & aktif menerima pesanan QR.
+     * Kriteria:
+     * 1. Outlet aktif (outlet_status == 1 && delete_status == 0)
+     * 2. Shift kasir operasional sedang AKTIF (status == 'open' di daily_closings)
+     */
+    protected function isStoreOpen(Outlet $outlet): bool
+    {
+        if ((int) $outlet->outlet_status !== 1 || (int) $outlet->delete_status !== 0) {
+            return false;
+        }
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('daily_closings')) {
+            $closingQuery = DailyClosing::where('status', 'open');
+            if (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'outlet_id')) {
+                $closingQuery->where('outlet_id', $outlet->outlet_id);
+            } elseif (\Illuminate\Support\Facades\Schema::hasColumn('daily_closings', 'company_id')) {
+                $closingQuery->where('company_id', $outlet->outlet_id);
+            }
+            return $closingQuery->exists();
+        }
+
+        return true;
+    }
+
+    /**
      * Halaman menu (QR scan meja).
      * URL: /{client_id}/{outlet_id}/{table_id}
      */
@@ -116,6 +142,7 @@ class OrderController extends Controller
         $client = $ctx['client'];
         $outlet = $ctx['outlet'];
         $table = $ctx['table'];
+        $isStoreOpen = $this->isStoreOpen($outlet);
 
         // Ambil produk aktif
         $products = Product::where('delete_status', 0)
@@ -145,7 +172,7 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
-        return view($this->guestView('index'), compact('client', 'table', 'outlet', 'products', 'categories', 'bundles'));
+        return view($this->guestView('index'), compact('client', 'table', 'outlet', 'products', 'categories', 'bundles', 'isStoreOpen'));
     }
 
     /**
@@ -156,6 +183,12 @@ class OrderController extends Controller
     {
         $ctx = $this->setupGuestContext($client_id, $outlet_id, $table_id);
         $table = $ctx['table'];
+        $outlet = $ctx['outlet'];
+
+        if (!$this->isStoreOpen($outlet)) {
+            return redirect()->route('guest.index', [$client_id, $outlet_id, $table_id])
+                ->with('error', 'Mohon maaf, restoran saat ini sedang tutup dan belum dapat menerima pesanan.');
+        }
 
         $cart = json_decode($request->cart_data, true);
         $bundles = json_decode($request->bundle_data, true);
@@ -186,6 +219,11 @@ class OrderController extends Controller
         $client = $ctx['client'];
         $outlet = $ctx['outlet'];
         $table = $ctx['table'];
+
+        if (!$this->isStoreOpen($outlet)) {
+            return redirect()->route('guest.index', [$client_id, $outlet_id, $table_id])
+                ->with('error', 'Mohon maaf, restoran saat ini sedang tutup dan belum dapat menerima pesanan.');
+        }
 
         $cart = session('guest_cart', []);
         $totalPrice = (float) session('guest_total', 0);
@@ -291,6 +329,11 @@ class OrderController extends Controller
         $client = $ctx['client'];
         $outlet = $ctx['outlet'];
         $table = $ctx['table'];
+
+        if (!$this->isStoreOpen($outlet)) {
+            return redirect()->route('guest.index', [$client_id, $outlet_id, $table_id])
+                ->with('error', 'Mohon maaf, sesi pemesanan menu via QR sedang ditutup.');
+        }
 
         if (is_string($request->items)) {
             $request->merge(['items' => json_decode($request->items, true) ?: []]);

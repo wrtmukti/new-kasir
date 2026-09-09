@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <nav class="sidebar-nav scroll-thin">
+    <nav class="sidebar-nav scroll-thin" id="appSidebarNav">
       {{-- DASHBOARD --}}
       <div class="nav-section-title">Dashboard</div>
       <ul class="list-unstyled">
@@ -145,6 +145,20 @@
           </a>
         </li>
       </ul>
+
+      <script>
+        (function() {
+          try {
+            var p = window.location.pathname;
+            var k = p.startsWith('/sys-admin') ? 'nexora-sidebar-scroll-sys' : (p.startsWith('/owner') ? 'nexora-sidebar-scroll-owner' : 'nexora-sidebar-scroll-admin');
+            var s = sessionStorage.getItem(k);
+            var n = document.getElementById('appSidebarNav') || (document.currentScript && document.currentScript.parentElement);
+            if (s !== null && n) {
+              n.scrollTop = parseInt(s, 10);
+            }
+          } catch(e) {}
+        })();
+      </script>
     </nav>
   </aside>
 
@@ -182,21 +196,25 @@
         @php
           $currentUser = auth('system_admin')->user();
         @endphp
-        <div class="dropdown">
-          <div class="user-chip" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-            <div class="user-avatar rounded-circle fw-bold text-white d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
-              {{ strtoupper(substr($currentUser->name ?? 'SA', 0, 2)) }}
+        <div class="dropdown ms-1">
+          <div class="user-chip d-flex align-items-center gap-2 px-2.5 py-1 rounded-3" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; transition: all 0.2s ease;">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="line-height: 1;">
+              <div class="user-avatar rounded-circle fw-bold text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.68rem; margin-bottom: 4px; background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
+                {{ strtoupper(substr($currentUser->name ?? 'SA', 0, 2)) }}
+              </div>
+              <span class="user-chip-role fw-semibold text-center text-capitalize" style="font-size: 0.62rem; line-height: 1; letter-spacing: 0.3px; color: var(--text-secondary); margin-top: 1px;">
+                {{ str_replace('_', ' ', $currentUser->role ?? 'super_admin') }}
+              </span>
             </div>
-            <div class="d-none d-md-block text-start">
-              <div class="user-chip-name fw-semibold" style="font-size:0.85rem;">{{ $currentUser->name ?? 'Super Admin' }}</div>
-              <div class="user-chip-role text-muted-c text-uppercase" style="font-size:0.68rem;">{{ str_replace('_', ' ', $currentUser->role ?? 'super_admin') }}</div>
-            </div>
-            <i class="bi bi-chevron-down" style="font-size:0.7rem; color:var(--text-muted);"></i>
+            <i class="bi bi-chevron-down ms-1" style="font-size: 0.65rem; color: var(--text-muted);"></i>
           </div>
-          <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-lg border-0" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle) !important; border-radius: 0.75rem;">
-            <li class="px-3 py-2 border-bottom" style="border-color: var(--border-subtle) !important;">
-              <small class="text-muted-c d-block" style="font-size:0.72rem;">Login sebagai:</small>
-              <div class="fw-bold" style="font-size:0.85rem; color:var(--text-primary);">{{ $currentUser->email ?? 'admin@system.local' }}</div>
+          <ul class="dropdown-menu dropdown-menu-end mt-2 shadow-lg border-0" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle) !important; border-radius: 0.75rem; min-width: 250px;">
+            <li class="px-3 py-2.5 border-bottom" style="border-color: var(--border-subtle) !important;">
+              <small class="text-muted-c d-block" style="font-size:0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Akun Administrator</small>
+              <div class="fw-bold text-wrap mt-1" style="font-size:0.92rem; color:var(--text-primary); line-height: 1.3;">
+                {{ $currentUser->name ?? 'Super Admin' }}
+              </div>
+              <div class="text-muted-c text-truncate mt-0.5" style="font-size:0.78rem;">{{ $currentUser->email ?? 'admin@system.local' }}</div>
             </li>
             <li>
               <a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2 text-primary"></i>Profil Akun</a>

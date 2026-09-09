@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('guest.partials._store_closed_banner')
+
 <!-- Hero Section -->
 <section class="mb-8">
   <span class="text-xs font-headline font-extrabold uppercase tracking-widest text-amber-900 bg-amber-100 px-3 py-1 rounded-full border border-amber-300">

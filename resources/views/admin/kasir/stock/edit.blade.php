@@ -125,7 +125,7 @@
           <div class="col-md-6">
             <label class="form-label-modern">Takaran Bahan Mentah Per 1 Unit Stok</label>
             <div class="input-group">
-              <input type="number" step="0.0001" name="raw_qty_per_unit" id="raw_qty_per_unit" class="form-control-modern" value="{{ old('raw_qty_per_unit', 0) }}" placeholder="Contoh: 0.2 (untuk 200gr per 1 unit)">
+              <input type="number" step="0.0001" name="raw_qty_per_unit" id="raw_qty_per_unit" class="form-control form-control-modern" value="{{ old('raw_qty_per_unit', 0) }}" placeholder="Contoh: 0.2 (untuk 200gr per 1 unit)">
               <span class="input-group-text bg-transparent rawUnitLabel" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.85rem;">-</span>
             </div>
             <span class="text-muted-c d-block mt-1" style="font-size: 0.78rem;">

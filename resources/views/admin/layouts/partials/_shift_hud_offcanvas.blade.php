@@ -191,7 +191,10 @@
               @csrf
               <div class="mb-2">
                 <label class="text-muted-c" style="font-size: 0.72rem;">Nominal (Rp) <span class="text-danger">*</span></label>
-                <input type="number" name="amount" class="form-control form-control-sm input-skeleton" placeholder="Contoh: 200000" min="1000" required>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
+                  <input type="number" name="amount" class="form-control form-control-sm input-skeleton" placeholder="Contoh: 200000" min="1000" required>
+                </div>
               </div>
               <div class="mb-2">
                 <label class="text-muted-c" style="font-size: 0.72rem;">Kategori</label>
@@ -221,7 +224,10 @@
               @csrf
               <div class="mb-2">
                 <label class="text-muted-c" style="font-size: 0.72rem;">Nominal Pengeluaran (Rp) <span class="text-danger">*</span></label>
-                <input type="number" name="amount" class="form-control form-control-sm input-skeleton" placeholder="Contoh: 25000" min="1000" required>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
+                  <input type="number" name="amount" class="form-control form-control-sm input-skeleton" placeholder="Contoh: 25000" min="1000" required>
+                </div>
               </div>
               <div class="mb-2">
                 <label class="text-muted-c" style="font-size: 0.72rem;">Kategori Beban</label>
@@ -409,7 +415,10 @@
           <div class="row g-2 mb-3">
             <div class="col-6">
               <label class="text-muted-c fw-medium mb-1" style="font-size: 0.72rem;">Modal Ditinggal di Laci (Rp)</label>
-              <input type="number" name="retained_cash_float" id="inputRetainedCashFloat" class="form-control form-control-sm" value="200000" min="0">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
+                <input type="number" name="retained_cash_float" id="inputRetainedCashFloat" class="form-control form-control-sm" value="200000" min="0">
+              </div>
               <small class="text-muted-c" style="font-size: 0.65rem;">Untuk kasir shift selanjutnya</small>
             </div>
             <div class="col-6">
@@ -513,6 +522,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Populate Recent Mutations
         renderRecentLogs(res.data.recent_logs);
 
+        // Sync Sidebar Menu (Buka Kasir <-> Tutup Kasir)
+        const navText = document.getElementById('navTextShiftOperational');
+        const navIcon = document.getElementById('navIconShiftOperational');
+        const navBadge = document.getElementById('navBadgeShiftOperational');
+        if (navText) navText.innerText = 'Tutup Kasir';
+        if (navIcon) navIcon.className = 'bi bi-door-closed';
+        if (navBadge) {
+          navBadge.className = 'badge bg-success-subtle text-success ms-auto fw-bold nav-badge';
+          navBadge.innerText = 'Aktif';
+          navBadge.style.removeProperty('display');
+        }
+
       } else {
         activeShiftData = null;
 
@@ -533,6 +554,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('hudInactiveShiftBanner')?.classList.remove('d-none');
         document.getElementById('hudActiveMetricsSection')?.classList.add('d-none');
         document.getElementById('hudFooterSection')?.classList.add('d-none');
+
+        // Sync Sidebar Menu (Buka Kasir <-> Tutup Kasir)
+        const navText = document.getElementById('navTextShiftOperational');
+        const navIcon = document.getElementById('navIconShiftOperational');
+        const navBadge = document.getElementById('navBadgeShiftOperational');
+        if (navText) navText.innerText = 'Buka Kasir';
+        if (navIcon) navIcon.className = 'bi bi-cash-stack';
+        if (navBadge) {
+          navBadge.className = 'badge bg-secondary-subtle text-muted-c ms-auto fw-bold nav-badge';
+          navBadge.innerText = 'Tutup';
+          navBadge.style.removeProperty('display');
+        }
       }
     })
     .catch(err => {

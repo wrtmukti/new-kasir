@@ -94,7 +94,7 @@
                   </td>
                   <td>
                     <div class="input-group">
-                      <input type="number" step="0.0001" name="items[{{ $idx }}][ingredient_qty]" class="form-control-modern input-qty" value="{{ $item->ingredient_qty }}" required>
+                      <input type="number" step="0.0001" name="items[{{ $idx }}][ingredient_qty]" class="form-control form-control-modern input-qty" value="{{ $item->ingredient_qty }}" required>
                       <span class="input-group-text bg-transparent unit-label" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">{{ $item->rawMaterial->unit ?? '-' }}</span>
                     </div>
                   </td>
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </td>
         <td>
           <div class="input-group">
-            <input type="number" step="0.0001" name="items[${rowIdx}][ingredient_qty]" class="form-control-modern input-qty" placeholder="0" required>
+            <input type="number" step="0.0001" name="items[${rowIdx}][ingredient_qty]" class="form-control form-control-modern input-qty" placeholder="0" required>
             <span class="input-group-text bg-transparent unit-label" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">-</span>
           </div>
         </td>

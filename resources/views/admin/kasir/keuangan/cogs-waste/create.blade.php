@@ -43,7 +43,7 @@
         <div class="col-md-6">
           <label for="qty_lost" class="form-label-modern">Jumlah Terbuang <span class="text-danger">*</span></label>
           <div class="input-group">
-            <input type="number" step="0.0001" name="qty_lost" id="qty_lost" class="form-control-modern @error('qty_lost') is-invalid @enderror" value="{{ old('qty_lost') }}" placeholder="2" required>
+            <input type="number" step="0.0001" name="qty_lost" id="qty_lost" class="form-control form-control-modern @error('qty_lost') is-invalid @enderror" value="{{ old('qty_lost') }}" placeholder="2" required>
             <span class="input-group-text bg-transparent unit-label" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.85rem;">-</span>
           </div>
           @error('qty_lost')

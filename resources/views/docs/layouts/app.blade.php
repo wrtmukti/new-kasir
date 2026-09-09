@@ -22,7 +22,7 @@
       <span class="brand-name">Nexora</span>
     </div>
 
-    <nav class="sidebar-nav scroll-thin">
+    <nav class="sidebar-nav scroll-thin" id="appSidebarNav">
       <div class="nav-section-title">Overview</div>
       <ul class="list-unstyled">
         <li class="nav-item @if(($activeMenu ?? '') === 'dashboard') active @endif">
@@ -105,6 +105,20 @@
           <a href="{{ url('docs/auth-login') }}" class="nav-link"><i class="bi bi-box-arrow-in-right"></i><span class="nav-label-text">Auth Pages</span></a>
         </li>
       </ul>
+
+      <script>
+        (function() {
+          try {
+            var p = window.location.pathname;
+            var k = p.startsWith('/sys-admin') ? 'nexora-sidebar-scroll-sys' : (p.startsWith('/owner') ? 'nexora-sidebar-scroll-owner' : 'nexora-sidebar-scroll-docs');
+            var s = sessionStorage.getItem(k);
+            var n = document.getElementById('appSidebarNav') || (document.currentScript && document.currentScript.parentElement);
+            if (s !== null && n) {
+              n.scrollTop = parseInt(s, 10);
+            }
+          } catch(e) {}
+        })();
+      </script>
     </nav>
 
   </aside>

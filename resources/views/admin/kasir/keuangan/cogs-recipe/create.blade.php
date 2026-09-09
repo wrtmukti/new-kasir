@@ -95,7 +95,7 @@
                   </td>
                   <td>
                     <div class="input-group">
-                      <input type="number" step="0.0001" name="items[0][ingredient_qty]" class="form-control-modern input-qty" placeholder="0" required>
+                      <input type="number" step="0.0001" name="items[0][ingredient_qty]" class="form-control form-control-modern input-qty" placeholder="0" required>
                       <span class="input-group-text bg-transparent unit-label" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">-</span>
                     </div>
                   </td>
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </td>
         <td>
           <div class="input-group">
-            <input type="number" step="0.0001" name="items[${rowIdx}][ingredient_qty]" class="form-control-modern input-qty" placeholder="0" required>
+            <input type="number" step="0.0001" name="items[${rowIdx}][ingredient_qty]" class="form-control form-control-modern input-qty" placeholder="0" required>
             <span class="input-group-text bg-transparent unit-label" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">-</span>
           </div>
         </td>

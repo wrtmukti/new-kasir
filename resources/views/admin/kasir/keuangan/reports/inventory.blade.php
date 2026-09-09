@@ -60,7 +60,8 @@
     <form action="{{ route('admin.reports.inventory') }}" method="GET" class="row g-3 align-items-center">
       <div class="col-md-6">
         <div class="input-group">
-          <input type="text" name="search" class="form-control-modern" placeholder="Cari kode atau nama bahan mentah..." value="{{ $search }}">
+          <span class="input-group-text bg-transparent border-end-0 text-muted-c" style="border-color: var(--border-subtle);"><i class="bi bi-search"></i></span>
+          <input type="text" name="search" class="form-control form-control-modern border-start-0 ps-0" placeholder="Cari kode atau nama bahan mentah..." value="{{ $search }}">
         </div>
       </div>
       <div class="col-md-6 d-flex align-items-center justify-content-md-end gap-2">

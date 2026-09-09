@@ -37,7 +37,7 @@
   <div class="px-3 pt-3 pb-2">
     <div class="input-group">
       <span class="input-group-text bg-transparent border-end-0 text-muted-c" style="border-color: var(--border-subtle);"><i class="bi bi-search"></i></span>
-      <input type="text" id="searchInput" class="form-control-modern border-start-0 ps-0" placeholder="Cari nama bahan mentah, kode, atau unit...">
+      <input type="text" id="searchInput" class="form-control form-control-modern border-start-0 ps-0" placeholder="Cari nama bahan mentah, kode, atau unit...">
     </div>
   </div>
 
@@ -70,14 +70,14 @@
             <div class="col-md-6">
               <label class="form-label-modern">Stok Sistem Saat Ini</label>
               <div class="input-group">
-                <input type="text" id="opnameCurrentAmount" class="form-control-modern" style="background: var(--bg-elevated); border-color: var(--border-subtle); color: var(--text-primary);" readonly>
+                <input type="text" id="opnameCurrentAmount" class="form-control form-control-modern" style="background: var(--bg-elevated); border-color: var(--border-subtle); color: var(--text-primary);" readonly>
                 <span class="input-group-text bg-transparent opnameUnitLabel" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">-</span>
               </div>
             </div>
             <div class="col-md-6">
               <label for="physical_amount" class="form-label-modern">Hasil Stok Fisik (Hitung Opname) <span class="text-danger">*</span></label>
               <div class="input-group">
-                <input type="number" step="0.0001" name="physical_amount" id="physical_amount" class="form-control-modern" placeholder="0" required>
+                <input type="number" step="0.0001" name="physical_amount" id="physical_amount" class="form-control form-control-modern" placeholder="0" required>
                 <span class="input-group-text bg-transparent opnameUnitLabel" style="border-color: var(--border-subtle); color: var(--text-muted); font-size:0.8rem;">-</span>
               </div>
             </div>

@@ -159,7 +159,7 @@
                 </label>
                 <div class="input-group">
                   <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-                  <input type="number" name="actual_cash_counted" id="actual_cash_counted" class="form-control-modern fw-bold text-warning fs-5" value="{{ $liveStats['expected_cash'] }}" step="any" min="0" oninput="calculateVariance()" required>
+                  <input type="number" name="actual_cash_counted" id="actual_cash_counted" class="form-control form-control-modern fw-bold text-warning fs-5" value="{{ $liveStats['expected_cash'] }}" step="any" min="0" oninput="calculateVariance()" required>
                 </div>
                 <span class="text-muted-c" style="font-size:0.75rem;">Total seluruh lembaran uang &amp; koin di laci.</span>
               </div>
@@ -171,7 +171,7 @@
                 </label>
                 <div class="input-group">
                   <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-                  <input type="number" name="retained_cash_float" id="retained_cash_float" class="form-control-modern fw-bold text-info fs-5" value="{{ $liveStats['starting_cash'] }}" step="any" min="0" oninput="calculateDeposit()">
+                  <input type="number" name="retained_cash_float" id="retained_cash_float" class="form-control form-control-modern fw-bold text-info fs-5" value="{{ $liveStats['starting_cash'] }}" step="any" min="0" oninput="calculateDeposit()">
                 </div>
                 <span class="text-muted-c" style="font-size:0.75rem;">Modal uang kembalian untuk buka kasir esok hari / berikutnya.</span>
               </div>
@@ -315,7 +315,7 @@
                 <input type="number" 
                        name="starting_cash" 
                        id="starting_cash" 
-                       class="form-control-modern fs-4 fw-bold text-success" 
+                       class="form-control form-control-modern fs-4 fw-bold text-success" 
                        value="{{ $masterShifts->first()->default_starting_cash ?? 200000 }}" 
                        step="any" 
                        min="0" 
@@ -445,7 +445,7 @@
             <label class="form-label-modern">Nominal Kas Masuk (Rp) <span class="text-danger">*</span></label>
             <div class="input-group">
               <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-              <input type="number" name="amount" class="form-control-modern fw-bold text-success fs-5" placeholder="Contoh: 150000" step="any" min="1" required>
+              <input type="number" name="amount" class="form-control form-control-modern fw-bold text-success fs-5" placeholder="Contoh: 150000" step="any" min="1" required>
             </div>
           </div>
 
@@ -490,7 +490,7 @@
             <label class="form-label-modern">Nominal Kas Keluar (Rp) <span class="text-danger">*</span></label>
             <div class="input-group">
               <span class="input-group-text bg-elevated border-strong text-muted-c fw-bold">Rp</span>
-              <input type="number" name="amount" class="form-control-modern fw-bold text-danger fs-5" placeholder="Contoh: 45000" step="any" min="1" required>
+              <input type="number" name="amount" class="form-control form-control-modern fw-bold text-danger fs-5" placeholder="Contoh: 45000" step="any" min="1" required>
             </div>
           </div>
 

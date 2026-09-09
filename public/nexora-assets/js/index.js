@@ -34,15 +34,93 @@
   }
 
   /* ---------------------------------------------------------------------
-     Sidebar collapse (desktop) + mobile drawer
+     Sidebar scroll preservation & collapse (desktop) + mobile drawer
      BUG FIX: Close submenu when sidebar collapses
      ------------------------------------------------------------------- */
+  function getSidebarScrollKey() {
+    var path = window.location.pathname;
+    if (path.startsWith("/sys-admin")) return "nexora-sidebar-scroll-sys";
+    if (path.startsWith("/owner")) return "nexora-sidebar-scroll-owner";
+    if (path.startsWith("/docs")) return "nexora-sidebar-scroll-docs";
+    return "nexora-sidebar-scroll-admin";
+  }
+
   function initSidebar() {
     const sidebar = document.getElementById("appSidebar");
     const collapseBtn = document.getElementById("sidebarCollapseBtn");
     const mobileToggle = document.getElementById("sidebarMobileToggle");
     const backdrop = document.getElementById("sidebarBackdrop");
     if (!sidebar) return;
+
+    const sidebarNav = sidebar.querySelector(".sidebar-nav");
+    const scrollKey = getSidebarScrollKey();
+
+    // 1. Scroll Position Restoration & Smart Fallback
+    if (sidebarNav) {
+      try {
+        const savedScroll = sessionStorage.getItem(scrollKey);
+        if (savedScroll !== null && !isNaN(parseInt(savedScroll, 10))) {
+          const targetScroll = parseInt(savedScroll, 10);
+          sidebarNav.scrollTop = targetScroll;
+
+          // Verify if active item is within visible range; if not (e.g. navigated via page content link), scroll to it
+          const activeItem = sidebarNav.querySelector(".nav-item.active, .nav-sublink.active");
+          if (activeItem) {
+            const itemTop = activeItem.offsetTop;
+            const itemBottom = itemTop + activeItem.offsetHeight;
+            const viewTop = targetScroll;
+            const viewBottom = targetScroll + sidebarNav.clientHeight;
+
+            if (itemTop < viewTop || itemBottom > viewBottom) {
+              activeItem.scrollIntoView({ block: "nearest" });
+              sessionStorage.setItem(scrollKey, String(sidebarNav.scrollTop));
+            }
+          }
+        } else {
+          // Fallback: if no saved scroll, bring active item into view
+          const activeItem = sidebarNav.querySelector(".nav-item.active, .nav-sublink.active");
+          if (activeItem) {
+            activeItem.scrollIntoView({ block: "nearest" });
+          }
+        }
+      } catch (e) {}
+
+      // 2. Track scroll changes (debounced)
+      let scrollTimer;
+      sidebarNav.addEventListener("scroll", function () {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function () {
+          try {
+            sessionStorage.setItem(scrollKey, String(sidebarNav.scrollTop));
+          } catch (e) {}
+        }, 50);
+      }, { passive: true });
+
+      // 3. Immediately save scroll position on sidebar link clicks
+      sidebar.querySelectorAll("a[href]").forEach(function (link) {
+        link.addEventListener("click", function () {
+          try {
+            sessionStorage.setItem(scrollKey, String(sidebarNav.scrollTop));
+          } catch (e) {}
+        });
+      });
+
+      // 4. Save on window beforeunload and restore on pageshow (e.g. back/forward navigation)
+      window.addEventListener("beforeunload", function () {
+        try {
+          sessionStorage.setItem(scrollKey, String(sidebarNav.scrollTop));
+        } catch (e) {}
+      });
+
+      window.addEventListener("pageshow", function () {
+        try {
+          const saved = sessionStorage.getItem(scrollKey);
+          if (saved !== null && !isNaN(parseInt(saved, 10))) {
+            sidebarNav.scrollTop = parseInt(saved, 10);
+          }
+        } catch (e) {}
+      });
+    }
 
     const savedCollapsed = localStorage.getItem("nexora-sidebar-collapsed") === "1";
     if (savedCollapsed) sidebar.classList.add("is-collapsed");
@@ -383,7 +461,10 @@
     function position() {
       const r = btn.getBoundingClientRect();
       fly.style.top = (r.bottom + 10) + 'px';
-      fly.style.left = Math.max(14, Math.min(window.innerWidth - fly.offsetWidth - 14, r.left - 20)) + 'px';
+      // Anchor to the right edge of the button and ensure minimum 16px padding from viewport edge
+      const rightDistance = Math.max(16, (window.innerWidth - r.right) - 10);
+      fly.style.right = rightDistance + 'px';
+      fly.style.left = 'auto';
     }
 
     btn.addEventListener('click', function (e) {
@@ -391,8 +472,8 @@
       if (fly.classList.contains('open')) {
         fly.classList.remove('open');
       } else {
-        position();
         fly.classList.add('open');
+        position();
       }
     });
 

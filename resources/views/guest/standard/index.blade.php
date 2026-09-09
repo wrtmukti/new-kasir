@@ -15,6 +15,8 @@
 </div>
 @endif
 
+@include('guest.partials._store_closed_banner')
+
 {{-- Hero --}}
 <div class="guest-hero">
   <div class="guest-hero-overlay">
@@ -25,7 +27,11 @@
 
 {{-- Status toko + cek status pesanan --}}
 <div class="guest-store-row">
-  <span class="guest-open-status"><i class="bi bi-circle-fill"></i> Buka 10:00 - 22:00 WIB</span>
+  @if($isStoreOpen ?? true)
+    <span class="guest-open-status text-success"><i class="bi bi-circle-fill text-success"></i> Resto Buka</span>
+  @else
+    <span class="guest-open-status text-danger"><i class="bi bi-circle-fill text-danger"></i> Resto Tutup</span>
+  @endif
   <a href="{{ route('guest.status', $table->table_id) }}" class="guest-status-link">
     Cek Status Pesanan <i class="bi bi-arrow-right"></i>
   </a>

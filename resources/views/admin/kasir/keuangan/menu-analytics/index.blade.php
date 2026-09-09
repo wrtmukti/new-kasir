@@ -197,7 +197,7 @@
     <div class="px-3 pt-3 pb-2">
       <div class="input-group">
         <span class="input-group-text bg-transparent border-end-0 text-muted-c" style="border-color: var(--border-subtle);"><i class="bi bi-search"></i></span>
-        <input type="text" id="searchTableInput" class="form-control-modern border-start-0 ps-0" placeholder="Cari nama menu, paket bundle, atau kategori...">
+        <input type="text" id="searchTableInput" class="form-control form-control-modern border-start-0 ps-0" placeholder="Cari nama menu, paket bundle, atau kategori...">
       </div>
     </div>
 

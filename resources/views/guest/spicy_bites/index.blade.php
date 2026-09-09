@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('guest.partials._store_closed_banner')
+
 <!-- Hero Section -->
 <section class="mb-8">
   <h2 class="font-headline font-black text-4xl md:text-5xl text-on-background leading-tight">
